@@ -1,4 +1,4 @@
-package helper
+package scala.model.helper
 
 /**
  * Applying `pimp my library` pattern to iterable to add utilities methods

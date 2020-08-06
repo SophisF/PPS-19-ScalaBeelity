@@ -1,16 +1,16 @@
-package helper
+package scala.model.helper
 
 import breeze.linalg._
 
 /**
- * Add useful operations to breeze.Matrix (used in Gaussian filter calc)
- * TODO change to AnyVal
+ * Pimping breeze.Matrix adding utility functions used in Gaussian filter calc.
+ * TODO change to AnyVal ?
  *
  * @author Paolo Baldini
  */
 object MatrixHelper {
 
-  type Matrix[T] = DenseMatrix[T]
+  type Matrix[T] = DenseMatrix[T] // TODO ?
   implicit class RichMatrix[T](matrix: Matrix[Double]) {
 
     /**

@@ -5,6 +5,7 @@ import scala.model.property.Filter._
 import scala.model.property.Property
 import scala.util.Random
 import scala.view.View
+import scala.model.helper.MatrixHelper.RichMatrix
 
 /**
  * Simply controller of the test
@@ -25,9 +26,11 @@ object Looper {
 
     plot(environment)
 
-    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(_ => {
+    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
       val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-      val filter = PropertySource.threeDimensionalPositiveDescent(values._1, values._2, 30, 30)// TODO
+      val filter = PropertySource.threeDimensionalPositiveDescent(values._1, values._2, 70, 70)// TODO
+
+      if (i / updateStep == iterations / (2 * updateStep)) plot(environment)
 
       environment = environment + Filter(filter.mapValues(it => Variation(it.toInt, Property.Temperature)),
         (Random.nextInt(environmentSize._1), Random.nextInt(environmentSize._2)), (filter.cols, filter.rows))
@@ -42,5 +45,5 @@ object Looper {
    * @param environment to plot
    */
   private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(environment.map
-    .mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
+      .dropColumns(0.3).dropRows(0.3).mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
 }

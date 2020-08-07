@@ -11,7 +11,7 @@ import breeze.linalg._
 object MatrixHelper {
 
   type Matrix[T] = DenseMatrix[T] // TODO ?
-  implicit class RichMatrix[T](matrix: Matrix[Double]) {
+  implicit class RichDoubleMatrix[T](matrix: Matrix[Double]) {
 
     /**
      * Mirror matrix on horizontal axis
@@ -38,7 +38,7 @@ object MatrixHelper {
      * @return flipped matrix
      */
     def flipX(mirrorCenter: Boolean = true): Matrix[Double] = new DenseMatrix(matrix.rows,
-      if (mirrorCenter) matrix.cols else matrix.cols -1, matrix.data.grouped(matrix.rows)
+      if (mirrorCenter) matrix.cols else matrix.cols - 1, matrix.data.grouped(matrix.rows)
         .drop(if (mirrorCenter) 0 else 1).reduce((_1, _2) => _2.appendedAll(_1)))
 
     /**
@@ -48,7 +48,16 @@ object MatrixHelper {
      * @return flipped matrix
      */
     def flipY(mirrorCenter: Boolean = true): Matrix[Double] =
-      new DenseMatrix(if (mirrorCenter) matrix.rows else matrix.rows -1, matrix.cols, matrix.data.grouped(matrix.rows)
+      new DenseMatrix(if (mirrorCenter) matrix.rows else matrix.rows - 1, matrix.cols, matrix.data.grouped(matrix.rows)
         .map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
+  }
+
+  implicit class RichMatrix[T](matrix: Matrix[T]) {
+
+    def dropColumns(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.cols -1) * dropN).toInt)
+      (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.cols).toSeq, Axis._1)
+
+    def dropRows(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.rows -1) * dropN).toInt)
+      (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.rows).toSeq, Axis._0)
   }
 }

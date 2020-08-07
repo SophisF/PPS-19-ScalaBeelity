@@ -62,7 +62,7 @@ object Environment {
   def `+scala`(environment: Environment, filter: Filter[Int]): Environment = environment.+(filter)
 
   val engine = new Prolog()
-  val externalTheory = new Theory(Source.fromFile("src/main/prolog/filter_applier.pl").getLines().mkString("", "\n", ""))
+  val externalTheory = new Theory(Source.fromFile("Project/src/main/prolog/filter_applier.pl").getLines().mkString("", "\n", ""))
   engine.addTheory(externalTheory)
   def `+prolog`(environment: Environment, filter: Filter[Int]): Environment = environment.`+prolog`(filter)
 }

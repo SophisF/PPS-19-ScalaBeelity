@@ -2,6 +2,7 @@ package bees
 
 import bees.GeneTaxonomy.GeneTaxonomy
 import utility.RandomGenerator
+import utility.RandomGenerator.getRandomNumber
 
 object GeneTaxonomy extends Enumeration {
   type GeneTaxonomy = Value
@@ -10,8 +11,11 @@ object GeneTaxonomy extends Enumeration {
 
 object Gene {
 
-  def apply( geneTaxonomy: GeneTaxonomy, frequency: Int = RandomGenerator.getLowFrequency): Gene = {
-    require(frequency >= 1 && frequency <= 9)
+  val minFrequency: Int = 1
+  val maxFrequency: Int = 9
+
+  def apply( geneTaxonomy: GeneTaxonomy, frequency: Int = getLowFrequency): Gene = {
+    require(frequency >= minFrequency && frequency <= maxFrequency)
     geneTaxonomy match {
       case GeneTaxonomy.TEMPERATURE => TemperatureCompatibilityGene(frequency)
       case GeneTaxonomy.PRESSURE => PressureCompatibilityGene(frequency)
@@ -22,6 +26,18 @@ object Gene {
       case GeneTaxonomy.COLOR => ColorGene(frequency)
       case _ => null
     }
+  }
+
+  def getLowFrequency: Int = {
+    getRandomNumber(minFrequency, (maxFrequency-minFrequency)/3)
+  }
+
+  def getMediumFrequency: Int = {
+    getRandomNumber(Gene.minFrequency + (maxFrequency-minFrequency)/3 + 1 , (maxFrequency-minFrequency)/3)
+  }
+
+  def getHighFrequency: Int = {
+    getRandomNumber(Gene.minFrequency + 2*(maxFrequency-minFrequency)/3 + 1, (maxFrequency-minFrequency)/3)
   }
 
   trait Gene {

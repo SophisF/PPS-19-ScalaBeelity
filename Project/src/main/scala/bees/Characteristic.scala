@@ -1,5 +1,7 @@
 package bees
 
+import utility.RangeMapper
+
 object Characteristic {
   trait Characteristic{
     type Expression
@@ -9,11 +11,13 @@ object Characteristic {
 
   trait RangeExpression {
     characteristic: Characteristic => type Expression = (Int, Int)
+    val rangeTuning: Int
   }
 
   //range between 18 and 36
   case class TemperatureCompatibilityCharacteristic(override val name: String, frequency: Int) extends Characteristic with RangeExpression {
-    override val expression: (Int, Int) = (18, 36)
+    override val expression: (Int, Int) = RangeMapper.getRange(18, 36, frequency, rangeTuning)
+    override val rangeTuning: Int = 20
   }
 
 }

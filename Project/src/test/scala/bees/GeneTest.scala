@@ -18,8 +18,8 @@ class GeneTest extends AnyFunSuite{
   var genes: Set[Gene] = HashSet(temperatureCompatibilityGene, pressureCompatibilityGene, humidityCompatibilityGene,
     aggressionGene, reproductionRateGene, longevityGene, colorGene)
 
-  val temperatureCompatibilityGeneWithMediumFrequency: Gene = Gene(GeneTaxonomy.TEMPERATURE, RandomGenerator.getMediumFrequency)
-  val temperatureCompatibilityGeneWithHighFrequency: Gene = Gene(GeneTaxonomy.TEMPERATURE, RandomGenerator.getHighFrequency)
+  val temperatureCompatibilityGeneWithMediumFrequency: Gene = Gene(GeneTaxonomy.TEMPERATURE, getMediumFrequency)
+  val temperatureCompatibilityGeneWithHighFrequency: Gene = Gene(GeneTaxonomy.TEMPERATURE, getHighFrequency)
 
   test("Any Gene should have a name"){
     val errorGenes = for {

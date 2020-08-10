@@ -1,0 +1,5 @@
+package bees
+
+object Characteristic {
+
+}

@@ -25,18 +25,18 @@ object PropertySource {
   ) extends PropertySource
 
   case class ContinuousPropertySource(
-    evaluatedPercent: Int = 0,
+    var evaluatedPercent: Int,
     inference: (EvolvableData[VariationMatrix], Int) => VariationMatrix,
     x: Int, y: Int,
     width: Int, height: Int,
     fireTime: Int, duration: Int
   ) extends PropertySource with EvolvableData[VariationMatrix]
 
-  def apply[T](x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix)
-  : InstantaneousPropertySource = InstantaneousPropertySource(filter, x, y, width, height)
+  //def apply[T](x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix): InstantaneousPropertySource =
+  //  InstantaneousPropertySource(filter, x, y, width, height)
 
-  def apply[T](x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix,
-  get: Int): ContinuousPropertySource = ContinuousPropertySource(0, (data, time) => {
+  def apply[T](x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix)
+  : ContinuousPropertySource = ContinuousPropertySource(0, (data, time) => {
     val force = (time - data.fireTime / data.duration) - data.evaluatedPercent
     data.evaluatedPercent += force
     DenseMatrix.create(filter.rows, filter.cols, filter.data

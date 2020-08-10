@@ -1,11 +1,13 @@
 package scala.controller
 
 import scala.model._
-import scala.model.property.Filter._
-import scala.model.property.Property
+import scala.model.matrix.Matrix._
+import scala.model.property.Property.Temperature
+import scala.model.property.{FilterBuilder, Property, PropertySource}
+import scala.model.property.PropertyVariation.Variation
+import scala.model.time.Time
 import scala.util.Random
 import scala.view.View
-import scala.model.helper.MatrixHelper.RichMatrix
 
 /**
  * Simply controller of the test
@@ -28,12 +30,14 @@ object Looper {
 
     Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
       val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-      val filter = PropertySource.threeDimensionalPositiveDescent(values._1, values._2, 70, 70)// TODO
+      val filter = FilterBuilder.threeDimensionalPositiveDescent(values._1, values._2, 70, 70)// TODO
 
       if (i / updateStep == iterations / (2 * updateStep)) plot(environment)
 
-      environment = environment + Filter(filter.mapValues(it => Variation(it.toInt, Property.Temperature)),
-        (Random.nextInt(environmentSize._1), Random.nextInt(environmentSize._2)), (filter.cols, filter.rows))
+      environment = environment + PropertySource(Random.nextInt(environmentSize._1), Random.nextInt(environmentSize._2),
+        filter.cols, filter.rows, filter.mapValues(it => Variation(Temperature, it.toInt)))
+
+      Time increment 1
     })
 
     plot(environment)

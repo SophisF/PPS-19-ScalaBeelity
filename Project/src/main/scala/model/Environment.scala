@@ -1,11 +1,9 @@
 package scala.model
 
-import alice.tuprolog.{Prolog, Theory}
 import breeze.linalg.DenseMatrix
 
-import scala.io.Source
-import scala.model.Environment.engine
-import scala.model.property.Filter._
+import scala.model.matrix._
+import scala.model.property.PropertySource.{InstantaneousPropertySource, border, in}
 
 /**
  * A first scratch of the environment class.
@@ -22,26 +20,20 @@ case class Environment private (map: DenseMatrix[Cell]) {
    * @param filter to apply
    * @return modified environment
    */
-  def +(filter: Filter[Int]): Environment = new Environment(map.mapPairs((pointXY, cell) => pointXY match {
-      case (x, y) if x >= leftBorder(filter) && x < rightBorder(filter) && y >= topBorder(filter)
-        && y < bottomBorder(filter) => cell + filter.data(x - leftBorder(filter), y - topBorder(filter))
+  def +(filter: InstantaneousPropertySource): Environment = new Environment(map.mapPairs((pointXY, cell) =>
+    pointXY match {
+      case p if in(p._1, p._2, filter) => cell + filter.data(p._1 - border(filter)(Size.Left), p._2 - border(filter)(Size.Top))
       case _ => cell
     }))
 
-  /**
-   * A version of the previous method that try to use Prolog.
-   * TODO it probably don't look fast because it run on a single thread (differently from breeze).
-   *
-   * @param filter to apply
-   * @return modified environment
-   */
-  def `+prolog`(filter: Filter[Int]): Environment = {
-    val mapMatrix = map.data.grouped(map.cols).map(_.map(_.temperature).mkString("[", ",", "]")).mkString("[", ",", "]")
-    val filterMatrix = filter.data.data.grouped(map.cols).map(_.map(_.value).mkString("[", ",", "]")).mkString("[", ",", "]")
-    val query = s"apply($mapMatrix, $filterMatrix, ${filter.center._1 - filter.size._1}, ${filter.center._2 - filter.size._2}, O)."
-    val res = engine.solve(query)
-    this
-  }
+  /*def +(filters: Iterable[Filter[Int]]): Environment = modify(filters.map(linearize)
+    .reduce((_1, _2) => _1.appendedAll(_2)).sortWith(Point.compare).toSeq)
+
+  def modify(variations: Seq[CellVariation[Int]]): Environment = new Environment(
+    map.mapPairs((pointXY, cell) => variations.take(1) match {
+      case seq if seq.isEmpty => cell
+      case seq => cell + seq.find(==(_, Point.toPoint(pointXY)))
+    }))*/
 }
 object Environment {
   type Matrix[T] = Array[Array[T]]
@@ -56,13 +48,4 @@ object Environment {
    */
   def apply(size: SizeWH, defaultCell: Cell) = new Environment(DenseMatrix.create(size._1, size._2, Iterator
     .continually(defaultCell).take(size._1 * size._2).toArray))
-
-  // TODO chose one of the following and delete the other
-
-  def `+scala`(environment: Environment, filter: Filter[Int]): Environment = environment.+(filter)
-
-  val engine = new Prolog()
-  val externalTheory = new Theory(Source.fromFile("Project/src/main/prolog/filter_applier.pl").getLines().mkString("", "\n", ""))
-  engine.addTheory(externalTheory)
-  def `+prolog`(environment: Environment, filter: Filter[Int]): Environment = environment.`+prolog`(filter)
 }

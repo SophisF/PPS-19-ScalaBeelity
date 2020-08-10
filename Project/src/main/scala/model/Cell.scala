@@ -1,8 +1,8 @@
 package scala.model
 
-import scala.model.property.Filter._
-import scala.model.property.Property
-import scala.model.property.Property._
+import scala.model.property.Property.{Property, Temperature, Humidity, Pressure}
+import scala.model.property.PropertyVariation
+import scala.model.property.PropertyVariation._
 
 /**
  * Class that represent an environment cell
@@ -23,9 +23,14 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @return the value of the property
    */
   def get(property: Property): Int = property match {
-    case Property.Temperature => temperature
-    case Property.Humidity => humidity
-    case Property.Pressure => pressure
+    case Temperature => temperature
+    case Humidity => humidity
+    case Pressure => pressure
+  }
+
+  def +(variation: Option[Variation]): Cell = variation match {
+    case None => this
+    case _ => this + variation.get
   }
 
   /**
@@ -34,9 +39,9 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @param variation contains value and target of the variation
    * @return the varied cell
    */
-  def +(variation: Variation[Int]): Cell = variation.property match {
-    case Property.Temperature => Cell(temperature + variation.value, humidity, pressure)
-    case Property.Humidity => Cell(temperature, humidity + variation.value, pressure)
-    case Property.Pressure => Cell(temperature, humidity, pressure + variation.value)
+  def +(variation: Variation): Cell = variation.property match {
+    case Temperature => Cell(temperature + variation.value, humidity, pressure)
+    case Humidity => Cell(temperature, humidity + variation.value, pressure)
+    case Pressure => Cell(temperature, humidity, pressure + variation.value)
   }
 }

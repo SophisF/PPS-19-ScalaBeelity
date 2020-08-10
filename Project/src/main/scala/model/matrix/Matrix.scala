@@ -1,17 +1,37 @@
-package scala.model.helper
+package scala.model.matrix
 
 import breeze.linalg._
 
 /**
- * Pimping breeze.Matrix adding utility functions used in Gaussian filter calc.
- * TODO change to AnyVal ?
+ * Pimping breeze.Matrix adding utility functions.
  *
  * @author Paolo Baldini
  */
-object MatrixHelper {
+object Matrix {
+  type Matrix[T] = DenseMatrix[T]
 
-  type Matrix[T] = DenseMatrix[T] // TODO ?
-  implicit class RichDoubleMatrix[T](matrix: Matrix[Double]) {
+  implicit class DroppableMatrix[T](matrix: Matrix[T]) {
+
+    /**
+     * Drop a percentage of columns in a balanced way (not all from start/end but in a distributed way).
+     *
+     * @param dropN percentage to drop. Value should be between 0 and 1
+     * @return matrix with 1-`dropN` percent of columns
+     */
+    def dropColumns(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.cols -1) * dropN).toInt)
+    (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.cols).toSeq, Axis._1)
+
+    /**
+     * Drop a percentage of rows in a balanced way (not all from start/end but in a distributed way).
+     *
+     * @param dropN percentage to drop. Value should be between 0 and 1
+     * @return matrix with 1-`dropN` percent of rows
+     */
+    def dropRows(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.rows -1) * dropN).toInt)
+    (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.rows).toSeq, Axis._0)
+  }
+
+  implicit class TransformableMatrix[T](matrix: Matrix[Double]) {
 
     /**
      * Mirror matrix on horizontal axis
@@ -50,14 +70,5 @@ object MatrixHelper {
     def flipY(mirrorCenter: Boolean = true): Matrix[Double] =
       new DenseMatrix(if (mirrorCenter) matrix.rows else matrix.rows - 1, matrix.cols, matrix.data.grouped(matrix.rows)
         .map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
-  }
-
-  implicit class RichMatrix[T](matrix: Matrix[T]) {
-
-    def dropColumns(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.cols -1) * dropN).toInt)
-      (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.cols).toSeq, Axis._1)
-
-    def dropRows(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.rows -1) * dropN).toInt)
-      (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.rows).toSeq, Axis._0)
   }
 }

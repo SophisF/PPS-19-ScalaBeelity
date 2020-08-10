@@ -1,9 +1,10 @@
-package scala.model
+package scala.model.property
 
-import breeze.linalg._
-import scala.math._
-import scala.model.helper.IteratorHelper._
-import scala.model.helper.MatrixHelper._
+import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.numerics.exp
+
+import scala.model.helper.IteratorHelper.RichIterator
+import scala.model.matrix.Matrix.TransformableMatrix
 
 /**
  * TODO chose a decent name.
@@ -11,7 +12,7 @@ import scala.model.helper.MatrixHelper._
  *
  * @author Paolo Baldini
  */
-object PropertySource {
+object FilterBuilder {
 
   /**
    * Build an 'half' 2d gaussian filter

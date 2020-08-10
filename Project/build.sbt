@@ -16,6 +16,7 @@ libraryDependencies  ++= Seq(
   // It depends on LGPL code
   "org.scalanlp" %% "breeze-viz" % "1.1",
 
-  // https://mvnrepository.com/artifact/it.unibo.alice.tuprolog/tuprolog
-  "it.unibo.alice.tuprolog" % "tuprolog" % "3.3.0"
+  // https://mvnrepository.com/artifact/org.scalatest/scalatest
+  "org.scalatest" %% "scalatest" % "3.2.0" % Test
+
 )

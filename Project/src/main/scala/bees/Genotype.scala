@@ -18,13 +18,13 @@ object Genotype {
 
   }
 
-  case class GenotypeImpl(override val temperatureCompatibilityGene: Gene = Gene("Temperature"),
-                          override val pressureCompatibilityGene: Gene = Gene("Pressure"),
-                          override val humidityCompatibilityGene: Gene = Gene("Humidity"),
-                          override val aggressionGene: Gene = Gene("Aggression"),
-                          override val reproductionRateGene: Gene = Gene("Reproduction"),
-                          override val longevityGene: Gene = Gene("Longevity"),
-                          override val colorGene: Gene = Gene("Color")) extends Genotype {
+  case class GenotypeImpl(override val temperatureCompatibilityGene: Gene = Gene(GeneTaxonomy.TEMPERATURE),
+                          override val pressureCompatibilityGene: Gene = Gene(GeneTaxonomy.PRESSURE),
+                          override val humidityCompatibilityGene: Gene = Gene(GeneTaxonomy.HUMIDITY),
+                          override val aggressionGene: Gene = Gene(GeneTaxonomy.AGGRESSION),
+                          override val reproductionRateGene: Gene = Gene(GeneTaxonomy.REPRODUCTION),
+                          override val longevityGene: Gene = Gene(GeneTaxonomy.LONGEVITY),
+                          override val colorGene: Gene = Gene(GeneTaxonomy.COLOR)) extends Genotype {
 
     private var genes: Set[Gene] = HashSet(this.temperatureCompatibilityGene, this.pressureCompatibilityGene, this.humidityCompatibilityGene,
       this.aggressionGene, this.reproductionRateGene, this.longevityGene, this.colorGene)

@@ -7,19 +7,19 @@ import utility.RandomGenerator
 import scala.collection.immutable.HashSet
 
 class GeneTest extends AnyFunSuite{
-  val temperatureCompatibilityGene: Gene = Gene("Temperature")
-  val pressureCompatibilityGene: Gene = Gene("Pressure")
-  val humidityCompatibilityGene: Gene = Gene("Humidity")
-  val aggressionGene: Gene = Gene("Aggression")
-  val reproductionRateGene: Gene = Gene("Reproduction")
-  val longevityGene: Gene = Gene("Longevity")
-  val colorGene: Gene = Gene("Color")
+  val temperatureCompatibilityGene: Gene = Gene(GeneTaxonomy.TEMPERATURE)
+  val pressureCompatibilityGene: Gene = Gene(GeneTaxonomy.PRESSURE)
+  val humidityCompatibilityGene: Gene = Gene(GeneTaxonomy.HUMIDITY)
+  val aggressionGene: Gene = Gene(GeneTaxonomy.AGGRESSION)
+  val reproductionRateGene: Gene = Gene(GeneTaxonomy.REPRODUCTION)
+  val longevityGene: Gene = Gene(GeneTaxonomy.LONGEVITY)
+  val colorGene: Gene = Gene(GeneTaxonomy.COLOR)
 
   var genes: Set[Gene] = HashSet(temperatureCompatibilityGene, pressureCompatibilityGene, humidityCompatibilityGene,
     aggressionGene, reproductionRateGene, longevityGene, colorGene)
 
-  val temperatureCompatibilityGeneWithMediumFrequency: Gene = Gene("Temperature", RandomGenerator.getMediumFrequency)
-  val temperatureCompatibilityGeneWithHighFrequency: Gene = Gene("Temperature", RandomGenerator.getHighFrequency)
+  val temperatureCompatibilityGeneWithMediumFrequency: Gene = Gene(GeneTaxonomy.TEMPERATURE, RandomGenerator.getMediumFrequency)
+  val temperatureCompatibilityGeneWithHighFrequency: Gene = Gene(GeneTaxonomy.TEMPERATURE, RandomGenerator.getHighFrequency)
 
   test("Any Gene should have a name"){
     val errorGenes = for {

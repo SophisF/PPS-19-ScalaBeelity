@@ -1,19 +1,25 @@
 package bees
 
+import bees.GeneTaxonomy.GeneTaxonomy
 import utility.RandomGenerator
 
+object GeneTaxonomy extends Enumeration {
+  type GeneTaxonomy = Value
+  val TEMPERATURE, PRESSURE, HUMIDITY, AGGRESSION, REPRODUCTION, LONGEVITY, COLOR = Value
+}
+
 object Gene {
-  //Possibly adding an enum
-  def apply( name: String, frequency: Int = RandomGenerator.getLowFrequency): Gene = {
+
+  def apply( geneTaxonomy: GeneTaxonomy, frequency: Int = RandomGenerator.getLowFrequency): Gene = {
     require(frequency >= 1 && frequency <= 9)
-    name match {
-      case "Temperature" => TemperatureCompatibilityGene(frequency)
-      case "Pressure" => PressureCompatibilityGene(frequency)
-      case "Humidity" => HumidityCompatibilityGene(frequency)
-      case "Aggression" => AggressionGene(frequency)
-      case "Reproduction" => ReproductionRateGene(frequency)
-      case "Longevity" => LongevityGene(frequency)
-      case "Color" => ColorGene(frequency)
+    geneTaxonomy match {
+      case GeneTaxonomy.TEMPERATURE => TemperatureCompatibilityGene(frequency)
+      case GeneTaxonomy.PRESSURE => PressureCompatibilityGene(frequency)
+      case GeneTaxonomy.HUMIDITY => HumidityCompatibilityGene(frequency)
+      case GeneTaxonomy.AGGRESSION => AggressionGene(frequency)
+      case GeneTaxonomy.REPRODUCTION => ReproductionRateGene(frequency)
+      case GeneTaxonomy.LONGEVITY => LongevityGene(frequency)
+      case GeneTaxonomy.COLOR => ColorGene(frequency)
       case _ => null
     }
   }

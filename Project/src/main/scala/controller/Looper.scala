@@ -30,7 +30,7 @@ object Looper {
     plot(environmentManager.environment)
 
     val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-    val filter = FilterBuilder.threeDimensionalPositiveDescent(values._1, values._2, 70, 70)// TODO
+    val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)// TODO
     println(filter)
     val continuousFilter = PropertySource(
       Random.nextInt(environmentSize._1), Random.nextInt(environmentSize._2),

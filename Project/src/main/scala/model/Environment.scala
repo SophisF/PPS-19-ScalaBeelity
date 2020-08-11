@@ -27,14 +27,22 @@ case class Environment private (map: DenseMatrix[Cell]) {
       case _ => cell
     }))
 
-  def +(filters: InstantaneousPropertySource*): Environment = modify(filters.map(linearize).map(_.filter(_.value > 0))
-    .reduce((_1, _2) => _1.appendedAll(_2)).sortWith(Point.compare):_*)
+  /*def +(filters: InstantaneousPropertySource*): Environment = filters.size match {
+    case 0 => this
+    case _ => Environment(DenseMatrix.create(map.rows, map.cols, modify(filters.map(linearize)
+      .map(_.filter(_.value > 0)).reduce((_1, _2) => _1.appendedAll(_2)).sortWith(Point.compare): _*)))
+  }
 
-  def modify(variations: PointVariation*): Environment = new Environment(
-    map.mapPairs((pointXY, cell) => variations.headOption match {
-      case None => cell
-      case Some(variation) if Point.equals(variation, Point.toPoint(pointXY)) => cell + variation
-    }))
+  private def modify(head: (Cell, Int, Int, tail: Cell, variations: PointVariation*): List[Cell] =
+    (cells.length, variations.size) match {
+    case (0, _) | (_, 0) => cells
+    case _ if Point.equals(variations.head, cells.head) =>
+    case _ =>
+      map.mapPairs((pointXY, cell) => Point.equals(variations.head, Point.toPoint(pointXY))) match {
+        case true => cell + variations.head :: modify()
+        case _ => cell
+      }))
+  }*/
 }
 object Environment {
   type Matrix[T] = Array[Array[T]]

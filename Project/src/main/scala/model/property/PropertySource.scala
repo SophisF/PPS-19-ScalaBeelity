@@ -32,18 +32,18 @@ object PropertySource {
     fireTime: Int, duration: Int
   ) extends PropertySource with EvolvableData[VariationMatrix]
 
-  //def apply[T](x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix): InstantaneousPropertySource =
+  //def apply(x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix): InstantaneousPropertySource =
   //  InstantaneousPropertySource(filter, x, y, width, height)
 
-  def apply[T](x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix)
+  def apply(x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix)
   : ContinuousPropertySource = ContinuousPropertySource(0, (data, time) => {
-    val force = (time - data.fireTime / data.duration) - data.evaluatedPercent
-    data.evaluatedPercent += force
+    val force = (time - data.fireTime) * 100 / data.duration.toDouble - data.evaluatedPercent
+    data.evaluatedPercent += force.toInt
     DenseMatrix.create(filter.rows, filter.cols, filter.data
-      .map(variation => Variation(variation.property, variation.value * force)))
+      .map(variation => Variation(variation.property, (variation.value * force).toInt)))
   }, x, y, width, height, fireTime, duration)
 
-  /*def linearize[T](filter: ContinuousPropertySource[T], instant: Int): Option[Array[PointVariation[T]]] =
+  /*def linearize(filter: ContinuousPropertySource[T], instant: Int): Option[Array[PointVariation[T]]] =
     lastFired(filter, instant) match {
       case None => Option.empty
       case Some(value) => Option.apply(
@@ -51,10 +51,10 @@ object PropertySource {
       )
     }*/
 
-  def linearize[T](filter: InstantaneousPropertySource): Array[PointVariation] = filter.data.mapPairs((p, v) =>
+  def linearize(filter: InstantaneousPropertySource): Array[PointVariation] = filter.data.mapPairs((p, v) =>
     PointVariation(v.property, v.value, p._1, p._2)).data
 
-  def sort[T](variations: PointVariation*): Seq[PointVariation] = variations.sortWith(Point.compare)
+  def sort(variations: PointVariation*): Seq[PointVariation] = variations.sortWith(Point.compare)
 
   def border(filter: PropertySource)(border: Size.Border): Int = border match {
     case Size.Top | Size.Bottom => filter.y + filter ~ border

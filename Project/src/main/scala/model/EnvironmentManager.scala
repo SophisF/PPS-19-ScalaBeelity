@@ -22,14 +22,14 @@ object EnvironmentManager {
 
   def evolution(manager: EnvironmentManager): EnvironmentManager =
     EnvironmentManager(
-      manager.environment + (manager.continuousFilters.map(it => dataAtInstant(it) match {
+      /*manager.environment + (manager.continuousFilters.map(it => dataAtInstant(it) match {
         case None => Option empty
         case filter => Option apply InstantaneousPropertySource(filter.get, it.x, it.y, it.width, it.height)
-      }).filter(_ nonEmpty).map(_ get):_*),
-      /*manager.continuousFilters.map(it => dataAtInstant(it) match {
+      }).filter(_ nonEmpty).map(_ get):_*),*/
+      manager.continuousFilters.map(it => dataAtInstant(it) match {
         case None => Option empty
         case filter => Option apply InstantaneousPropertySource(filter.get, it.x, it.y, it.width, it.height)
-      }).filter(_ nonEmpty).map(_ get).foldLeft(manager environment)(applyFilter),*/
+      }).filter(_ nonEmpty).map(_ get).foldLeft(manager environment)(applyFilter),
       manager.continuousFilters.filter(!isEnded(_))
     )
 

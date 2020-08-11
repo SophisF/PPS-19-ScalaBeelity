@@ -14,9 +14,9 @@ object Point {
   def apply(x: Int, y: Int): Point = new Point { override val x: Int = x; override val y: Int = y }
 
   /**
-   * Polish notation
+   * Polish like notation
    */
-  def ==(first: Point, second: Point): Unit = first.x == second.x && first.y == second.y
+  def equals(first: Point, second: Point): Boolean = first.x == second.x && first.y == second.y
 
   def compare(first: Point, second: Point): Boolean = first.x match {
     case second.x => first.y < first.y

@@ -3,7 +3,8 @@ package scala.controller
 import scala.model.EnvironmentManager.{addSource, evolution}
 import scala.model._
 import scala.model.matrix.Matrix._
-import scala.model.property.Property.{Temperature, range}
+import scala.model.property.Property.Temperature
+import scala.model.property.PropertySource.ContinuousPropertySource
 import scala.model.property.PropertyVariation.Variation
 import scala.model.property.{FilterBuilder, Property, PropertySource}
 import scala.model.time.Time
@@ -29,27 +30,14 @@ object Looper {
 
     plot(environmentManager.environment)
 
-    val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-    val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)// TODO
-    println(filter)
-    val continuousFilter = PropertySource(
-      Random.nextInt(environmentSize._1), Random.nextInt(environmentSize._2),
-      filter.cols, filter.rows,
-      /*i + updateStep*/0, 100, filter.mapValues(it => Variation(Temperature, it.toInt))
-    )
-    environmentManager = addSource(environmentManager, continuousFilter)
+    environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
+      .foldLeft(environmentManager)(addSource)
 
-    Iterator.range(0, iterations)/*.filter(_ % updateStep == 0)*/.foreach(i => {
+    Iterator range(0, iterations) filter(_ % updateStep == 0) foreach(i => {
 
       environmentManager = evolution(environmentManager)
 
-      if (i == iterations / 2) {
-        plot(environmentManager.environment)
-        println(environmentManager.continuousFilters.appended(continuousFilter).mkString("Array(", ", ", ")"))
-        println(environmentManager.continuousFilters.mkString("Array(", ", ", ")"))
-        println(environmentManager.environment.map.data.filter(it => it.temperature != range(Temperature).default).mkString("Array(", ", ", ")"))
-      }
-      //if (i / updateStep == iterations / (2 * updateStep)) plot(environmentManager.environment)
+      if (i == iterations / 2) plot(environmentManager.environment)
 
       Time increment 1
     })
@@ -57,11 +45,23 @@ object Looper {
     plot(environmentManager.environment)
   }
 
+  private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
+  : Iterable[ContinuousPropertySource] = (0 until quantity) map (_ => {
+      val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
+      val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
+
+      PropertySource(
+        Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
+        filter.cols, filter.rows,
+        0, iterations, filter.mapValues(it => Variation(Temperature, it.toInt))
+      )
+    })
+
   /**
    * Plot the environment calling the view
    *
    * @param environment to plot
    */
   private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(environment.map
-      .dropColumns(0.3).dropRows(0.3).mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
+      .dropColumns(0.5).dropRows(0.5).mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
 }

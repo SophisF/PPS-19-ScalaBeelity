@@ -13,8 +13,8 @@ trait EvolvableData[E] extends Timed {
 
 object EvolvableData {
 
-  def inference[E](data: EvolvableData[E], time: Int = Time.time): Option[E] = time match {
-    case time if !Timed.inProgress(data, time) => Option.empty
-    case _ => Option.apply(data.inference(data, time))
-  }
+  def dataAtInstant[E](data: EvolvableData[E], time: Int = Time.time): Option[E] = time match {
+      case time if !Timed.inProgress(data, time) => Option.empty
+      case _ => Option.apply(data.inference(data, time))
+    }
 }

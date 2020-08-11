@@ -11,7 +11,7 @@ trait Timed {
 }
 object Timed {
 
-  def ended(obj: Timed, time: Int = Time.time): Boolean = obj.fireTime + obj.duration < time
+  def isEnded(obj: Timed, time: Int = Time.time): Boolean = obj.fireTime + obj.duration < time
 
   /**
    * Check if start time has yet been reached
@@ -19,7 +19,7 @@ object Timed {
    * @param obj to check start
    * @return true if start time is previous to actual time; false otherwise
    */
-  def isStarted(obj: Timed, time: Int = Time.time): Boolean = obj.fireTime >= time
+  def isStarted(obj: Timed, time: Int = Time.time): Boolean = obj.fireTime <= time
 
-  def inProgress(obj: Timed, time: Int = Time.time): Boolean = isStarted(obj, time) && !ended(obj, time)
+  def inProgress(obj: Timed, time: Int = Time.time): Boolean = isStarted(obj, time) && !isEnded(obj, time)
 }

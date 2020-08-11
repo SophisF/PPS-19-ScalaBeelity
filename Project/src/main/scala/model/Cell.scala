@@ -28,7 +28,7 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
     case Pressure => pressure
   }
 
-  def +(variation: Option[Variation]): Cell = variation match {
+  def +(variation: Option[PropertyVariation]): Cell = variation match {
     case None => this
     case _ => this + variation.get
   }
@@ -39,7 +39,7 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @param variation contains value and target of the variation
    * @return the varied cell
    */
-  def +(variation: Variation): Cell = variation.property match {
+  def +(variation: PropertyVariation): Cell = variation.property match {
     case Temperature => Cell(temperature + variation.value, humidity, pressure)
     case Humidity => Cell(temperature, humidity + variation.value, pressure)
     case Pressure => Cell(temperature, humidity, pressure + variation.value)

@@ -3,7 +3,8 @@ package scala.model
 import breeze.linalg.DenseMatrix
 
 import scala.model.matrix._
-import scala.model.property.PropertySource.{InstantaneousPropertySource, border, in}
+import scala.model.property.PropertySource.{InstantaneousPropertySource, border, in, linearize}
+import scala.model.property.PropertyVariation.PointVariation
 
 /**
  * A first scratch of the environment class.
@@ -26,14 +27,14 @@ case class Environment private (map: DenseMatrix[Cell]) {
       case _ => cell
     }))
 
-  /*def +(filters: Iterable[Filter[Int]]): Environment = modify(filters.map(linearize)
-    .reduce((_1, _2) => _1.appendedAll(_2)).sortWith(Point.compare).toSeq)
+  def +(filters: InstantaneousPropertySource*): Environment = modify(filters.map(linearize).map(_.filter(_.value > 0))
+    .reduce((_1, _2) => _1.appendedAll(_2)).sortWith(Point.compare):_*)
 
-  def modify(variations: Seq[CellVariation[Int]]): Environment = new Environment(
-    map.mapPairs((pointXY, cell) => variations.take(1) match {
-      case seq if seq.isEmpty => cell
-      case seq => cell + seq.find(==(_, Point.toPoint(pointXY)))
-    }))*/
+  def modify(variations: PointVariation*): Environment = new Environment(
+    map.mapPairs((pointXY, cell) => variations.headOption match {
+      case None => cell
+      case Some(variation) if Point.equals(variation, Point.toPoint(pointXY)) => cell + variation
+    }))
 }
 object Environment {
   type Matrix[T] = Array[Array[T]]
@@ -48,4 +49,13 @@ object Environment {
    */
   def apply(size: SizeWH, defaultCell: Cell) = new Environment(DenseMatrix.create(size._1, size._2, Iterator
     .continually(defaultCell).take(size._1 * size._2).toArray))
+
+  /**
+   * Apply a filter to an environment
+   *
+   * @param environment to which apply the filter
+   * @param filter to apply
+   * @return an environment to which is applied the filter
+   */
+  def applyFilter(environment: Environment, filter: InstantaneousPropertySource): Environment = environment + filter
 }

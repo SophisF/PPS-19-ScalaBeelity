@@ -1,70 +1,89 @@
-package bees
+package bees.genotype
 
-import bees.GeneTaxonomy.GeneTaxonomy
-import utility.RandomGenerator
-import utility.RandomGenerator.getRandomNumber
+import bees.genotype.GeneTaxonomy.GeneTaxonomy
+import bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
+import bees.genotype.Influence.InfluenceImpl
+import bees.phenotype.CharacteristicTaxonomy
 
-object GeneTaxonomy extends Enumeration {
-  type GeneTaxonomy = Value
-  val TEMPERATURE, PRESSURE, HUMIDITY, AGGRESSION, REPRODUCTION, LONGEVITY, COLOR = Value
-}
+import scala.util.Random
 
 object Gene {
 
-  val minFrequency: Int = 1
-  val maxFrequency: Int = 9
-
-  def apply( geneTaxonomy: GeneTaxonomy, frequency: Int = getLowFrequency): Gene = {
-    require(frequency >= minFrequency && frequency <= maxFrequency)
-    geneTaxonomy match {
-      case GeneTaxonomy.TEMPERATURE => TemperatureCompatibilityGene(frequency)
-      case GeneTaxonomy.PRESSURE => PressureCompatibilityGene(frequency)
-      case GeneTaxonomy.HUMIDITY => HumidityCompatibilityGene(frequency)
-      case GeneTaxonomy.AGGRESSION => AggressionGene(frequency)
-      case GeneTaxonomy.REPRODUCTION => ReproductionRateGene(frequency)
-      case GeneTaxonomy.LONGEVITY => LongevityGene(frequency)
-      case GeneTaxonomy.COLOR => ColorGene(frequency)
-      case _ => null
+  private def geneFactory(taxonomy: GeneTaxonomy): Gene = {
+    taxonomy match {
+      case GeneTaxonomy.TEMPERATURE_GENE => TemperatureCompatibilityGene()
+      case GeneTaxonomy.PRESSURE_GENE => PressureCompatibilityGene()
+      case GeneTaxonomy.HUMIDITY_GENE => HumidityCompatibilityGene()
+      case GeneTaxonomy.AGGRESSION_GENE => AggressionGene()
+      case GeneTaxonomy.REPRODUCTION_GENE => ReproductionRateGene()
+      case GeneTaxonomy.LONGEVITY_GENE => LongevityGene()
+      case GeneTaxonomy.COLOR_GENE => ColorGene()
+      case GeneTaxonomy.GROWTH_GENE => GrowthGene()
+      case _ => WingsGene()
     }
   }
 
-  def getLowFrequency: Int = {
-    getRandomNumber(minFrequency, (maxFrequency-minFrequency)/3)
+  def apply(taxonomy: Option[GeneTaxonomy] = None): Gene = {
+    taxonomy match {
+      case Some(t) => geneFactory(t)
+      case None => geneFactory(GeneTaxonomy(Random.nextInt(GeneTaxonomy.values.size)))
+    }
   }
 
-  def getMediumFrequency: Int = {
-    getRandomNumber(Gene.minFrequency + (maxFrequency-minFrequency)/3 + 1 , (maxFrequency-minFrequency)/3)
-  }
-
-  def getHighFrequency: Int = {
-    getRandomNumber(Gene.minFrequency + 2*(maxFrequency-minFrequency)/3 + 1, (maxFrequency-minFrequency)/3)
-  }
 
   trait Gene {
-    val name: String
-    val frequency: Int
+    val name: GeneTaxonomy
+    val information: GeneticInformation
   }
 
-  private case class TemperatureCompatibilityGene(override val frequency: Int) extends Gene{
-    override val name: String = "Temperature"
+  private case class TemperatureCompatibilityGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.TEMPERATURE_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY, InfluenceImpl()))
+
   }
-  private case class PressureCompatibilityGene(override val frequency: Int) extends Gene{
-    override val name: String = "Pressure"
+
+  private case class PressureCompatibilityGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.PRESSURE_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.PRESSURE_COMPATIBILITY, InfluenceImpl()))
   }
-  private case class HumidityCompatibilityGene(override val frequency: Int) extends Gene{
-    override val name: String = "Humidity"
+
+  private case class HumidityCompatibilityGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.HUMIDITY_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY, InfluenceImpl()))
   }
-  private case class AggressionGene(override val frequency: Int) extends Gene{
-    override val name: String = "Aggression"
+
+  private case class AggressionGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.AGGRESSION_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.AGGRESSION_RATE, InfluenceImpl()))
   }
-  private case class ReproductionRateGene(override val frequency: Int) extends Gene{
-    override val name: String = "Reproduction"
+
+  private case class ReproductionRateGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.REPRODUCTION_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.REPRODUCTION_RATE,
+                                                                            InfluenceImpl()))
   }
-  private case class LongevityGene(override val frequency: Int) extends Gene{
-    override val name: String = "Longevity"
+
+  private case class LongevityGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.LONGEVITY_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.LONGEVITY, InfluenceImpl()))
   }
-  private case class ColorGene(override val frequency: Int) extends Gene{
-    override val name: String = "Color"
+
+  private case class ColorGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.COLOR_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.COLOR, InfluenceImpl()))
+  }
+
+  private case class GrowthGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.GROWTH_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.SPEED, InfluenceImpl(
+      typeOfInfluence = InfluenceType.NEGATIVE,
+      influenceInPercentage = 20
+    )), (CharacteristicTaxonomy.AGGRESSION_RATE, InfluenceImpl(influenceInPercentage = 20)))
+  }
+
+  private case class WingsGene() extends Gene {
+    override val name: GeneTaxonomy = GeneTaxonomy.WINGS_GENE
+    override val information: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.SPEED, InfluenceImpl()))
   }
 
 }

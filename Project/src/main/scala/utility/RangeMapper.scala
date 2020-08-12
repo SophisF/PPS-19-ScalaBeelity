@@ -1,9 +1,7 @@
 package utility
 
-import bees.Gene
-
 object RangeMapper {
-
+/*
   def getRange(min: Int, max: Int, frequency: Int, rangeTuning: Int): (Int, Int) = {
     val minMax = max - max*rangeTuning/100
     val maxMin = min + min*rangeTuning/100
@@ -12,5 +10,7 @@ object RangeMapper {
 
     (min + frequency*intervalMin, minMax+frequency*intervalMin)
   }
+
+ */
 
 }

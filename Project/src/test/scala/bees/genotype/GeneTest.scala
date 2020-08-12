@@ -1,7 +1,6 @@
-package bees
+package bees.genotype
 
 import bees.genotype.Gene._
-import bees.genotype.{Gene, GeneTaxonomy}
 import org.scalatest.funsuite.AnyFunSuite
 
 class GeneTest extends AnyFunSuite{

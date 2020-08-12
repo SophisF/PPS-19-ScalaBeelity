@@ -4,6 +4,7 @@ import scala.model.EnvironmentManager.{addSource, evolution}
 import scala.model._
 import scala.model.matrix.Matrix._
 import scala.model.property.Property.Temperature
+import scala.model.property.PropertySource.SeasonalPropertySource
 import scala.model.property.ZonePropertySource.ContinuousZonePropertySource
 import scala.model.property.PropertyVariation.Variation
 import scala.model.property.{FilterBuilder, Property, ZonePropertySource}
@@ -32,6 +33,13 @@ object Looper {
 
     environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
       .foldLeft(environmentManager)(addSource)
+
+    environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity, Time.time, (p, t) => {
+      val applications = (t - p.lastInference) % 30
+      p.lastInference = t
+
+      applications * 2
+    }))
 
     Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
 

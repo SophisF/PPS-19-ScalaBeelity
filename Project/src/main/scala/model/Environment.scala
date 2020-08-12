@@ -2,8 +2,8 @@ package scala.model
 
 import breeze.linalg.DenseMatrix
 
-import scala.annotation.tailrec
 import scala.model.matrix._
+import scala.model.property.Property.Property
 import scala.model.property.{Property, PropertySource}
 import scala.model.property.PropertySource.SeasonalPropertySource
 import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, border, in}
@@ -58,10 +58,13 @@ object Environment {
       case _ => cell
     }))
 
-  def applySeason(environment: Environment, scalar: SeasonalPropertySource): Environment =
-    Environment(environment.map.map(cell => scalar.property match {
-      case Property.Temperature => Cell(cell.temperature + PeriodicalData.dataAtInstant(scalar), cell.humidity, cell.pressure)
-      case Property.Humidity => Cell(cell.temperature, cell.humidity + PeriodicalData.dataAtInstant(scalar), cell.pressure)
-      case Property.Pressure => Cell(cell.temperature, cell.humidity, cell.pressure + PeriodicalData.dataAtInstant(scalar))
+  def applySeason(environment: Environment, variator: SeasonalPropertySource): Environment = {
+    val scalar: (Property, Int) = (variator.property, PeriodicalData.dataAtInstant(variator))
+
+    Environment(environment.map.map(cell => scalar._1 match {
+      case Property.Temperature => Cell(cell.temperature + scalar._2, cell.humidity, cell.pressure)
+      case Property.Humidity => Cell(cell.temperature, cell.humidity + scalar._2, cell.pressure)
+      case Property.Pressure => Cell(cell.temperature, cell.humidity, cell.pressure + scalar._2)
     }))
+  }
 }

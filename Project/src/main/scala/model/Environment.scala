@@ -2,9 +2,12 @@ package scala.model
 
 import breeze.linalg.DenseMatrix
 
+import scala.annotation.tailrec
 import scala.model.matrix._
-import scala.model.property.PropertySource.{InstantaneousPropertySource, border, in, linearize}
-import scala.model.property.PropertyVariation.PointVariation
+import scala.model.property.{Property, PropertySource}
+import scala.model.property.PropertySource.SeasonalPropertySource
+import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, border, in}
+import scala.model.time.{EvolvableData, PeriodicalData}
 
 /**
  * A first scratch of the environment class.
@@ -13,37 +16,8 @@ import scala.model.property.PropertyVariation.PointVariation
  *
  * @author Paolo Baldini
  */
-case class Environment private (map: DenseMatrix[Cell]) {
+case class Environment private (map: DenseMatrix[Cell])
 
-  /**
-   * Apply a filter to the environment
-   *
-   * @param filter to apply
-   * @return modified environment
-   */
-  def +(filter: InstantaneousPropertySource): Environment = new Environment(map.mapPairs((pointXY, cell) =>
-    pointXY match {
-      case p if in(p._1, p._2, filter) => cell + filter.data(p._1 - border(filter)(Size.Left), p._2 - border(filter)(Size.Top))
-      case _ => cell
-    }))
-
-  /*def +(filters: InstantaneousPropertySource*): Environment = filters.size match {
-    case 0 => this
-    case _ => Environment(DenseMatrix.create(map.rows, map.cols, modify(filters.map(linearize)
-      .map(_.filter(_.value > 0)).reduce((_1, _2) => _1.appendedAll(_2)).sortWith(Point.compare): _*)))
-  }
-
-  private def modify(head: (Cell, Int, Int, tail: Cell, variations: PointVariation*): List[Cell] =
-    (cells.length, variations.size) match {
-    case (0, _) | (_, 0) => cells
-    case _ if Point.equals(variations.head, cells.head) =>
-    case _ =>
-      map.mapPairs((pointXY, cell) => Point.equals(variations.head, Point.toPoint(pointXY))) match {
-        case true => cell + variations.head :: modify()
-        case _ => cell
-      }))
-  }*/
-}
 object Environment {
   type Matrix[T] = Array[Array[T]]
   type SizeWH = (Int, Int)
@@ -58,6 +32,18 @@ object Environment {
   def apply(size: SizeWH, defaultCell: Cell) = new Environment(DenseMatrix.create(size._1, size._2, Iterator
     .continually(defaultCell).take(size._1 * size._2).toArray))
 
+  def apply(environment: Environment, propertySource: PropertySource): Environment = propertySource match {
+    case propertySource: InstantaneousZonePropertySource =>
+      applyFilter(environment, propertySource.asInstanceOf[InstantaneousZonePropertySource])
+    case propertySource: ContinuousZonePropertySource => EvolvableData.dataAtInstant(propertySource) match {
+      case None => environment
+      case Some(value) => applyFilter(environment, InstantaneousZonePropertySource(value, propertySource.x,
+        propertySource.y, propertySource.width, propertySource.height))
+    }
+    case propertySource: SeasonalPropertySource =>
+      applySeason(environment, propertySource.asInstanceOf[SeasonalPropertySource])
+  }
+
   /**
    * Apply a filter to an environment
    *
@@ -65,5 +51,17 @@ object Environment {
    * @param filter to apply
    * @return an environment to which is applied the filter
    */
-  def applyFilter(environment: Environment, filter: InstantaneousPropertySource): Environment = environment + filter
+  def applyFilter(environment: Environment, filter: InstantaneousZonePropertySource): Environment =
+    Environment(environment.map.mapPairs((pointXY, cell) => pointXY match {
+      case p if in(p._1, p._2, filter) =>
+        cell + filter.data(p._1 - border(filter)(Size.Left), p._2 - border(filter)(Size.Top))
+      case _ => cell
+    }))
+
+  def applySeason(environment: Environment, scalar: SeasonalPropertySource): Environment =
+    Environment(environment.map.map(cell => scalar.property match {
+      case Property.Temperature => Cell(cell.temperature + PeriodicalData.dataAtInstant(scalar), cell.humidity, cell.pressure)
+      case Property.Humidity => Cell(cell.temperature, cell.humidity + PeriodicalData.dataAtInstant(scalar), cell.pressure)
+      case Property.Pressure => Cell(cell.temperature, cell.humidity, cell.pressure + PeriodicalData.dataAtInstant(scalar))
+    }))
 }

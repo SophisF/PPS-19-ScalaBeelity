@@ -1,6 +1,7 @@
 package scala.model.time
 
 /**
+ * TODO cercare di generalizzare evolvable data
  * Represent a data that can change it's state at pre-defined time-instants
  *
  * @tparam E type of the data

@@ -3,7 +3,7 @@ package scala.controller
 import scala.model.EnvironmentManager.{addSource, evolution}
 import scala.model._
 import scala.model.matrix.Matrix._
-import scala.model.property.Property.Temperature
+import scala.model.property.Property.{Temperature, toPercentage}
 import scala.model.property.PropertySource.SeasonalPropertySource
 import scala.model.property.ZonePropertySource.ContinuousZonePropertySource
 import scala.model.property.PropertyVariation.Variation
@@ -34,12 +34,7 @@ object Looper {
     environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
       .foldLeft(environmentManager)(addSource)
 
-    environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity, Time.time, (p, t) => {
-      val applications = (t - p.lastInference) % 30
-      p.lastInference = t
-
-      applications * 2
-    }))
+    environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))
 
     Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
 
@@ -70,6 +65,12 @@ object Looper {
    *
    * @param environment to plot
    */
+  /*private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
+    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
+    Property.range(property).minValue,
+    Property.range(property).maxValue,
+    s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
+  ))*/
   private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(environment.map
-      .dropColumns(0.5).dropRows(0.5).mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
+    .dropColumns(0.5).dropRows(0.5).mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
 }

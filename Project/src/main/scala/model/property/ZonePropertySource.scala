@@ -4,7 +4,7 @@ import breeze.linalg._
 
 import scala.model.matrix._
 import scala.model.property.PropertyVariation._
-import scala.model.time.EvolvableData
+import scala.model.time.{FiniteData, Time}
 
 trait ZonePropertySource extends PropertySource with Point with Size
 
@@ -25,23 +25,26 @@ object ZonePropertySource {
   ) extends ZonePropertySource
 
   case class ContinuousZonePropertySource(
-    var evaluatedPercent: Int,
-    inference: (EvolvableData[VariationMatrix], Int) => VariationMatrix,
+    filter: VariationMatrix,
     x: Int, y: Int,
     width: Int, height: Int,
     fireTime: Int, duration: Int
-  ) extends ZonePropertySource with EvolvableData[VariationMatrix]
+  ) extends ZonePropertySource with FiniteData[VariationMatrix] {
+    var evaluated: Int = 0
+  }
 
   //def apply(x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix): InstantaneousPropertySource =
   //  InstantaneousPropertySource(filter, x, y, width, height)
 
-  def apply(x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix)
-  : ContinuousZonePropertySource = ContinuousZonePropertySource(0, (data, time) => {
-    val force = (time - data.fireTime) * 100 / data.duration.toDouble - data.evaluatedPercent
-    data.evaluatedPercent += force.toInt
-    DenseMatrix.create(filter.rows, filter.cols, filter.data
+  implicit def nextValue(data: ContinuousZonePropertySource): VariationMatrix = {
+    val force = (Time.time - data.fireTime) * 100 / data.duration.toDouble - data.evaluated
+    data.evaluated += force.toInt
+    DenseMatrix.create(data.filter.rows, data.filter.cols, data.filter.data
       .map(variation => Variation(variation.property, (variation.value * force).toInt)))
-  }, x, y, width, height, fireTime, duration)
+  }
+
+  def apply(x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix)
+  : ContinuousZonePropertySource = ContinuousZonePropertySource(filter, x, y, width, height, fireTime, duration)
 
   /*def linearize(filter: ContinuousPropertySource[T], instant: Int): Option[Array[PointVariation[T]]] =
     lastFired(filter, instant) match {

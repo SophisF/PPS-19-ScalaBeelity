@@ -3,11 +3,12 @@ package scala.model
 import breeze.linalg.DenseMatrix
 
 import scala.model.matrix._
-import scala.model.property.Property.Property
-import scala.model.property.{Property, PropertySource}
-import scala.model.property.PropertySource.SeasonalPropertySource
-import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, border, in}
-import scala.model.time.{EvolvableData, PeriodicalData}
+import scala.model.property.PropertySource
+import scala.model.property.PropertySource.{SeasonalPropertySource, nextValueLinear}
+import scala.model.property.PropertyVariation.Variation
+import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, VariationMatrix, border, in, nextValue}
+import scala.model.time.TimeData.dataAtInstant
+import scala.model.time.FiniteData
 
 /**
  * A first scratch of the environment class.
@@ -33,15 +34,14 @@ object Environment {
     .continually(defaultCell).take(size._1 * size._2).toArray))
 
   def apply(environment: Environment, propertySource: PropertySource): Environment = propertySource match {
-    case propertySource: InstantaneousZonePropertySource =>
-      applyFilter(environment, propertySource.asInstanceOf[InstantaneousZonePropertySource])
-    case propertySource: ContinuousZonePropertySource => EvolvableData.dataAtInstant(propertySource) match {
-      case None => environment
-      case Some(value) => applyFilter(environment, InstantaneousZonePropertySource(value, propertySource.x,
-        propertySource.y, propertySource.width, propertySource.height))
-    }
-    case propertySource: SeasonalPropertySource =>
-      applySeason(environment, propertySource.asInstanceOf[SeasonalPropertySource])
+    case propertySource: InstantaneousZonePropertySource => applyFilter(environment, propertySource)
+    case propertySource: ContinuousZonePropertySource =>
+      FiniteData.dataAtInstant[VariationMatrix, ContinuousZonePropertySource](propertySource)(nextValue) match {
+        case None => environment
+        case Some(value) => applyFilter(environment, InstantaneousZonePropertySource(value, propertySource.x,
+          propertySource.y, propertySource.width, propertySource.height))
+      }
+    case propertySource: SeasonalPropertySource => applySeason(environment, propertySource)
   }
 
   /**
@@ -59,12 +59,7 @@ object Environment {
     }))
 
   def applySeason(environment: Environment, variator: SeasonalPropertySource): Environment = {
-    val scalar: (Property, Int) = (variator.property, PeriodicalData.dataAtInstant(variator))
-
-    Environment(environment.map.map(cell => scalar._1 match {
-      case Property.Temperature => Cell(cell.temperature + scalar._2, cell.humidity, cell.pressure)
-      case Property.Humidity => Cell(cell.temperature, cell.humidity + scalar._2, cell.pressure)
-      case Property.Pressure => Cell(cell.temperature, cell.humidity, cell.pressure + scalar._2)
-    }))
+    val variation = Variation(variator.property, dataAtInstant[Int, SeasonalPropertySource](variator)(nextValueLinear))
+    Environment(environment.map.map(_ + variation))
   }
 }

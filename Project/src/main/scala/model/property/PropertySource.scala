@@ -18,9 +18,7 @@ object PropertySource {
     data.lastGet = sin
     variance toInt
   }
-
-  println(0 until 12 map (x => if (x < 6) x * 3 else (12 - x) * 3))
-
+  
   def incrementalValue(time : Int) : Int =(0 until 12 map (x => if (x < 6) x * 3 else (12 - x) * 3))
     .drop((time / 30) % 12).head
 

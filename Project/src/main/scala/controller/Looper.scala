@@ -65,12 +65,10 @@ object Looper {
    *
    * @param environment to plot
    */
-  /*private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
+  private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
     environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
     Property.range(property).minValue,
     Property.range(property).maxValue,
     s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
-  ))*/
-  private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(environment.map
-    .dropColumns(0.5).dropRows(0.5).mapValues(cell => Property.toPercentage(property, cell.get(property)).toDouble)))
+  ))
 }

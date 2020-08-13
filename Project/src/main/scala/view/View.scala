@@ -15,7 +15,7 @@ import scala.model.property.Property
 object View {
 
   private val Figure_ = Figure()
-  private val ColorGradient = Array(Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED)
+  private val ColorGradient = (0 until(360, 36)).map(it => new Color(Color.HSBtoRGB(it / 360f, 1, 1)))
   private var i = 0 // TODO :/
 
   /**
@@ -28,9 +28,9 @@ object View {
    *
    * @param map to plot
    */
-  def plot(map: DenseMatrix[Double]): Unit = {
-    (Figure_.subplot(i / Figure_.cols + 1, Property.values.size, i) += image(map, GradientPaintScale(0, 100,
-      ColorGradient))).title = i.toString
+  def plot(map: DenseMatrix[Double], minValue: Int = 0, maxValue: Int = 100, name: String = i toString): Unit = {
+    (Figure_.subplot(i / Figure_.cols + 1, Property.values.size, i) += image(map, GradientPaintScale(minValue, maxValue,
+      ColorGradient.toArray))).title = name
     i += 1
   }
 }

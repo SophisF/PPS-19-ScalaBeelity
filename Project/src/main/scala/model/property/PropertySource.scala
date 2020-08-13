@@ -4,6 +4,7 @@ import scala.model.property.Property.Property
 import scala.model.time.{Time, TimeData}
 
 trait PropertySource
+
 object PropertySource {
 
   // TODO case class con var?
@@ -18,11 +19,16 @@ object PropertySource {
     variance toInt
   }
 
-  // TODO ??? non sono sicuro sia giusto il calcolo
-  implicit def nextValueLinear(data: SeasonalPropertySource): Int = {
-    val applications = (Time.time - data.lastGet) % 30
-    data.lastGet = Time.time
+  println(0 until 12 map (x => if (x < 6) x * 3 else (12 - x) * 3))
 
-    applications * 2 toInt
+  def incrementalValue(time : Int) : Int =(0 until 12 map (x => if (x < 6) x * 3 else (12 - x) * 3))
+    .drop((time / 30) % 12).head
+
+  // TODO ??? non sono sicuro sia giusto il calcolo, vedere se si può accedere con indice
+  implicit def nextValueLinear(data: SeasonalPropertySource): Int = {
+    val result = incrementalValue(Time.time) - incrementalValue(data.lastGet toInt)
+    data.lastGet = Time.time
+    result
   }
+
 }

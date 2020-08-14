@@ -1,5 +1,5 @@
 package bees.phenotype
 
-class phenotypeTest {
+class PhenotypeTest {
 
 }

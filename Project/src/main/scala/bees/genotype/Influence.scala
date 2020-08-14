@@ -11,6 +11,8 @@ object Influence {
   trait Influence{
     val typeOfInfluence: InfluenceType
     val influenceValue: Double
+
+    def +(value: Double): Double = value + this.influenceValue
   }
 
   case class InfluenceImpl(override val typeOfInfluence: InfluenceType = InfluenceType.POSITIVE,

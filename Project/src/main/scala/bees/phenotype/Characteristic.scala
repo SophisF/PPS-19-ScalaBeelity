@@ -1,10 +1,10 @@
 package bees.phenotype
 
 import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import utility.ExpressionMapper
 
 object Characteristic {
 
+  //possibly adding a generic type and an Expression Interface as superclasses of the others.
   trait Characteristic{
     type Expression
     val name: CharacteristicTaxonomy

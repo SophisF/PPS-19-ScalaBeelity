@@ -10,7 +10,7 @@ class GeneticInformationTest extends AnyFunSuite{
                                                                       InfluenceImpl()))
 
   test("A GeneticInformation should not be empty"){
-    assert(geneticInformation.getInfo.nonEmpty)
+    assert(geneticInformation.information.nonEmpty)
   }
 
   test("An empty GeneticInformation should throws an IllegalArgumentException"){

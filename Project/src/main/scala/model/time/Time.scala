@@ -18,10 +18,13 @@ object Time {
    *
    * @param value the time increment
    */
-  def increment(value: Int): Unit = value match {
+  def increment(value: Int = 1): Unit = value match {
     case value if value > 0 => _time += value
     case _ =>
   }
 
+  /**
+   * Initialize the ecosystem time.
+   */
   def initialize(): Unit = _time = 0
 }

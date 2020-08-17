@@ -59,6 +59,13 @@ object Environment {
       case _ => cell
     }))
 
+  /**
+   * Apply a seasonal variation to an environment
+   *
+   * @param environment to which apply the filter
+   * @param variator to apply
+   * @return an environment to which is applied the filter
+   */
   def applySeason(environment: Environment, variator: SeasonalPropertySource): Environment = {
     val variation = Variation(variator.property, dataAtInstant[Int, SeasonalPropertySource](variator)(nextValueLinear))
     Environment(environment.map.map(_ + variation))

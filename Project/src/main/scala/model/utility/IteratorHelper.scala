@@ -1,7 +1,7 @@
 package scala.model.helper
 
 /**
- * Applying `pimp my library` pattern to iterable to add utilities methods
+ * Applying `Pimp my library` pattern to iterable to add utilities methods
  *
  * @author Paolo Baldini
  */

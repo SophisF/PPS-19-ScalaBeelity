@@ -13,13 +13,33 @@ object EnvironmentManager {
    * 2- potrei salvarmi un parametro lastupdate per vedere se l'ultimo aggiornamento è stato fatto
    */
 
+  /**
+   * Manager of the environment, that control its evolution.
+   *
+   * @param environment, the environment to manage.
+   * @param propertySource, the property to at the environment.
+   */
   case class EnvironmentManager(environment: Environment, propertySource: Array[PropertySource])
 
+  /**
+   * Apply function.
+   *
+   * @param width of environment.
+   * @param height of environment.
+   * @return an environment manager.
+   */
   def apply(width: Int, height: Int): EnvironmentManager = {
     EnvironmentManager(Environment((width, height), Cell(range(Temperature).default, range(Humidity).default,
       range(Pressure).default)), Array())
   }
 
+  /**
+   * Apply property source at the environment and control property source.
+   *
+   * @param manager, environment manager to evolute.
+   * @return environment manager evoluted.
+   *
+   */
   def evolution(manager: EnvironmentManager): EnvironmentManager =
     EnvironmentManager(
       manager.propertySource.foldLeft(manager.environment)(Environment.apply),

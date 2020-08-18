@@ -1,12 +1,13 @@
-package scala.model.property
+package scala.model.property.source
 
 import breeze.linalg._
 
 import scala.model.matrix._
+import scala.model.property.Property
 import scala.model.property.PropertyVariation._
 import scala.model.time.{FiniteData, Time}
 
-trait ZonePropertySource extends PropertySource with Point with Size
+trait ZonePropertySource[T <: Property] extends PropertySource[T] with Point with Size
 
 /**
  * Object for a basic filter that contains a matrix representing the gaussian 3d function.
@@ -16,35 +17,33 @@ trait ZonePropertySource extends PropertySource with Point with Size
  */
 object ZonePropertySource {
 
-  type VariationMatrix = DenseMatrix[Variation]
-
-  case class InstantaneousZonePropertySource(
-    data: VariationMatrix,
+  case class InstantaneousZonePropertySource[T <: Property](
+    data: DenseMatrix[Variation[T]],
     x: Int, y: Int,
     width: Int, height: Int
-  ) extends ZonePropertySource
+  ) extends ZonePropertySource[T]
 
-  case class ContinuousZonePropertySource(
-    filter: VariationMatrix,
+  case class ContinuousZonePropertySource[T <: Property](
+    filter: DenseMatrix[Variation[T]],
     x: Int, y: Int,
     width: Int, height: Int,
     fireTime: Int, duration: Int
-  ) extends ZonePropertySource with FiniteData[VariationMatrix] {
+  ) extends ZonePropertySource[T] with FiniteData[DenseMatrix[Variation[T]]] {
     var evaluated: Int = 0
   }
 
   //def apply(x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix): InstantaneousPropertySource =
   //  InstantaneousPropertySource(filter, x, y, width, height)
 
-  implicit def nextValue(data: ContinuousZonePropertySource): VariationMatrix = {
+  implicit def nextValue[T <: Property](data: ContinuousZonePropertySource[T]): DenseMatrix[Variation[T]] = {
     val force = (Time.time - data.fireTime) * 100 / data.duration.toDouble - data.evaluated
     data.evaluated += force.toInt
     DenseMatrix.create(data.filter.rows, data.filter.cols, data.filter.data
-      .map(variation => Variation(variation.property, (variation.value * force).toInt)))
+      .map(variation => Variation(/*(variation.value * force)*/5.asInstanceOf[T#ValueType])))
   }
 
-  def apply(x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: VariationMatrix)
-  : ContinuousZonePropertySource = ContinuousZonePropertySource(filter, x, y, width, height, fireTime, duration)
+  def apply[T <: Property](x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: DenseMatrix[Variation[T]])
+  : ContinuousZonePropertySource[T] = ContinuousZonePropertySource(filter, x, y, width, height, fireTime, duration)
 
   /*def linearize(filter: ContinuousPropertySource[T], instant: Int): Option[Array[PointVariation[T]]] =
     lastFired(filter, instant) match {
@@ -54,17 +53,17 @@ object ZonePropertySource {
       )
     }*/
 
-  def linearize(filter: InstantaneousZonePropertySource): Array[PointVariation] = filter.data.mapPairs((p, v) =>
-    PointVariation(v.property, v.value, p._1, p._2)).data
+  def linearize[T <: Property](filter: InstantaneousZonePropertySource[T]): Array[PointVariation[T]] =
+    filter.data.mapPairs((p, v) => PointVariation(v.value, p._1, p._2)).data
 
-  def sort(variations: PointVariation*): Seq[PointVariation] = variations.sortWith(Point.compare)
+  def sort[T <: Property](variations: PointVariation[T]*): Seq[PointVariation[T]] = variations.sortWith(Point.compare)
 
-  def border(filter: ZonePropertySource)(border: Size.Border): Int = border match {
+  def border[T <: Property](filter: ZonePropertySource[T])(border: Size.Border): Int = border match {
     case Size.Top | Size.Bottom => filter.y + filter ~ border
     case _ => filter.x + filter ~ border
   }
 
-  def in(x: Int, y: Int, filter: ZonePropertySource): Boolean = {
+  def in[T <: Property](x: Int, y: Int, filter: ZonePropertySource[T]): Boolean = {
     x >= border(filter)(Size.Left) && x <= border(filter)(Size.Right) &&
     y >= border(filter)(Size.Top) && y <= border(filter)(Size.Bottom)
   }

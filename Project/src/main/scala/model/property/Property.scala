@@ -1,15 +1,18 @@
 package scala.model.property
 
-object Property extends Enumeration {
-  type Property = Value
-  val Temperature, Humidity, Pressure = Value
+trait Property {
+  type ValueType
 
-  case class PropertyData(minValue: Int, maxValue: Int, default: Int)
+  def default: ValueType
+}
 
+
+
+  /*
   /**
    * Return static/constant values associated to a property
    *
-   * @param propertyValue value of the property (to be identified)
+   * //@param propertyValue value of the property (to be identified)
    * @return a tuple representing [MIN VALUE, MAX VALUE, DEFAULT VALUE]
    */
   def range(propertyValue: Value): PropertyData = propertyValue match {
@@ -21,10 +24,9 @@ object Property extends Enumeration {
   /**
    * Convert the given value into a percentage on the range of the corresponding property
    *
-   * @param propertyValue value of the property (to be identified)
-   * @param value the value to convert into range
+   * //@param propertyValue value of the property (to be identified)
+   * //@param value the value to convert into range
    * @return the converted value
    */
   def toPercentage(propertyValue: Value, value: Int): Int =
-    100 * (value - range(propertyValue).minValue) / (range(propertyValue).maxValue - range(propertyValue).minValue)
-}
+    100 * (value - range(propertyValue).minValue) / (range(propertyValue).maxValue - range(propertyValue).minValue)*/

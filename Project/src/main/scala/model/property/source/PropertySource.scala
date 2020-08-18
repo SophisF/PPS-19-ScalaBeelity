@@ -1,18 +1,9 @@
-package scala.model.property
+package scala.model.property.source
 
-import scala.model.property.Property.Property
-import scala.model.time.{Time, TimeData}
+trait PropertySource[-Property]
 
-trait PropertySource
 
-object PropertySource {
-
-  // TODO case class con var?
-  case class SeasonalPropertySource(property: Property) extends PropertySource with TimeData[Int] {
-    var lastGet: Double = 0
-  }
-
-  implicit def nextValueSin(data: SeasonalPropertySource): Int = {
+  /*implicit def nextValueSin(data: SeasonalPropertySource): Int = {
     val sin = Math sin (Time.time % 365)
     val variance = sin - data.lastGet
     data.lastGet = sin
@@ -27,6 +18,5 @@ object PropertySource {
     val result = incrementalValue(Time.time) - incrementalValue(data.lastGet toInt)
     data.lastGet = Time.time
     result
-  }
+  }*/
 
-}

@@ -2,12 +2,11 @@ package scala.model
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.matrix._
-import scala.model.property.PropertySource
-import scala.model.property.PropertySource.{SeasonalPropertySource, nextValueLinear}
+import scala.model.matrix.Size
+import scala.model.property.Property
 import scala.model.property.PropertyVariation.Variation
-import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, VariationMatrix, border, in, nextValue}
-import scala.model.time.TimeData.dataAtInstant
+import scala.model.property.source.{PropertySource, SeasonalPropertySource, ZonePropertySource}
+import scala.model.property.source.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, border, in}
 import scala.model.time.FiniteData
 
 /**
@@ -20,8 +19,6 @@ import scala.model.time.FiniteData
 case class Environment private (map: DenseMatrix[Cell])
 
 object Environment {
-  type Matrix[T] = Array[Array[T]]
-  type SizeWH = (Int, Int)
 
   /**
    * Create a new environment
@@ -30,20 +27,21 @@ object Environment {
    * @param defaultCell initial value for the cells of the map
    * @return the environment
    */
-  def apply(size: SizeWH, defaultCell: Cell) = new Environment(DenseMatrix.create(size._1, size._2, Iterator
-    .continually(defaultCell).take(size._1 * size._2).toArray))
+  def apply(width: Int, height: Int, defaultCell: Cell): Environment =
+    new Environment(DenseMatrix.create(width, height, Iterator.continually(defaultCell).take(width * height).toArray))
 
   //TODO: Cercare un metodo per rimuovere i case match innestati.
-  def apply(environment: Environment, propertySource: PropertySource): Environment = propertySource match {
-    case propertySource: InstantaneousZonePropertySource => applyFilter(environment, propertySource)
-    case propertySource: ContinuousZonePropertySource =>
-      FiniteData.dataAtInstant[VariationMatrix, ContinuousZonePropertySource](propertySource)(nextValue) match {
-        case None => environment
-        case Some(value) => applyFilter(environment, InstantaneousZonePropertySource(value, propertySource.x,
-          propertySource.y, propertySource.width, propertySource.height))
-      }
-    case propertySource: SeasonalPropertySource => applySeason(environment, propertySource)
-  }
+  def apply[T <: Property](environment: Environment, propertySource: PropertySource[T]): Environment =
+    propertySource match {
+      case propertySource: InstantaneousZonePropertySource[T] => applyFilter(environment, propertySource)
+      case propertySource: ContinuousZonePropertySource[T] =>
+        FiniteData.dataAtInstant[DenseMatrix[Variation[T]], ContinuousZonePropertySource[T]](propertySource)(ZonePropertySource.nextValue[T]) match {
+          case None => environment
+          case Some(value) => applyFilter(environment, InstantaneousZonePropertySource(value, propertySource.x,
+            propertySource.y, propertySource.width, propertySource.height))
+        }
+      case propertySource: SeasonalPropertySource[T] => applySeason(environment, propertySource)
+    }
 
   /**
    * Apply a filter to an environment
@@ -52,7 +50,7 @@ object Environment {
    * @param filter to apply
    * @return an environment to which is applied the filter
    */
-  def applyFilter(environment: Environment, filter: InstantaneousZonePropertySource): Environment =
+  def applyFilter[T <: Property](environment: Environment, filter: InstantaneousZonePropertySource[T]): Environment =
     Environment(environment.map.mapPairs((pointXY, cell) => pointXY match {
       case p if in(p._1, p._2, filter) =>
         cell + filter.data(p._1 - border(filter)(Size.Left), p._2 - border(filter)(Size.Top))
@@ -66,8 +64,8 @@ object Environment {
    * @param variator to apply
    * @return an environment to which is applied the filter
    */
-  def applySeason(environment: Environment, variator: SeasonalPropertySource): Environment = {
-    val variation = Variation(variator.property, dataAtInstant[Int, SeasonalPropertySource](variator)(nextValueLinear))
+  def applySeason[T <: Property](environment: Environment, variator: SeasonalPropertySource[T]): Environment = {
+    val variation = Variation(SeasonalPropertySource.nextValue(variator))
     Environment(environment.map.map(_ + variation))
   }
 }

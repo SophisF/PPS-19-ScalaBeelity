@@ -1,9 +1,9 @@
 package scala.model
 
-import scala.model.property.Property.{Humidity, Pressure, Temperature, range}
-import scala.model.property.PropertySource.SeasonalPropertySource
-import scala.model.property.PropertySource
-import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource}
+import scala.model.property.Property
+import scala.model.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
+import scala.model.property.source.{PropertySource, SeasonalPropertySource}
+import scala.model.property.source.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource}
 import scala.model.time.Timed.isEnded
 
 object EnvironmentManager {
@@ -19,7 +19,7 @@ object EnvironmentManager {
    * @param environment, the environment to manage.
    * @param propertySource, the property to at the environment.
    */
-  case class EnvironmentManager(environment: Environment, propertySource: Array[PropertySource])
+  case class EnvironmentManager(environment: Environment, propertySource: PropertySource[Property]*)
 
   /**
    * Apply function.
@@ -28,10 +28,8 @@ object EnvironmentManager {
    * @param height of environment.
    * @return an environment manager.
    */
-  def apply(width: Int, height: Int): EnvironmentManager = {
-    EnvironmentManager(Environment((width, height), Cell(range(Temperature).default, range(Humidity).default,
-      range(Pressure).default)), Array())
-  }
+  def apply[T <: Property](width: Int, height: Int): EnvironmentManager = EnvironmentManager(
+    Environment(width, height, Cell(TemperatureProperty.default, HumidityProperty.default, PressureProperty.default)))
 
   /**
    * Apply property source at the environment and control property source.
@@ -42,14 +40,14 @@ object EnvironmentManager {
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager =
     EnvironmentManager(
-      manager.propertySource.foldLeft(manager.environment)(Environment.apply),
+      manager.propertySource.foldLeft(manager.environment)((x, y) => Environment.apply(x,y)),
       manager.propertySource.filter {
-        case _: SeasonalPropertySource => true
-        case _: InstantaneousZonePropertySource => false
-        case p: ContinuousZonePropertySource => !isEnded(p)
-      }
+        case _: SeasonalPropertySource[_] => true
+        case _: InstantaneousZonePropertySource[_] => false
+        case p: ContinuousZonePropertySource[_] => !isEnded(p)
+      } :_*
     )
 
-  def addSource(manager: EnvironmentManager, propertySource: PropertySource): EnvironmentManager =
-    EnvironmentManager(manager.environment, manager.propertySource.appended(propertySource))
+  def addSource[T <: Property](manager: EnvironmentManager, propertySource: PropertySource[T]): EnvironmentManager
+  = EnvironmentManager(manager.environment, manager.propertySource.appended(propertySource.asInstanceOf[PropertySource[Property]]) :_*)
 }

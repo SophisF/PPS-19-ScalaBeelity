@@ -1,8 +1,10 @@
 package scala.model
 
-import scala.model.Cell.limit
-import scala.model.property.Property.{Humidity, Pressure, Property, Temperature}
-import scala.model.property.{Property, PropertyVariation}
+import scala.collection.immutable.HashMap
+import scala.model.property.PropertyType.{Humidity, Pressure, PropertyTypeValue, Temperature}
+import scala.model.property.PropertyVariation.vary
+import scala.model.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
+import scala.model.property.{Property, PropertyType, PropertyVariation}
 
 /**
  * Class that represent an environment cell
@@ -13,30 +15,22 @@ import scala.model.property.{Property, PropertyVariation}
  *
  * @author Paolo Baldini
  */
-case class Cell(temperature: Int, humidity: Int, pressure: Int) {
+class Cell(temperature: Int, humidity: Int, pressure: Int) {
+  private val map = HashMap((Temperature, temperature), (Humidity, humidity), (Pressure, pressure))
 
   /**
-   * Method made for iterate over the properties
+   * Used to iterate over the properties
    *
    * @param property of which we want to know the value
    * @return the value of the property
    */
-  def get(property: Property): Int = property match {
-    case Temperature => temperature
-    case Humidity => humidity
-    case Pressure => pressure
-  }
+  def apply(property: PropertyType.Value): Int = map(property)
 
-  /**
-   * Variate a specific property of the cell summing the value specified by the variation
-   *
-   * @param variation contains value and target of the variation
-   * @return the varied cell
-   */
-  def +(variation: PropertyVariation): Cell = variation.property match {
-    case Temperature => Cell(limit(Temperature, temperature + variation.value), humidity, pressure)
-    case Humidity => Cell(temperature, limit(Humidity, humidity + variation.value), pressure)
-    case Pressure => Cell(temperature, humidity, limit(Pressure, pressure + variation.value))
+  def +[T <: Property](variation: PropertyVariation[T]): Cell = variation match {
+    case v:PropertyVariation[TemperatureProperty] => Cell(vary[TemperatureProperty](temperature, v), humidity, pressure)
+    case v:PropertyVariation[HumidityProperty] => Cell(vary[HumidityProperty](temperature, v), humidity, pressure)
+    case v:PropertyVariation[PressureProperty] => Cell(vary[PressureProperty](temperature, v), humidity, pressure)
+    case _ => this
   }
 
   /**
@@ -46,9 +40,11 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @param variation optionally contains value and target of the variation
    * @return the optionally varied cell
    */
-  def +(variation: Option[PropertyVariation]): Cell = variation map(this + _) getOrElse this
+  def +?[T <: Property](variation: Option[PropertyVariation[T]]): Cell = variation map (this + _) getOrElse this
 }
 object Cell {
+
+  def apply(temperature: Int, humidity: Int, pressure: Int): Cell = new Cell(temperature, humidity, pressure)
 
   /**
    * Apply field-wise operation between two cell. Resulting value cannot exceed property limits/range
@@ -60,19 +56,7 @@ object Cell {
    *        'first' and 'second' cells
    */
   def operation(first: Cell, second: Cell)(property: (Int, Int) => Int): Cell = Cell(
-    limit(Temperature, property(first.temperature, second.temperature)),
-    limit(Humidity, property(first.humidity, second.humidity)),
-    limit(Pressure, property(first.pressure, second.pressure)))
-
-  /**
-   * Make the passed value respect the limit decreed by the property
-   *
-   * @param property of which use the range
-   * @param value to set in range
-   * @return ranged value
-   */
-  private def limit(property: Property, value: Int): Int = value match {
-    case value if value >= 0 => Math.min(value, Property.range(property).maxValue)
-    case value => Math.max(value, Property.range(property).minValue)
-  }
+    TemperatureProperty.limit(property(first(Temperature), second(Temperature))),
+    HumidityProperty.limit(property(first(Humidity), second(Humidity))),
+    PressureProperty.limit(property(first(Pressure), second(Pressure))))
 }

@@ -5,7 +5,7 @@ import java.awt.Color
 import breeze.linalg._
 import breeze.plot._
 
-import scala.model.property.Property
+import scala.model.property.{Property, PropertyType}
 
 /**
  * Basic view that allows to plot grids.
@@ -29,7 +29,7 @@ object View {
    * @param map to plot
    */
   def plot(map: DenseMatrix[Double], minValue: Int = 0, maxValue: Int = 100, name: String = i toString): Unit = {
-    (Figure_.subplot(i / Figure_.cols + 1, Property.values.size, i) += image(map, GradientPaintScale(minValue, maxValue,
+    (Figure_.subplot(i / Figure_.cols + 1, PropertyType.values.size, i) += image(map, GradientPaintScale(minValue, maxValue,
       ColorGradient.toArray))).title = name
     i += 1
   }

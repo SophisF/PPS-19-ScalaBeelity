@@ -3,11 +3,11 @@ package scala.controller
 import scala.model.EnvironmentManager.{addSource, evolution}
 import scala.model._
 import scala.model.matrix.Matrix._
-import scala.model.property.Property.{Temperature, toPercentage}
-import scala.model.property.PropertySource.SeasonalPropertySource
-import scala.model.property.ZonePropertySource.ContinuousZonePropertySource
 import scala.model.property.PropertyVariation.Variation
-import scala.model.property.{FilterBuilder, Property, ZonePropertySource}
+import scala.model.property.realization.TemperatureProperty
+import scala.model.property.source.{SeasonalPropertySource, ZonePropertySource}
+import scala.model.property.source.ZonePropertySource.ContinuousZonePropertySource
+import scala.model.property.{FilterBuilder, PropertyType}
 import scala.model.time.Time
 import scala.util.Random
 import scala.view.View
@@ -32,9 +32,10 @@ object Looper {
     plot(environmentManager.environment)
 
     environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
-      .foldLeft(environmentManager)(addSource)
+      .foldLeft(environmentManager)((x, y) => addSource[TemperatureProperty](x, y))
 
-    environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))
+    environmentManager = addSource[TemperatureProperty](environmentManager,
+      SeasonalPropertySource[TemperatureProperty](TemperatureProperty.variation))
 
     Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
 
@@ -49,14 +50,14 @@ object Looper {
   }
 
   private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
-  : Iterable[ContinuousZonePropertySource] = (0 until quantity) map (_ => {
+  : Iterable[ContinuousZonePropertySource[TemperatureProperty]] = (0 until quantity) map (_ => {
       val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
       val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
 
       ZonePropertySource(
         Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
         filter.cols, filter.rows,
-        0, iterations, filter.mapValues(it => Variation(Temperature, it.toInt))
+        0, iterations, filter.mapValues(it => Variation[TemperatureProperty](it.toInt))
       )
     })
 
@@ -65,10 +66,9 @@ object Looper {
    *
    * @param environment to plot
    */
-  private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
-    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
-    Property.range(property).minValue,
-    Property.range(property).maxValue,
-    s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
+  private def plot(environment: Environment): Unit = PropertyType.values.foreach(property => View.plot(
+    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(cell => cell(property).toDouble),
+    0, 100,
+    s"${property.toString}"
   ))
 }

@@ -6,7 +6,14 @@ import bees.genotype.{Gene, GeneExpressor}
 import bees.phenotype.CharacteristicTaxonomy
 import bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
 
+/**
+ * Object that represents the queen bee
+ */
 object Queen {
+
+  /**
+   * Trait for a queen
+   */
   trait Queen extends BeeImpl {
     val position: (Int, Int)
     val genotype: Genotype
@@ -18,6 +25,10 @@ object Queen {
   }
 
   //position override between the environment dimensions
+  /**
+   * Class that represents a queen bee
+   * @param position its position in the environment
+   */
   case class QueenImpl(override val position: (Int, Int)) extends Queen {
     override val genotype: Genotype = GenotypeImpl(List.range(0, 100).map(_ => Gene()))
     override val phenotype: Phenotype = PhenotypeImpl(GeneExpressor.mapGenotypeToCharacteristics(genotype))

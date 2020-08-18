@@ -1,6 +1,13 @@
 package bees.bee
 
+/**
+ * Object that represents a colony area
+ */
 object ColonyArea {
+
+  /**
+   * Trait that represents a colony area
+   */
   trait ColonyArea{
     val center: (Int, Int)
     def getArea(): Int
@@ -8,6 +15,11 @@ object ColonyArea {
     def getEnds(): Ends
   }
 
+  /**
+   * Class that represents a colony area
+   * @param center of the colony, overlap with the position of the queen
+   * @param dimension is the distance between the center and the side of the square
+   */
   case class ColonyAreaImpl(override val center: (Int, Int) , dimension: Int) extends ColonyArea{
     private var side: Int = dimension*2+1
 
@@ -23,6 +35,9 @@ object ColonyArea {
     }
   }
 
+  /**
+   * Trait that represents the four ends of the colony area
+   */
   trait Ends{
     val bottomLeft: (Int, Int)
     val bottomRight: (Int, Int)

@@ -6,7 +6,14 @@ import bees.bee.Queen.Queen
 
 import scala.collection.immutable.HashSet
 
+/**
+ * Object that represents colony
+ */
 object Colony {
+
+  /**
+   * Trait that represents colony
+   */
   trait Colony {
     def getBees: Set[Bee]
     def getPosition: Ends
@@ -18,6 +25,10 @@ object Colony {
     def collideWith(colony: Colony): Boolean
   }
 
+  /**
+   * Class that represents colony
+   * @param queen the only queen of the colony
+   */
   case class ColonyImpl(private val queen: Queen) extends Colony{
     private var bees: Set[Bee] = HashSet(queen)
     private var dimension: Int = 0

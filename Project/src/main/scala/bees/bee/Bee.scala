@@ -4,8 +4,14 @@ import bees.genotype.Genotype.Genotype
 import bees.phenotype.CharacteristicTaxonomy
 import bees.phenotype.Phenotype.Phenotype
 
+/**
+ * Object that represents bee
+ */
 object Bee {
 
+  /**
+   * Trait that represents bee
+   */
   trait Bee{
     val genotype: Genotype
     val phenotype: Phenotype
@@ -14,6 +20,11 @@ object Bee {
     def kill(): Unit
   }
 
+  /**
+   * Class that represents bee
+   * @param genotype genotype of the bee
+   * @param phenotype phenotype of the bee
+   */
   case class BeeImpl(override val genotype: Genotype, override val phenotype: Phenotype) extends Bee{
     protected var age: Int = 0
     protected var remainingDaysOfLife: Int = this.phenotype.getCharacteristicByTaxonomy(CharacteristicTaxonomy.LONGEVITY) match {
@@ -34,6 +45,5 @@ object Bee {
       this.remainingDaysOfLife -= 1
     }
   }
-
 
 }

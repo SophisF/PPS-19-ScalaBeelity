@@ -1,68 +1,30 @@
-/**
- * Attempt with ScalaFX. In MacOS doesn't work.
- */
-/*
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.geometry.Insets
-import scalafx.scene.Scene
-import scalafx.scene.effect.DropShadow
-import scalafx.scene.layout.HBox
-import scalafx.scene.paint.Color._
-import scalafx.scene.paint.{Stops, LinearGradient}
-import scalafx.scene.text.Text
+import javax.swing.JFrame
 
-object ScalaFXHelloWorld extends JFXApp {
+import scala.language.postfixOps
+import smile.interpolation._
+import smile.plot.swing._
 
-  stage = new PrimaryStage {
-    title = "ScalaFX Hello World"
-    scene = new Scene {
-      fill = Black
-      content = new HBox {
-        padding = Insets(20)
-        children = Seq(
-          new Text {
-            text = "Hello "
-            style = "-fx-font-size: 48pt"
-            fill = new LinearGradient(
-              endX = 0,
-              stops = Stops(PaleGreen, SeaGreen))
-          },
-          new Text {
-            text = "World!!!"
-            style = "-fx-font-size: 48pt"
-            fill = new LinearGradient(
-              endX = 0,
-              stops = Stops(Cyan, DodgerBlue)
-            )
-            effect = new DropShadow {
-              color = DodgerBlue
-              radius = 25
-              spread = 0.25
-            }
-          }
-        )
-      }
-    }
-  }
-}*/
-
-
-/**
- * Attempt with SPlot.
- */
 object Main extends App {
 
-  import com.datawizards.splot.api.implicits._
+  val z = Array(
+    Array(1.0, 2.0, 4.0, 1.0),
+    Array(6.0, 3.0, 5.0, 2.0),
+    Array(4.0, 2.0, 1.0, 5.0),
+    Array(5.0, 4.0, 2.0, 3.0)
+  )
 
-  // Plot bar chart:
-  Seq(1.0, 4.0, 9.0).plotBar()  //
-  //  // Plot line chart:
-  //  data.plotLine()
-  //
-  //  // Plot scatter chart:
-  //  data.plotScatter()
-  //
-  //  // Start building plot:
-  //  data.buildPlot()
+  val x = Array(0.0, 1.0, 2.0, 3.0)
+  val y = Array(0.0, 1.0, 2.0, 3.0)
+  val bicubic = new BicubicInterpolation(x, y, z)
+  val Z = Array.ofDim[Double](101, 101)
+  for (i <- 0 to 100) {
+    for (j <- 0 to 100)
+      Z(i)(j) = bicubic.interpolate(i * 0.03, j * 0.03)
+  }
+
+  val canvas = heatmap(Z, Palette.jet(256))
+  canvas.add(Contour.of(Z))
+  val xvfgn = new JFrame("")
+  xvfgn.getContentPane.add(canvas.panel())
+  xvfgn.show()
 }

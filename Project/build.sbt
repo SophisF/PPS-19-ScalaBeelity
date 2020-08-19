@@ -21,10 +21,7 @@ libraryDependencies ++= Seq(
   // https://mvnrepository.com/artifact/org.scalafx/scalafx
   "org.scalafx" %% "scalafx" % "14-R19",
 
-  "com.github.haifengl" % "smile-core" % "1.5.1",
-  "com.github.haifengl" %% "smile-scala" % "1.5.1"
-
-  /*"com.github.haifengl" % "smile-core" % "2.5.1",
+  "com.github.haifengl" % "smile-core" % "2.5.1",
 
   "com.github.haifengl" % "smile-plot" % "2.5.1",
 
@@ -40,9 +37,5 @@ libraryDependencies ++= Seq(
 
   "com.github.haifengl" % "smile-graph" % "2.5.1",
 
-  "com.github.haifengl" %% "smile-scala" % "2.5.1",
-
-  "org.vegas-viz" %% "vegas" % "0.3.11",
-
-  "com.github.haifengl" %% "smile-scala" % "1.5.1"*/
+  "com.github.haifengl" %% "smile-scala" % "2.5.1"
 )

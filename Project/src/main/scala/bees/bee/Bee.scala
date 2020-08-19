@@ -13,8 +13,15 @@ object Bee {
    * Trait that represents bee
    */
   trait Bee{
+
     val genotype: Genotype
     val phenotype: Phenotype
+
+    protected var age: Int = 0
+    protected var remainingDaysOfLife: Int = this.phenotype.characteristicByTaxonomy(CharacteristicTaxonomy.LONGEVITY) match {
+      case Some(value) => value.expression.asInstanceOf[Int]
+      case _ => 0
+    }
     def update(): Unit
     def isAlive: Boolean
     def kill(): Unit
@@ -26,11 +33,7 @@ object Bee {
    * @param phenotype phenotype of the bee
    */
   case class BeeImpl(override val genotype: Genotype, override val phenotype: Phenotype) extends Bee{
-    protected var age: Int = 0
-    protected var remainingDaysOfLife: Int = this.phenotype.getCharacteristicByTaxonomy(CharacteristicTaxonomy.LONGEVITY) match {
-      case Some(value) => value.expression.asInstanceOf[Int]
-      case _ => 0
-    }
+
 
     override def isAlive: Boolean = this.remainingDaysOfLife == 0
 

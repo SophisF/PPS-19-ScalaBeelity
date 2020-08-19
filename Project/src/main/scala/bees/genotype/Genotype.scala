@@ -1,26 +1,36 @@
 package bees.genotype
 
-import bees.genotype.Gene.Gene
+
+import bees.genotype.Gene.{Gene, GeneImpl}
+import bees.genotype.GeneManager._
+import bees.phenotype.CharacteristicTaxonomy
+import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+
+import scala.collection.immutable.HashSet
 
 /**
- * Object that represents genotype
+ * Object that represent the genotype.
  */
 object Genotype {
 
-  /**
-   * Trait that represents genotype
-   */
-  trait Genotype {
-    def getGenes : List[Gene]
+  def calculateExpression(genotype: Genotype): Map[CharacteristicTaxonomy, Double] = {
+    CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, genotype.genes
+      .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
+      .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _))).toMap
   }
 
+
   /**
-   * Class that represents genotype
-   * @param genes a list of genes
+   * Trait for the genotype.
    */
-  case class GenotypeImpl(genes: List[Gene]) extends Genotype {
-    require(genes.nonEmpty)
-    private var genotype: List[Gene] = genes
-    override def getGenes: List[Gene] = this.genotype
+  trait Genotype {
+    val genes: Set[Gene]
   }
+
+
+  case class GenotypeImpl(geneSet: Set[Gene] = HashSet()) extends Genotype {
+    override val genes: Set[Gene] = GeneTaxonomy.values map (value => geneSet.find(_.name.equals(value)) getOrElse GeneImpl(value))
+
+  }
+
 }

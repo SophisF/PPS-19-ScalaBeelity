@@ -18,11 +18,11 @@ class GeneticInformationTest extends AnyFunSuite{
   }
 
   test("A GeneticInformation should contain exactly the initializer Taxonomy"){
-    assert(!geneticInformation.getCharacteristics.toSeq.contains(CharacteristicTaxonomy.AGGRESSION_RATE))
+    assert(!geneticInformation.characteristics.toSeq.contains(CharacteristicTaxonomy.AGGRESSION_RATE))
   }
 
   test("A GenericInformation should return an empty optional if doesn't contains a Taxonomy"){
-    assert(geneticInformation.getInfluence(CharacteristicTaxonomy.AGGRESSION_RATE) match {
+    assert(geneticInformation.influence(CharacteristicTaxonomy.AGGRESSION_RATE) match {
       case None => true
       case _ => false
     })

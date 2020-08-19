@@ -4,18 +4,14 @@ import bees.genotype.Genotype.{Genotype, GenotypeImpl}
 import org.scalatest.funsuite.AnyFunSuite
 
 class GenotypeTest extends AnyFunSuite{
-  val genotype: Genotype = GenotypeImpl(List.range(0, 100) map (_ => Gene()))
+  val genotype: Genotype = GenotypeImpl()
 
   test("A Genotype should not be empty"){
-    assert(genotype.getGenes.nonEmpty)
+    assert(genotype.genes.nonEmpty)
   }
 
-  test("A empty Genotype should throws an IllegalArgumentException"){
-    assertThrows[IllegalArgumentException](GenotypeImpl(List()))
-  }
-
-  test("A Genotype should have exactly " + 100 + " Genes"){
-    assert(genotype.getGenes.size == 100)
+  test("A Genotype should have exactly " + GeneTaxonomy.maxId + " Genes"){
+    assert(genotype.genes.size == GeneTaxonomy.maxId)
   }
 
 

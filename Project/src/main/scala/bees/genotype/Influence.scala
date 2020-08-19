@@ -3,7 +3,7 @@ package bees.genotype
 import bees.genotype.InfluenceType.InfluenceType
 
 /**
-  Enumeration of the influence types.
+Enumeration of the influence types.
  */
 object InfluenceType extends Enumeration {
   type InfluenceType = Value
@@ -11,22 +11,20 @@ object InfluenceType extends Enumeration {
 }
 
 /**
-  Represent the influence of a gene on a characteristic.
+Represent the influence of a gene on a characteristic.
  */
 object Influence {
-
-  type InfluenceValue = Double
 
   /**
    * Implicit class to convert from influence in percentage to influence value.
    * @param value the influence percentage.
    */
-  implicit class InfluenceInPercentage(value: Int){
+  implicit class InfluenceValue(value: Int){
     /**
      * Convert the type of influence in percentage from Int to InfluenceValue.
      * @return the influence value converted.
      */
-    def toInfluenceValue: InfluenceValue = value.toDouble
+    def toInfluenceValue: Double = value.toDouble
   }
 
   /**
@@ -40,14 +38,9 @@ object Influence {
     /**
      * The value of the influence.
      */
-    val influenceValue: InfluenceValue
+    val influenceValue: Double
 
-    /**
-     * Method for sum two influences.
-     * @param value the influence value.
-     * @return the sum of the two influence values.
-     */
-    def +(value: InfluenceValue): InfluenceValue = value + this.influenceValue
+
   }
 
   /**
@@ -65,12 +58,12 @@ object Influence {
      * Private method that convert the value in percentage to the real value.
      * @return the influence value
      */
-    private def convertInfluence: InfluenceValue = influenceInPercentage.toInfluenceValue / 100
+    private def convertInfluence: Double = influenceInPercentage.toInfluenceValue / 100
 
     /**
      * The value of the influence.
      */
-    override val influenceValue: InfluenceValue = this.typeOfInfluence match {
+    override val influenceValue: Double = this.typeOfInfluence match {
       case InfluenceType.POSITIVE => convertInfluence
       case _ => - convertInfluence
     }

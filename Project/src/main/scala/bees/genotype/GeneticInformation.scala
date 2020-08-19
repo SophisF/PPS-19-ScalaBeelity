@@ -4,9 +4,11 @@ import bees.genotype.Influence.Influence
 import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 /**
-  The genetic information of the bees.
+The genetic information of the bees.
  */
 object GeneticInformation {
+
+
 
   /**
    * Trait that represent a genetic information.
@@ -22,14 +24,14 @@ object GeneticInformation {
      * Getter of the characteristics of a genetic information.
      * @return the characteristics expressed by the genetic information
      */
-    def getCharacteristics: Iterable[CharacteristicTaxonomy] = this.information.keys
+    def characteristics: Iterable[CharacteristicTaxonomy] = this.information.keys
 
     /**
      * Getter of the influence of a genetic information
      * @param taxonomy the characteristic taxonomy
      * @return an optional that contains the influence, if the genetic information express the taxonomy, an empty optional otherwise
      */
-    def getInfluence(taxonomy: CharacteristicTaxonomy): Option[Influence] =
+    def influence(taxonomy: CharacteristicTaxonomy): Option[Influence] =
       if (this.information.contains(taxonomy)) Some(this.information(taxonomy)) else None
   }
 

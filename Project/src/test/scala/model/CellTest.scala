@@ -2,10 +2,10 @@ package scala.model
 /*
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.Cell.operation
-import scala.model.property.Property.{Humidity, Pressure, Temperature}
-import scala.model.property.PropertyVariation.Variation
-import scala.model.property.TemperatureProperty
+import scala.model.environment.Cell.operation
+import scala.model.environment.property.Property.{Humidity, Pressure, Temperature}
+import scala.model.environment.property.PropertyVariation.Variation
+import scala.model.environment.property.TemperatureProperty
 
 /**
  * Test for cell entities

@@ -22,9 +22,11 @@ object Bee {
       case Some(value) => value.expression.asInstanceOf[Int]
       case _ => 0
     }
-    def update(): Unit
-    def isAlive: Boolean
-    def kill(): Unit
+
+    def update(time: Int): Unit
+    def isAlive: Boolean = this.remainingDaysOfLife == 0
+    def kill(): Unit = this.remainingDaysOfLife = 0
+
   }
 
   /**
@@ -34,18 +36,12 @@ object Bee {
    */
   case class BeeImpl(override val genotype: Genotype, override val phenotype: Phenotype) extends Bee{
 
-
-    override def isAlive: Boolean = this.remainingDaysOfLife == 0
-
-    //Possibly to return a Bee
-    override def kill(): Unit = this.remainingDaysOfLife = 0
-
     //example. Parameters from simulation for update of N days
-    override def update(): Unit = {
-      this.age += 1
+    override def update(time: Int): Unit = {
+      this.age += time
 
       //based on environment characteristic
-      this.remainingDaysOfLife -= 1
+      this.remainingDaysOfLife -= time
     }
   }
 

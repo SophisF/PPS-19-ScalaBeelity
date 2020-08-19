@@ -2,11 +2,11 @@
  * Copyright 2013 ScalaFX Project
  * All right reserved.
  */
-package scala
+package view
 
 import scalafx.application.JFXApp
-import scalafx.scene.Scene
 import scalafx.collections.ObservableBuffer
+import scalafx.scene.Scene
 import scalafx.scene.chart.{LineChart, NumberAxis, XYChart}
 
 /** A chart in which lines connect a series of data points. Useful for viewing

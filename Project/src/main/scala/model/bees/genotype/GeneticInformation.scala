@@ -1,7 +1,7 @@
-package bees.genotype
+package model.bees.genotype
 
-import bees.genotype.Influence.Influence
-import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import model.bees.genotype.Influence.Influence
+import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 /**
 The genetic information of the bees.

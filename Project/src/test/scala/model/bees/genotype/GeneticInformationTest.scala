@@ -1,8 +1,8 @@
-package bees.genotype
+package model.bees.genotype
 
-import bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
-import bees.genotype.Influence.InfluenceImpl
-import bees.phenotype.CharacteristicTaxonomy
+import model.bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
+import model.bees.genotype.Influence.InfluenceImpl
+import model.bees.phenotype.CharacteristicTaxonomy
 import org.scalatest.funsuite.AnyFunSuite
 
 class GeneticInformationTest extends AnyFunSuite{

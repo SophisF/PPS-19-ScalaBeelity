@@ -1,12 +1,10 @@
-package bees.genotype
+package model.bees.genotype
 
 
-import bees.genotype.Gene.{Gene, GeneImpl}
-import bees.genotype.GeneManager._
-import bees.phenotype.CharacteristicTaxonomy
-import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-
-import scala.collection.immutable.HashSet
+import model.bees.genotype.Gene.{Gene, GeneImpl}
+import model.bees.genotype.GeneManager._
+import model.bees.phenotype.CharacteristicTaxonomy
+import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 /**
  * Object that represent the genotype.
@@ -28,8 +26,8 @@ object Genotype {
   }
 
 
-  case class GenotypeImpl(geneSet: Set[Gene] = HashSet()) extends Genotype {
-    override val genes: Set[Gene] = GeneTaxonomy.values map (value => geneSet.find(_.name.equals(value)) getOrElse GeneImpl(value))
+  case class GenotypeImpl(geneSet: Set[Gene] = Set.empty) extends Genotype {
+    override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneSet.find(_.name.equals(value)).getOrElse(GeneImpl(value)))
 
   }
 

@@ -1,9 +1,9 @@
-package bees.phenotype
+package model.bees.phenotype
 
-import bees.genotype.Genotype
-import bees.genotype.Genotype.GenotypeImpl
-import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
+import model.bees.genotype.Genotype
+import model.bees.genotype.Genotype.GenotypeImpl
+import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import model.bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
 import org.scalatest.funsuite.AnyFunSuite
 
 class PhenotypeTest extends AnyFunSuite{

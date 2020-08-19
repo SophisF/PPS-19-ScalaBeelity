@@ -1,6 +1,6 @@
-package bees.genotype
+package model.bees.genotype
 
-import bees.genotype.InfluenceType.InfluenceType
+import model.bees.genotype.InfluenceType.InfluenceType
 
 /**
 Enumeration of the influence types.

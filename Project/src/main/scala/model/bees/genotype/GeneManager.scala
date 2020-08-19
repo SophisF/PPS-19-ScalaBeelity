@@ -1,9 +1,9 @@
-package bees.genotype
+package model.bees.genotype
 
-import bees.genotype.GeneTaxonomy.GeneTaxonomy
-import bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
-import bees.genotype.Influence.InfluenceImpl
-import bees.phenotype.CharacteristicTaxonomy
+import model.bees.genotype.GeneTaxonomy.GeneTaxonomy
+import model.bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
+import model.bees.genotype.Influence.InfluenceImpl
+import model.bees.phenotype.CharacteristicTaxonomy
 
 /**
  * Singleton to manipulate the genotype in order to create a phenotype.

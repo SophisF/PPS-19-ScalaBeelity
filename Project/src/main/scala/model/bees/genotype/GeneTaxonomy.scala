@@ -1,4 +1,4 @@
-package bees.genotype
+package model.bees.genotype
 
 /**
  * The taxonomy of the genes. It's an enumeration that defines the names of all genes.

@@ -1,9 +1,9 @@
-package scala.model
+package model.environment
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.environment.Cell.operation
 import scala.model.environment.Cell
+import scala.model.environment.Cell.operation
 import scala.model.environment.property.Property.{Humidity, Pressure, Temperature, range}
 import scala.model.environment.property.PropertyVariation.Variation
 

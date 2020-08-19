@@ -1,9 +1,9 @@
-package bees.bee
+package model.bees.bee
 
-import bees.bee.Bee.Bee
-import bees.genotype.Genotype
-import bees.genotype.Genotype.{Genotype, GenotypeImpl}
-import bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
+import model.bees.bee.Bee.Bee
+import model.bees.genotype.Genotype
+import model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
+import model.bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
 
 /**
  * Object that represents the queen bee

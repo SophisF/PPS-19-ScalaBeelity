@@ -1,8 +1,7 @@
-package bees.phenotype
+package model.bees.phenotype
 
-import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import ExpressionMapper._
-
+import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import model.bees.phenotype.ExpressionMapper._
 
 object Characteristic {
 

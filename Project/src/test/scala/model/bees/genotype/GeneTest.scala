@@ -1,8 +1,8 @@
-package bees.genotype
+package model.bees.genotype
 
-import bees.genotype.Gene._
+import model.bees.genotype.Gene._
 import org.scalatest.funsuite.AnyFunSuite
-import bees.genotype.GeneManager._
+import model.bees.genotype.GeneManager._
 
 class GeneTest extends AnyFunSuite {
   val temperatureGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE)

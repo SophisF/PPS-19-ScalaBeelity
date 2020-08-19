@@ -1,7 +1,7 @@
-package bees.phenotype
+package model.bees.phenotype
 
-import bees.phenotype.Characteristic._
-import bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import model.bees.phenotype.Characteristic.Characteristic
+import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 object Phenotype {
 

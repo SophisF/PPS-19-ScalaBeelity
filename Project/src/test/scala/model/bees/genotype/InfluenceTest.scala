@@ -1,6 +1,6 @@
-package bees.genotype
+package model.bees.genotype
 
-import bees.genotype.Influence.{Influence, InfluenceImpl}
+import model.bees.genotype.Influence.{Influence, InfluenceImpl}
 import org.scalatest.funsuite.AnyFunSuite
 
 class InfluenceTest extends AnyFunSuite{

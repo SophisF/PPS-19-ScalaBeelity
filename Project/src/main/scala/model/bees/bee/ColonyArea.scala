@@ -1,4 +1,4 @@
-package bees.bee
+package model.bees.bee
 
 /**
  * Object that represents a colony area

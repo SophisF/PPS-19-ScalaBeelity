@@ -1,4 +1,4 @@
-package bees.phenotype
+package model.bees.phenotype
 
 object CharacteristicTaxonomy extends Enumeration {
   type CharacteristicTaxonomy = Value

@@ -1,8 +1,8 @@
-package bees.bee
+package model.bees.bee
 
-import bees.genotype.Genotype.Genotype
-import bees.phenotype.CharacteristicTaxonomy
-import bees.phenotype.Phenotype.Phenotype
+import model.bees.genotype.Genotype.Genotype
+import model.bees.phenotype.Phenotype.Phenotype
+import model.bees.phenotype.CharacteristicTaxonomy
 
 /**
  * Object that represents bee

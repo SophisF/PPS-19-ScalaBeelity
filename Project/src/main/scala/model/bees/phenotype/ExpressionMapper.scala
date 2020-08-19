@@ -1,6 +1,6 @@
-package bees.phenotype
+package model.bees.phenotype
 
-import bees.genotype.Gene
+import model.bees.genotype.Gene
 
 object ExpressionMapper {
 

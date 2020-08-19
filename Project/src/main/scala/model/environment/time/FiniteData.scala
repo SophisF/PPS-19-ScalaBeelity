@@ -1,5 +1,6 @@
 package scala.model.environment.time
 
+import scala.model.Time
 import scala.model.environment.time.Timed.inProgress
 
 /**

@@ -2,6 +2,7 @@ package scala.model.environment.time
 
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.model.Time
 import scala.model.environment.time.Timed.{inProgress, isEnded, isStarted}
 
 /**

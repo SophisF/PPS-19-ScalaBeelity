@@ -1,7 +1,8 @@
 package scala.model.environment.property
 
+import scala.model.Time
 import scala.model.environment.property.Property.Property
-import scala.model.environment.time.{Time, TimeData}
+import scala.model.environment.time.TimeData
 
 trait PropertySource
 

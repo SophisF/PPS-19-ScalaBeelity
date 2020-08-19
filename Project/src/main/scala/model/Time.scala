@@ -1,4 +1,4 @@
-package scala.model.environment.time
+package scala.model
 
 /**
  * Ecosystem time

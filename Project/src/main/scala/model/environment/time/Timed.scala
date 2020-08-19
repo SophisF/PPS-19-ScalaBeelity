@@ -1,5 +1,7 @@
 package scala.model.environment.time
 
+import scala.model.Time
+
 /**
  * Represent a duration
  *

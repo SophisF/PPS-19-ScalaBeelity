@@ -1,7 +1,7 @@
 package scala.controller
 
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
-import scala.model._
+import scala.model.{Time, _}
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.matrix.Matrix._
 import scala.model.environment.property.Property.{Temperature, toPercentage}
@@ -9,7 +9,6 @@ import scala.model.environment.property.PropertySource.SeasonalPropertySource
 import scala.model.environment.property.ZonePropertySource.ContinuousZonePropertySource
 import scala.model.environment.property.PropertyVariation.Variation
 import scala.model.environment.property.{FilterBuilder, Property, ZonePropertySource}
-import scala.model.environment.time.Time
 import scala.util.Random
 import scala.view.View
 

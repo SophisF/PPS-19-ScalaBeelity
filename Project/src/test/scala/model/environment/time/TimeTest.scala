@@ -2,6 +2,8 @@ package scala.model.environment.time
 
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.model.Time
+
 /**
  * Test class for the time entity
  *

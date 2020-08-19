@@ -2,9 +2,10 @@ package scala.model.environment.property
 
 import breeze.linalg._
 
+import scala.model.Time
 import scala.model.environment.matrix._
 import scala.model.environment.property.PropertyVariation._
-import scala.model.environment.time.{FiniteData, Time}
+import scala.model.environment.time.FiniteData
 
 trait ZonePropertySource extends PropertySource with Point with Size
 

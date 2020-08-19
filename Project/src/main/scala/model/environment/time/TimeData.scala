@@ -1,4 +1,4 @@
-package scala.model.time
+package scala.model.environment.time
 
 /**
  * TODO valori variazione stagionali verranno settati dal controller (magari introducendo dei val max-min)

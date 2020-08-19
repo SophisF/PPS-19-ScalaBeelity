@@ -1,8 +1,8 @@
-package scala.model.time
+package scala.model.environment.time
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.time.Timed.{inProgress, isEnded, isStarted}
+import scala.model.environment.time.Timed.{inProgress, isEnded, isStarted}
 
 /**
  * Test for timed entities

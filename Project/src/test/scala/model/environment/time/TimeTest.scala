@@ -1,4 +1,4 @@
-package scala.model.time
+package scala.model.environment.time
 
 import org.scalatest.funsuite.AnyFunSuite
 

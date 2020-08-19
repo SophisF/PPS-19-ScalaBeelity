@@ -1,10 +1,10 @@
-package scala.model
+package scala.model.environment
 
-import scala.model.property.Property.{Humidity, Pressure, Temperature, range}
-import scala.model.property.PropertySource.SeasonalPropertySource
-import scala.model.property.PropertySource
-import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource}
-import scala.model.time.Timed.isEnded
+import scala.model.environment.property.Property.{Humidity, Pressure, Temperature, range}
+import scala.model.environment.property.PropertySource
+import scala.model.environment.property.PropertySource.SeasonalPropertySource
+import scala.model.environment.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource}
+import scala.model.environment.time.Timed.isEnded
 
 object EnvironmentManager {
 

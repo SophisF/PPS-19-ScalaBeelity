@@ -1,14 +1,14 @@
-package scala.model
+package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.matrix._
-import scala.model.property.PropertySource
-import scala.model.property.PropertySource.{SeasonalPropertySource, nextValueLinear}
-import scala.model.property.PropertyVariation.Variation
-import scala.model.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, VariationMatrix, border, in, nextValue}
-import scala.model.time.TimeData.dataAtInstant
-import scala.model.time.FiniteData
+import scala.model.environment.matrix._
+import scala.model.environment.property.PropertySource
+import scala.model.environment.property.PropertySource.{SeasonalPropertySource, nextValueLinear}
+import scala.model.environment.property.PropertyVariation.Variation
+import scala.model.environment.property.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, VariationMatrix, border, in, nextValue}
+import scala.model.environment.time.FiniteData
+import scala.model.environment.time.TimeData.dataAtInstant
 
 /**
  * A first scratch of the environment class.

@@ -1,6 +1,6 @@
-package scala.model.time
+package scala.model.environment.time
 
-import scala.model.time.Timed.inProgress
+import scala.model.environment.time.Timed.inProgress
 
 /**
  * Represent a data whose value is related to a specific life-time

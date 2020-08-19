@@ -1,8 +1,8 @@
-package scala.model.property
+package scala.model.environment.property
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.property.FilterBuilder._
+import scala.model.environment.property.FilterBuilder._
 
 /**
  * Test class for the creation of the gaussian filters

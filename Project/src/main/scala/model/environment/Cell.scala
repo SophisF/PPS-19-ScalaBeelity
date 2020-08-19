@@ -1,8 +1,7 @@
-package scala.model
+package scala.model.environment
 
-import scala.model.Cell.limit
-import scala.model.property.Property.{Humidity, Pressure, Property, Temperature}
-import scala.model.property.{Property, PropertyVariation}
+import scala.model.environment.property.Property.{Humidity, Pressure, Property, Temperature}
+import scala.model.environment.property.{Property, PropertyVariation}
 
 /**
  * Class that represent an environment cell
@@ -34,9 +33,9 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @return the varied cell
    */
   def +(variation: PropertyVariation): Cell = variation.property match {
-    case Temperature => Cell(limit(Temperature, temperature + variation.value), humidity, pressure)
-    case Humidity => Cell(temperature, limit(Humidity, humidity + variation.value), pressure)
-    case Pressure => Cell(temperature, humidity, limit(Pressure, pressure + variation.value))
+    case Temperature => Cell(Cell.limit(Temperature, temperature + variation.value), humidity, pressure)
+    case Humidity => Cell(temperature, Cell.limit(Humidity, humidity + variation.value), pressure)
+    case Pressure => Cell(temperature, humidity, Cell.limit(Pressure, pressure + variation.value))
   }
 
   /**

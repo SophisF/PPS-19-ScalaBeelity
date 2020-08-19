@@ -1,10 +1,10 @@
-package scala.model.property
+package scala.model.environment.property
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.exp
 
 import scala.model.helper.IteratorHelper.RichIterator
-import scala.model.matrix.Matrix.TransformableMatrix
+import scala.model.environment.matrix.Matrix.TransformableMatrix
 
 /**
  * TODO maybe rename to GaussianFilterBuilder.<br>

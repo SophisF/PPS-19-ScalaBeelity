@@ -1,4 +1,4 @@
-package scala.model.time
+package scala.model.environment.time
 
 /**
  * Represent a duration

@@ -1,14 +1,15 @@
 package scala.controller
 
-import scala.model.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model._
-import scala.model.matrix.Matrix._
-import scala.model.property.Property.{Temperature, toPercentage}
-import scala.model.property.PropertySource.SeasonalPropertySource
-import scala.model.property.ZonePropertySource.ContinuousZonePropertySource
-import scala.model.property.PropertyVariation.Variation
-import scala.model.property.{FilterBuilder, Property, ZonePropertySource}
-import scala.model.time.Time
+import scala.model.environment.{Environment, EnvironmentManager}
+import scala.model.environment.matrix.Matrix._
+import scala.model.environment.property.Property.{Temperature, toPercentage}
+import scala.model.environment.property.PropertySource.SeasonalPropertySource
+import scala.model.environment.property.ZonePropertySource.ContinuousZonePropertySource
+import scala.model.environment.property.PropertyVariation.Variation
+import scala.model.environment.property.{FilterBuilder, Property, ZonePropertySource}
+import scala.model.environment.time.Time
 import scala.util.Random
 import scala.view.View
 

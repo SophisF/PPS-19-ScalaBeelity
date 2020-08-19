@@ -1,6 +1,6 @@
-package scala.model.matrix
+package scala.model.environment.matrix
 
-import scala.model.matrix.Size.Border
+import scala.model.environment.matrix.Size.Border
 
 /**
  * Represent the size of a 2d matrix

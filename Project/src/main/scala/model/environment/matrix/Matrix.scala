@@ -1,4 +1,4 @@
-package scala.model.matrix
+package scala.model.environment.matrix
 
 import breeze.linalg._
 

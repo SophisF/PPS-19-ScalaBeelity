@@ -1,4 +1,4 @@
-package scala.model.matrix
+package scala.model.environment.matrix
 
 /**
  * Represent a point in a 2 dimensional matrix

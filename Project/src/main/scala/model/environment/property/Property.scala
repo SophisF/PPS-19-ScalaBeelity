@@ -1,4 +1,4 @@
-package scala.model.property
+package scala.model.environment.property
 
 object Property extends Enumeration {
   type Property = Value

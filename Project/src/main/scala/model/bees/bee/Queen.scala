@@ -1,9 +1,9 @@
-package model.bees.bee
+package scala.model.bees.bee
 
-import model.bees.bee.Bee.Bee
-import model.bees.genotype.Genotype
-import model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
-import model.bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
+import scala.model.bees.bee.Bee.Bee
+import scala.model.bees.genotype.Genotype
+import scala.model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
+import scala.model.bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
 
 /**
  * Object that represents the queen bee

@@ -1,8 +1,8 @@
-package model.bees.bee
+package scala.model.bees.bee
 
-import model.bees.genotype.Genotype.Genotype
-import model.bees.phenotype.Phenotype.Phenotype
-import model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.genotype.Genotype.Genotype
+import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 /**
  * Object that represents bee

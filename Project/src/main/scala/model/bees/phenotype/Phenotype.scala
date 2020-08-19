@@ -1,7 +1,7 @@
-package model.bees.phenotype
+package scala.model.bees.phenotype
 
-import model.bees.phenotype.Characteristic.Characteristic
-import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import scala.model.bees.phenotype.Characteristic.Characteristic
+import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 object Phenotype {
 

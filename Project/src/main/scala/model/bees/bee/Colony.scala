@@ -1,8 +1,8 @@
-package model.bees.bee
+package scala.model.bees.bee
 
-import model.bees.bee.Bee.Bee
-import model.bees.bee.ColonyArea.{ColonyArea, ColonyAreaImpl, Ends}
-import model.bees.bee.Queen.Queen
+import scala.model.bees.bee.Bee.Bee
+import scala.model.bees.bee.ColonyArea.{ColonyArea, ColonyAreaImpl, Ends}
+import scala.model.bees.bee.Queen.Queen
 
 import scala.collection.immutable.HashSet
 

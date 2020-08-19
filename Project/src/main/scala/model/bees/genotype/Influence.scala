@@ -1,6 +1,6 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
-import model.bees.genotype.InfluenceType.InfluenceType
+import scala.model.bees.genotype.InfluenceType.InfluenceType
 
 /**
 Enumeration of the influence types.

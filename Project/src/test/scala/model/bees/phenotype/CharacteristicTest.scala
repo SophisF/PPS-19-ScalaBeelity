@@ -1,8 +1,8 @@
-package model.bees.phenotype
+package scala.model.bees.phenotype
 
-import model.bees.genotype.Gene
-import model.bees.phenotype.Characteristic.{Characteristic, TemperatureCompatibilityCharacteristic}
-import model.bees.phenotype.ExpressionMapper._
+import scala.model.bees.genotype.Gene
+import scala.model.bees.phenotype.Characteristic.{Characteristic, TemperatureCompatibilityCharacteristic}
+import scala.model.bees.phenotype.ExpressionMapper._
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.Random

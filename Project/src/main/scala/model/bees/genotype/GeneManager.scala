@@ -1,9 +1,9 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
-import model.bees.genotype.GeneTaxonomy.GeneTaxonomy
-import model.bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
-import model.bees.genotype.Influence.InfluenceImpl
-import model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
+import scala.model.bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
+import scala.model.bees.genotype.Influence.InfluenceImpl
+import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 /**
  * Singleton to manipulate the genotype in order to create a phenotype.

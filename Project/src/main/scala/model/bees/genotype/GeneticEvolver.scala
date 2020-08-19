@@ -1,13 +1,13 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
 
-import model.bees.genotype.Gene.{Gene, GeneImpl}
-import model.bees.genotype.GeneManager._
-import model.bees.genotype.GeneTaxonomy.GeneTaxonomy
-import model.bees.genotype.Genotype.Genotype
-import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import model.bees.phenotype.Phenotype.Phenotype
-import model.bees.phenotype.Characteristic._
+import scala.model.bees.genotype.Gene.{Gene, GeneImpl}
+import scala.model.bees.genotype.GeneManager._
+import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
+import scala.model.bees.genotype.Genotype.Genotype
+import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.bees.phenotype.Characteristic._
 
 import scala.collection.immutable.HashSet
 import scala.util.Random

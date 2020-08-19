@@ -1,7 +1,7 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
-import model.bees.genotype.GeneTaxonomy.GeneTaxonomy
-import model.bees.genotype.GeneticInformation.GeneticInformation
+import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
+import scala.model.bees.genotype.GeneticInformation.GeneticInformation
 
 import scala.util.Random
 

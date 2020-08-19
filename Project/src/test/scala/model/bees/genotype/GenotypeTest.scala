@@ -1,6 +1,6 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
-import model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
+import scala.model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
 import org.scalatest.funsuite.AnyFunSuite
 
 class GenotypeTest extends AnyFunSuite{

@@ -1,4 +1,4 @@
-package model.bees.phenotype
+package scala.model.bees.phenotype
 
 object CharacteristicTaxonomy extends Enumeration {
   type CharacteristicTaxonomy = Value

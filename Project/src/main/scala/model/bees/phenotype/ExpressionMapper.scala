@@ -1,6 +1,6 @@
-package model.bees.phenotype
+package scala.model.bees.phenotype
 
-import model.bees.genotype.Gene
+import scala.model.bees.genotype.Gene
 
 object ExpressionMapper {
 

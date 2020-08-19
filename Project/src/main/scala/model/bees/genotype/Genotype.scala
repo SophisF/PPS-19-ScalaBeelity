@@ -1,10 +1,10 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
 
-import model.bees.genotype.Gene.{Gene, GeneImpl}
-import model.bees.genotype.GeneManager._
-import model.bees.phenotype.CharacteristicTaxonomy
-import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import scala.model.bees.genotype.Gene.{Gene, GeneImpl}
+import scala.model.bees.genotype.GeneManager._
+import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 /**
  * Object that represent the genotype.

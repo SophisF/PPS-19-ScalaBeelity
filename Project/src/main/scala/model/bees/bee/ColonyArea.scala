@@ -1,4 +1,4 @@
-package model.bees.bee
+package scala.model.bees.bee
 
 /**
  * Object that represents a colony area

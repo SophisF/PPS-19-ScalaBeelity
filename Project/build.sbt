@@ -21,3 +21,7 @@ libraryDependencies  ++= Seq(
 
 )
 
+scalacOptions ++= Seq(
+  "-language:postfixOps"
+)
+

@@ -1,7 +1,7 @@
-package model.bees.genotype
+package scala.model.bees.genotype
 
-import model.bees.genotype.Influence.Influence
-import model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import scala.model.bees.genotype.Influence.Influence
+import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 /**
 The genetic information of the bees.

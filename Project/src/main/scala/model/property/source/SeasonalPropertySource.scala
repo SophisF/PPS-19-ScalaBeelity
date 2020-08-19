@@ -4,7 +4,7 @@ import scala.model.property.Property
 import scala.model.time.Time
 
 trait SeasonalPropertySource[T <: Property] extends PropertySource[T] {
-  var lastGet: Double = 0
+  var lastGet: Double = 0 // TODO eventualmente fare privato e rendere nextValue metodo
   def nextValue: (Int, Int) => T#ValueType
 }
 

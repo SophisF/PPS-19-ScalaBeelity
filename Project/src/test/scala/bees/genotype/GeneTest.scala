@@ -6,6 +6,8 @@ import bees.genotype.GeneManager._
 
 class GeneTest extends AnyFunSuite {
   val temperatureGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE)
+  val negativeFrequencyGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE, freq = -1)
+  val overMaxFrequencyGene: Gene = GeneImpl(GeneTaxonomy.PRESSURE_GENE, freq = Gene.maxFrequency + 1)
 
 
   test("A Gene should have a name") {
@@ -20,7 +22,15 @@ class GeneTest extends AnyFunSuite {
     assert(GeneTaxonomy.values.contains(temperatureGene.name))
   }
 
-  test("A Coding Gene should have at least one information") {
+  test("A Gene should have always positive frequency"){
+    assert(negativeFrequencyGene.frequency > 0)
+  }
+
+  test("A Gene should have always frequency in range (1, 100)"){
+    assert(negativeFrequencyGene.frequency >= 1 && overMaxFrequencyGene.frequency <= 100)
+  }
+
+  test("A Gene should have at least one information") {
     assert(temperatureGene.geneticInformation.information.nonEmpty)
   }
 

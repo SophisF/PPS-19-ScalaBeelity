@@ -24,7 +24,7 @@ object Gene {
   case class GeneImpl(override val name: GeneTaxonomy, freq: Frequency = minFrequency + Random.nextInt(maxFrequency-minFrequency))
                      (implicit mapper: GeneTaxonomy => GeneticInformation,
                       implicit val env: GeneTaxonomy => Boolean) extends Gene{
-    (require(GeneTaxonomy.values.contains(name)))
+    require(GeneTaxonomy.values.contains(name))
     override val frequency: Frequency = freq match {
       case i if i < minFrequency => minFrequency
       case i if i > maxFrequency => maxFrequency

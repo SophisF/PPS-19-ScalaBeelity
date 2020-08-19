@@ -11,6 +11,7 @@ object Phenotype {
   }
 
   case class PhenotypeImpl(expressions: Map[CharacteristicTaxonomy, Double]) extends Phenotype {
+    require(expressions.size == CharacteristicTaxonomy.maxId)
     override val characteristics: Set[Characteristic] = expressions.map(kv => Characteristic(kv._1, kv._2) ).toSet
 
 

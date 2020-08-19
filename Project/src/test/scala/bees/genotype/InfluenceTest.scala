@@ -19,6 +19,10 @@ class InfluenceTest extends AnyFunSuite{
     assertThrows[NoSuchElementException](InfluenceType(InfluenceType.maxId+1))
   }
 
+  test("An Influence should return a positive InfluenceValue if InfluenceType is positive"){
+    assert(influence.influenceValue >= 0)
+  }
+
   test("An Influence should return a negative InfluenceValue if InfluenceType is negative"){
     assert(negativeInfluence.influenceValue <= 0)
   }

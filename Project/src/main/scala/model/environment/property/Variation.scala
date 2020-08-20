@@ -26,6 +26,6 @@ object Variation {
    * @tparam T type of property
    * @return the varied value
    */
-  def vary[T <: Property](value: T#ValueType, variation: Variation[T])(implicit operation: (Variation[T], T#ValueType)
-    => T#ValueType): T#ValueType = operation(variation, value)
+  def vary[T <: Property](state: T#State, variation: Variation[T])(implicit operation: (T#State, Variation[T])
+    => T#State): T#State = operation(state, variation)
 }

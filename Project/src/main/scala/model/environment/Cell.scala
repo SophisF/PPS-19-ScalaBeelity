@@ -2,8 +2,11 @@ package scala.model.environment
 
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
 import scala.model.environment.property.Variation.vary
-import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
-import scala.model.environment.property.{Property, PropertyType, Variation}
+import scala.model.environment.property.realization.{HumidityProperty, HumidityPropertyHelper, PressureProperty, PressurePropertyHelper, TemperatureProperty, TemperaturePropertyHelper}
+import scala.model.environment.property.realization.TemperaturePropertyHelper.TemperatureHelper
+import scala.model.environment.property.realization.HumidityPropertyHelper.HumidityHelper
+import scala.model.environment.property.realization.PressurePropertyHelper.PressureHelper
+import scala.model.environment.property.{Property, PropertyHelper, PropertyType, Variation}
 
 /**
  * Class that represent an environment cell
@@ -14,8 +17,12 @@ import scala.model.environment.property.{Property, PropertyType, Variation}
  *
  * @author Paolo Baldini
  */
-class Cell(temperature: Int, humidity: Int, pressure: Int) {  // TODO abstract type or generics
-  private val map = Map[PropertyType.Value, Int](
+case class Cell(
+  temperature: TemperatureProperty#State,
+  humidity: HumidityProperty#State,
+  pressure: PressureProperty#State
+) {
+  private val map = Map[PropertyType.Value, Property#State](
     Temperature -> temperature,
     Humidity -> humidity,
     Pressure -> pressure
@@ -27,12 +34,16 @@ class Cell(temperature: Int, humidity: Int, pressure: Int) {  // TODO abstract t
    * @param property of which we want to know the value
    * @return the value of the property
    */
-  def apply[T <: Property](property: PropertyType.Value): Int = map(property)
+  def apply[T <: Property](property: PropertyType.PropertyTypeValue[T]): T#State = map(property) match {
+    case state: T#State => state.asInstanceOf[T#State]
+  }
+
+  def apply[T <: Property](property: PropertyType.Value): T#State = map(property).asInstanceOf[T#State]
 
   def +[T <: Property](variation: Variation[T]): Cell = variation match {
-    case v:Variation[TemperatureProperty] => Cell(vary[TemperatureProperty](temperature, v), humidity, pressure)
-    case v:Variation[HumidityProperty] => Cell(vary[HumidityProperty](temperature, v), humidity, pressure)
-    case v:Variation[PressureProperty] => Cell(vary[PressureProperty](temperature, v), humidity, pressure)
+    case v:Variation[TemperatureProperty] => Cell(vary(temperature, v), humidity, pressure)
+    case v:Variation[HumidityProperty] => Cell(temperature, vary(humidity, v), pressure)
+    case v:Variation[PressureProperty] => Cell(temperature, humidity, vary(pressure, v))
     case _ => this
   }
 
@@ -45,9 +56,15 @@ class Cell(temperature: Int, humidity: Int, pressure: Int) {  // TODO abstract t
    */
   def +?[T <: Property](variation: Option[Variation[T]]): Cell = variation map (this + _) getOrElse this
 }
+
 object Cell {
 
-  def apply(temperature: Int, humidity: Int, pressure: Int): Cell = new Cell(temperature, humidity, pressure)
+  def apply(
+    temperature: TemperatureProperty#ValueType,
+    humidity: HumidityProperty#ValueType,
+    pressure: PressureProperty#ValueType
+  ): Cell = Cell(TemperaturePropertyHelper.toState(temperature), HumidityPropertyHelper.toState(humidity),
+    PressurePropertyHelper.toState(pressure))
 
   /**
    * Apply field-wise operation between two cell. Resulting value cannot exceed property limits/range
@@ -58,8 +75,9 @@ object Cell {
    * @return a cell on which every field is the (limited) result of the operation applied to between the value of the
    *        'first' and 'second' cells
    */
-  def operation(first: Cell, second: Cell)(property: (Int, Int) => Int): Cell = Cell(
-    TemperatureProperty.limit(property(first(Temperature), second(Temperature))),
-    HumidityProperty.limit(property(first(Humidity), second(Humidity))),
-    PressureProperty.limit(property(first(Pressure), second(Pressure))))
+  def operation(first: Cell, second: Cell): Cell = Cell(
+    implicitly[PropertyHelper[TemperatureProperty]].sum(first(Temperature), second(Temperature)),
+    implicitly[PropertyHelper[HumidityProperty]].sum(first(Humidity), second(Humidity)),
+    implicitly[PropertyHelper[PressureProperty]].sum(first(Pressure), second(Pressure))
+  )
 }

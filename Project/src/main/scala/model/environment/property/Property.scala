@@ -11,4 +11,15 @@ trait Property {
   type ValueType
 
   def default: ValueType
+
+  /**
+   * Represent the state of a property
+   */
+  trait State {
+    def value: ValueType
+  }
+}
+
+trait PropertyHelper[T <: Property] {
+  def sum(first: T#State, second: T#State): T#State
 }

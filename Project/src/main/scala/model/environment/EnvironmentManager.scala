@@ -2,6 +2,9 @@ package scala.model.environment
 
 import scala.model.environment.property.Property
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
+import scala.model.environment.property.realization.TemperaturePropertyHelper.toState
+import scala.model.environment.property.realization.HumidityPropertyHelper.toState
+import scala.model.environment.property.realization.PressurePropertyHelper.toState
 import scala.model.environment.property.source.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource}
 import scala.model.environment.property.source.{PropertySource, SeasonalPropertySource}
 import scala.model.environment.time.Timed.isEnded

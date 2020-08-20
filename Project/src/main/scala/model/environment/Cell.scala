@@ -1,10 +1,9 @@
 package scala.model.environment
 
-import scala.collection.immutable.HashMap
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
-import scala.model.environment.property.PropertyVariation.vary
+import scala.model.environment.property.Variation.vary
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
-import scala.model.environment.property.{Property, PropertyType, PropertyVariation}
+import scala.model.environment.property.{Property, PropertyType, Variation}
 
 /**
  * Class that represent an environment cell
@@ -15,8 +14,12 @@ import scala.model.environment.property.{Property, PropertyType, PropertyVariati
  *
  * @author Paolo Baldini
  */
-class Cell(temperature: Int, humidity: Int, pressure: Int) {
-  private val map = HashMap((Temperature, temperature), (Humidity, humidity), (Pressure, pressure))
+class Cell(temperature: Int, humidity: Int, pressure: Int) {  // TODO abstract type or generics
+  private val map = Map[PropertyType.Value, Int](
+    Temperature -> temperature,
+    Humidity -> humidity,
+    Pressure -> pressure
+  )
 
   /**
    * Used to iterate over the properties
@@ -24,12 +27,12 @@ class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @param property of which we want to know the value
    * @return the value of the property
    */
-  def apply(property: PropertyType.Value): Int = map(property)
+  def apply[T <: Property](property: PropertyType.Value): Int = map(property)
 
-  def +[T <: Property](variation: PropertyVariation[T]): Cell = variation match {
-    case v:PropertyVariation[TemperatureProperty] => Cell(vary[TemperatureProperty](temperature, v), humidity, pressure)
-    case v:PropertyVariation[HumidityProperty] => Cell(vary[HumidityProperty](temperature, v), humidity, pressure)
-    case v:PropertyVariation[PressureProperty] => Cell(vary[PressureProperty](temperature, v), humidity, pressure)
+  def +[T <: Property](variation: Variation[T]): Cell = variation match {
+    case v:Variation[TemperatureProperty] => Cell(vary[TemperatureProperty](temperature, v), humidity, pressure)
+    case v:Variation[HumidityProperty] => Cell(vary[HumidityProperty](temperature, v), humidity, pressure)
+    case v:Variation[PressureProperty] => Cell(vary[PressureProperty](temperature, v), humidity, pressure)
     case _ => this
   }
 
@@ -40,7 +43,7 @@ class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @param variation optionally contains value and target of the variation
    * @return the optionally varied cell
    */
-  def +?[T <: Property](variation: Option[PropertyVariation[T]]): Cell = variation map (this + _) getOrElse this
+  def +?[T <: Property](variation: Option[Variation[T]]): Cell = variation map (this + _) getOrElse this
 }
 object Cell {
 

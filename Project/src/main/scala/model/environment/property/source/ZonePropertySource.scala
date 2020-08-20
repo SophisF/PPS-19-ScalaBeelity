@@ -4,7 +4,7 @@ import breeze.linalg._
 
 import scala.model.environment.matrix._
 import scala.model.environment.property.Property
-import scala.model.environment.property.PropertyVariation._
+import scala.model.environment.property.Variation._
 import scala.model.environment.time.{FiniteData, Time}
 
 trait ZonePropertySource[T <: Property] extends PropertySource[T] with Point with Size
@@ -18,31 +18,31 @@ trait ZonePropertySource[T <: Property] extends PropertySource[T] with Point wit
 object ZonePropertySource {
 
   case class InstantaneousZonePropertySource[T <: Property](
-    data: DenseMatrix[Variation[T]],
-    x: Int, y: Int,
-    width: Int, height: Int
+                                                             data: DenseMatrix[GenericVariation[T]],
+                                                             x: Int, y: Int,
+                                                             width: Int, height: Int
   ) extends ZonePropertySource[T]
 
   case class ContinuousZonePropertySource[T <: Property](
-    filter: DenseMatrix[Variation[T]],
-    x: Int, y: Int,
-    width: Int, height: Int,
-    fireTime: Int, duration: Int
-  ) extends ZonePropertySource[T] with FiniteData[DenseMatrix[Variation[T]]] {
+                                                          filter: DenseMatrix[GenericVariation[T]],
+                                                          x: Int, y: Int,
+                                                          width: Int, height: Int,
+                                                          fireTime: Int, duration: Int
+  ) extends ZonePropertySource[T] with FiniteData[DenseMatrix[GenericVariation[T]]] {
     var evaluated: Int = 0
   }
 
   //def apply(x: Int, y: Int, width: Int, height: Int, filter: VariationMatrix): InstantaneousPropertySource =
   //  InstantaneousPropertySource(filter, x, y, width, height)
 
-  implicit def nextValue[T <: Property](data: ContinuousZonePropertySource[T]): DenseMatrix[Variation[T]] = {
+  implicit def nextValue[T <: Property](data: ContinuousZonePropertySource[T]): DenseMatrix[GenericVariation[T]] = {
     val force = (Time.time - data.fireTime) * 100 / data.duration.toDouble - data.evaluated
     data.evaluated += force.toInt
     DenseMatrix.create(data.filter.rows, data.filter.cols, data.filter.data
-      .map(variation => Variation(/*(variation.value * force)*/5.asInstanceOf[T#ValueType])))
+      .map(variation => GenericVariation(/*(variation.value * force)*/5.asInstanceOf[T#ValueType])))
   }
 
-  def apply[T <: Property](x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: DenseMatrix[Variation[T]])
+  def apply[T <: Property](x: Int, y: Int, width: Int, height: Int, fireTime: Int, duration: Int, filter: DenseMatrix[GenericVariation[T]])
   : ContinuousZonePropertySource[T] = ContinuousZonePropertySource(filter, x, y, width, height, fireTime, duration)
 
   /*def linearize(filter: ContinuousPropertySource[T], instant: Int): Option[Array[PointVariation[T]]] =

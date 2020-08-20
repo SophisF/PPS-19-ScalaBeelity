@@ -1,6 +1,6 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.{Property, PropertyVariation, Range}
+import scala.model.environment.property.{Property, Variation, Range}
 
 sealed trait HumidityProperty extends Property with Range {
   override type ValueType = Int
@@ -13,7 +13,7 @@ object HumidityProperty extends HumidityProperty {
 
   implicit def toValueType[T: Numeric](value: T): ValueType = implicitly[Numeric[T]].toInt(value)
 
-  implicit def operation: (PropertyVariation[HumidityProperty], ValueType) => ValueType =
+  implicit def operation: (Variation[HumidityProperty], ValueType) => ValueType =
     (variation, value) => variation.value + value
 
   /*override implicit def instantValue(time: Int): Int = maxValue * Math.sin(time % 365) toInt

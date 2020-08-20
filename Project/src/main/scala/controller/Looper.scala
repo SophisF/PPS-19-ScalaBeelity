@@ -1,10 +1,9 @@
 package scala.controller
 
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
-import scala.model._
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.matrix.Matrix._
-import scala.model.environment.property.PropertyVariation.Variation
+import scala.model.environment.property.Variation.GenericVariation
 import scala.model.environment.property.realization.TemperatureProperty
 import scala.model.environment.property.source.{SeasonalPropertySource, ZonePropertySource}
 import scala.model.environment.property.source.ZonePropertySource.ContinuousZonePropertySource
@@ -58,7 +57,7 @@ object Looper {
       ZonePropertySource(
         Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
         filter.cols, filter.rows,
-        0, iterations, filter.mapValues(it => Variation[TemperatureProperty](it.toInt))
+        0, iterations, filter.mapValues(it => GenericVariation[TemperatureProperty](it.toInt))
       )
     })
 

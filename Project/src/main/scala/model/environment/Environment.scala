@@ -4,7 +4,7 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.Property
-import scala.model.environment.property.PropertyVariation.Variation
+import scala.model.environment.property.Variation.GenericVariation
 import scala.model.environment.property.source.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource, border, in}
 import scala.model.environment.property.source.{PropertySource, SeasonalPropertySource, ZonePropertySource}
 import scala.model.environment.time.FiniteData
@@ -35,7 +35,7 @@ object Environment {
     propertySource match {
       case propertySource: InstantaneousZonePropertySource[T] => applyFilter(environment, propertySource)
       case propertySource: ContinuousZonePropertySource[T] =>
-        FiniteData.dataAtInstant[DenseMatrix[Variation[T]], ContinuousZonePropertySource[T]](propertySource)(ZonePropertySource.nextValue[T]) match {
+        FiniteData.dataAtInstant[DenseMatrix[GenericVariation[T]], ContinuousZonePropertySource[T]](propertySource)(ZonePropertySource.nextValue[T]) match {
           case None => environment
           case Some(value) => applyFilter(environment, InstantaneousZonePropertySource(value, propertySource.x,
             propertySource.y, propertySource.width, propertySource.height))
@@ -65,7 +65,7 @@ object Environment {
    * @return an environment to which is applied the filter
    */
   def applySeason[T <: Property](environment: Environment, variator: SeasonalPropertySource[T]): Environment = {
-    val variation = Variation(SeasonalPropertySource.nextValue(variator))
+    val variation = GenericVariation(SeasonalPropertySource.nextValue(variator))
     Environment(environment.map.map(_ + variation))
   }
 }

@@ -1,6 +1,6 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.{Property, PropertyVariation, Range}
+import scala.model.environment.property.{Property, Variation, Range}
 import scala.model.environment.time.{Time, TimeData}
 
 sealed trait TemperatureProperty extends Property with Range with TimeData[Int] {
@@ -14,7 +14,7 @@ object TemperatureProperty extends TemperatureProperty {
 
   implicit def toValueType[T: Numeric](value: T): ValueType = implicitly[Numeric[T]].toInt(value)
 
-  implicit def operation: (PropertyVariation[TemperatureProperty], ValueType) => ValueType =
+  implicit def operation: (Variation[TemperatureProperty], ValueType) => ValueType =
     (variation, value) => variation.value + value
 
   // TODO periodic property source

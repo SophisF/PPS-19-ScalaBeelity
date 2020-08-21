@@ -7,7 +7,7 @@ import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import model.bees.utility.PimpInt._
+import scala.model.bees.utility.PimpInt._
 
 import scala.collection.immutable.HashSet
 import scala.util.Random

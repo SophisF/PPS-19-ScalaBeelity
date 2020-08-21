@@ -1,4 +1,4 @@
-package model.bees.utility
+package scala.model.bees.utility
 
 object PimpInt {
 
@@ -8,6 +8,8 @@ object PimpInt {
     def <(tuple: (Int, Int)): Boolean = number < tuple._1
 
     def >(tuple: (Int, Int)): Boolean = number > tuple._2
+
+    def toInfluenceValue: Double = number.toDouble
   }
 
 }

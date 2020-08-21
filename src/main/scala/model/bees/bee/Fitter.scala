@@ -1,6 +1,6 @@
-package model.bees.bee
+package scala.model.bees.bee
 
-import model.bees.utility.PimpInt._
+import scala.model.bees.utility.PimpInt._
 
 object Fitter {
 

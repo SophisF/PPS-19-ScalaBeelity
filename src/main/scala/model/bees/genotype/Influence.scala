@@ -1,6 +1,7 @@
 package scala.model.bees.genotype
 
 import scala.model.bees.genotype.InfluenceType.InfluenceType
+import scala.model.bees.utility.PimpInt._
 
 /**
 Enumeration of the influence types.
@@ -14,18 +15,6 @@ object InfluenceType extends Enumeration {
 Represent the influence of a gene on a characteristic.
  */
 object Influence {
-
-  /**
-   * Implicit class to convert from influence in percentage to influence value.
-   * @param value the influence percentage.
-   */
-  implicit class InfluenceValue(value: Int){
-    /**
-     * Convert the type of influence in percentage from Int to InfluenceValue.
-     * @return the influence value converted.
-     */
-    def toInfluenceValue: Double = value.toDouble
-  }
 
   /**
    * Trait for the influence.

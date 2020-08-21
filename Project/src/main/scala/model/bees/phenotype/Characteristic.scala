@@ -1,28 +1,15 @@
 package scala.model.bees.phenotype
 
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import scala.model.bees.phenotype.ExpressionMapper._
 
 object Characteristic {
 
+  //def getExpression(characteristic: Characteristic with IntExpression): characteristic.Expression = characteristic.expression
   //possibly adding a generic type and an Expression Interface as superclasses of the others.
   trait Characteristic {
     type Expression
     val name: CharacteristicTaxonomy
     val expression: Expression
-  }
-
-  def apply(taxonomy: CharacteristicTaxonomy, influenceValue: Double): Characteristic = {
-    taxonomy match {
-      case CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY => TemperatureCompatibilityCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.PRESSURE_COMPATIBILITY => PressureCompatibilityCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY => HumidityCompatibilityCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.AGGRESSION_RATE => AggressionRateCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.REPRODUCTION_RATE => ReproductionRateCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.LONGEVITY => LongevityRateCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.COLOR => ColorRateCharacteristic(influenceValue)
-      case _ => SpeedRateCharacteristic(influenceValue)
-    }
   }
 
   //Int or Double??
@@ -46,7 +33,6 @@ object Characteristic {
   case class TemperatureCompatibilityCharacteristic(influenceValue: Double)
                                                    (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
-    println(influenceValue)
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY
     override val expression: (Int, Int) = mapper(20)(34)(influenceValue)(2)
 

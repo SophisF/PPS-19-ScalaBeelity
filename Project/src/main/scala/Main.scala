@@ -1,6 +1,6 @@
 package scala
 
-import scala.controller.Looper
+import scala.model.Ecosystem
 
 /**
  * Entry point for the (test) application
@@ -8,6 +8,7 @@ import scala.controller.Looper
  * @author Paolo Baldini
  */
 object Main extends App {
+  /*
   private val EnvironmentSize = (1000, 1000)
   private val Iterations = 1000
   private val UpdateWindow = 10
@@ -32,4 +33,11 @@ object Main extends App {
     performs some tasks in parallel). But that require to study how to structure the 'cell' entity (if mutable,
     avoiding race hazard; if immutable, collecting the three results).
    */
+
+   */
+
+  Ecosystem.createQueen()
+  println(Ecosystem.colonies)
+
+
 }

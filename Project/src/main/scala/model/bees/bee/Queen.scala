@@ -1,10 +1,11 @@
 package scala.model.bees.bee
 
+import scala.model.Ecosystem
 import scala.model.bees.bee.Bee.Bee
-import scala.model.bees.bee.Colony.Colony
-import scala.model.bees.genotype.Genotype
-import scala.model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
-import scala.model.bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
+import scala.model.bees.bee.Colony.{Colony, ColonyImpl}
+import scala.model.bees.genotype.Genotype.Genotype
+import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.util.Random
 
 /**
  * Object that represents the queen bee
@@ -15,31 +16,24 @@ object Queen {
    * Trait for a queen
    */
   trait Queen extends Bee {
-
-    val genotype: Genotype
-    val phenotype: Phenotype
+    val colony: Colony
     def move(): Unit
     def generateBee()
-    def getAge: Int
-    def update()
   }
 
+  case class QueenImpl(colonyOpt: Option[Colony],
+  override val genotype: Genotype, override val phenotype: Phenotype,
+  override val age: Int, temperature: Int,
+  pressure: Int, humidity: Int) extends Queen {
 
-  case class QueenImpl(colony: Colony) extends Queen {
-    override val genotype: Genotype = GenotypeImpl()
-    override val phenotype: Phenotype = PhenotypeImpl(Genotype.calculateExpression(genotype))
+    override val colony: Colony = colonyOpt getOrElse ColonyImpl(this, (Random.nextInt(Ecosystem.width), Random.nextInt(Ecosystem.height)))
 
-    override def move(): Unit = ???
 
-    override def generateBee(): Unit = ???
+    override def move(): Unit = ()
+    override def generateBee(): Unit = ()
 
-    override def getAge: Int = this.age
 
-    override def update(time: Int): Unit = ???
-
-    override def isAlive: Boolean = super.isAlive
-
-    override def kill(): Unit = super.kill()
+    override val remainingDaysOfLife: Int = Bee.calculateRemainingLife(this, temperature, pressure, humidity)
 
   }
 

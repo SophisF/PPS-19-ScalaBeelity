@@ -1,5 +1,5 @@
 *.class
 *.log
-Project/.idea
-Project/project
-Project/target
+project/
+target/
+.idea/

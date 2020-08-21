@@ -2,15 +2,13 @@ package scala.controller
 
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model.environment.{Environment, EnvironmentManager}
-import scala.model.environment.matrix.Matrix._
 import scala.model.environment.property.Variation.GenericVariation
 import scala.model.environment.property.realization.TemperatureProperty
-import scala.model.environment.property.source.{SeasonalPropertySource, ZonePropertySource}
-import scala.model.environment.property.source.ZonePropertySource.ContinuousZonePropertySource
-import scala.model.environment.property.{FilterBuilder, PropertyType}
+import scala.model.environment.property.source.{ContinuousSource, SeasonalSource}
+import scala.model.environment.property.FilterBuilder
+import scala.model.environment.property.source.ContinuousSource.ContinuousSourceImpl
 import scala.model.environment.time.Time
 import scala.util.Random
-import scala.view.View
 
 /**
  * Simply controller of the test
@@ -31,34 +29,39 @@ object Looper {
 
     plot(environmentManager.environment)
 
+    var t = new Timer()
     environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
-      .foldLeft(environmentManager)((x, y) => addSource[TemperatureProperty](x, y))
+      .foldLeft(environmentManager)(addSource)
+    println("Time to build continuous filters: " + t.elapsedTime())
 
-    environmentManager = addSource[TemperatureProperty](environmentManager,
-      SeasonalPropertySource[TemperatureProperty](TemperatureProperty.variation))
+    t = new Timer()
+    environmentManager = addSource(environmentManager, SeasonalSource[TemperatureProperty](TemperatureProperty.variation))
+    println("Time to build seasonal filter: " + t.elapsedTime())
 
+    t = new Timer()
     Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
 
+      //t = new Timer()
       environmentManager = evolution(environmentManager)
+      //println("Time for an evolution: " + t.elapsedTime())
 
-      if (i == iterations / 2) plot(environmentManager.environment)
+      //if (i == iterations / 2) plot(environmentManager.environment)
 
       Time increment 1
     })
+    println("Time to run: " + t.elapsedTime())
 
     plot(environmentManager.environment)
   }
 
   private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
-  : Iterable[ContinuousZonePropertySource[TemperatureProperty]] = (0 until quantity) map (_ => {
+  : Iterable[ContinuousSource[TemperatureProperty]] = (0 until quantity) map (_ => {
       val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
       val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
 
-      ZonePropertySource(
-        Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
-        filter.cols, filter.rows,
-        0, iterations, filter.mapValues(it => GenericVariation[TemperatureProperty](it.toInt))
-      )
+      ContinuousSourceImpl[TemperatureProperty](filter.mapValues(it => GenericVariation[TemperatureProperty](it.toInt)),
+        (value, percentage) => value * percentage / 100, Random.nextInt(environmentWidth),
+        Random.nextInt(environmentHeight), filter.cols, filter.rows, 0, iterations)
     })
 
   /**

@@ -1,6 +1,9 @@
 package scala.model.environment.matrix
 
 import breeze.linalg._
+import breeze.math.Ring.ringFromField
+
+import scala.collection.parallel.CollectionConverters._
 
 /**
  * Pimping breeze.Matrix adding utility functions.
@@ -29,9 +32,13 @@ object Matrix {
      */
     def dropRows(dropN: Double): Matrix[T] = matrix.delete(Iterable.iterate(0, ((matrix.rows -1) * dropN).toInt)
     (_ + Math.ceil(1 / dropN).toInt).takeWhile(_ < matrix.rows).toSeq, Axis._0)
+
+    // TODO move in trasformable after adjusted double problem
+    //def parallelMap[R](op: T => R): Matrix[R] = DenseMatrix.create[R](matrix.rows, matrix.cols, matrix.data.par.map(op)
+    //  .toArray)(null)
   }
 
-  implicit class TransformableMatrix[T](matrix: Matrix[Double]) {
+  implicit class TransformableMatrix[T](matrix: Matrix[Double]) { // TODO double
 
     /**
      * Mirror matrix on horizontal axis

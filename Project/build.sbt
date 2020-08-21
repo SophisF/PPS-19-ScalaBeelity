@@ -16,6 +16,8 @@ libraryDependencies  ++= Seq(
   // It depends on LGPL code
   "org.scalanlp" %% "breeze-viz" % "1.1",
 
+  "org.scala-lang.modules" %% "scala-parallel-collections" % "0.2.0",
+
   // https://mvnrepository.com/artifact/org.scalatest/scalatest
   "org.scalatest" %% "scalatest" % "3.2.0" % Test
 

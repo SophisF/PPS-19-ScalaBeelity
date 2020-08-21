@@ -3,10 +3,10 @@ package scala.model.environment.property.source
 import scala.model.environment.property.Property
 
 /**
- * Represent a source of property variations
+ * A property source that influence the whole environment
  *
  * @tparam T type of property
  *
  * @author Paolo Baldini
  */
-trait PropertySource[T <: Property]
+trait GlobalSource[T <: Property] extends PropertySource[T]

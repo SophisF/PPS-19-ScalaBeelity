@@ -3,7 +3,7 @@ package scala.model.environment.property
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.exp
 
-import scala.model.helper.IteratorHelper.RichIterator
+import scala.model.environment.utility.IteratorHelper.RichIterator
 import scala.model.environment.matrix.Matrix.TransformableMatrix
 
 /**

@@ -2,27 +2,18 @@ package scala.model.environment
 
 import scala.model.environment.property.Property
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
-import scala.model.environment.property.realization.TemperaturePropertyHelper.toState
-import scala.model.environment.property.realization.HumidityPropertyHelper.toState
-import scala.model.environment.property.realization.PressurePropertyHelper.toState
-import scala.model.environment.property.source.ZonePropertySource.{ContinuousZonePropertySource, InstantaneousZonePropertySource}
-import scala.model.environment.property.source.{PropertySource, SeasonalPropertySource}
+import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, SeasonalSource}
 import scala.model.environment.time.Timed.isEnded
 
 object EnvironmentManager {
 
   /**
-   * 1- con granularità temporale maggiore della durata del filtro posso pensare di usare un filtro istantaneo
-   * 2- potrei salvarmi un parametro lastupdate per vedere se l'ultimo aggiornamento è stato fatto
-   */
-
-  /**
    * Manager of the environment, that control its evolution.
    *
    * @param environment    , the environment to manage.
-   * @param propertySource , the property to at the environment.
+   * @param propertySources , the property to at the environment.
    */
-  case class EnvironmentManager(environment: Environment, propertySource: PropertySource[Property]*)
+  case class EnvironmentManager(environment: Environment, propertySources: Seq[PropertySource[Property]] = Seq empty)
 
   /**
    * Apply function.
@@ -43,14 +34,15 @@ object EnvironmentManager {
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager =
     EnvironmentManager(
-      manager.propertySource.foldLeft(manager.environment)((x, y) => Environment.apply(x, y)),
-      manager.propertySource.filter {
-        case _: SeasonalPropertySource[_] => true
-        case _: InstantaneousZonePropertySource[_] => false
-        case p: ContinuousZonePropertySource[_] => !isEnded(p)
-      }: _*
+      manager.propertySources.foldLeft(manager.environment)((x, y) => Environment.apply(x, y)),
+      manager.propertySources.filter {
+        case _: SeasonalSource[_] => true
+        case _: InstantaneousSource[_] => false
+        case p: ContinuousSource[_] => !isEnded(p)
+      }
     )
 
-  def addSource[T <: Property](manager: EnvironmentManager, propertySource: PropertySource[T]): EnvironmentManager
-  = EnvironmentManager(manager.environment, manager.propertySource.appended(propertySource.asInstanceOf[PropertySource[Property]]): _*)
+  def addSource[T <: Property](manager: EnvironmentManager, source: PropertySource[T]): EnvironmentManager =
+    EnvironmentManager(manager.environment, manager.propertySources
+      .appended(source.asInstanceOf[PropertySource[Property]]))
 }

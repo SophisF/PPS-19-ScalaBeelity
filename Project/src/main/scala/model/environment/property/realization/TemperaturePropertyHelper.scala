@@ -11,4 +11,6 @@ object TemperaturePropertyHelper {
   implicit def toValueType[T: Numeric](value: T): ValueType = implicitly[Numeric[T]].toInt(value)
 
   implicit def toState[T: Numeric](value: T): TemperatureState = TemperatureState(implicitly[Numeric[T]].toInt(value))
+
+  implicit def percentage(value: Int, percent: Int): Int = value * percent / 100
 }

@@ -60,9 +60,9 @@ case class Cell(
 object Cell {
 
   def apply(
-    temperature: TemperatureProperty#ValueType,
-    humidity: HumidityProperty#ValueType,
-    pressure: PressureProperty#ValueType
+    temperature: TemperatureProperty#ValueType = TemperatureProperty.default,
+    humidity: HumidityProperty#ValueType = HumidityProperty.default,
+    pressure: PressureProperty#ValueType = PressureProperty.default
   ): Cell = Cell(TemperaturePropertyHelper.toState(temperature), HumidityPropertyHelper.toState(humidity),
     PressurePropertyHelper.toState(pressure))
 

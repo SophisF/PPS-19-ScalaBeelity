@@ -8,8 +8,9 @@ import scala.model.environment.time.Timed.inProgress
  * @tparam R type of data returned
  */
 trait FiniteData[R] extends TimeData[R] with Timed {
-  def evaluated: Int
+  var evaluated: Int
 }
+
 object FiniteData {
 
   /**
@@ -23,5 +24,5 @@ object FiniteData {
    * @return the data at actual time or null if the data is dead (out of lifetime)
    */
   def dataAtInstant[R, T <: FiniteData[R]](data: T)(implicit operation: T => R): Option[R] =
-    Option.when(inProgress(data, Time.time))(operation(data))
+    Option.when(inProgress(data, Time.now()))(operation(data))
 }

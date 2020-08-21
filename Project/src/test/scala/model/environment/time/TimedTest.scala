@@ -1,5 +1,5 @@
 package scala.model.environment.time
-
+/*
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.model.environment.time.Timed.{inProgress, isEnded, isStarted}
@@ -89,3 +89,4 @@ class TimedTest extends AnyFunSuite {
     assert(inProgress(timed(0, 0)))
   }
 }
+*/

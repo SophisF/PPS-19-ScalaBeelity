@@ -18,6 +18,7 @@ trait Size {
     case Size.Right => width / 2
   }
 }
+
 object Size extends Enumeration {
   type Border = Value
   val Top, Right, Bottom, Left = Value

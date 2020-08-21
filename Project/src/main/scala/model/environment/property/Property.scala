@@ -13,9 +13,9 @@ object Property extends Enumeration {
    * @return a tuple representing [MIN VALUE, MAX VALUE, DEFAULT VALUE]
    */
   def range(propertyValue: Value): PropertyData = propertyValue match {
-    case Temperature => PropertyData(-50, 50, 10) // celsius
+    case Temperature => PropertyData(-10, 40, 20) // celsius
     case Humidity => PropertyData(0, 100, 30)     // percentage
-    case Pressure => PropertyData(-5, 5, 1)       // atmosphere
+    case Pressure => PropertyData(980, 1080, 1000)       // mmHg
   }
 
   /**

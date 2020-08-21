@@ -1,7 +1,5 @@
 package scala.model.bees.bee
 
-import model.bees.bee.EvolutionManager
-
 import scala.model.bees.bee.Bee.{Bee, BeeImpl}
 import scala.model.bees.bee.ColonyArea.{ColonyArea, ColonyAreaImpl}
 import scala.model.bees.bee.Queen.{Queen, QueenImpl}
@@ -40,8 +38,9 @@ object Colony {
 
     private var queen: Queen = queenBee
     private var _bees: List[Bee] = List.empty
-    private var averageGenotype = EvolutionManager.calculateAverageGenotype(this._bees)
-    private var averagePhenotype = EvolutionManager.calculateAveragePhenotype(this.averageGenotype)
+    //Da mettere in update
+    //private var averageGenotype = EvolutionManager.calculateAverageGenotype(this._bees)
+    //private var averagePhenotype = EvolutionManager.calculateAveragePhenotype(this.averageGenotype)
     private var dimension: Int = 0
     private var area: ColonyArea = ColonyAreaImpl(this.center, dimension)
 

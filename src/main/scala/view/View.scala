@@ -5,7 +5,7 @@ import java.awt.Color
 import breeze.linalg._
 import breeze.plot._
 
-import scala.model.property.Property
+import scala.model.environment.property.Property
 
 /**
  * Basic view that allows to plot grids.

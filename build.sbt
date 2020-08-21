@@ -18,5 +18,6 @@ libraryDependencies  ++= Seq(
 
   // https://mvnrepository.com/artifact/org.scalatest/scalatest
   "org.scalatest" %% "scalatest" % "3.2.0" % Test
-
 )
+
+scalacOptions ++= Seq("-language:postfixOps")

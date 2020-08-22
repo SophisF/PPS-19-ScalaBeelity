@@ -3,6 +3,7 @@ package scala.model.bees.genotype
 
 import scala.model.bees.genotype.Gene.{Gene, GeneImpl}
 import scala.model.bees.genotype.GeneManager._
+import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
@@ -27,6 +28,17 @@ object Genotype {
    */
   trait Genotype {
     val genes: Set[Gene]
+
+    /**
+     * Method to get the frequency of a gene.
+     * @param geneTaxonomy the gene taxonomy.
+     * @return the frequency of the gene.
+     */
+    def frequency(geneTaxonomy: GeneTaxonomy): Int = {
+      val geneOpt = genes.find(_.name.equals(geneTaxonomy))
+      if(geneOpt.nonEmpty) geneOpt.get.frequency else Gene.minFrequency
+    }
+
   }
 
   /**

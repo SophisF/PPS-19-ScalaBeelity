@@ -8,6 +8,7 @@ class GeneTest extends AnyFunSuite {
   val temperatureGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE)
   val negativeFrequencyGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE, freq = -1)
   val overMaxFrequencyGene: Gene = GeneImpl(GeneTaxonomy.PRESSURE_GENE, freq = Gene.maxFrequency + 1)
+  val nonEnvironmentalGene: Gene = GeneImpl(GeneTaxonomy.GROWTH_GENE)
 
 
   test("A Gene should have a name") {
@@ -33,6 +34,15 @@ class GeneTest extends AnyFunSuite {
   test("A Gene should have at least one information") {
     assert(temperatureGene.geneticInformation.information.nonEmpty)
   }
+
+  test("A Gene that expresses environmental characteristics should be an environmental Gene"){
+    assert(temperatureGene.isEnvironmental)
+  }
+
+  test("A Gene that doesn't express environmental characteristics shouldn't be an environmental Gene"){
+    assert(!nonEnvironmentalGene.isEnvironmental)
+  }
+
 
 
 

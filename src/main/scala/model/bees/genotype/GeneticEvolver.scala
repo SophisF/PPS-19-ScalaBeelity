@@ -57,8 +57,7 @@ object GeneticEvolver {
    */
   private def environmentalAdaptation(genotype: Genotype)(phenotype: Phenotype)(parameter: Int)
                           (geneTaxonomy: GeneTaxonomy)(characteristicTaxonomy: CharacteristicTaxonomy): Gene = {
-    val geneOpt: Option[Gene] = genotype.genes.find(_.name.equals(geneTaxonomy))
-    val frequency: Int = if (geneOpt.nonEmpty) geneOpt.get.frequency else Gene.minFrequency
+    val frequency: Int = genotype.frequency(geneTaxonomy)
     val characteristicOpt: Option[Characteristic] = phenotype.characteristics.find(_.name.equals(characteristicTaxonomy))
     val expressionOpt: Option[(Int, Int)] = if (characteristicOpt.nonEmpty && characteristicOpt.get.isInstanceOf[Characteristic with RangeExpression])
       Some(characteristicOpt.get.asInstanceOf[Characteristic with RangeExpression].expression) else None

@@ -8,8 +8,6 @@ The genetic information of the bees.
  */
 object GeneticInformation {
 
-
-
   /**
    * Trait that represent a genetic information.
    */

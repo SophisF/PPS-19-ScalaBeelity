@@ -11,12 +11,16 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
  */
 object Genotype {
 
+  /**
+   * Utility method to calculate how a genotype expresses itself.
+   * @param genotype the genotype.
+   * @return a map which binds a characteristic taxonomy with his expression value, expressed as a double.
+   */
   def calculateExpression(genotype: Genotype): Map[CharacteristicTaxonomy, Double] = {
     CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, genotype.genes
       .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
       .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _))).toMap
   }
-
 
   /**
    * Trait for the genotype.
@@ -25,10 +29,12 @@ object Genotype {
     val genes: Set[Gene]
   }
 
-
+  /**
+   * Concrete implementation of genotype.
+   * @param geneSet a set of gene to build the genotype.
+   */
   case class GenotypeImpl(geneSet: Set[Gene] = Set.empty) extends Genotype {
     override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneSet.find(_.name.equals(value)).getOrElse(GeneImpl(value)))
-
   }
 
 }

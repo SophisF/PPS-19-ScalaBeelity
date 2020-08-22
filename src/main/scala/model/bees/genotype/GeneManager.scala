@@ -6,10 +6,15 @@ import scala.model.bees.genotype.Influence.InfluenceImpl
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 /**
- * Singleton to manipulate the genotype in order to create a phenotype.
+ * Singleton that implements strategies to define the genes.
  */
 object GeneManager {
 
+  /**
+   * Implicit strategy which binds a gene taxonomy to its genetic information.
+   * @param geneTaxonomy the taxonomy of the gene.
+   * @return a genetic information.
+   */
   implicit def geneticMapper(geneTaxonomy: GeneTaxonomy): GeneticInformation = {
     geneTaxonomy match {
       case GeneTaxonomy.TEMPERATURE_GENE => GeneticInformationImpl((CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY, InfluenceImpl()))
@@ -28,6 +33,13 @@ object GeneManager {
     }
   }
 
+
+  //TODO forse più corretto che prenda una informazione.
+  /**
+   * Implicit strategy that defines which gene has influence on the environmental characteristics.
+   * @param geneTaxonomy the taxonomy of the gene.
+   * @return a boolean, true if the gene influence the adaptation to the environment, false otherwise.
+   */
   implicit def environmentalDefiner(geneTaxonomy: GeneTaxonomy): Boolean = {
     geneTaxonomy match {
       case GeneTaxonomy.TEMPERATURE_GENE => true

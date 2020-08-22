@@ -3,10 +3,16 @@ package scala.model.bees.phenotype
 import scala.model.bees.phenotype.Characteristic.{Characteristic, DoubleExpression, IntExpression, RangeExpression}
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
+/**
+ * Object that represents the phenotype.
+ */
 object Phenotype {
 
   private val defaultExpressionValue: Int = 1
 
+  /**
+   * Trait for the phenotype.
+   */
   trait Phenotype {
 
     val characteristics: Set[Characteristic]
@@ -26,9 +32,12 @@ object Phenotype {
     val speed: Characteristic with IntExpression
 
     val color: Characteristic with DoubleExpression
-
   }
 
+  /**
+   * Concrete implementation of phenotype.
+   * @param expressions a map of characteristic and its frequency
+   */
   case class PhenotypeImpl(expressions: Map[CharacteristicTaxonomy, Double]) extends Phenotype {
     require(expressions.size == CharacteristicTaxonomy.maxId)
     override val characteristics: Set[Characteristic] = expressions.map(kv => Characteristic(kv._1, kv._2)).toSet
@@ -57,7 +66,5 @@ object Phenotype {
     override lazy val color: Characteristic with DoubleExpression =
       this.characteristics.find(_.name.equals(CharacteristicTaxonomy.COLOR))
         .getOrElse(Characteristic(CharacteristicTaxonomy.COLOR, defaultExpressionValue)).asInstanceOf[Characteristic with DoubleExpression]
-
   }
-
 }

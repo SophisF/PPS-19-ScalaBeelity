@@ -19,9 +19,9 @@ object Colony {
    */
   trait Colony {
     val center: Point
-    def getQueen: Queen
+    def queen: Queen
     def setNewQueen(queen: Queen): Unit
-    def getDimension: Int
+    def dimension: Int
     def bees: List[Bee]
     def +(bees: Bee*): Unit
     def isColonyAlive: Boolean
@@ -36,21 +36,21 @@ object Colony {
    */
   case class ColonyImpl(private val queenBee: Queen, override val center: Point) extends Colony{
 
-    private var queen: Queen = queenBee
+    private var _queen: Queen = queenBee
     private var _bees: List[Bee] = List.empty
     //Da mettere in update
     //private var averageGenotype = EvolutionManager.calculateAverageGenotype(this._bees)
     //private var averagePhenotype = EvolutionManager.calculateAveragePhenotype(this.averageGenotype)
-    private var dimension: Int = 0
-    private var area: ColonyArea = ColonyAreaImpl(this.center, dimension)
+    private var _dimension: Int = 0
+    private var _area: ColonyArea = ColonyAreaImpl(this.center, this._dimension)
 
-    override def getQueen: Queen = this.queen
+    override def queen: Queen = this._queen
 
-    override def setNewQueen(queen: Queen): Unit = this.queen = queen
+    override def setNewQueen(newQueen: Queen): Unit = this._queen = newQueen
 
     override def bees: List[Bee] = this._bees
 
-    override def getDimension: Int = this.dimension
+    override def dimension: Int = this._dimension
 
     override def +(bees: Bee*): Unit = this._bees = this._bees ++ _bees
 
@@ -60,7 +60,7 @@ object Colony {
 
     override def update(time: Int): Unit = {
       this._bees = this.bees.map(bee => BeeImpl(bee.genotype, bee.phenotype, bee.age + time, 20, 1000, 65))
-      this.queen = QueenImpl(Some(this.queen.colony), this.queen.genotype, this.queen.phenotype, this.queen.age + time, 20, 1000, 65)
+      this._queen = QueenImpl(Some(this._queen.colony), this._queen.genotype, this._queen.phenotype, this._queen.age + time, 20, 1000, 65)
 
 
 

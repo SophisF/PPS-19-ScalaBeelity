@@ -11,8 +11,14 @@ class GeneticEvolverTest extends AnyFunSuite{
   val phenotype: Phenotype = PhenotypeImpl(Genotype.calculateExpression(genotype))
 
   test("The evolution should slowly adapt the bees to the environment"){
-    val newGenes = GeneticEvolver.buildGenotype(genotype)(phenotype)(40)(1080)(100)
-    assert(newGenes.find(_.name.equals(GeneTaxonomy.TEMPERATURE_GENE)).get.frequency
-      >= genotype.genes.find(_.name.equals(GeneTaxonomy.TEMPERATURE_GENE)).get.frequency)
+    val newGenotype = GenotypeImpl(GeneticEvolver.buildGenotype(genotype)(phenotype)(40)(1080)(100))
+    assert(newGenotype.frequency(GeneTaxonomy.TEMPERATURE_GENE) >= genotype.frequency(GeneTaxonomy.TEMPERATURE_GENE))
+  }
+
+  test("The evolution should slowly change a non environmental gene random, with a factor of 2"){
+    val newGenotype = GenotypeImpl(GeneticEvolver.buildGenotype(genotype)(phenotype)(40)(1080)(100))
+    val newGrowthGeneFrequency = newGenotype.frequency(GeneTaxonomy.GROWTH_GENE)
+    val oldGrowthGeneFrequency = genotype.frequency(GeneTaxonomy.GROWTH_GENE)
+    assert(newGrowthGeneFrequency == oldGrowthGeneFrequency - 2 || newGrowthGeneFrequency == oldGrowthGeneFrequency + 2)
   }
 }

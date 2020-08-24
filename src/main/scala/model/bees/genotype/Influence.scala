@@ -16,6 +16,9 @@ object InfluenceType extends Enumeration {
  */
 object Influence {
 
+  def apply(typeOfInfluence: InfluenceType = InfluenceType.POSITIVE,
+            influenceInPercentage: Int = 100): Influence = InfluenceImpl(typeOfInfluence, influenceInPercentage)
+
   /**
    * Trait for the influence.
    */
@@ -39,8 +42,8 @@ object Influence {
    * @param typeOfInfluence       the type of the influence
    * @param influenceInPercentage the value of the influence in percentage.
    */
-  case class InfluenceImpl(override val typeOfInfluence: InfluenceType = InfluenceType.POSITIVE,
-                           influenceInPercentage: Int = 100) extends Influence {
+  private case class InfluenceImpl(override val typeOfInfluence: InfluenceType,
+                           influenceInPercentage: Int) extends Influence {
     require(InfluenceType.values.contains(typeOfInfluence) &&
       influenceInPercentage >= 0 && influenceInPercentage <= 100)
 

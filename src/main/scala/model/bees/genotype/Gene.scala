@@ -2,6 +2,7 @@ package scala.model.bees.genotype
 
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.genotype.GeneticInformation.GeneticInformation
+import scala.model.bees.genotype.GeneManager._
 
 import scala.util.Random
 
@@ -9,6 +10,8 @@ import scala.util.Random
  * Object that represent a gene.
  */
 object Gene {
+
+  def apply(name: GeneTaxonomy, freq: Frequency = minFrequency + Random.nextInt(maxFrequency-minFrequency)): Gene = GeneImpl(name, freq)
 
   /**
    * The type of the frequency, expressed as an integer value.
@@ -35,7 +38,7 @@ object Gene {
    * @param mapper an implicit strategy that map a gene to its genetic information.
    * @param env an implicit strategy that defines if a gene map an environmental characteristic.
    */
-  case class GeneImpl(override val name: GeneTaxonomy, freq: Frequency = minFrequency + Random.nextInt(maxFrequency-minFrequency))
+  private case class GeneImpl(override val name: GeneTaxonomy, freq: Frequency)
                      (implicit mapper: GeneTaxonomy => GeneticInformation,
                       implicit val env: GeneTaxonomy => Boolean) extends Gene{
     require(GeneTaxonomy.values.contains(name))

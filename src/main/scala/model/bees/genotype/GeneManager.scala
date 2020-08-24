@@ -1,8 +1,7 @@
 package scala.model.bees.genotype
 
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
-import scala.model.bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
-import scala.model.bees.genotype.Influence.InfluenceImpl
+import scala.model.bees.genotype.GeneticInformation.GeneticInformation
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 /**
@@ -17,19 +16,19 @@ object GeneManager {
    */
   implicit def geneticMapper(geneTaxonomy: GeneTaxonomy): GeneticInformation = {
     geneTaxonomy match {
-      case GeneTaxonomy.TEMPERATURE_GENE => GeneticInformationImpl((CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY, InfluenceImpl()))
-      case GeneTaxonomy.PRESSURE_GENE => GeneticInformationImpl((CharacteristicTaxonomy.PRESSURE_COMPATIBILITY, InfluenceImpl()))
-      case GeneTaxonomy.HUMIDITY_GENE => GeneticInformationImpl((CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY, InfluenceImpl()))
-      case GeneTaxonomy.AGGRESSION_GENE => GeneticInformationImpl((CharacteristicTaxonomy.AGGRESSION_RATE, InfluenceImpl()))
-      case GeneTaxonomy.REPRODUCTION_GENE => GeneticInformationImpl((CharacteristicTaxonomy.REPRODUCTION_RATE,
-        InfluenceImpl()))
-      case GeneTaxonomy.LONGEVITY_GENE => GeneticInformationImpl((CharacteristicTaxonomy.LONGEVITY, InfluenceImpl()))
-      case GeneTaxonomy.COLOR_GENE => GeneticInformationImpl((CharacteristicTaxonomy.COLOR, InfluenceImpl()))
-      case GeneTaxonomy.GROWTH_GENE => GeneticInformationImpl((CharacteristicTaxonomy.SPEED, InfluenceImpl(
+      case GeneTaxonomy.TEMPERATURE_GENE => GeneticInformation((CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY, Influence()))
+      case GeneTaxonomy.PRESSURE_GENE => GeneticInformation((CharacteristicTaxonomy.PRESSURE_COMPATIBILITY, Influence()))
+      case GeneTaxonomy.HUMIDITY_GENE => GeneticInformation((CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY, Influence()))
+      case GeneTaxonomy.AGGRESSION_GENE => GeneticInformation((CharacteristicTaxonomy.AGGRESSION_RATE, Influence()))
+      case GeneTaxonomy.REPRODUCTION_GENE => GeneticInformation((CharacteristicTaxonomy.REPRODUCTION_RATE,
+        Influence()))
+      case GeneTaxonomy.LONGEVITY_GENE => GeneticInformation((CharacteristicTaxonomy.LONGEVITY, Influence()))
+      case GeneTaxonomy.COLOR_GENE => GeneticInformation((CharacteristicTaxonomy.COLOR, Influence()))
+      case GeneTaxonomy.GROWTH_GENE => GeneticInformation((CharacteristicTaxonomy.SPEED, Influence(
         typeOfInfluence = InfluenceType.NEGATIVE,
         influenceInPercentage = 10
-      )), (CharacteristicTaxonomy.AGGRESSION_RATE, InfluenceImpl()))
-      case _ => GeneticInformationImpl((CharacteristicTaxonomy.SPEED, InfluenceImpl()))
+      )), (CharacteristicTaxonomy.AGGRESSION_RATE, Influence()))
+      case _ => GeneticInformation((CharacteristicTaxonomy.SPEED, Influence()))
     }
   }
 

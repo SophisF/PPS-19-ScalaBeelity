@@ -1,14 +1,14 @@
 package scala.model.bees.genotype
 
-import scala.model.bees.genotype.Gene._
 import org.scalatest.funsuite.AnyFunSuite
-import scala.model.bees.genotype.GeneManager._
+
+import scala.model.bees.genotype.Gene._
 
 class GeneTest extends AnyFunSuite {
-  val temperatureGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE)
-  val negativeFrequencyGene: Gene = GeneImpl(GeneTaxonomy.TEMPERATURE_GENE, freq = -1)
-  val overMaxFrequencyGene: Gene = GeneImpl(GeneTaxonomy.PRESSURE_GENE, freq = Gene.maxFrequency + 1)
-  val nonEnvironmentalGene: Gene = GeneImpl(GeneTaxonomy.GROWTH_GENE)
+  val temperatureGene: Gene = Gene(GeneTaxonomy.TEMPERATURE_GENE)
+  val negativeFrequencyGene: Gene = Gene(GeneTaxonomy.TEMPERATURE_GENE, freq = -1)
+  val overMaxFrequencyGene: Gene = Gene(GeneTaxonomy.PRESSURE_GENE, freq = Gene.maxFrequency + 1)
+  val nonEnvironmentalGene: Gene = Gene(GeneTaxonomy.GROWTH_GENE)
 
 
   test("A Gene should have a name") {

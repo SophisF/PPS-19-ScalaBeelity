@@ -1,19 +1,18 @@
 package scala.model.bees.genotype
 
-import scala.model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.collection.immutable.HashSet
-import scala.model.bees.genotype.Gene.{Gene, GeneImpl}
-import scala.model.bees.genotype.GeneManager._
+import scala.model.bees.genotype.Gene.Gene
+import scala.model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 class GenotypeTest extends AnyFunSuite {
-  private val genotype: Genotype = GenotypeImpl()
+  private val genotype: Genotype = Genotype()
 
-  private val growthGene: Gene = GeneImpl(GeneTaxonomy.GROWTH_GENE, 50)
-  private val wingsGene: Gene = GeneImpl(GeneTaxonomy.WINGS_GENE, 50)
+  private val growthGene: Gene = Gene(GeneTaxonomy.GROWTH_GENE, 50)
+  private val wingsGene: Gene = Gene(GeneTaxonomy.WINGS_GENE, 50)
   private val fixedGenotype: Genotype = GenotypeImpl(HashSet(growthGene, wingsGene))
 
   private def calculateExpression(gene: Gene, taxonomy: CharacteristicTaxonomy): Double =

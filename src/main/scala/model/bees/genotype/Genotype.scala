@@ -1,8 +1,7 @@
 package scala.model.bees.genotype
 
 
-import scala.model.bees.genotype.Gene.{Gene, GeneImpl}
-import scala.model.bees.genotype.GeneManager._
+import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
@@ -11,6 +10,8 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
  * Object that represent the genotype.
  */
 object Genotype {
+
+  def apply(genes: Set[Gene] = Set.empty): Genotype = GenotypeImpl(genes)
 
   /**
    * Utility method to calculate how a genotype expresses itself.
@@ -45,8 +46,8 @@ object Genotype {
    * Concrete implementation of genotype.
    * @param geneSet a set of gene to build the genotype.
    */
-  case class GenotypeImpl(geneSet: Set[Gene] = Set.empty) extends Genotype {
-    override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneSet.find(_.name.equals(value)).getOrElse(GeneImpl(value)))
+  case class GenotypeImpl(geneSet: Set[Gene]) extends Genotype {
+    override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneSet.find(_.name.equals(value)).getOrElse(Gene(value)))
   }
 
 }

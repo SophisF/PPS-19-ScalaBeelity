@@ -1,8 +1,7 @@
 package scala.model.bees.genotype
 
 
-import scala.model.bees.genotype.Gene.{Gene, GeneImpl}
-import scala.model.bees.genotype.GeneManager._
+import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.Characteristic.{Characteristic, RangeExpression}
@@ -39,7 +38,7 @@ object GeneticEvolver {
     genes = genes ++ genotype.genes.filter(_.name.equals(GeneTaxonomy.HUMIDITY_GENE)).map(gene => environmentalAdaptation(genotype)(phenotype)
     (humidity)(gene.name)(gene.geneticInformation.characteristics.head)
     )
-    genes = genes ++ genotype.genes.filterNot(_.isEnvironmental).map(gene => GeneImpl(gene.name, if (Random.nextInt() % 2 == 0)
+    genes = genes ++ genotype.genes.filterNot(_.isEnvironmental).map(gene => Gene(gene.name, if (Random.nextInt() % 2 == 0)
       gene.frequency - evolutionaryRate else gene.frequency + evolutionaryRate))
 
     genes
@@ -63,11 +62,11 @@ object GeneticEvolver {
       Some(characteristicOpt.get.asInstanceOf[Characteristic with RangeExpression].expression) else None
 
     expressionOpt match {
-      case Some(expression) => if (parameter in expression) GeneImpl(geneTaxonomy, frequency)
+      case Some(expression) => if (parameter in expression) Gene(geneTaxonomy, frequency)
       else if (parameter < expression)
-        GeneImpl(geneTaxonomy, frequency - evolutionaryRate)
-      else GeneImpl(geneTaxonomy, frequency + evolutionaryRate)
-      case _ => GeneImpl(geneTaxonomy, frequency)
+        Gene(geneTaxonomy, frequency - evolutionaryRate)
+      else Gene(geneTaxonomy, frequency + evolutionaryRate)
+      case _ => Gene(geneTaxonomy, frequency)
     }
 
 

@@ -1,20 +1,20 @@
 package scala.model.bees.genotype
 
-import scala.model.bees.genotype.GeneticInformation.{GeneticInformation, GeneticInformationImpl}
-import scala.model.bees.genotype.Influence.InfluenceImpl
-import scala.model.bees.phenotype.CharacteristicTaxonomy
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.model.bees.genotype.GeneticInformation.GeneticInformation
+import scala.model.bees.phenotype.CharacteristicTaxonomy
+
 class GeneticInformationTest extends AnyFunSuite{
-  val geneticInformation: GeneticInformation = GeneticInformationImpl((CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY,
-                                                                      InfluenceImpl()))
+  val geneticInformation: GeneticInformation = GeneticInformation((CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY,
+                                                                      Influence()))
 
   test("A GeneticInformation should not be empty"){
     assert(geneticInformation.information.nonEmpty)
   }
 
   test("An empty GeneticInformation should throws an IllegalArgumentException"){
-    assertThrows[IllegalArgumentException](GeneticInformationImpl())
+    assertThrows[IllegalArgumentException](GeneticInformation())
   }
 
   test("A GeneticInformation should contain exactly the initializer Taxonomy"){

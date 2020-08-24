@@ -30,15 +30,15 @@ class CellTest extends AnyFunSuite {
   }
 
   test("Get `Property.Pressure` should return correct value") {
-    assert(4 == Cell(0, 0, 4).get(Pressure))
+    assert(1020 == Cell(0, 0, 1020).get(Pressure))
   }
 
   test("Sum operation is field-wise") {
-    assert(Cell(2, 3, 4) == Cell(1, 1, 1) + Variation(Temperature, 1) + Variation(Humidity, 2) + Variation(Pressure, 3))
+    assert(Cell(2, 20, 1000) == Cell(1, 18, 997) + Variation(Temperature, 1) + Variation(Humidity, 2) + Variation(Pressure, 3))
   }
 
   test("Sum should never exceed max property value") {
-    assert(Cell(maxTemp, maxHum, maxPres) == Cell(1, 1, 1) + Variation(Temperature, maxTemp) +
+    assert(Cell(maxTemp, maxHum, maxPres) == Cell(10, 10, 10) + Variation(Temperature, maxTemp) +
       Variation(Humidity, maxHum) + Variation(Pressure, maxPres))
   }
 
@@ -52,7 +52,7 @@ class CellTest extends AnyFunSuite {
   }
 
   test("Sum operation with `Optional Some` should work as normal sum") {
-    assert(Cell(2, 3, 4) == Cell(1, 1, 1) + Option.apply(Variation(Temperature, 1)) +
+    assert(Cell(20, 30, 1002) == Cell(19, 28, 999) + Option.apply(Variation(Temperature, 1)) +
       Option.apply(Variation(Humidity, 2)) + Option.apply(Variation(Pressure, 3)))
   }
 
@@ -65,10 +65,10 @@ class CellTest extends AnyFunSuite {
   }
 
   test("Function 'operation' apply a mathematical operations between fields of the two cell") {
-    assert(Cell(6, 4, 2) == operation(Cell(3, 2, 1), Cell(3, 2, 1))((_1, _2) => _1 + _2))
-    assert(Cell(0, 0, 0) == operation(Cell(3, 2, 1), Cell(3, 2, 1))((_1, _2) => _1 - _2))
-    assert(Cell(9, 4, 1) == operation(Cell(3, 2, 1), Cell(3, 2, 1))((_1, _2) => _1 * _2))
-    assert(Cell(1, 1, 1) == operation(Cell(2, 2, 2), Cell(2, 2, 2))((_1, _2) => _1 / _2))
+    assert(Cell(6, 40, 1048) == operation(Cell(3, 20, 1000), Cell(3, 20, 48))((_1, _2) => _1 + _2))
+    assert(Cell(0, 0, 980) == operation(Cell(3, 2, 1001), Cell(3, 2, 21))((_1, _2) => _1 - _2))
+    assert(Cell(9, 4, 1000) == operation(Cell(3, 2, 1000), Cell(3, 2, 1))((_1, _2) => _1 * _2))
+    assert(Cell(1, 1, 1000) == operation(Cell(2, 2, 2000), Cell(2, 2, 2))((_1, _2) => _1 / _2))
   }
 
   test("Function 'operation' between properties should respect limits/range") {

@@ -16,6 +16,12 @@ object InfluenceType extends Enumeration {
  */
 object Influence {
 
+  /**
+   * Apply method for influence.
+   * @param typeOfInfluence the type of influence.
+   * @param influenceInPercentage the value of the influence, in percentage.
+   * @return a new influence.
+   */
   def apply(typeOfInfluence: InfluenceType = InfluenceType.POSITIVE,
             influenceInPercentage: Int = 100): Influence = InfluenceImpl(typeOfInfluence, influenceInPercentage)
 

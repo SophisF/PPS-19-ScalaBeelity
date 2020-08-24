@@ -11,6 +11,11 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
  */
 object Genotype {
 
+  /**
+   * Apply method for genotype.
+   * @param genes the input genes.
+   * @return a new genotype.
+   */
   def apply(genes: Set[Gene] = Set.empty): Genotype = GenotypeImpl(genes)
 
   /**

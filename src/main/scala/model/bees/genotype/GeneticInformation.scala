@@ -8,7 +8,12 @@ The genetic information of the bees.
  */
 object GeneticInformation {
 
-  def apply(info: (CharacteristicTaxonomy, Influence)*): GeneticInformation = GeneticInformationImpl(info)
+  /**
+   * Apply method for the genetic information.
+   * @param info the genetic information.
+   * @return a new genetic information.
+   */
+  def apply(info: (CharacteristicTaxonomy, Influence)*): GeneticInformation = GeneticInformationImpl(info.toSet)
 
   /**
    * Trait that represent a genetic information.
@@ -40,7 +45,7 @@ object GeneticInformation {
    * @constructor creates a genetic information from tuples of characteristic taxonomy and influence
    * @param info tuples of characteristic taxonomy and influence
    */
-  private case class GeneticInformationImpl(info: (CharacteristicTaxonomy, Influence)*) extends GeneticInformation {
+  private case class GeneticInformationImpl(info: Set[(CharacteristicTaxonomy, Influence)]) extends GeneticInformation {
     require(info.nonEmpty)
     val information: Map[CharacteristicTaxonomy, Influence] = info.toMap
   }

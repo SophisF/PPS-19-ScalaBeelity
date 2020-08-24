@@ -11,6 +11,12 @@ import scala.util.Random
  */
 object Gene {
 
+  /**
+   * Apply method for gene.
+   * @param name the gene taxonomy.
+   * @param freq the frequency of the gene.
+   * @return a new gene.
+   */
   def apply(name: GeneTaxonomy, freq: Frequency = minFrequency + Random.nextInt(maxFrequency-minFrequency)): Gene = GeneImpl(name, freq)
 
   /**

@@ -2,7 +2,6 @@ package scala.model.environment.property.source
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.environment.Environment.applyFilter
 import scala.model.environment.property.Property
 import scala.model.environment.property.Variation.GenericVariation
 import scala.model.environment.property.source.InstantaneousSource.InstantaneousSourceImpl

@@ -4,6 +4,7 @@ import breeze.linalg._
 import breeze.storage.Zero
 
 import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.mutable.ParIterable
 import scala.reflect.ClassTag
 
 /**
@@ -79,6 +80,12 @@ object Matrix {
   implicit class ParallelMatrix[T](matrix: Matrix[T]) {
     // TODO move in trasformable after adjusted double problem
     def parallelMap[R: ClassTag](op: T => R)(zero: R): Matrix[R] =
-      DenseMatrix.create(matrix rows, matrix cols, matrix.data.par.map(op).toArray)(Zero apply zero)
+      DenseMatrix.create(matrix rows, matrix cols, matrix.data.par.map(op))(Zero apply zero)
+
+    def indexedParallelMap[R: ClassTag](op: (T, Int) => R)(zero: R): Matrix[R] =
+      DenseMatrix.create(matrix rows, matrix cols, matrix.data.par.zipWithIndex
+        .map[R](it => op(it._1, it._2)))(Zero apply zero)
   }
+
+  implicit def toArray[T: ClassTag](iterable: ParIterable[T]): Array[T] = iterable.toArray
 }

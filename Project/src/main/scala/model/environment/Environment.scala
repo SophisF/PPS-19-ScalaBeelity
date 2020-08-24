@@ -1,16 +1,16 @@
 package scala.model.environment
 
-import scala.collection.parallel.CollectionConverters._
-
-import breeze.generic.UFunc
 import breeze.linalg.DenseMatrix
-import breeze.linalg.operators.OpAdd
 
 import scala.model.environment.matrix.Zone.{border, in}
 import scala.model.environment.matrix.Size
+import scala.model.environment.matrix.Matrix.ParallelMatrix
 import scala.model.environment.property.Property
 import scala.model.environment.property.Variation.GenericVariation
 import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, SeasonalSource, ZoneSource}
+import scala.model.environment.utility.IteratorHelper._
+import scala.collection.parallel.CollectionConverters._
+import scala.model.environment.property.source.InstantaneousSource.indexed
 
 /**
  * A first scratch of the environment class.
@@ -35,10 +35,12 @@ object Environment {
     DenseMatrix.create(width, height, Iterator continually defaultCell take(width * height) toArray))
 
   def apply[T <: Property](environment: Environment, source: PropertySource[T]): Environment = source match {
-    case source: InstantaneousSource[T] => applyFilter(environment, source)
+    case source: InstantaneousSource[T] => applyFilter(environment, indexed(source, environment.map.cols,
+      environment.map.rows))
     case source: ContinuousSource[T] => ContinuousSource.instantaneous(source) match {
       case None => environment
-      case Some(value) => applyFilter(environment, value)
+      case Some(value) => applyFilter(environment, indexed(value, environment.map.cols,
+        environment.map.rows))//applyFilter(environment, value)
     }
     case propertySource: SeasonalSource[T] => applySeason(environment, propertySource)
   }
@@ -57,6 +59,15 @@ object Environment {
       case _ => cell
     }))
 
+  private def applyFilter[T <: Property](environment: Environment, source: Iterable[(Int, GenericVariation[T])])
+  : Environment = { Environment(DenseMatrix.create(environment.map.rows, environment.map.cols, environment.map.data.par
+      .zipWithIndex[Cell].map(p => source.iterator.conditionalNext(_._1 == p._2) match {
+        case Some(variation) => p._1 + variation._2
+        case _ => p._1
+      }).toArray[Cell])
+    )
+  }
+
   /**
    * Apply a seasonal variation to an environment
    *
@@ -67,7 +78,6 @@ object Environment {
   def applySeason[T <: Property](environment: Environment, variator: SeasonalSource[T]): Environment = {
     val variation = GenericVariation(SeasonalSource.nextValue(variator))
     //Environment(environment.map.map(_ + variation))
-    Environment(DenseMatrix.create(environment.map.rows, environment.map.cols,
-      environment.map.data.par.map(_ + variation).toArray))
+    Environment(environment.map.parallelMap(_ + variation)(Cell()))
   }
 }

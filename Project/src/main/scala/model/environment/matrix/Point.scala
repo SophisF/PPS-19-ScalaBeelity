@@ -12,7 +12,7 @@ trait Point {
 
 object Point {
 
-  def apply(x: Int, y: Int): Point = new Point { override val x: Int = x; override val y: Int = y }
+  def apply(_x: Int, _y: Int): Point = new Point { override val x: Int = _x; override val y: Int = _y }
 
   /**
    * Polish like notation
@@ -25,4 +25,7 @@ object Point {
   }
 
   implicit def toPoint(tuple: (Int, Int)): Point = Point(tuple._1, tuple._2)
+
+  // TODO move out (a point isnt related to a width)
+  def toPoint(index: Int, width: Int): Point = Point(index % width, index / width)
 }

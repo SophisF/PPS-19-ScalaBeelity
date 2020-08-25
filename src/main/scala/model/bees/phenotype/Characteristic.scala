@@ -70,7 +70,7 @@ object Characteristic {
                                                    (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY
-    override val expression: (Int, Int) = mapper(20)(34)(influenceValue)(2) //così vanno dai 18 ai 36 gradi
+    override val expression: (Int, Int) = mapper(18)(36)(influenceValue)(2)
   }
 
   /**
@@ -82,7 +82,7 @@ object Characteristic {
                                                 (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY
-    override val expression: (Int, Int) = mapper(40)(70)(influenceValue)(3) // Sophi - mapper(40)(80)(influenceValue)(8)
+    override val expression: (Int, Int) = mapper(40)(80)(influenceValue)(3)
   }
 
   /**

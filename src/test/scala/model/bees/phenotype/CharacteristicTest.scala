@@ -25,16 +25,16 @@ class CharacteristicTest extends AnyFunSuite{
     assert(range._1 >= 18 && range._2 <= 36)
   }
 
-  test("A humidityCompabilityCharacteristic should have expression between 37 and 73"){
+  test("A humidityCompabilityCharacteristic should have expression between 40 and 70"){
     val range: (Int, Int) = humidityCharacteristic.expression
     println("Humidity: (" + range._1 +", " + range._2 + ")")
-    assert(range._1 >= 37 && range._2 <= 73)
+    assert(range._1 >= 40 && range._2 <= 80)
   }
 
   test("A pressureCompabilityCharacteristic should have expression between 1000 and 1050"){
     val range: (Int, Int) = pressureCharacteristic.expression
     println("Pressure: (" + range._1 +", " + range._2 + ")")
-    assert(range._1 >= 995 && range._2 <= 1055)
+    assert(range._1 >= 1000 && range._2 <= 1050)
   }
 
 }

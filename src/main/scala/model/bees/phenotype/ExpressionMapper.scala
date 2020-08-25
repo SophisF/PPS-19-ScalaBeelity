@@ -19,7 +19,7 @@ object ExpressionMapper {
     val step: Double = (max - min).toDouble / Gene.maxFrequency
     val xMin: Double  = min + step * influenceValue - rangeTuning
     val xMax: Double = min + step * influenceValue + rangeTuning
-    (math.round(xMin).toInt, math.round(xMax).toInt)
+    (Math.max(min,xMin.toInt), Math.min(max, xMax.toInt))
   }
 
   /**

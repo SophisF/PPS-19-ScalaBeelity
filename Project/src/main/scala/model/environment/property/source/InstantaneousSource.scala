@@ -1,6 +1,5 @@
 package scala.model.environment.property.source
 
-import scala.collection.parallel.CollectionConverters._
 import breeze.linalg._
 
 import scala.model.environment.matrix.Size
@@ -29,11 +28,11 @@ object InstantaneousSource {
     val leftDelta: Int = border(source)(Size.Left)
     val topDelta: Int = border(source)(Size.Top)
 
-    source.filter.data.par.zipWithIndex[GenericVariation[T]].map(p => (toPoint(p._2, source.width), p._1))
-      .map(p => ((height - p._1.y - topDelta) * width + (p._1.x + leftDelta), p._2)).toList
+    source.filter.data.zipWithIndex.map(p => (toPoint(p._2, source.width), p._1))
+      .map(p => ((height - p._1.y - topDelta) * width + (p._1.x + leftDelta), p._2))
+      .filter(p => p._1 >= 0 && p._1 < width * height).toList
   }
 
-  def linearize[T <: Property](source: InstantaneousSource[T]): Seq[PointVariation[T]] = source.filter.data.par
-    .zipWithIndex[GenericVariation[T]].map(p => (p._1, toPoint(p._2, source.width)))
-    .map(p => PointVariation(p._1.value, p._2.x, p._2.y)).toList//.mapPairs((p, v) => PointVariation(v.value, p._1, p._2)).data
+  def linearize[T <: Property](source: InstantaneousSource[T]): Seq[PointVariation[T]] = source.filter.data
+    .zipWithIndex.map(p => (p._1, toPoint(p._2, source.width))).map(p => PointVariation(p._1.value, p._2.x, p._2.y))
 }

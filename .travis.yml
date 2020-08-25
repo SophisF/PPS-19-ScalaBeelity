@@ -16,5 +16,5 @@ scala:
 script:
   - sbt test
   - sbt ++$TRAVIS_SCALA_VERSION test
-  - sbt -jvm-opts travis/jvmopts.compile ... compile
-  - sbt -jvm-opts travis/jvmopts.test ... test
+#  - sbt -jvm-opts travis/jvmopts.compile compile
+#  - sbt -jvm-opts travis/jvmopts.test test

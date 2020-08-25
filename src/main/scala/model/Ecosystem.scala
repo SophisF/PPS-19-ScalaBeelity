@@ -3,7 +3,7 @@ package scala.model
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.bee.Queen.{Queen, QueenImpl}
 import scala.model.bees.genotype.Genotype
-import scala.model.bees.phenotype.Phenotype.PhenotypeImpl
+import scala.model.bees.phenotype.Phenotype
 import scala.model.environment.{Cell, Environment}
 
 object Ecosystem {
@@ -17,7 +17,7 @@ object Ecosystem {
 
   def createQueen(): Unit = {
     val genotype = Genotype()
-   val queen: Queen = QueenImpl(None, genotype, PhenotypeImpl(Genotype.calculateExpression(genotype)), 0, 20, 50, 1000)
+   val queen: Queen = QueenImpl(None, genotype, Phenotype(Genotype.calculateExpression(genotype)), 0, 20, 50, 1000)
     colonies = colonies + queen.colony
   }
 

@@ -3,7 +3,8 @@ package model.bees.bee
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.genotype.Genotype.{Genotype, GenotypeImpl}
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
-import scala.model.bees.phenotype.Phenotype.PhenotypeImpl
+import scala.model.bees.phenotype.Phenotype
+import scala.model.bees.phenotype.Phenotype.{Phenotype}
 
 object EvolutionManager {
 
@@ -13,11 +14,8 @@ object EvolutionManager {
     } )).toSet)
   }
 
-  def calculateAveragePhenotype(genotype: Genotype): PhenotypeImpl = {
-    PhenotypeImpl(Genotype.calculateExpression(genotype))
+  def calculateAveragePhenotype(genotype: Genotype): Phenotype = {
+    Phenotype(Genotype.calculateExpression(genotype))
   }
-
-
-
 
 }

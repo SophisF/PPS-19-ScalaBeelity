@@ -17,6 +17,8 @@ object GeneticEvolver {
 
   private val evolutionaryRate: Int = 2
 
+  //TODO add time.
+
   /**
    * Method that build a new genotype with a better adaptation to the environment and casual variations.
    * @param genotype the existing genotype.

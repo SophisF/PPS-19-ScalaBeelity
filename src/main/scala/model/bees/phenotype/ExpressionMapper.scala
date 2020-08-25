@@ -20,7 +20,6 @@ object ExpressionMapper {
     val xMin: Double  = min + step * influenceValue - rangeTuning
     val xMax: Double = min + step * influenceValue + rangeTuning
     (math.round(xMin).toInt, math.round(xMax).toInt)
-
   }
 
   /**

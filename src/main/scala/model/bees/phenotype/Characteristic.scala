@@ -60,6 +60,7 @@ object Characteristic {
     type Expression = Int
   }
 
+  //TODO non mi piace min e max siano diversi dai valori inseriti
   /**
    * Class that represents temperature characteristic.
    * @param influenceValue a double value that represents influence value.
@@ -81,7 +82,7 @@ object Characteristic {
                                                 (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY
-    override val expression: (Int, Int) = mapper(40)(80)(influenceValue)(8)
+    override val expression: (Int, Int) = mapper(40)(70)(influenceValue)(3) // Sophi - mapper(40)(80)(influenceValue)(8)
   }
 
   /**

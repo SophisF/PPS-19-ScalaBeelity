@@ -11,6 +11,13 @@ object Phenotype {
   private val defaultExpressionValue: Int = 1
 
   /**
+   * Apply method for phenotype.
+   * @param expressions a map of characteristic and its frequency.
+   * @return a new phenotype.
+   */
+  def apply(expressions: Map[CharacteristicTaxonomy, Double]): Phenotype = PhenotypeImpl(expressions)
+
+  /**
    * Trait for the phenotype.
    */
   trait Phenotype {
@@ -36,9 +43,9 @@ object Phenotype {
 
   /**
    * Concrete implementation of phenotype.
-   * @param expressions a map of characteristic and its frequency
+   * @param expressions a map of characteristic and its frequency.
    */
-  case class PhenotypeImpl(expressions: Map[CharacteristicTaxonomy, Double]) extends Phenotype {
+  private case class PhenotypeImpl(expressions: Map[CharacteristicTaxonomy, Double]) extends Phenotype {
     require(expressions.size == CharacteristicTaxonomy.maxId)
     override val characteristics: Set[Characteristic] = expressions.map(kv => Characteristic(kv._1, kv._2)).toSet
 

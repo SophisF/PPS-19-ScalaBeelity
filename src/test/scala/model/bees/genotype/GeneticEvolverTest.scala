@@ -4,11 +4,12 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{GeneTaxonomy, GeneticEvolver, Genotype}
-import scala.model.bees.phenotype.Phenotype.{Phenotype, PhenotypeImpl}
+import scala.model.bees.phenotype.Phenotype
+import scala.model.bees.phenotype.Phenotype.{Phenotype}
 
 class GeneticEvolverTest extends AnyFunSuite{
   val genotype: Genotype = Genotype()
-  val phenotype: Phenotype = PhenotypeImpl(Genotype.calculateExpression(genotype))
+  val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
 
   test("The evolution should slowly adapt the bees to the environment"){
     val newGenotype = Genotype(GeneticEvolver.buildGenotype(genotype)(phenotype)(40)(1080)(100))

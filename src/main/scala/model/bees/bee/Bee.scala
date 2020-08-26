@@ -8,7 +8,8 @@ import scala.model.bees.phenotype.Phenotype.Phenotype
  */
 object Bee {
 
-  def fromBee(bee: Bee, age: Int, temperature: Int, pressure: Int, humidity: Int): Bee = BeeImpl(bee.genotype, bee.phenotype, age, temperature, pressure, humidity)
+  def apply(genotype: Genotype, phenotype: Phenotype, age: Int, temperature: Int, pressure: Int, humidity: Int): Bee =
+    BeeImpl(genotype, phenotype, age, temperature, pressure, humidity)
 
   def calculateRemainingLife(bee: Bee, temperature: Int, pressure: Int, humidity: Int): Int = {
     val tFit: Double = Fitter.calculateFit(temperature)(bee.phenotype.temperatureCompatibility.expression)
@@ -26,7 +27,7 @@ object Bee {
     val age: Int
     val remainingDaysOfLife: Int
 
-    def isAlive: Boolean = this.remainingDaysOfLife > 0
+    val isAlive: Boolean = this.remainingDaysOfLife > 0
   }
 
   /**
@@ -39,7 +40,7 @@ object Bee {
                      override val age: Int, temperature: Int,
                      pressure: Int, humidity: Int) extends Bee {
 
-    override val remainingDaysOfLife: Int = calculateRemainingLife(this, temperature, pressure, humidity)
+    override lazy val remainingDaysOfLife: Int = calculateRemainingLife(this, temperature, pressure, humidity)
 
 
   }

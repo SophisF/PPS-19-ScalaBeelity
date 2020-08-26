@@ -51,7 +51,7 @@ object Genotype {
    * Concrete implementation of genotype.
    * @param geneSet a set of gene to build the genotype.
    */
-  case class GenotypeImpl(geneSet: Set[Gene]) extends Genotype {
+  private case class GenotypeImpl(geneSet: Set[Gene]) extends Genotype {
     override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneSet.find(_.name.equals(value)).getOrElse(Gene(value)))
   }
 

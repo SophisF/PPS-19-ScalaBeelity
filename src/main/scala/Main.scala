@@ -36,8 +36,8 @@ object Main extends App {
 
    */
 
-  Ecosystem.createQueen()
-  println(Ecosystem.colonies)
+  Ecosystem.initialize(1)
+  Ecosystem.colonies.foreach(c=> println(c.bees.size))
 
 
 }

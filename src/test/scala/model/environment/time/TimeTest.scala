@@ -12,6 +12,7 @@ import scala.model.Time
 class TimeTest extends AnyFunSuite {
 
   test("Time should start at 0") {
+    Time.initialize()
     assert(Time.time == 0)
   }
 

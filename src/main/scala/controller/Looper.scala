@@ -28,11 +28,11 @@ object Looper {
 
     plot(environmentManager.environment)
 
-    //    environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
-    //      .foldLeft(environmentManager)(addSource)
+    environmentManager = GeneratorClimateChange.randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
+          .foldLeft(environmentManager)(addSource)
 
-    GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations, 5)
-      .filter(_ != Option.empty).map(x =>  addSource(environmentManager, x))
+   // GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations, 5)
+    //  .filter(_ != Option.empty).map(x =>  addSource(environmentManager, x))
 
 
     environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))

@@ -45,6 +45,8 @@ class TimedTest extends AnyFunSuite {
   }
 
   test("Ended function should return true when duration is 0 (or eventually less)") {
+    Time.initialize()
+    Time increment 2
     assert(isEnded(timed(0, 0)))
   }
 

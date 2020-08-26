@@ -1,15 +1,12 @@
 package scala.controller
 
+import scala.model.Time
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
-import scala.model.{Time, _}
-import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.matrix.Matrix._
-import scala.model.environment.property.Property.{Temperature, toPercentage}
+import scala.model.environment.property.Property
+import scala.model.environment.property.Property.toPercentage
 import scala.model.environment.property.PropertySource.SeasonalPropertySource
-import scala.model.environment.property.ZonePropertySource.ContinuousZonePropertySource
-import scala.model.environment.property.PropertyVariation.Variation
-import scala.model.environment.property.{FilterBuilder, Property, ZonePropertySource}
-import scala.util.Random
+import scala.model.environment.{Environment, EnvironmentManager}
 import scala.view.View
 
 /**
@@ -23,16 +20,20 @@ object Looper {
    * Run a simulation
    *
    * @param environmentSize size of the map
-   * @param iterations number of iterations to simulate
-   * @param updateStep how often update the environment
+   * @param iterations      number of iterations to simulate
+   * @param updateStep      how often update the environment
    */
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
 
     plot(environmentManager.environment)
 
-    environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
-      .foldLeft(environmentManager)(addSource)
+    //    environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
+    //      .foldLeft(environmentManager)(addSource)
+
+    GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations, 5)
+      .filter(_ != Option.empty).map(x =>  addSource(environmentManager, x))
+
 
     environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))
 
@@ -48,7 +49,7 @@ object Looper {
     plot(environmentManager.environment)
   }
 
-  private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
+  /*private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
   : Iterable[ContinuousZonePropertySource] = (0 until quantity) map (_ => {
       val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
       val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
@@ -58,7 +59,7 @@ object Looper {
         filter.cols, filter.rows,
         0, iterations, filter.mapValues(it => Variation(Temperature, it.toInt))
       )
-    })
+    })*/
 
   /**
    * Plot the environment calling the view

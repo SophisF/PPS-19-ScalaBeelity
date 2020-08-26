@@ -1,0 +1,7 @@
+Meeting di gruppo con analisi e sviluppo dei seguenti punti:
+
+- Sviluppo dell'interazione fra colonie e gestione delle collisioni
+- Inizio di un generatore per i filtri sul clima casuale
+- Confronto sulla gestione del movimento delle api e analisi della parte in Prolog
+- Discussione dell'approccio sfruttando le monadi per realizzare un looper funzionale con for comprehension
+- Studio e primo approccio con le monadi per l'implementazione dell'ambiente

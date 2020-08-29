@@ -8,6 +8,7 @@ import scalafx.scene.Scene
 import scalafx.scene.chart.{LineChart, NumberAxis, XYChart}
 import scalafx.scene.control.{Label, Tab, TabPane}
 import scalafx.scene.layout.{StackPane, VBox}
+import smile.interpolation.BicubicInterpolation
 
 
 object TabDemo extends JFXApp {
@@ -37,6 +38,24 @@ object TabDemo extends JFXApp {
       (2.6, 0.9)).map(toChartData)
   }
 
+
+  val z = Array(
+    Array(1.0, 2.0, 4.0, 1.0),
+    Array(6.0, 3.0, 5.0, 2.0),
+    Array(4.0, 2.0, 1.0, 5.0),
+    Array(5.0, 4.0, 2.0, 3.0)
+  )
+
+  val x = Array(0.0, 1.0, 2.0, 3.0)
+  val y = Array(0.0, 1.0, 2.0, 3.0)
+  val bicubic = new BicubicInterpolation(x, y, z)
+  val Z = Array.ofDim[Double](101, 101)
+  for (i <- 0 to 100) {
+    for (j <- 0 to 100)
+      Z(i)(j) = bicubic.interpolate(i * 0.03, j * 0.03)
+  }
+
+
   stage = new PrimaryStage {
     title = "ScalaBeelity"
     scene = new Scene(1400, 1300) {
@@ -52,8 +71,9 @@ object TabDemo extends JFXApp {
                 closable = true
                 content = new StackPane {
                   children = Seq(
-                    new Label("Temperature")
+                    //HeatMapChart<Number, Number> chart = new HeatMapChart<>();
                   )
+
                   padding = Insets(20)
                 }
               },

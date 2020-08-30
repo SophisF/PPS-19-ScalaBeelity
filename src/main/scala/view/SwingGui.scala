@@ -1,9 +1,14 @@
 package view
 
+import java.awt._
 import java.awt.event.KeyEvent
-import java.awt.{BorderLayout, Dimension, GridLayout, Toolkit}
+import java.io.File
 
 import javax.swing._
+import org.jfree.chart.plot.PlotOrientation
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
+import org.jfree.chart.{ChartFactory, ChartPanel, JFreeChart}
+import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import smile.interpolation.BicubicInterpolation
 import smile.plot.swing.{Contour, Palette, heatmap}
 
@@ -16,6 +21,76 @@ object SwingGui extends App {
     panel.setLayout(new GridLayout(1, 1))
     panel.add(filler)
     panel
+  }
+
+  def createChartPanel = { // this method will create the chart panel containin the graph
+    val chartTitle = "Objects Movement Chart"
+    val xAxisLabel = "X"
+    val yAxisLabel = "Y"
+    //val dataset = createDataset
+    val chart = ChartFactory.createXYLineChart(chartTitle, xAxisLabel, yAxisLabel, /*dataset*/ null, PlotOrientation.VERTICAL, true, true, true)
+    customizeChart(chart)
+    // saves the chart as an image files
+    val imageFile = new File("XYLineChart.png")
+    val width = 640
+    val height = 480
+    //    try ChartUtilities.saveChartAsPNG(imageFile, chart, width, height)
+    //    catch {
+    //      case ex: IOException =>
+    //        System.err.println(ex)
+    //    }
+    new ChartPanel(chart)
+  }
+
+  private def createDataset = { // this method creates the data as time seris
+    val dataset = new XYSeriesCollection
+    val series1 = new XYSeries("Object 1")
+    val series2 = new XYSeries("Object 2")
+    val series3 = new XYSeries("Object 3")
+    series1.add(1.0, 2.0)
+    series1.add(2.0, 3.0)
+    series1.add(3.0, 2.5)
+    series1.add(3.5, 2.8)
+    series1.add(4.2, 6.0)
+    series2.add(2.0, 1.0)
+    series2.add(2.5, 2.4)
+    series2.add(3.2, 1.2)
+    series2.add(3.9, 2.8)
+    series2.add(4.6, 3.0)
+    series3.add(1.2, 4.0)
+    series3.add(2.5, 4.4)
+    series3.add(3.8, 4.2)
+    series3.add(4.3, 3.8)
+    series3.add(4.5, 4.0)
+    dataset.addSeries(series1)
+    dataset.addSeries(series2)
+    dataset.addSeries(series3)
+    dataset
+  }
+
+  private def customizeChart(chart: JFreeChart): Unit = { // here we make some customization
+    val plot = chart.getXYPlot
+    val renderer = new XYLineAndShapeRenderer
+    // sets paint color for each series
+    renderer.setSeriesPaint(0, Color.RED)
+    renderer.setSeriesPaint(1, Color.GREEN)
+    renderer.setSeriesPaint(2, Color.YELLOW)
+    // sets thickness for series (using strokes)
+    renderer.setSeriesStroke(0, new BasicStroke(4.0f))
+    renderer.setSeriesStroke(1, new BasicStroke(3.0f))
+    renderer.setSeriesStroke(2, new BasicStroke(2.0f))
+    // sets paint color for plot outlines
+    plot.setOutlinePaint(Color.BLUE)
+    plot.setOutlineStroke(new BasicStroke(2.0f))
+    // sets renderer for lines
+    plot.setRenderer(renderer)
+    // sets plot background
+    plot.setBackgroundPaint(Color.DARK_GRAY)
+    // sets paint color for the grid lines
+    plot.setRangeGridlinesVisible(true)
+    plot.setRangeGridlinePaint(Color.BLACK)
+    plot.setDomainGridlinesVisible(true)
+    plot.setDomainGridlinePaint(Color.BLACK)
   }
 
   //TODO: Da modificare qui
@@ -61,9 +136,9 @@ object SwingGui extends App {
     tabbedPane.addTab("Pressure", null, panel3, "Still does nothing")
     tabbedPane.setMnemonicAt(2, KeyEvent.VK_3)
 
-    val panel4 = makeTextPanel("Panel #4 (has a preferred size of 410 x 50).")
-    panel4.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Seasonal Variation Diagram", null, panel4, "Does nothing at all")
+    val chart = createChartPanel
+    chart.setPreferredSize(new Dimension(410, 50))
+    tabbedPane.addTab("Seasonal Variation Diagram", null, chart, "Does nothing at all")
     tabbedPane.setMnemonicAt(3, KeyEvent.VK_4)
 
     val panel5 = makeTextPanel("Panel #5")

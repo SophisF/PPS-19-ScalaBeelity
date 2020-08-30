@@ -5,7 +5,6 @@ import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model.environment.matrix.Matrix._
 import scala.model.environment.property.Property
 import scala.model.environment.property.Property.toPercentage
-import scala.model.environment.property.PropertySource.SeasonalPropertySource
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.view.View
 
@@ -32,8 +31,7 @@ object Looper {
     environmentManager = GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations)
       .foldLeft(environmentManager)(addSource)
 
-
-    environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))
+    environmentManager = GeneratorClimateChange.generateSeason().foldLeft(environmentManager)(addSource)
 
     Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
 

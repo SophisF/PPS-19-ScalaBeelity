@@ -1,5 +1,6 @@
 package scala.controller
 
+import scala.model.environment.property.PropertySource.SeasonalPropertySource
 import scala.model.environment.property.PropertyVariation.Variation
 import scala.model.environment.property.ZonePropertySource.ContinuousZonePropertySource
 import scala.model.environment.property.{FilterBuilder, Property, PropertySource, ZonePropertySource}
@@ -19,10 +20,13 @@ object GeneratorClimateChange {
    * @return
    */
   def generateClimate(environmentWidth: Int, environmentHeight: Int, iterations: Int): Iterator[PropertySource] = {
-    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations)).take(2)
+    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations))
+      .take(7)
     //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
   }
 
+  def generateSeason(): Iterable[PropertySource] =
+  Property.values.toArray.map(SeasonalPropertySource).toIterable
 
   /**
    *

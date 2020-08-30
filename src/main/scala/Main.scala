@@ -1,6 +1,6 @@
 package scala
 
-import scala.model.environment.property.Property
+import scala.controller.Looper
 
 /**
  * Entry point for the (test) application
@@ -8,22 +8,21 @@ import scala.model.environment.property.Property
  * @author Paolo Baldini
  */
 object Main extends App {
-  println(Property.values.size)
-//  private val EnvironmentSize = (1000, 1000)
-//  private val Iterations = 1000
-//  private val UpdateWindow = 10
-//
-//  println("Testing execution speed with:\n\t" +
-//    EnvironmentSize._1 * EnvironmentSize._2 + " cells\n\t" +
-//    Iterations + " iterations")
-//
-//  val initialTime = System.currentTimeMillis()
-//  Looper.run(EnvironmentSize, Iterations, UpdateWindow)
-//  var timeElapsed: Long = System.currentTimeMillis() - initialTime
-//  val peak = -50
-//
-//  println(s"Simulation ran in ${timeElapsed} ms\n" +
-//    s"Average time for an iteration was ${timeElapsed * UpdateWindow / Iterations} ms")
+  private val EnvironmentSize = (1000, 1000)
+  private val Iterations = 1000
+  private val UpdateWindow = 10
+
+  println("Testing execution speed with:\n\t" +
+    EnvironmentSize._1 * EnvironmentSize._2 + " cells\n\t" +
+    Iterations + " iterations")
+
+  val initialTime = System.currentTimeMillis()
+  Looper.run(EnvironmentSize, Iterations, UpdateWindow)
+  var timeElapsed: Long = System.currentTimeMillis() - initialTime
+  val peak = -50
+
+  println(s"Simulation ran in ${timeElapsed} ms\n" +
+    s"Average time for an iteration was ${timeElapsed * UpdateWindow / Iterations} ms")
 
   /*
     Notes: the test is about apply a filter 1 over $UpdateWindow iterations. That led to a total of

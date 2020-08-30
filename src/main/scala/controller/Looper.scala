@@ -28,11 +28,9 @@ object Looper {
 
     plot(environmentManager.environment)
 
-    environmentManager = GeneratorClimateChange.randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
-          .foldLeft(environmentManager)(addSource)
 
-   // GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations, 5)
-    //  .filter(_ != Option.empty).map(x =>  addSource(environmentManager, x))
+    environmentManager = GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations)
+      .foldLeft(environmentManager)(addSource)
 
 
     environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))
@@ -49,17 +47,6 @@ object Looper {
     plot(environmentManager.environment)
   }
 
-  /*private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
-  : Iterable[ContinuousZonePropertySource] = (0 until quantity) map (_ => {
-      val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-      val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
-
-      ZonePropertySource(
-        Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
-        filter.cols, filter.rows,
-        0, iterations, filter.mapValues(it => Variation(Temperature, it.toInt))
-      )
-    })*/
 
   /**
    * Plot the environment calling the view
@@ -68,8 +55,8 @@ object Looper {
    */
   private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
     environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
-    Property.range(property).minValue,
-    Property.range(property).maxValue,
+    0,
+    100,
     s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
   ))
 }

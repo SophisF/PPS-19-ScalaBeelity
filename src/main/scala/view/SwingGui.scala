@@ -1,11 +1,11 @@
+package view
+
 import java.awt.event.KeyEvent
 import java.awt.{BorderLayout, Dimension, GridLayout, Toolkit}
 
 import javax.swing._
-import smile.interpolation._
-import smile.plot.swing._
-
-import scala.language.postfixOps
+import smile.interpolation.BicubicInterpolation
+import smile.plot.swing.{Contour, Palette, heatmap}
 
 object SwingGui extends App {
 

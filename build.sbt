@@ -6,7 +6,9 @@ scalaVersion := "2.13.3"
 
 libraryDependencies ++= Seq(
 
-  // https://mvnrepository.com/artifact/org.openjfx/javafx-base
+  "org.jfree" % "jfreechart" % "1.0.14",
+
+// https://mvnrepository.com/artifact/org.openjfx/javafx-base
   "org.openjfx" % "javafx-base" % "16-ea+1",
 
   // https://mvnrepository.com/artifact/org.openjfx/javafx-controls

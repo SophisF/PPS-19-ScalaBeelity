@@ -9,6 +9,7 @@ import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
 import org.jfree.chart.{ChartFactory, ChartPanel, JFreeChart}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
+import org.jfree.data.xy.DefaultXYDataset
 import smile.interpolation.BicubicInterpolation
 import smile.plot.swing.{Contour, Palette, heatmap}
 
@@ -24,48 +25,27 @@ object SwingGui extends App {
   }
 
   def createChartPanel = { // this method will create the chart panel containin the graph
-    val chartTitle = "Objects Movement Chart"
-    val xAxisLabel = "X"
-    val yAxisLabel = "Y"
-    //val dataset = createDataset
-    val chart = ChartFactory.createXYLineChart(chartTitle, xAxisLabel, yAxisLabel, /*dataset*/ null, PlotOrientation.VERTICAL, true, true, true)
+    val xAxisLabel = "Month"
+    val yAxisLabel = "Value"
+    val dataset = createDataset
+    val chart = ChartFactory.createXYLineChart("", xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, true)
     customizeChart(chart)
-    // saves the chart as an image files
-    val imageFile = new File("XYLineChart.png")
-    val width = 640
-    val height = 480
-    //    try ChartUtilities.saveChartAsPNG(imageFile, chart, width, height)
-    //    catch {
-    //      case ex: IOException =>
-    //        System.err.println(ex)
-    //    }
     new ChartPanel(chart)
   }
 
   private def createDataset = { // this method creates the data as time seris
-    val dataset = new XYSeriesCollection
-    val series1 = new XYSeries("Object 1")
-    val series2 = new XYSeries("Object 2")
-    val series3 = new XYSeries("Object 3")
-    series1.add(1.0, 2.0)
-    series1.add(2.0, 3.0)
-    series1.add(3.0, 2.5)
-    series1.add(3.5, 2.8)
-    series1.add(4.2, 6.0)
-    series2.add(2.0, 1.0)
-    series2.add(2.5, 2.4)
-    series2.add(3.2, 1.2)
-    series2.add(3.9, 2.8)
-    series2.add(4.6, 3.0)
-    series3.add(1.2, 4.0)
-    series3.add(2.5, 4.4)
-    series3.add(3.8, 4.2)
-    series3.add(4.3, 3.8)
-    series3.add(4.5, 4.0)
-    dataset.addSeries(series1)
-    dataset.addSeries(series2)
-    dataset.addSeries(series3)
-    dataset
+    val ds = new DefaultXYDataset
+    val data0: Array[Array[Double]] = Array(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+      Array(20, 21, 22, 23, 24, 25, 26, 25, 24, 23, 22, 21))
+    ds.addSeries("Temperature", data0)
+    val data1: Array[Array[Double]] = Array(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+      Array(30, 31, 32, 33, 34, 35, 35, 34, 33, 32, 31, 30))
+    ds.addSeries("Humidity", data1)
+    val data2: Array[Array[Double]] = Array(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+      Array(1030, 1031, 1032, 1033, 1034, 1035, 1035, 1034, 1033, 1032, 1031, 1030))
+    ds.addSeries("Pressure", data2)
+
+    ds
   }
 
   private def customizeChart(chart: JFreeChart): Unit = { // here we make some customization

@@ -1,7 +1,8 @@
 package scala.controller
 
+import scala.annotation.tailrec
 import scala.model.Time
-import scala.model.environment.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.EnvironmentManager._
 import scala.model.environment.matrix.Matrix._
 import scala.model.environment.property.Property
 import scala.model.environment.property.Property.toPercentage
@@ -33,14 +34,30 @@ object Looper {
 
     environmentManager = GeneratorClimateChange.generateSeason().foldLeft(environmentManager)(addSource)
 
-    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
+    //    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
+    //
+    //      environmentManager = evolution(environmentManager)
+    //
+    //      if (i == iterations / 2) plot(environmentManager.environment)
+    //
+    //      Time increment 1
+    //    })
 
-      environmentManager = evolution(environmentManager)
+    //TODO: Da sostituire con Ecosystem
+    @tailrec
+    def loop(environment: EnvironmentManager, iterations: Int): EnvironmentManager = iterations match {
+      case 0 => environment
+      case _ => {
+        val env = evolution(environment)
+        //if (iterations % 100 == 0) plot(env.environment)
+        println(iterations)
+        Time.increment()
+        //colonies.update(time, env)
+        loop(env, iterations - 1)
+      }
+    }
 
-      if (i == iterations / 2) plot(environmentManager.environment)
-
-      Time increment 1
-    })
+    loop(environmentManager, iterations)
 
     plot(environmentManager.environment)
   }

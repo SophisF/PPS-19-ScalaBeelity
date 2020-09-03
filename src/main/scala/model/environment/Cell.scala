@@ -1,12 +1,11 @@
 package scala.model.environment
 
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
-import scala.model.environment.property.Variation.vary
+import scala.model.environment.property.realization.HumidityProperty.HumidityState
+import scala.model.environment.property.realization.PressureProperty.PressureState
+import scala.model.environment.property.realization.TemperatureProperty.TemperatureState
 import scala.model.environment.property.realization.{HumidityProperty, HumidityPropertyHelper, PressureProperty, PressurePropertyHelper, TemperatureProperty, TemperaturePropertyHelper}
-import scala.model.environment.property.realization.TemperaturePropertyHelper.TemperatureHelper
-import scala.model.environment.property.realization.HumidityPropertyHelper.HumidityHelper
-import scala.model.environment.property.realization.PressurePropertyHelper.PressureHelper
-import scala.model.environment.property.{Property, PropertyHelper, PropertyType, Variation}
+import scala.model.environment.property.{Property, PropertyType, Variation}
 
 /**
  * Class that represent an environment cell
@@ -50,9 +49,9 @@ case class Cell(
 
   def +[T <: Property](variation: Variation[T]): Cell = {
     variation match {
-      case v:Variation[TemperatureProperty] => Cell(vary(temperature, v), humidity, pressure)
-      case v:Variation[HumidityProperty] => Cell(temperature, vary(humidity, v), pressure)
-      case v:Variation[PressureProperty] => Cell(temperature, humidity, vary(pressure, v))
+      case v:Variation[TemperatureProperty] => Cell(temperature varyBy v.value, humidity, pressure)
+      case v:Variation[HumidityProperty] => Cell(temperature, humidity varyBy v.value, pressure)
+      case v:Variation[PressureProperty] => Cell(temperature, humidity, pressure varyBy v.value)
       case _ => this
     }
   }
@@ -73,8 +72,7 @@ object Cell {
     temperature: TemperatureProperty#ValueType = TemperatureProperty.default,
     humidity: HumidityProperty#ValueType = HumidityProperty.default,
     pressure: PressureProperty#ValueType = PressureProperty.default
-  ): Cell = Cell(TemperaturePropertyHelper.toState(temperature), HumidityPropertyHelper.toState(humidity),
-    PressurePropertyHelper.toState(pressure))
+  ): Cell = Cell(TemperatureState(temperature), HumidityState(humidity), PressureState(pressure))
 
   /**
    * Apply field-wise operation between two cell. Resulting value cannot exceed property limits/range
@@ -86,8 +84,8 @@ object Cell {
    *        'first' and 'second' cells
    */
   def operation(first: Cell, second: Cell): Cell = Cell(
-    implicitly[PropertyHelper[TemperatureProperty]].sum(first(Temperature), second(Temperature)),
-    implicitly[PropertyHelper[HumidityProperty]].sum(first(Humidity), second(Humidity)),
-    implicitly[PropertyHelper[PressureProperty]].sum(first(Pressure), second(Pressure))
+    first(Temperature) varyBy second(Temperature),
+    first(Humidity) varyBy second(Humidity),
+    first(Pressure) varyBy second(Pressure)
   )
 }

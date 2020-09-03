@@ -1,14 +1,10 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.PropertyHelper
-import scala.model.environment.property.realization.PressureProperty.{PressureState, ValueType}
+import breeze.linalg.DenseMatrix
 
-object PressurePropertyHelper {
+import scala.model.environment.property.Variation
 
-  implicit def PressureHelper: PropertyHelper[PressureProperty] =
-    (first: PressureProperty#State, second: PressureProperty#State) => first.value + second.value
+object PressurePropertyHelper extends IntegerPropertyHelper[PressureProperty] {
 
-  implicit def toValueType[T: Numeric](value: T): ValueType = implicitly[Numeric[T]].toInt(value)
-
-  implicit def toState[T: Numeric](value: T): PressureState = PressureState(implicitly[Numeric[T]].toInt(value))
+  override def generateFilter(width: Int, height: Int): DenseMatrix[Variation.GenericVariation[PressureProperty]] = ???
 }

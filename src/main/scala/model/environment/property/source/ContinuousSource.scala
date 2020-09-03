@@ -13,14 +13,24 @@ sealed trait ContinuousSource[T <: Property] extends ZoneSource[T] with FiniteDa
 
 object ContinuousSource {
 
-  case class ContinuousSourceImpl[T <: Property](
-    filter: DenseMatrix[GenericVariation[T]],
-    percentage: (T#ValueType, Int) => T#ValueType,
-    x: Int, y: Int,
-    width: Int, height: Int,
-    fireTime: Time = Time.now(), daysDuration: Int
-  ) extends ContinuousSource[T] {
-    var evaluated: Int = 0
+  def apply[T <: Property](
+    _filter: DenseMatrix[GenericVariation[T]],
+    _x: Int, _y: Int,
+    _width: Int, _height: Int,
+    _fireTime: Time = Time.now(), _daysDuration: Int
+  )(implicit _percentage: (T#ValueType, Int) => T#ValueType): ContinuousSource[T] = new ContinuousSource[T] {
+    override def filter: DenseMatrix[GenericVariation[T]] = _filter
+    override def percentage: (T#ValueType, Int) => T#ValueType = _percentage
+
+    override var evaluated: Int = 0
+
+    override val width: Int = _width
+    override val height: Int = _height
+    override val x: Int = _x
+    override val y: Int = _y
+
+    override def fireTime: Time = _fireTime
+    override def daysDuration: Int = _daysDuration
   }
 
   implicit def nextValue[T <: Property](source: ContinuousSource[T]): DenseMatrix[GenericVariation[T]] = {

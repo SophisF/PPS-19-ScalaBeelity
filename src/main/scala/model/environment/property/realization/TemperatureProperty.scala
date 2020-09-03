@@ -1,13 +1,9 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.realization.TemperaturePropertyHelper.toState
-import scala.model.environment.property.{Property, Range, Variation}
-import scala.model.environment.time.{Time, TimeData}
-import scala.model.environment.utility.IteratorHelper.RichIterator
+import scala.model.environment.property.Range
+import scala.model.environment.time.TimeData
 
-sealed trait TemperatureProperty extends Property with Range with TimeData[Int] {
-  override type ValueType = Int
-}
+sealed trait TemperatureProperty extends IntegerProperty with Range with TimeData[Int]
 
 object TemperatureProperty extends TemperatureProperty {
   private val MonthlyIncrement = 3
@@ -17,15 +13,13 @@ object TemperatureProperty extends TemperatureProperty {
   override val minValue: Int = -50
 
   // TODO se implicit limit funziona -> do nothing, altrimenti -> apply con limit
-  case class TemperatureState(value: Int) extends TemperatureProperty.State {
-    override def asNumericPercentage(): Int = (value - minValue) * 100 / (maxValue - minValue)
+  case class TemperatureState(value: Int) extends IntegerState {
+    override implicit def apply(value: Int): TemperatureState = TemperatureState(value)
   }
 
-  implicit def operation: (TemperatureProperty#State, Variation[TemperatureProperty]) => TemperatureState =
-    (state, variation) => state.value + variation.value
-
+  /*
   implicit def instantValue(time: Time): Int = (0 until 6).iterator.mirror(false).map(_ * MonthlyIncrement)
     .drop(time.month).toSeq.head
 
-  implicit def variation(older: Time, newer: Time): Int = instantValue(newer) - instantValue(older)
+  implicit def variation(older: Time, newer: Time): Int = instantValue(newer) - instantValue(older)*/
 }

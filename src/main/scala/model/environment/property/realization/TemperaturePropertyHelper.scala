@@ -1,16 +1,12 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.PropertyHelper
-import scala.model.environment.property.realization.TemperatureProperty.{TemperatureState, ValueType}
+import breeze.linalg.DenseMatrix
 
-object TemperaturePropertyHelper {
+import scala.model.environment.property.Variation
 
-  implicit def TemperatureHelper: PropertyHelper[TemperatureProperty] =
-    (first: TemperatureProperty#State, second: TemperatureProperty#State) => first.value + second.value
+object TemperaturePropertyHelper extends IntegerPropertyHelper[TemperatureProperty] {
 
-  implicit def toValueType[T: Numeric](value: T): ValueType = implicitly[Numeric[T]].toInt(value)
+  //implicit def percentage(value: Int, percent: Int): Int = value * percent / 100
 
-  implicit def toState[T: Numeric](value: T): TemperatureState = TemperatureState(implicitly[Numeric[T]].toInt(value))
-
-  implicit def percentage(value: Int, percent: Int): Int = value * percent / 100
+  override def generateFilter(width: Int, height: Int): DenseMatrix[Variation.GenericVariation[TemperatureProperty]] = ???
 }

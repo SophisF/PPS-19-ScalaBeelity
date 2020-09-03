@@ -22,4 +22,11 @@ trait Size {
 object Size extends Enumeration {
   type Border = Value
   val Top, Right, Bottom, Left = Value
+
+  def apply(_weight: Int, _height: Int): Size = new Size {
+    override val width: Int = _weight
+    override val height: Int = _height
+  }
+
+  implicit def toSize: ((Int, Int)) => Size = p => Size(p._1, p._2)
 }

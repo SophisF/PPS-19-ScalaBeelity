@@ -9,8 +9,8 @@ import scala.controller.Looper
  */
 object Main extends App {
   private val EnvironmentSize = (1000, 1000)
-  private val Iterations = 100
-  private val UpdateWindow = 100
+  private val Iterations = 1000
+  private val UpdateWindow = 10
 
   println("Testing execution speed with:\n\t" +
     EnvironmentSize._1 * EnvironmentSize._2 + " cells\n\t" +

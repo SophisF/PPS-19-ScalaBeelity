@@ -1,10 +1,8 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.{Property, Range, Variation, realization}
+import scala.model.environment.property.Range
 
-sealed trait HumidityProperty extends Property with Range {
-  override type ValueType = Int
-}
+sealed trait HumidityProperty extends IntegerProperty with Range
 
 object HumidityProperty extends HumidityProperty {
   override val default: Int = 10
@@ -12,14 +10,11 @@ object HumidityProperty extends HumidityProperty {
   override val minValue: Int = 0
 
   // TODO se implicit limit funziona -> do nothing, altrimenti -> apply con limit
-  case class HumidityState(value: Int) extends HumidityProperty.State {
-    override def asNumericPercentage(): Int = (value - minValue) * 100 / (maxValue - minValue)
+  case class HumidityState(override val value: Int) extends IntegerState {
+    override implicit def apply(value: Int): HumidityState = HumidityState(value)
   }
-
-  implicit def operation: (HumidityProperty#State, Variation[HumidityProperty]) => HumidityState =
-    (state, variation) => HumidityState(state.value + variation.value)
-
-  /*override implicit def instantValue(time: Int): Int = maxValue * Math.sin(time % 365) toInt
+  /*
+  override implicit def instantValue(time: Int): Int = maxValue * Math.sin(time % 365) toInt
 
   override def variation(olderTime: Int, newerTime: Int): Int => Int =
     value => value + instantValue(olderTime) - instantValue(newerTime)*/

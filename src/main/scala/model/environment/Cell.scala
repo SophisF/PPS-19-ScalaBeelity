@@ -22,11 +22,11 @@ case class Cell(
   humidity: HumidityProperty#State,
   pressure: PressureProperty#State
 ) {
-  private val map = Map[PropertyType.Value, Property#State](
+  /*private val map = Map[PropertyType.Value, Property#State](
     Temperature -> temperature,
     Humidity -> humidity,
     Pressure -> pressure
-  )
+  )*/
 
   /**
    * Used to iterate over the properties
@@ -34,11 +34,19 @@ case class Cell(
    * @param property of which we want to know the value
    * @return the value of the property
    */
-  def apply[T <: Property](property: PropertyType.PropertyTypeValue[T]): T#State = map(property) match {
+  def apply[T <: Property](property: PropertyType.PropertyTypeValue[T]): T#State = property match {
+    case Temperature => temperature.asInstanceOf[T#State]
+    case Humidity => humidity.asInstanceOf[T#State]
+    case Pressure => pressure.asInstanceOf[T#State]
+  }/*map(property) match {
     case state: T#State => state.asInstanceOf[T#State]
-  }
+  }*/
 
-  def apply[T <: Property](property: PropertyType.Value): T#State = map(property).asInstanceOf[T#State]
+  def apply[T <: Property](property: PropertyType.Value): T#State = property match {
+    case Temperature => temperature.asInstanceOf[T#State]
+    case Humidity => humidity.asInstanceOf[T#State]
+    case Pressure => pressure.asInstanceOf[T#State]
+  }//map(property).asInstanceOf[T#State]
 
   def +[T <: Property](variation: Variation[T]): Cell = {
     variation match {

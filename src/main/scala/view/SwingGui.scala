@@ -74,41 +74,6 @@ object SwingGui extends App {
     plot.setDomainGridlinePaint(Color.BLACK)
   }
 
-  /** ************************************BUBBLE CHART ******************************************************* */
-
-  private def createBubbleChart(xyzdataset: XYZDataset) = {
-    val jfreechart = ChartFactory.createBubbleChart("Colonies", "X Axis", "Y Axis", xyzdataset, PlotOrientation.VERTICAL, true, true, false)
-    val xyplot = jfreechart.getPlot.asInstanceOf[XYPlot]
-    xyplot.setForegroundAlpha(0.65F)
-    val xyitemrenderer = xyplot.getRenderer
-    xyitemrenderer.setSeriesPaint(0, Color.blue)
-    val numberaxis = xyplot.getDomainAxis.asInstanceOf[NumberAxis]
-    numberaxis.setLowerMargin(0.2)
-    numberaxis.setUpperMargin(0.5)
-    val numberaxis1 = xyplot.getRangeAxis.asInstanceOf[NumberAxis]
-    numberaxis1.setLowerMargin(0.8)
-    numberaxis1.setUpperMargin(0.9)
-    jfreechart
-  }
-
-  def createBubbleDataset = {
-    val defaultxyzdataset = new DefaultXYZDataset
-    val ad: Array[Double] = Array(30, 40, 50, 60, 70, 80)
-    val ad1: Array[Double] = Array(10, 20, 30, 40, 50, 60)
-    val ad2: Array[Double] = Array(4, 5, 10, 8, 9, 6)
-    val ad3: Array[Array[Double]] = Array(ad, ad1, ad2)
-    defaultxyzdataset.addSeries("Colony 1", ad3)
-    defaultxyzdataset
-  }
-
-  def createDemoPanel = {
-    val jfreechart = createBubbleChart(createBubbleDataset)
-    val chartpanel = new ChartPanel(jfreechart)
-    chartpanel.setDomainZoomable(true)
-    chartpanel.setRangeZoomable(true)
-    chartpanel
-  }
-
   /** ************************************TABBED GUI ******************************************************* */
 
   //TODO: Da modificare qui
@@ -159,9 +124,10 @@ object SwingGui extends App {
     tabbedPane.addTab("Seasonal Variation Diagram", null, chart, "Does nothing at all")
     tabbedPane.setMnemonicAt(3, KeyEvent.VK_4)
 
-    val bubblePanel = createDemoPanel
-    bubblePanel.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Colonies", null, bubblePanel, "Does nothing at all")
+    val c = new DisplayGraphics
+
+    c.setPreferredSize(new Dimension(410, 50))
+    tabbedPane.addTab("Colonies", null, c, "Does nothing at all")
     tabbedPane.setMnemonicAt(4, KeyEvent.VK_5)
 
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)

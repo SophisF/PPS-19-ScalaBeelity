@@ -33,12 +33,12 @@ object Environment {
     DenseMatrix.create(width, height, Iterator continually defaultCell take(width * height) toArray))
 
   def apply(environment: Environment, source: PropertySource[Property]): Environment = source match {
-    case source: InstantaneousSource[Property] => applyFilterX(environment, indexed(source, environment.map.cols,
-      environment.map.rows))
+    case source: InstantaneousSource[Property] => applyFilter(environment, source)//applyFilterX(environment, indexed(source, environment.map.cols,
+      //environment.map.rows))
     case source: ContinuousSource[Property] => ContinuousSource.instantaneous(source) match {
       case None => environment
-      case Some(value) => applyFilterX(environment, indexed(value, environment.map.cols,
-        environment.map.rows))//applyFilter(environment, value)
+      case Some(value) => applyFilter(environment, value)//applyFilterX(environment, indexed(value, environment.map.cols,
+        //environment.map.rows))//applyFilter(environment, value)
     }
     case propertySource: SeasonalSource[Property] => applySeason(environment, propertySource)
   }

@@ -40,11 +40,13 @@ case class Cell(
 
   def apply[T <: Property](property: PropertyType.Value): T#State = map(property).asInstanceOf[T#State]
 
-  def +[T <: Property](variation: Variation[T]): Cell = variation match {
-    case v:Variation[TemperatureProperty] => Cell(vary(temperature, v), humidity, pressure)
-    case v:Variation[HumidityProperty] => Cell(temperature, vary(humidity, v), pressure)
-    case v:Variation[PressureProperty] => Cell(temperature, humidity, vary(pressure, v))
-    case _ => this
+  def +[T <: Property](variation: Variation[T]): Cell = {
+    variation match {
+      case v:Variation[TemperatureProperty] => Cell(vary(temperature, v), humidity, pressure)
+      case v:Variation[HumidityProperty] => Cell(temperature, vary(humidity, v), pressure)
+      case v:Variation[PressureProperty] => Cell(temperature, humidity, vary(pressure, v))
+      case _ => this
+    }
   }
 
   /**

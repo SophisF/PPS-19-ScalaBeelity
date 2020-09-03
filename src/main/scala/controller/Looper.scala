@@ -1,14 +1,16 @@
 package scala.controller
 
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.matrix.Matrix.DroppableMatrix
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.property.Variation.GenericVariation
 import scala.model.environment.property.realization.TemperatureProperty
 import scala.model.environment.property.source.{ContinuousSource, SeasonalSource}
-import scala.model.environment.property.FilterBuilder
+import scala.model.environment.property.{FilterBuilder, PropertyType}
 import scala.model.environment.property.source.ContinuousSource.ContinuousSourceImpl
 import scala.model.environment.time.Time
 import scala.util.Random
+import scala.view.View
 
 /**
  * Simply controller of the test
@@ -47,7 +49,7 @@ object Looper {
 
       //if (i == iterations / 2) plot(environmentManager.environment)
 
-      Time increment 1
+      Time increment updateStep
     })
     println("Time to run: " + t.elapsedTime())
 
@@ -69,9 +71,8 @@ object Looper {
    *
    * @param environment to plot
    */
-  private def plot(environment: Environment): Unit = /*PropertyType.values.foreach(property => View.plot(
-    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(cell => cell(property).value.toDouble),
-    0, 100,
+  private def plot(environment: Environment): Unit = PropertyType.values.foreach(property => View.plot(
+    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(cell => cell(property).asNumericPercentage().toDouble),
     s"${property.toString}"
-  ))*/5
+  ))
 }

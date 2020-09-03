@@ -28,8 +28,8 @@ object View {
    *
    * @param map to plot
    */
-  def plot(map: DenseMatrix[Double], minValue: Int = 0, maxValue: Int = 100, name: String = i toString): Unit = {
-    (Figure_.subplot(i / Figure_.cols + 1, PropertyType.values.size, i) += image(map, GradientPaintScale(minValue, maxValue,
+  def plot(map: DenseMatrix[Double], name: String = i toString): Unit = {
+    (Figure_.subplot(i / Figure_.cols + 1, PropertyType.values.size, i) += image(map, GradientPaintScale(0, 100,
       ColorGradient.toArray))).title = name
     i += 1
   }

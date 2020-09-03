@@ -17,6 +17,8 @@ trait Property {
    */
   trait State {
     def value: ValueType
+
+    def asNumericPercentage(): Int
   }
 }
 

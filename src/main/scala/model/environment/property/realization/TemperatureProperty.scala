@@ -17,7 +17,9 @@ object TemperatureProperty extends TemperatureProperty {
   override val minValue: Int = -50
 
   // TODO se implicit limit funziona -> do nothing, altrimenti -> apply con limit
-  case class TemperatureState(value: Int) extends TemperatureProperty.State
+  case class TemperatureState(value: Int) extends TemperatureProperty.State {
+    override def asNumericPercentage(): Int = (value - minValue) * 100 / (maxValue - minValue)
+  }
 
   implicit def operation: (TemperatureProperty#State, Variation[TemperatureProperty]) => TemperatureState =
     (state, variation) => state.value + variation.value

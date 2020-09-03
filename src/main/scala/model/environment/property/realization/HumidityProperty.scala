@@ -12,7 +12,9 @@ object HumidityProperty extends HumidityProperty {
   override val minValue: Int = 0
 
   // TODO se implicit limit funziona -> do nothing, altrimenti -> apply con limit
-  case class HumidityState(value: Int) extends HumidityProperty.State
+  case class HumidityState(value: Int) extends HumidityProperty.State {
+    override def asNumericPercentage(): Int = (value - minValue) * 100 / (maxValue - minValue)
+  }
 
   implicit def operation: (HumidityProperty#State, Variation[HumidityProperty]) => HumidityState =
     (state, variation) => HumidityState(state.value + variation.value)

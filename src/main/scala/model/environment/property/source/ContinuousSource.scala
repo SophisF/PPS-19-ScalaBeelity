@@ -24,7 +24,7 @@ object ContinuousSource {
   }
 
   implicit def nextValue[T <: Property](source: ContinuousSource[T]): DenseMatrix[GenericVariation[T]] = {
-    val force = (Time.now() - source.fireTime) * 100 / source.daysDuration - source.evaluated
+    val force = (Time.now() - source.fireTime) * 100 / (source.daysDuration - source.evaluated)
     source.evaluated += force
     DenseMatrix.create(source.filter.rows, source.filter.cols, source.filter.data.map(variation =>
       GenericVariation(source.percentage(variation.value, force))))

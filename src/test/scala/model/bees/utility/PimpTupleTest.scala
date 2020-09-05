@@ -1,19 +1,27 @@
-package model.bees.utility
+package scala.model.bees.utility
 
 import org.scalatest.funsuite.AnyFunSuite
+
 import scala.model.bees.utility.PimpTuple._
 
-class PimpTupleTest extends AnyFunSuite{
-  private val tuple1: (Int, Int) = (9, 11)
-  private val tuple2: (Int, Int) = (3, 7)
-  private val tuple3: (Int, Int) = (10, 12)
+class PimpTupleTest extends AnyFunSuite {
 
-  test("Two tuple should intersect each other if their value are overlapped."){
-    assert(tuple1.intersection(tuple3) == 2)
+  type Range = (Int, Int)
+
+  private val tuple1: Range = (9, 11)
+  private val tuple2: Range = (3, 7)
+  private val tuple3: Range = (10, 12)
+
+  test("One Range should contains another if the first value of the second is between the two values of the first.") {
+    assert(tuple1.contains(tuple3))
   }
 
-  test("Two tuple should not intersect each other if their value aren't overlapped."){
-    assert(tuple1.intersection(tuple2) == 0)
+  test("One Range should not contains another if the first value of the second is not between the two values of the first.") {
+    assert(!tuple2.contains(tuple3))
+  }
+
+  test("The average of a Range is the mean of its values") {
+    assert(tuple1.average == (tuple1._1 + tuple1._2) / 2)
   }
 
 }

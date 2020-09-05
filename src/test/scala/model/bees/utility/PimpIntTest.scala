@@ -27,4 +27,10 @@ class PimpIntTest extends AnyFunSuite{
     assert(x.>((1, 2)))
   }
 
+  test("Method applyTwoOperations apply two operations between an integer and a value"){
+    val x: Int = 3
+    val value: Int = 2
+    assert(x.applyTwoOperations(value)(_ + _)(_ * _) == (x + value, x * value))
+  }
+
 }

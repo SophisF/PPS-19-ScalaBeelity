@@ -2,41 +2,67 @@ package scala.model.bees.bee
 
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.utility.PimpTuple._
+import scala.model.bees.utility.PimpInt._
 
 /**
- * Object that represents a colony area
+ * Object that provides method to check collisions between colonies.
  */
 object CollisionManager {
 
   type Range = (Int, Int)
 
+  /**
+   * Method to finds, given a colony, all the colliding colonies with it.
+   * @param colony the given colony.
+   * @param colonies the list of colonies.
+   * @return a list of colonies that collide with colony.
+   */
+  def findColliding(colony: Colony, colonies: List[Colony]): List[Colony] = for {
+    c <- colonies
+    if colony != c
+    if this.checkCollision(colony, c)
+  } yield c
+
+  /**
+   * Method that calculate the collision area between two colonies.
+   * @param colony1 the first colony.
+   * @param colony2 the second colony.
+   * @return the collision area between the two colonies.
+   */
   def collisionArea(colony1: Colony, colony2: Colony): Int = {
-    val sumColony1 = (colony1.position.x, colony1.position.y).applyOperation(colony1.dimension)(_ + _)
-    val diffColony1 = (colony1.position.x, colony1.position.y).applyOperation(colony1.dimension)(_ - _)
-    val sumColony2 = (colony2.position.x, colony2.position.y).applyOperation(colony2.dimension)(_ + _)
-    val diffColony2 = (colony2.position.x, colony2.position.y).applyOperation(colony2.dimension)(_ - _)
-    val colony1XRange: Range = (diffColony1._1, sumColony1._1)
-    val colony1YRange: Range = (diffColony1._2, sumColony1._2)
-    val colony2XRange: Range = (diffColony2._1, sumColony2._1)
-    val colony2YRange: Range = (diffColony2._2, sumColony2._2)
+    val colony1XRange: Range = colony1.position.x.applyTwoOperations(colony1.dimension)(_ - _)(_ + _)
+    val colony1YRange: Range = colony1.position.y.applyTwoOperations(colony1.dimension)(_ - _)(_ + _)
+    val colony2XRange: Range = colony2.position.x.applyTwoOperations(colony2.dimension)(_ - _)(_ + _)
+    val colony2YRange: Range = colony2.position.y.applyTwoOperations(colony2.dimension)(_ - _)(_ + _)
 
-    colony1XRange.intersection(colony2XRange) * colony1YRange.intersection(colony2YRange)
+    this.calculateIntersectionArea(colony1XRange)(colony2XRange) * this.calculateIntersectionArea(colony1YRange)(colony2YRange)
   }
 
-
-
-
-
-/*
-  case class ColonyAreaImpl(override val center: Point , dimension: Int) extends ColonyArea{
-    private var side: Int = dimension*2+1
-
-    override def area(): Int = side^2
-
-    override def *(x: Int): Int = this.area()*x
-
-
+  /**
+   * Method to check if two colony collides.
+   * @param colony1 the first colony.
+   * @param colony2 the second colony.
+   * @return a boolean, true if the two colonies collide, false otherwise.
+   */
+  private def checkCollision(colony1: Colony, colony2: Colony): Boolean = {
+    this.collisionArea(colony1, colony2) > 0
   }
 
- */
+  /**
+   * Method to calculate the intersection area between two range.
+   * @param range1 the first range.
+   * @param range2 the second range.
+   * @return the intersection area.
+   */
+  private def calculateIntersectionArea(range1: Range)(range2: Range): Int = {
+    if (range1.contains(range2)) {
+      val max: Int = math.min(range1._2, range2._2)
+      max - range1._1 + 1
+    }
+    else if (range2.contains(range1)) {
+      val max: Int = math.min(range1._2, range2._2)
+      max - range2._1 + 1
+    }
+    else 0
   }
+}

@@ -1,6 +1,5 @@
-package model.bees.genotype
+package model.bees.bee
 
-import model.bees.bee.EvolutionManager
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.model.bees.genotype.Genotype.Genotype
@@ -8,7 +7,7 @@ import scala.model.bees.genotype.{GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.Phenotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
 
-class GeneticEvolverTest extends AnyFunSuite{
+class EvolutionManagerTest extends AnyFunSuite{
   val genotype: Genotype = Genotype()
   val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
 

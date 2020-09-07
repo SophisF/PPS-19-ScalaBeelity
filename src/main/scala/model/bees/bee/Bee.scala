@@ -12,11 +12,7 @@ object Bee {
     BeeImpl(genotype, phenotype, age, temperature, pressure, humidity)
 
   def calculateRemainingLife(bee: Bee, temperature: Int, pressure: Int, humidity: Int): Int = {
-    val tFit: Double = Fitter.calculateFit(temperature)(bee.phenotype.temperatureCompatibility.expression)
-    val pFit: Double = Fitter.calculateFit(pressure)(bee.phenotype.pressureCompatibility.expression)
-    val hFit: Double = Fitter.calculateFit(humidity)(bee.phenotype.humidityCompatibility.expression)
-
-    ((bee.phenotype.longevity.expression - bee.age).toDouble * ((tFit + pFit + hFit) / 3)).toInt
+    Fitter.calculateFitValue(bee.phenotype)(temperature)(pressure)(humidity).toInt
   }
   /**
    * Trait that represents bee

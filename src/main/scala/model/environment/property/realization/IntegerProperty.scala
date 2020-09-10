@@ -9,12 +9,16 @@ import scala.model.environment.property.Property
  */
 trait IntegerProperty extends Property {
   override type ValueType = Int
-
-  trait IntegerState extends State {
-    implicit def apply(value: Int): IntegerState
-
-    override def varyBy(variation: Int): State = value + variation
+}/*
+  case class IntegerVariation(value: Int) extends Variation {
+    override def vary[S <: State](state: S): S = toState(state.value + value)
   }
-
-  implicit def toValue(state: IntegerProperty#State): Int = state.value
 }
+
+object IntegerProperty {
+  implicit def toState[S <: IntegerProperty#State](value: Int): S
+
+  implicit def toVariation(value: Int = default): Variation = IntegerVariation(value)
+
+  implicit def toValue(state: State): Int = state.value
+}*/

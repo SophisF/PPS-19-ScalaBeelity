@@ -27,6 +27,6 @@ trait IntegerPropertyHelper[T <: IntegerProperty] extends PropertyHelper[T] {
    * @tparam N type of value
    * @return converted value
    */
-  implicit def toState[N: Numeric](value: N)(implicit _toState: Int => T#IntegerState): T#IntegerState =
+  implicit def toState[N: Numeric](value: N)(implicit _toState: Int => T#State): T#State =
     _toState(implicitly[Numeric[N]].toInt(value))
 }

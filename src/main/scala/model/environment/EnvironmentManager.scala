@@ -1,8 +1,6 @@
 package scala.model.environment
 
 import scala.model.environment.property.Property
-import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
-import scala.model.environment.property.source.InstantaneousSource.indexed
 import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, SeasonalSource, ZoneSource}
 import scala.model.environment.property.source.ContinuousSource.instantaneous
 import scala.model.environment.time.Timed.isEnded

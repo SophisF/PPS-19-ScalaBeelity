@@ -5,10 +5,7 @@ import breeze.linalg.DenseMatrix
 import scala.model.environment.matrix.Zone.{border, in}
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.Property
-import scala.model.environment.property.Variation.GenericVariation
-import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, SeasonalSource, ZoneSource}
-import scala.model.environment.utility.IteratorHelper._
-import scala.model.environment.property.source.InstantaneousSource.indexed
+import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, ZoneSource}
 
 /**
  * A first scratch of the environment class.
@@ -40,12 +37,12 @@ object Environment {
       case Some(value) => applyFilter(environment, value)//applyFilterX(environment, indexed(value, environment.map.cols,
         //environment.map.rows))//applyFilter(environment, value)
     }
-    case propertySource: SeasonalSource[Property] => applySeason(environment, propertySource)
+    //case propertySource: SeasonalSource[Property] => applySeason(environment, propertySource)
   }
 
-  def apply(environment: Environment, variations: Iterable[(Int, Seq[GenericVariation[Property]])]): Environment = {
-    variations.foreach(p => p._2.foreach(v => environment.map.data(p._1) += v)); environment
-  }
+  /*def apply(environment: Environment, variations: Iterable[(Int, Seq[GenericVariation[Property]])]): Environment = {
+    variations.foreach(p => p._2.foreach(v => environment.map.data(p._1) += v))
+  }*/
 
   /**
    * Apply a filter to an environment
@@ -54,19 +51,21 @@ object Environment {
    * @param filter to apply
    * @return an environment to which is applied the filter
    */
-  def applyFilter(environment: Environment, source: ZoneSource[Property]): Environment =
+  def applyFilter(environment: Environment, source: ZoneSource[Property]): Environment = {
     Environment(environment.map.mapPairs((pointXY, cell) => pointXY match {
       case p if in(p._1, p._2, source) => cell + source.filter(p._1 - border(source)(Size.Left),
         p._2 - border(source)(Size.Top))
       case _ => cell
     }))
+    environment
+  }
 
-  private def applyFilterX(environment: Environment, source: Iterable[(Int, GenericVariation[Property])])
-  : Environment = { Environment(DenseMatrix.create(environment.map.rows, environment.map.cols, environment.map.data
+  private def applyFilterX(environment: Environment, source: Iterable[(Int, Property#Variation)])
+  : Environment = { /*Environment(DenseMatrix.create(environment.map.rows, environment.map.cols, environment.map.data
       .zipWithIndex.map(p => source.iterator.conditionalNext(_._1 == p._2) match {
       case Some(variation) => p._1 + variation._2
       case _ => p._1
-    })))
+    })))*/environment
   }
 
   /**
@@ -76,9 +75,9 @@ object Environment {
    * @param variator to apply
    * @return an environment to which is applied the filter
    */
-  def applySeason(environment: Environment, variator: SeasonalSource[Property]): Environment = {
+  /*def applySeason(environment: Environment, variator: SeasonalSource[Property]): Environment = {
     val variation = GenericVariation(SeasonalSource.nextValue(variator))
     Environment(environment.map.map(_ + variation))
     //Environment(environment.map.parallelMap(_ + variation)(Cell()))
-  }
+  }*/
 }

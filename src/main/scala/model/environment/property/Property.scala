@@ -29,14 +29,10 @@ trait Property {
      *
      * @return the value of the state
      */
-    def value: ValueType
+    def value: ValueType = default
+  }
 
-    /**
-     * Determine the variation based on the passed value
-     *
-     * @param value of the variation
-     * @return the varied state
-     */
-    def varyBy(value: ValueType): State
+  trait Variation {
+    def vary[S <: State](state: S): State
   }
 }

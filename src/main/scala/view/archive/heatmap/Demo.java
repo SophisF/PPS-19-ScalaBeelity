@@ -1,55 +1,63 @@
-package view.heatmap;
+package view.archive.heatmap;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
-public class SimpleHeatMapDemo extends Application {
+public class Demo extends Application {
     private SimpleHeatMap heatMap;
     private StackPane pane;
-    private EventHandler<ActionEvent> handler;
+    private Point2D[] events;
 
 
     // ******************** Initialization ************************************
     @Override
     public void init() {
         pane = new StackPane();
-        heatMap = new SimpleHeatMap(400, 400, ColorMapping.BLACK_WHITE);
-
-        registerListeners();
+        heatMap = new SimpleHeatMap(400, 400, ColorMapping.BLUE_CYAN_GREEN_YELLOW_RED, 40);
+        heatMap.setOpacityDistribution(OpacityDistribution.LINEAR);
+        heatMap.setHeatMapOpacity(1);
+        events = new Point2D[]{
+                new Point2D(110, 238),
+                new Point2D(120, 144),
+                new Point2D(207, 119),
+                new Point2D(315, 348),
+                new Point2D(264, 226),
+                new Point2D(280, 159),
+                new Point2D(240, 186),
+                new Point2D(228, 170),
+                new Point2D(234, 160),
+                new Point2D(214, 170),
+                new Point2D(200, 200),
+        };
     }
 
 
     // ******************** Start *********************************************
     @Override
     public void start(Stage stage) {
+        pane.getChildren().setAll(heatMap.getHeatMapImage());
+        Scene scene = new Scene(pane, 400, 400, Color.rgb(0, 0, 0, 0.5));
 
-        VBox layout = new VBox();
-        layout.setPadding(new Insets(10, 10, 10, 10));
-        layout.setSpacing(10);
-
-        pane.getChildren().setAll(layout, heatMap.getHeatMapImage());
-        Scene scene = new Scene(pane, 400, 400, Color.GRAY);
-
-        stage.setTitle("JavaFX SimpleHeatMap Demo");
+        stage.setTitle("JavaFX HeatMap Demo");
         stage.setScene(scene);
         stage.show();
+        heatMap.addEvents(events);
     }
 
     public static void main(String[] args) {
+        Dimension2D mapDimension = new Dimension2D(1500, 1577);
+        Point2D upperLeft = new Point2D(0, 9.8);
+        Point2D lowerRight = new Point2D(53.45, 10.2);
+        Point2D location = new Point2D(53.7, 9.95);
+
+        System.out.println(Helper.latLongToPixel(mapDimension, upperLeft, lowerRight, location));
+
         launch(args);
     }
 
@@ -70,6 +78,7 @@ public class SimpleHeatMapDemo extends Application {
         pane.heightProperty().addListener((ov, oldHeight, newHeight) -> heatMap.setSize(pane.getWidth(), newHeight.doubleValue()));
     }
 }
+
 
 
 

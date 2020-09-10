@@ -1,4 +1,4 @@
-package view.heatmap;
+package view.archive.heatmap;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;

@@ -1,4 +1,4 @@
-package view.heatmap;
+package view.archive.heatmap;
 
 public enum OpacityDistribution {
     EXPONENTIAL(0.90, 0.37, 0.14, 0.05, 0.02, 0.006, 0.002, 0.001, 0.0003, 0.0001, 0.0),

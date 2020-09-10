@@ -2,7 +2,7 @@
  * Copyright 2013 ScalaFX Project
  * All right reserved.
  */
-package view
+package view.archive
 
 import scalafx.application.JFXApp
 import scalafx.collections.ObservableBuffer

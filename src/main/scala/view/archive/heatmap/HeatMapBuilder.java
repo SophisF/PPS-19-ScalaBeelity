@@ -1,4 +1,4 @@
-package view.heatmap;
+package view.archive.heatmap;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;

@@ -1,4 +1,4 @@
-package view;
+package view.archive;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

@@ -1,4 +1,4 @@
-package view
+package view.archive
 
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage

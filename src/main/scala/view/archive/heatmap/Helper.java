@@ -1,4 +1,4 @@
-package view.heatmap;
+package view.archive.heatmap;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;

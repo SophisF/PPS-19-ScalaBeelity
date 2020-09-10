@@ -1,4 +1,4 @@
-package view;
+package view.archive;
 
 import java.awt.Color;
 

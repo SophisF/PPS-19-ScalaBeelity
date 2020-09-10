@@ -1,4 +1,4 @@
-package view.heatmap;
+package view.archive.heatmap;
 
 public class HeatMapEvent {
     private double              x;

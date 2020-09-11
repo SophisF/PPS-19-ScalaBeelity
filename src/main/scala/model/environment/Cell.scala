@@ -7,9 +7,8 @@ import scala.model.environment.property.{Property, PropertyVariation}
  * Class that represent an environment cell
  *
  * @param temperature in the area represented by the cell
- * @param humidity in the area represented by the cell
- * @param pressure in the area represented by the cell
- *
+ * @param humidity    in the area represented by the cell
+ * @param pressure    in the area represented by the cell
  * @author Paolo Baldini
  */
 case class Cell(temperature: Int, humidity: Int, pressure: Int) {
@@ -45,18 +44,19 @@ case class Cell(temperature: Int, humidity: Int, pressure: Int) {
    * @param variation optionally contains value and target of the variation
    * @return the optionally varied cell
    */
-  def +(variation: Option[PropertyVariation]): Cell = variation map(this + _) getOrElse this
+  def +(variation: Option[PropertyVariation]): Cell = variation map (this + _) getOrElse this
 }
+
 object Cell {
 
   /**
    * Apply field-wise operation between two cell. Resulting value cannot exceed property limits/range
    *
-   * @param first a cell
-   * @param second a cell
+   * @param first    a cell
+   * @param second   a cell
    * @param property the operation between element of 'first' and 'second'
    * @return a cell on which every field is the (limited) result of the operation applied to between the value of the
-   *        'first' and 'second' cells
+   *         'first' and 'second' cells
    */
   def operation(first: Cell, second: Cell)(property: (Int, Int) => Int): Cell = Cell(
     limit(Temperature, property(first.temperature, second.temperature)),
@@ -67,11 +67,17 @@ object Cell {
    * Make the passed value respect the limit decreed by the property
    *
    * @param property of which use the range
-   * @param value to set in range
+   * @param value    to set in range
    * @return ranged value
    */
+  //  private def limit(property: Property, value: Int): Int = value match {
+  //    case value if value >= 0 => if Math.min(value, Property.range(property).maxValue)
+  //    case value => Math.max(value, Property.range(property).minValue)
+  //  }
+
   private def limit(property: Property, value: Int): Int = value match {
-    case value if value >= 0 => Math.min(value, Property.range(property).maxValue)
-    case value => Math.max(value, Property.range(property).minValue)
+    case value if value > Property.range(property).maxValue => Property.range(property).maxValue
+    case value if value < Property.range(property).minValue => Property.range(property).minValue
+    case value => value
   }
 }

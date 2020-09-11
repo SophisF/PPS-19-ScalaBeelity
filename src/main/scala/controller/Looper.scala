@@ -1,16 +1,14 @@
 package scala.controller
 
-import scala.language.postfixOps
+
+import scala.annotation.tailrec
 import scala.model.Time
-import scala.model.environment.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.EnvironmentManager._
 import scala.model.environment.matrix.Matrix._
-import scala.model.environment.property.Property.{Temperature, toPercentage}
-import scala.model.environment.property.PropertySource.SeasonalPropertySource
-import scala.model.environment.property.PropertyVariation.Variation
-import scala.model.environment.property.ZonePropertySource.ContinuousZonePropertySource
-import scala.model.environment.property.{FilterBuilder, Property, ZonePropertySource}
+import scala.model.environment.property.Property
+import scala.model.environment.property.Property.toPercentage
 import scala.model.environment.{Environment, EnvironmentManager}
-import scala.util.Random
+
 import scala.view.View
 /**
  * Simply controller of the test
@@ -23,42 +21,48 @@ object Looper {
    * Run a simulation
    *
    * @param environmentSize size of the map
-   * @param iterations number of iterations to simulate
-   * @param updateStep how often update the environment
+   * @param iterations      number of iterations to simulate
+   * @param updateStep      how often update the environment
    */
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
 
     plot(environmentManager.environment)
 
-    environmentManager = randomContinuousFilters(environmentSize._1, environmentSize._2, iterations, 5)
+
+    environmentManager = GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations)
       .foldLeft(environmentManager)(addSource)
 
-    environmentManager = addSource(environmentManager, SeasonalPropertySource(Property.Humidity))
+    environmentManager = GeneratorClimateChange.generateSeason().foldLeft(environmentManager)(addSource)
 
-    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
+    //    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
+    //
+    //      environmentManager = evolution(environmentManager)
+    //
+    //      if (i == iterations / 2) plot(environmentManager.environment)
+    //
+    //      Time increment 1
+    //    })
 
-      environmentManager = evolution(environmentManager)
+    //TODO: Da sostituire con Ecosystem
+    @tailrec
+    def loop(environment: EnvironmentManager, iterations: Int): EnvironmentManager = iterations match {
+      case 0 => environment
+      case _ => {
+        val env = evolution(environment)
+        //if (iterations % 100 == 0) plot(env.environment)
+        println(iterations)
+        Time.increment()
+        //colonies.update(time, env)
+        loop(env, iterations - 1)
+      }
+    }
 
-      if (i == iterations / 2) plot(environmentManager.environment)
-
-      Time increment 1
-    })
+    loop(environmentManager, iterations)
 
     plot(environmentManager.environment)
   }
 
-  private def randomContinuousFilters(environmentWidth: Int, environmentHeight: Int, iterations: Int, quantity: Int)
-  : Iterable[ContinuousZonePropertySource] = (0 until quantity) map (_ => {
-      val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-      val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
-
-      ZonePropertySource(
-        Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
-        filter.cols, filter.rows,
-        0, iterations, filter.mapValues(it => Variation(Temperature, it.toInt))
-      )
-    })
 
   /**
    * Plot the environment calling the view
@@ -67,8 +71,8 @@ object Looper {
    */
   private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
     environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
-    Property.range(property).minValue,
-    Property.range(property).maxValue,
+    0,
+    100,
     s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
   ))
 }

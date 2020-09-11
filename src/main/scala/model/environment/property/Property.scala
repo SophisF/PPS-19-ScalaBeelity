@@ -1,5 +1,7 @@
 package scala.model.environment.property
 
+import scala.util.Random
+
 object Property extends Enumeration {
   type Property = Value
   val Temperature, Humidity, Pressure = Value
@@ -27,4 +29,11 @@ object Property extends Enumeration {
    */
   def toPercentage(propertyValue: Value, value: Int): Int =
     100 * (value - range(propertyValue).minValue) / (range(propertyValue).maxValue - range(propertyValue).minValue)
+
+
+
+  //TODO: DA RIFARE STO SCHIFO.
+  def randomPropertyType(): Property = {
+    IndexedSeq(Temperature, Humidity, Pressure)(Random.nextInt(values.size))
+  }
 }

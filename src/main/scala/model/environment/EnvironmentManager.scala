@@ -50,6 +50,13 @@ object EnvironmentManager {
       }
     )
 
+  /**
+   * Add property source to the environment manager.
+   *
+   * @param manager, the environment manager.
+   * @param propertySource, property source to add.
+   * @return an enviroment manager with the property added.
+   */
   def addSource(manager: EnvironmentManager, propertySource: PropertySource): EnvironmentManager =
     EnvironmentManager(manager.environment, manager.propertySource.appended(propertySource))
 }

@@ -5,7 +5,7 @@ import breeze.linalg.DenseMatrix
 import scala.model.environment.matrix.Zone.{border, in}
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.Property
-import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, ZoneSource}
+import scala.model.environment.property.source.{PropertySource, ZoneSource}
 
 /**
  * A first scratch of the environment class.
@@ -30,13 +30,7 @@ object Environment {
     DenseMatrix.create(width, height, Iterator continually defaultCell take(width * height) toArray))
 
   def apply(environment: Environment, source: PropertySource[Property]): Environment = source match {
-    case source: InstantaneousSource[Property] => applyFilter(environment, source)//applyFilterX(environment, indexed(source, environment.map.cols,
-      //environment.map.rows))
-    case source: ContinuousSource[Property] => ContinuousSource.instantaneous(source) match {
-      case None => environment
-      case Some(value) => applyFilter(environment, value)//applyFilterX(environment, indexed(value, environment.map.cols,
-        //environment.map.rows))//applyFilter(environment, value)
-    }
+    case source: ZoneSource[Property] => applyFilter(environment, source)
     //case propertySource: SeasonalSource[Property] => applySeason(environment, propertySource)
   }
 

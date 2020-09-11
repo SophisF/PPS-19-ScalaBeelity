@@ -30,7 +30,7 @@ object GeneratorClimateChange {
    * @return
    */
   private def randomContinuousFilter[T <: Property](environmentSize: Size, iterations: Int): ContinuousSource[T] = {
-    val filter = HumidityPropertyHelper.generateContinuousFilter(70, 70, iterations)
+    val filter = HumidityPropertyHelper.generateInstantaneousFilter(70, 70)
 
     ContinuousSource(filter, Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), filter.cols,
       filter.rows, 0, iterations)((value, percentage) => value * percentage / 100).asInstanceOf[ContinuousSource[T]]

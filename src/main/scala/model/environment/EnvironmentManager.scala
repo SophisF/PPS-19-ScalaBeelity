@@ -2,7 +2,6 @@ package scala.model.environment
 
 import scala.model.environment.property.Property
 import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, SeasonalSource, ZoneSource}
-import scala.model.environment.property.source.ContinuousSource.instantaneous
 import scala.model.environment.time.Timed.isEnded
 
 object EnvironmentManager {
@@ -34,10 +33,7 @@ object EnvironmentManager {
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager = {
     EnvironmentManager(
-      manager.propertySources.filter(_.isInstanceOf[ZoneSource[_]]).map {
-        case source: ContinuousSource[Property] => instantaneous(source)
-        case source: InstantaneousSource[Property] => Option(source)
-      }.filterNot(_ isEmpty).map(_ get).foldLeft(manager.environment)(Environment.apply),
+      manager.propertySources.filter(_.isInstanceOf[ZoneSource[_]]).foldLeft(manager.environment)(Environment.apply),
       /*Environment(manager.environment, manager.propertySources.filter(_.isInstanceOf[ZoneSource[_]]).map {
         case source: ContinuousSource[Property] => instantaneous(source)
         case source: InstantaneousSource[Property] => Option(source)

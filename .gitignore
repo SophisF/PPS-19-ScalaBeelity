@@ -1,5 +1,10 @@
 *.class
 *.log
 .idea/
+<<<<<<< HEAD
 project/
 target/
+=======
+target/
+project/
+>>>>>>> develop

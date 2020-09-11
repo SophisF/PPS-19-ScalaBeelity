@@ -8,12 +8,19 @@ import scala.model.bees.phenotype.Phenotype.Phenotype
  */
 object Bee {
 
-  def apply(genotype: Genotype, phenotype: Phenotype, age: Int, temperature: Int, pressure: Int, humidity: Int): Bee =
-    BeeImpl(genotype, phenotype, age, temperature, pressure, humidity)
+  //TODO last age from generate
+  private val reproductionTime = 20
 
-  def calculateRemainingLife(bee: Bee, temperature: Int, pressure: Int, humidity: Int): Int = {
-    Fitter.calculateFitValue(bee.phenotype)(temperature)(pressure)(humidity).toInt
+  def apply(genotype: Genotype, phenotype: Phenotype, age: Int, temperature: Int, pressure: Int, humidity: Int,
+            canGenerate: Int = 0, lastAgeFromBrood: Int = 0): Bee = {
+    val currentAge = if(age > phenotype.longevity.expression) phenotype.longevity.expression else age
+    val fitValue: Double = Fitter.calculateFitValue(phenotype)(temperature)(pressure)(humidity)
+    BeeImpl(
+      genotype, phenotype, currentAge, Fitter.applyFitValue(fitValue)(phenotype.longevity.expression - currentAge)(_ * _),
+      Fitter.applyFitValue(fitValue)(phenotype.reproductionRate.expression)(_ * _),
+      Fitter.applyFitValue(fitValue)(phenotype.aggression.expression)(_ * _), canGenerate, lastAgeFromBrood)
   }
+
   /**
    * Trait that represents bee
    */
@@ -21,9 +28,19 @@ object Bee {
     val genotype: Genotype
     val phenotype: Phenotype
     val age: Int
-    val remainingDaysOfLife: Int
+    val effectiveLongevity: Int
+    val effectiveReproductionRate: Int
+    val effectiveAggression: Int
+    val canGenerate: Int
+    val lastAgeFromBrood: Int
+    def update(time: Int, temperature: Int, pressure: Int, humidity: Int): Bee = {
+      val canGenerate: Int = ((this.age - lastAgeFromBrood) / reproductionTime) * this.effectiveReproductionRate
+      Bee(this.genotype, this.phenotype, this.age + time, temperature, pressure, humidity, canGenerate,
+        if(canGenerate > 0) this.age else this.lastAgeFromBrood)
 
-    val isAlive: Boolean = this.remainingDaysOfLife > 0
+    }
+
+    val isAlive: Boolean = this.effectiveLongevity > 0
   }
 
   /**
@@ -33,12 +50,9 @@ object Bee {
    * @param phenotype phenotype of the bee
    */
   case class BeeImpl(override val genotype: Genotype, override val phenotype: Phenotype,
-                     override val age: Int, temperature: Int,
-                     pressure: Int, humidity: Int) extends Bee {
-
-    override lazy val remainingDaysOfLife: Int = calculateRemainingLife(this, temperature, pressure, humidity)
-
-
+                     override val age: Int, override val effectiveLongevity: Int,
+                     override val effectiveReproductionRate: Int, override val effectiveAggression: Int,
+                     override val canGenerate: Int, override val lastAgeFromBrood: Int) extends Bee {
   }
 
 }

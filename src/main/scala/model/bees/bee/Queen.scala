@@ -11,6 +11,7 @@ import scala.model.bees.phenotype.Phenotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.model.environment.matrix.Point
 import scala.util.Random
+import scala.model.bees.utility.PimpTuple._
 
 /**
  * Object that represents the queen bee
@@ -21,8 +22,14 @@ object Queen {
             genotype: Genotype, phenotype: Phenotype,
             age: Int, temperature: Int,
             pressure: Int, humidity: Int,
-            position: Point = (Random.nextInt(Ecosystem.width), Random.nextInt(Ecosystem.height))): Queen =
-    QueenImpl(colonyOpt, genotype, phenotype, age, temperature, pressure, humidity, position)
+            position: Point = (Random.nextInt(Ecosystem.width), Random.nextInt(Ecosystem.height))): Queen = {
+    val fitValue: Double = Fitter.calculateFitValue(phenotype)(temperature)(pressure)(humidity)
+
+    QueenImpl(colonyOpt, genotype, phenotype, age, Fitter.applyFitValue(fitValue)(phenotype.longevity.expression - age)(_ * _),
+      Fitter.applyFitValue(fitValue)(phenotype.reproductionRate.expression)(_ * _),
+      Fitter.applyFitValue(fitValue)(phenotype.aggression.expression)(_ * _),
+      temperature, pressure, humidity, position)
+  }
 
   /**
    * Trait for a queen
@@ -31,35 +38,31 @@ object Queen {
     val colony: Colony
     val position: Point
 
-    def move(): Unit
-
-    def generateBee()
   }
 
   private case class QueenImpl(colonyOpt: Option[Colony],
-                       override val genotype: Genotype, override val phenotype: Phenotype,
-                       override val age: Int, temperature: Int,  pressure: Int, humidity: Int,
-                               override val position: Point) extends Queen {
+                               override val genotype: Genotype, override val phenotype: Phenotype,
+                               override val age: Int, override val effectiveLongevity: Int, override val effectiveReproductionRate: Int,
+                               override val effectiveAggression: Int, private val temperature: Int, private val pressure: Int,
+                               private val humidity: Int, override val position: Point) extends Queen {
 
-    override val colony: Colony = colonyOpt getOrElse ColonyImpl(this, List.range(0, 30).map(_ => {
-      val similarGenotype = EvolutionManager.buildGenotype(this.genotype)(this.phenotype)(temperature)(pressure)(humidity)(1)
+    override val colony: Colony = colonyOpt getOrElse ColonyImpl(this, generateBee)
 
-      Bee(
-        similarGenotype,
-        Phenotype(Genotype.calculateExpression(similarGenotype)),
-        0,
-        temperature, pressure, humidity
-      )
-    }))
+    private def generateBee: Seq[Bee] = List.range(0, this.effectiveReproductionRate + 1)
+      .map(_ => {
+        val similarGenotype = EvolutionManager.buildGenotype(this.genotype)(this.phenotype)(this.phenotype.temperatureCompatibility
+          .expression.average)(this.phenotype.pressureCompatibility.expression.average)(this.phenotype.humidityCompatibility
+          .expression.average)(1)
+        Bee(
+          similarGenotype,
+          Phenotype(Genotype.calculateExpression(similarGenotype)),
+          0,
+          temperature, pressure, humidity
+        )
+      })
 
-
-    override def move(): Unit = ()
-
-    override def generateBee(): Unit = ()
-
-
-    override lazy val remainingDaysOfLife: Int = Bee.calculateRemainingLife(this, temperature, pressure, humidity)
-
+    override val canGenerate: Int = if (this.colony.bees.size < this.colony.maxBees) 1 else 0
+    override val lastAgeFromBrood: Int = this.age
   }
 
 }

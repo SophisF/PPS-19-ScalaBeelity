@@ -1,0 +1,6 @@
+Meeting di gruppo con analisi e sviluppo dei seguenti punti:
+
+- Design della sezione in Prolog, riguardante il movimento
+- Implementazione della teoria in Prolog
+- Testing del codice prodotto attraverso l'applicativo TuProlog
+- Integrazione della teoria sviluppata all'interno del progetto Scala, con l'utilizzo dell'engine di TuProlog

@@ -28,7 +28,7 @@ object SeasonalChart {
       Array(30, 31, 32, 33, 34, 35, 35, 34, 33, 32, 31, 30))
     ds.addSeries("Humidity", data1)
     val data2: Array[Array[Double]] = Array(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-      Array(1030, 1031, 1032, 1033, 1034, 1035, 1035, 1034, 1033, 1032, 1031, 1030))
+      Array(10.30, 10.31, 10.32, 10.33, 10.34, 10.35, 10.35, 10.34, 10.33, 10.32, 10.31, 10.30))
     ds.addSeries("Pressure", data2)
 
     ds

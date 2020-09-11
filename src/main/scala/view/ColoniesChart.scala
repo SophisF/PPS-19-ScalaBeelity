@@ -2,14 +2,11 @@ package view
 
 import java.awt.{Canvas, Color, Dimension, Graphics}
 
-abstract class ColoniesChart extends Canvas {
-
-}
-
-class ColoniesChartImpl extends ColoniesChart {
+object ColoniesChart extends Canvas {
 
   override def paint(g: Graphics): Unit = {
     //g.drawString("Hello",40,40);
+    g.setClip(0, 0, 300, 300)
     setBackground(Color.WHITE)
     setPreferredSize(new Dimension(200, 200))
     g.fillRect(130, 30, 100, 80)

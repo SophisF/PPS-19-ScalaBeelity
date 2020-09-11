@@ -30,28 +30,28 @@ object SwingGui extends App {
 
     val temperature = HeatmapChart.createChart()
     temperature.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Temperature", null, temperature, "Does nothing")
+    tabbedPane.addTab("Temperature", null, temperature)
     tabbedPane.setMnemonicAt(0, KeyEvent.VK_1)
 
     val panel2 = makeTextPanel("Panel #2")
     panel2.setPreferredSize(new Dimension(410, 50))
 
-    tabbedPane.addTab("Humidity", null, panel2, "Does twice as much nothing")
+    tabbedPane.addTab("Humidity", null, panel2)
     tabbedPane.setMnemonicAt(1, KeyEvent.VK_2)
 
     val panel3 = makeTextPanel("Panel #3")
     panel3.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Pressure", null, panel3, "Still does nothing")
+    tabbedPane.addTab("Pressure", null, panel3)
     tabbedPane.setMnemonicAt(2, KeyEvent.VK_3)
 
     val season = SeasonalChart.createChart
     season.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Seasonal Variation Diagram", null, season, "Does nothing at all")
+    tabbedPane.addTab("Seasonal Variation Diagram", null, season)
     tabbedPane.setMnemonicAt(3, KeyEvent.VK_4)
 
-    val colonies = new ColoniesChartImpl
+    val colonies = ColoniesChart
     colonies.setPreferredSize(new Dimension(200, 200))
-    tabbedPane.addTab("Colonies", null, colonies, "Does nothing at all")
+    tabbedPane.addTab("Colonies", null, colonies)
     tabbedPane.setMnemonicAt(4, KeyEvent.VK_5)
 
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)

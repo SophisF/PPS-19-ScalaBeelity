@@ -2,7 +2,7 @@ package model.prolog
 
 import java.io.FileInputStream
 
-import alice.tuprolog.{Prolog, SolveInfo, Struct, Term, Theory, Var}
+import alice.tuprolog._
 
 import scala.model.environment.EnvironmentManager
 
@@ -49,7 +49,7 @@ object MovementLogic {
 object TryScala2P extends App {
   import MovementLogic._
 
-  val environment = EnvironmentManager(1000, 1000)
+  var environment = EnvironmentManager(1000, 1000)
 
   val engine: Term => Iterable[SolveInfo] = mkPrologEngine(new Theory(new FileInputStream("src/main/scala/model/prolog/prolog.pl")))
 
@@ -57,17 +57,23 @@ object TryScala2P extends App {
   val rp = "range(980.0, 995.0)"
   val rh = "range(50.0, 80.0)"
 
-  val position = (100, 100)
-  val dimension = 10
+  val position = (980, 980)
+  val shift = 20
 
+  //TODO add the speed of the bees and the dimension of the colony.
   val cells = for {
-    i <- position._1 - dimension to position._1 + dimension
-    j <- position._2 - dimension to position._2 + dimension
+    i <- position._1 - shift to position._1 + shift
+    j <- position._2 - shift to position._2 + shift
+    if i < environment.environment.map.rows && j < environment.environment.map.cols
     cell = environment.environment.map.valueAt(i, j)
 
   } yield s"cell(${cell.temperature.toDouble}, ${cell.pressure.toDouble}, ${cell.humidity.toDouble}, position($i, $j))"
 
-  println(seqToTerm(cells))
+  val list: Term = cells
+
+  println(cells)
+
+
 
 
 
@@ -75,8 +81,10 @@ object TryScala2P extends App {
   //engine() foreach (println(_))
   // permutation([1,2,3],[1,2,3]) ... permutation([1,2,3],[3,2,1])
 
-  val input = new Struct("maxFit", "50.0", "range(20.0, 25.0)", new Var())
-  engine(input) map (extractTerm(_,2)) foreach (println(_))
+  val time = System.currentTimeMillis()
+  val input = new Struct("move", list, rt, rp, rh, new Var())
+  engine(input) map (extractTerm(_,4)) foreach (println(_))
+  println(System.currentTimeMillis() - time )
  // engine(input) map (extractTerm(_,1)) take 100 foreach (println(_))
   // [1,2,3,4,..,20] ... [1,2,..,15,20,16,18,19,17]
 

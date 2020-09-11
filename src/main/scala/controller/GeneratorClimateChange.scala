@@ -26,7 +26,7 @@ object GeneratorClimateChange {
   }
 
   def generateSeason(): Iterable[PropertySource] =
-  Property.values.toArray.map(SeasonalPropertySource).toIterable
+    Property.values.toArray.map(SeasonalPropertySource).toIterable
 
   /**
    *

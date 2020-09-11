@@ -5,9 +5,17 @@ import java.awt.event.KeyEvent
 
 import javax.swing._
 
+import scala.model.environment.EnvironmentManager
+
 
 object SwingGui extends App {
+  var environment = EnvironmentManager(20, 20)
 
+
+
+ println(environment.environment.map.data.
+    map(it => it.temperature.toDouble).
+    sliding(20, 20).toArray.map(_.mkString(""," ","")).mkString("","\n",""))
 
   protected def makeTextPanel(text: String) = {
     val panel = new JPanel(false)
@@ -29,14 +37,11 @@ object SwingGui extends App {
     val tabbedPane = new JTabbedPane
 
     HeatmapChart.createDataset(
-      Array(
-        Array(1.0, 2.0, 4.0, 1.0),
-        Array(6.0, 3.0, 5.0, 2.0),
-        Array(42.0, 22.0, 122.0, 52.0),
-        Array(5333.0, 433.0, 233.0, 33.0)
-      ),
-      Array(0.0, 1.0, 2.0, 3.0),
-      Array(0.0, 1.0, 2.0, 3.0)
+      environment.environment.map.data.
+        map(it => it.temperature.toDouble).
+        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray,
+      (0 to environment.environment.map.cols ).map(_.toDouble).toArray,
+      (0 to environment.environment.map.rows).map(_.toDouble).toArray,
     )
     val temperature = HeatmapChart.createChart()
     temperature.setPreferredSize(new Dimension(410, 50))

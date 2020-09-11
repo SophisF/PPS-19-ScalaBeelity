@@ -5,7 +5,7 @@ package scala.model
  */
 object Time {
   private var _time: Int = 0
-  private var _incrementValue: Int = 0
+  private var _incrementValue: Int = 1
 
 
   /**

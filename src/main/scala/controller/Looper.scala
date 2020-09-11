@@ -49,8 +49,7 @@ object Looper {
       case 0 => environment
       case _ => {
         val env = evolution(environment)
-        //if (iterations % 100 == 0) plot(env.environment)
-        println(iterations)
+        if (iterations % 50 == 0) plot(env.environment)
         Time.increment()
         //colonies.update(time, env)
         loop(env, iterations - 1)
@@ -58,8 +57,6 @@ object Looper {
     }
 
     loop(environmentManager, iterations)
-
-    plot(environmentManager.environment)
   }
 
 

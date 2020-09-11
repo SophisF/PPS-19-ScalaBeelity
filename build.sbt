@@ -4,16 +4,16 @@ version := "0.1"
 
 scalaVersion := "2.13.3"
 
-<<<<<<< HEAD
 libraryDependencies ++= Seq(
 
   "org.jfree" % "jfreechart" % "1.0.14",
 
-// https://mvnrepository.com/artifact/org.openjfx/javafx-base
+  // https://mvnrepository.com/artifact/org.openjfx/javafx-base
   "org.openjfx" % "javafx-base" % "16-ea+1",
 
   // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
   "org.openjfx" % "javafx-controls" % "16-ea+1",
+
 
   // https://mvnrepository.com/artifact/org.openjfx/javafx-graphics
   "org.openjfx" % "javafx-graphics" % "16-ea+1",
@@ -40,10 +40,8 @@ libraryDependencies ++= Seq(
 
   "com.github.haifengl" % "smile-graph" % "2.5.1",
 
-  "com.github.haifengl" %% "smile-scala" % "2.5.1"
-)
-=======
-libraryDependencies  ++= Seq(
+  "com.github.haifengl" %% "smile-scala" % "2.5.1",
+
   // Last stable release
   "org.scalanlp" %% "breeze" % "1.1",
 
@@ -60,4 +58,3 @@ libraryDependencies  ++= Seq(
 )
 
 scalacOptions ++= Seq("-language:postfixOps")
->>>>>>> develop

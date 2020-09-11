@@ -28,6 +28,16 @@ object SwingGui extends App {
     frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit.getScreenSize.width, Toolkit.getDefaultToolkit.getScreenSize.width))
     val tabbedPane = new JTabbedPane
 
+    HeatmapChart.createDataset(
+      Array(
+        Array(1.0, 2.0, 4.0, 1.0),
+        Array(6.0, 3.0, 5.0, 2.0),
+        Array(42.0, 22.0, 122.0, 52.0),
+        Array(5333.0, 433.0, 233.0, 33.0)
+      ),
+      Array(0.0, 1.0, 2.0, 3.0),
+      Array(0.0, 1.0, 2.0, 3.0)
+    )
     val temperature = HeatmapChart.createChart()
     temperature.setPreferredSize(new Dimension(410, 50))
     tabbedPane.addTab("Temperature", null, temperature)

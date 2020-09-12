@@ -4,6 +4,10 @@ version := "0.1"
 
 scalaVersion := "2.13.3"
 
+scalaSource in Test := baseDirectory.value / "src" / "test"
+
+scalaSource in Compile := baseDirectory.value / "src" / "main"
+
 libraryDependencies  ++= Seq(
   // Last stable release
   "org.scalanlp" %% "breeze" % "1.1",
@@ -20,5 +24,6 @@ libraryDependencies  ++= Seq(
 
   // https://mvnrepository.com/artifact/org.scalatest/scalatest
   "org.scalatest" %% "scalatest" % "3.2.0" % Test
-
 )
+
+scalacOptions ++= Seq("-language:postfixOps")

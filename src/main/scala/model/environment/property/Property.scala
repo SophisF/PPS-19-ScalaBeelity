@@ -1,5 +1,7 @@
 package scala.model.environment.property
 
+import breeze.linalg.DenseMatrix
+
 /**
  * Represent an environmental property.
  * It can be both a quantitative one (e.g., temperature, pressure),
@@ -14,13 +16,6 @@ trait Property {
   type ValueType
 
   /**
-   * Default property state
-   *
-   * @return the default property state
-   */
-  def default: ValueType
-
-  /**
    * Represent the state of a property
    */
   trait State {
@@ -29,10 +24,14 @@ trait Property {
      *
      * @return the value of the state
      */
-    def value: ValueType = default
+    def value: ValueType
+
+    def numericRepresentation: Int
   }
 
   trait Variation {
     def vary[S <: State](state: S): State
   }
+
+  def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[Variation]
 }

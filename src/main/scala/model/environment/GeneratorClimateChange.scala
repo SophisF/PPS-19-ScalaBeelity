@@ -3,7 +3,6 @@ package scala.model.environment
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.matrix.Size
-import scala.model.environment.property.realization.{HumidityPropertyHelper, PressurePropertyHelper, TemperaturePropertyHelper}
 import scala.model.environment.property.{Property, PropertyType}
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
 import scala.util.Random
@@ -32,9 +31,9 @@ object GeneratorClimateChange {
    * @return
    */
   private def randomContinuousFilter(environmentSize: Size, iterations: Int): ContinuousSource[Property] = {
-    val filter = PropertyType.random().helper.generateInstantaneousFilter(70,70)
+    val filter = PropertyType.random()().generateFilter(70,70)
 
-    ContinuousSource(filter.asInstanceOf[DenseMatrix[Property#Variation]], Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), filter.cols,
-      filter.rows, 0, iterations)
+    ContinuousSource(filter.asInstanceOf[DenseMatrix[Property#Variation]], Random.nextInt(environmentSize.width),
+      Random.nextInt(environmentSize.height), filter.cols, filter.rows, 0, iterations)
   }
 }

@@ -1,5 +1,6 @@
 package scala.controller
 
+import scala.annotation.tailrec
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model.environment.matrix.Matrix.DroppableMatrix
 import scala.model.environment.{Environment, EnvironmentManager, GeneratorClimateChange}
@@ -31,7 +32,7 @@ object Looper {
 
     //environmentManager = GeneratorClimateChange.generateSeason().foldLeft(environmentManager)(addSource)
 
-    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
+    /*Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
 
       environmentManager = evolution(environmentManager)
 
@@ -40,23 +41,22 @@ object Looper {
       Time increment updateStep
     })
 
+    plot(environmentManager.environment)*/
+
     //TODO: Da sostituire con Ecosystem
-    /*@tailrec
+    @tailrec
     def loop(environment: EnvironmentManager.EnvironmentManager, iterations: Int): EnvironmentManager.EnvironmentManager = iterations match {
       case x if x <= 0 => environment
-      case _ => {
+      case _ =>
         val env = evolution(environment)
-        //if (iterations % 100 == 0) plot(env.environment)
-        //println(iterations)
+        if (iterations == 500) plot(env.environment)
+
         Time.increment(updateStep)
         //colonies.update(time, env)
         loop(env, iterations - updateStep)
-      }
-    }*/
+    }
 
-    //loop(environmentManager, iterations)
-
-    plot(environmentManager.environment)
+    plot(loop(environmentManager, iterations).environment)
   }
 
   /**
@@ -64,8 +64,8 @@ object Looper {
    *
    * @param environment to plot
    */
-  private def plot(environment: Environment): Unit = PropertyType.properties.foreach(property => View.plot(
-    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(cell => property.helper.percentage(cell(property))),
-    s"${property.toString}"
-  ))
+  private def plot(environment: Environment): Unit = PropertyType.properties.foreach(property =>
+    View.plot(environment.map.dropColumns(0.5).dropRows(0.5)
+      .mapValues(cell => cell(property).numericRepresentation.toDouble), s"${property.toString}")
+  )
 }

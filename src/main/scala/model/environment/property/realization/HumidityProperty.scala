@@ -1,14 +1,12 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.Range
-
-sealed trait HumidityProperty extends IntegerProperty with Range {
-  trait HumidityState extends State
+sealed trait HumidityProperty extends RangedIntegerProperty {
+  trait HumidityState extends RangedIntegerState
   trait HumidityVariation extends Variation
 }
 
 object HumidityProperty extends HumidityProperty {
-  override val default: Int = 10
+  val default: Int = 10
   override val maxValue: Int = 100
   override val minValue: Int = 0
 

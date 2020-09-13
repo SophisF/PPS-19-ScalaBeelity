@@ -47,16 +47,15 @@ object Looper {
     @tailrec
     def loop(environment: EnvironmentManager, iterations: Int): EnvironmentManager = iterations match {
       case 0 => environment
-      case _ => {
+      case _ =>
         val env = evolution(environment)
-        if (iterations % 50 == 0) plot(env.environment)
-        Time.increment()
+        if (iterations == 500) plot(env.environment)
+        Time.increment(updateStep)
         //colonies.update(time, env)
-        loop(env, iterations - 1)
-      }
+        loop(env, iterations - updateStep)
     }
 
-    loop(environmentManager, iterations)
+    plot(loop(environmentManager, iterations).environment)
   }
 
 

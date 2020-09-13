@@ -57,4 +57,4 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.0" % Test
 )
 
-scalacOptions ++= Seq("-language:postfixOps")
+scalacOptions ++= Seq("-language:postfixOps", "-language:implicitConversions")

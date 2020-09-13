@@ -1,6 +1,7 @@
 package scala.model.environment.property
 
-import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
+import scala.model.environment.property.realization._
+import scala.util.Random
 
 /**
  * Enumeration of all the possible property types
@@ -15,7 +16,7 @@ object PropertyType extends Enumeration {
    * @param property instantiated object
    * @tparam T type of property
    */
-  case class PropertyTypeValue[T <: Property] private (property: T) extends Val() {
+  case class PropertyValue[T <: Property] private(property: T, helper: PropertyHelper[T]) extends Val() {
 
     /**
      * Allow to get the property value directly without access the 'property' field
@@ -25,7 +26,11 @@ object PropertyType extends Enumeration {
     def apply(): T = property
   }
 
-  val Temperature: PropertyTypeValue[TemperatureProperty] = PropertyTypeValue(TemperatureProperty)
-  val Humidity: PropertyTypeValue[HumidityProperty] = PropertyTypeValue(HumidityProperty)
-  val Pressure: PropertyTypeValue[PressureProperty] = PropertyTypeValue(PressureProperty)
+  val Temperature: PropertyValue[TemperatureProperty] = PropertyValue(TemperatureProperty, TemperaturePropertyHelper)
+  val Humidity: PropertyValue[HumidityProperty] = PropertyValue(HumidityProperty, HumidityPropertyHelper)
+  val Pressure: PropertyValue[PressureProperty] = PropertyValue(PressureProperty, PressurePropertyHelper)
+
+  def properties: Seq[PropertyValue[Property]] = super.values.toSeq.asInstanceOf[Seq[PropertyValue[Property]]]
+
+  def random(): PropertyValue[Property] = properties.toIndexedSeq(Random.nextInt(values.size))
 }

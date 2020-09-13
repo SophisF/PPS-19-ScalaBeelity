@@ -29,6 +29,7 @@ object View {
    * @param map to plot
    */
   def plot(map: DenseMatrix[Double], name: String = i toString): Unit = {
+    println(map.data.min + " " + map.data.max)
     (Figure_.subplot(i / Figure_.cols + 1, PropertyType.values.size, i) += image(map, GradientPaintScale(0, 100,
       ColorGradient.toArray))).title = name
     i += 1

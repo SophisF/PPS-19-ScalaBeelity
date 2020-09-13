@@ -4,6 +4,7 @@ import scala.util.Random
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.FilterBuilder
+import scala.model.environment.property.realization.HumidityProperty._
 
 object HumidityPropertyHelper extends IntegerPropertyHelper[HumidityProperty] {
 
@@ -15,6 +16,8 @@ object HumidityPropertyHelper extends IntegerPropertyHelper[HumidityProperty] {
    * @return the gaussian filter
    */
   override def generateInstantaneousFilter(width: Int, height: Int): DenseMatrix[HumidityProperty#Variation] = FilterBuilder
-    .gaussianFunction3d(Random.between(HumidityProperty.minValue +1, HumidityProperty.maxValue +1), 1, width, height)
-    .mapValues(it => HumidityProperty.variation(it).asInstanceOf[HumidityProperty#Variation])
+    .gaussianFunction3d(Random.between(minValue +1, maxValue +1), 1, width, height)
+    .mapValues(it => variation(it).asInstanceOf[HumidityProperty#Variation])
+
+  override def percentage(state: HumidityProperty#State): Double = (state.value - minValue) * 100 / (maxValue - minValue)
 }

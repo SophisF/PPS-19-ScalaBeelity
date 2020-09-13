@@ -12,7 +12,7 @@ object HumidityProperty extends HumidityProperty {
   override val maxValue: Int = 100
   override val minValue: Int = 0
 
-  implicit def state(_value: Int): HumidityState = new HumidityState { override val value: Int = _value }
+  implicit def state(_value: Int): HumidityState = new HumidityState { override val value: Int = limit(_value) }
 
   implicit def variation(_value: Int): HumidityVariation = new HumidityVariation {
     override def vary[S <: State](_state: S): HumidityState = state(_state.value + _value)

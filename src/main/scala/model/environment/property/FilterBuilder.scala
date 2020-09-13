@@ -22,12 +22,12 @@ object FilterBuilder {
    * @param decrementRate influences the 'width' of the function. The greater it is, the more the values descent slowly
    * @return the right side (from the center) of a 2d gaussian curve
    */
-  def positive2dGaussianFunction(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterator[Double] =
-    peak * stop match {
-      case signedResult if signedResult < 0 => Iterator.empty
-      case _ => Iterator.iterate(0)(it => it + 1)
-        .map(it => peak * exp( (it * it) / -(2.0 * decrementRate * decrementRate) )).takeWhile(it => it.abs >= stop.abs)
-    }
+  def positive2dGaussianFunction(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] = {
+    val ranges = correctRanges(peak, stop)
+    readjustRanges(peak, stop, Iterator.iterate(0)(_ + 1)
+      .map(it => ranges._1 * exp( (it * it) / -(2.0 * decrementRate * decrementRate) ))
+      .takeWhile(_.abs >= ranges._2.abs).toArray)
+  }
 
   /**
    * Calculate influence descent through use of a gaussian function (See
@@ -39,8 +39,8 @@ object FilterBuilder {
    * @param decrementRate influences the 'width' of the function. The greater it is, the more the values descent slowly
    * @return the 2d gaussian function
    */
-  def gaussianFunction2d(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterator[Double] =
-    positive2dGaussianFunction(peak, stop, decrementRate).toArray.reverseIterator.mirror(false)
+  def gaussianFunction2d(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] =
+    positive2dGaussianFunction(peak, stop, decrementRate).toArray.reverseIterator.mirror(false).toArray
 
   /**
    * Build a matrix representing the 3d gaussian function
@@ -54,12 +54,31 @@ object FilterBuilder {
    *               The greater it is, the higher the filter become (values descent slowly)
    * @return the 3d gaussian filter
    */
-  def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1)
-  : DenseMatrix[Double] = peak match {
-    case peak if peak < -1 || peak > 1 => (
-        DenseVector(positive2dGaussianFunction(peak, stop, height) toArray) *
-        DenseVector(positive2dGaussianFunction(peak, stop, width) map(_ / peak) toArray).t
-      ).mirrorX(false).mirrorY(false)
-    case _ => DenseMatrix.create(0, 0, Array.empty)
+  def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] = {
+    val ranges = correctRanges(peak, stop)
+    ranges._1.abs match {
+      case 0 => DenseMatrix.create(0, 0, Array.empty)
+      case _ => (
+          DenseVector(positive2dGaussianFunction(ranges._1, ranges._2, height) toArray) *
+          DenseVector(positive2dGaussianFunction(ranges._1, ranges._2, width) map(_ / ranges._1) toArray).t
+        ).map(_ + stop + ranges._2).mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
+    }
   }
+
+  def correctRanges(peak: Int, stop: Int): (Int, Int) =
+    concordantSign(peak, stop, (_1, _2) => (_1 - _2, 0), (_1, _2) => (_1, _2)) match {
+      case t if t._2 == 0 => (t._1 + math.signum(t._1) * 1, t._2 + math.signum(t._1) * 1)
+      case t => t
+    }
+
+  def readjustRanges(peak: Int, stop: Int, iterator: Iterable[Double]): Iterable[Double] = {
+    val t = correctRanges(peak, stop)
+    iterator.map(_ + stop - t._2)
+  }
+
+  def concordantSign[T](value1: Int, value2: Int, discordant: (Int, Int) => T, concordant: (Int, Int) => T): T =
+    value1 * value2 match {
+      case signedResult if signedResult < 0 => discordant(value1, value2)
+      case _ => concordant(value1, value2)
+    }
 }

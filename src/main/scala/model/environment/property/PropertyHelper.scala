@@ -14,4 +14,6 @@ import scala.model.environment.time.FiniteData
 trait PropertyHelper[T <: Property] {
 
   def generateInstantaneousFilter(width: Int, height: Int): DenseMatrix[T#Variation]
+
+  def percentage(state: T#State): Double
 }

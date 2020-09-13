@@ -15,7 +15,7 @@ object TemperatureProperty extends TemperatureProperty {
   override val maxValue: Int = 50
   override val minValue: Int = -50
 
-  implicit def state(_value: Int): TemperatureState = new TemperatureState { override val value: Int = _value }
+  implicit def state(_value: Int): TemperatureState = new TemperatureState { override val value: Int = limit(_value) }
 
   implicit def variation(_value: Int): TemperatureVariation = new TemperatureVariation {
     override def vary[S <: State](_state: S): TemperatureState = state(_state.value + _value)

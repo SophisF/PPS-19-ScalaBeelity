@@ -4,7 +4,8 @@ import scala.model.environment.property.realization.HumidityProperty.HumidityVar
 import scala.model.environment.property.realization.PressureProperty.PressureVariation
 import scala.model.environment.property.realization.TemperatureProperty.TemperatureVariation
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
-import scala.model.environment.property.{Property, PropertyType}
+import scala.model.environment.property.Property
+import scala.model.environment.property.PropertyType.PropertyValue
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
 
 /**
@@ -17,16 +18,16 @@ import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temper
  * @author Paolo Baldini
  */
 case class Cell(
-  temperature: TemperatureProperty.State = 6,
-  humidity: HumidityProperty.State = 6,
-  pressure: PressureProperty.State = 6
+  temperature: TemperatureProperty.State = TemperatureProperty.default,
+  humidity: HumidityProperty.State = HumidityProperty.default,
+  pressure: PressureProperty.State = PressureProperty.default
 ) {
 
-  def apply(property: PropertyType.Value): Property#State = (property match {
+  def apply(property: PropertyValue[_]): Property#State = property match {
     case Temperature => temperature
     case Humidity => humidity
     case Pressure => pressure
-  }).asInstanceOf[Property#State]
+  }
 
   def +(variation: Property#Variation): Cell = variation match {
     case v: TemperatureVariation => Cell(v vary temperature, humidity, pressure)

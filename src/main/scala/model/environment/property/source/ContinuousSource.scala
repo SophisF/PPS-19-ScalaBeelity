@@ -11,10 +11,6 @@ case class ContinuousSource[T <: Property](
   width: Int, height: Int,
   fireTime: Time = Time.now(),
   daysDuration: Int
-)(
-  implicit _percentage: (T#ValueType, Int) => T#ValueType
 ) extends ZoneSource[T] with FiniteData[DenseMatrix[T#Variation]] {
   override var evaluated: Int = 0
-
-  def percentage: (T#ValueType, Int) => T#ValueType = _percentage
 }

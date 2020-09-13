@@ -64,8 +64,8 @@ object Looper {
    *
    * @param environment to plot
    */
-  private def plot(environment: Environment): Unit = PropertyType.values.foreach(property => View.plot(
-    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(cell => cell(property).value.asInstanceOf[Int].toDouble),
+  private def plot(environment: Environment): Unit = PropertyType.properties.foreach(property => View.plot(
+    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(cell => property.helper.percentage(cell(property))),
     s"${property.toString}"
   ))
 }

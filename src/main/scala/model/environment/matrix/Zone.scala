@@ -1,5 +1,7 @@
 package scala.model.environment.matrix
 
+import scala.model.environment.matrix.Size.Border._
+
 trait Zone extends Point with Size
 
 /**
@@ -16,8 +18,8 @@ object Zone {
    * @param border left, right, top, bottom
    * @return coordinate of the border in one axis. E.g., left/right on X axis, top/bottom on Y axis
    */
-  def border(zone: Zone)(border: Size.Border): Int = border match {
-    case Size.Top | Size.Bottom => zone.y + zone ~ border
+  def border(zone: Zone)(border: Border): Int = border match {
+    case Top | Bottom => zone.y + zone ~ border
     case _ => zone.x + zone ~ border
   }
 
@@ -29,6 +31,6 @@ object Zone {
    * @param zone of which check membership
    * @return true if the point is contained in the zone, false otherwise
    */
-  def in(x: Int, y: Int, zone: Zone): Boolean = x >= border(zone)(Size.Left) && x <= border(zone)(Size.Right) &&
-      y >= border(zone)(Size.Top) && y <= border(zone)(Size.Bottom)
+  def in(x: Int, y: Int, zone: Zone): Boolean = x >= border(zone)(Left) && x <= border(zone)(Right) &&
+      y >= border(zone)(Top) && y <= border(zone)(Bottom)
 }

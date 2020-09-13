@@ -60,12 +60,12 @@ class FilterBuilderTest extends AnyFunSuite {
 
   test(s"$GF2 should always return an odd number of values") {
     val result = gaussianFunction2d(50, 1, 10)
-    assert(result.length % 2 > 0)
+    assert(result.size % 2 > 0)
   }
 
   test(s"$GF2 should always return a center-mirrored filter") {
     val result = gaussianFunction2d(50, 1, 10)
-    assert(result.take(result.length -1 / 2) sameElements result.drop(result.length -1 / 2 +1).toArray.reverse)
+    assert(result.take(result.size -1 / 2) sameElements result.drop(result.size -1 / 2 +1).toArray.reverse)
   }
 
   test(s"$GF3 with specific parameters should return a fixed sequence") {

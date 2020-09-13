@@ -1,8 +1,10 @@
 package scala.model.environment
 
+import breeze.linalg.DenseMatrix
+
 import scala.model.environment.matrix.Size
-import scala.model.environment.property.realization.HumidityPropertyHelper
-import scala.model.environment.property.Property
+import scala.model.environment.property.realization.{HumidityPropertyHelper, PressurePropertyHelper, TemperaturePropertyHelper}
+import scala.model.environment.property.{Property, PropertyType}
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
 import scala.util.Random
 
@@ -29,10 +31,10 @@ object GeneratorClimateChange {
    * @param iterations
    * @return
    */
-  private def randomContinuousFilter[T <: Property](environmentSize: Size, iterations: Int): ContinuousSource[T] = {
-    val filter = HumidityPropertyHelper.generateInstantaneousFilter(70, 70)
+  private def randomContinuousFilter(environmentSize: Size, iterations: Int): ContinuousSource[Property] = {
+    val filter = PropertyType.random().helper.generateInstantaneousFilter(70,70)
 
-    ContinuousSource(filter, Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), filter.cols,
-      filter.rows, 0, iterations)((value, percentage) => value * percentage / 100).asInstanceOf[ContinuousSource[T]]
+    ContinuousSource(filter.asInstanceOf[DenseMatrix[Property#Variation]], Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), filter.cols,
+      filter.rows, 0, iterations)
   }
 }

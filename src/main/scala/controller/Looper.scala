@@ -28,7 +28,6 @@ object Looper {
 
     plot(environmentManager.environment)
 
-
     environmentManager = GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations)
       .foldLeft(environmentManager)(addSource)
 

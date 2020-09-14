@@ -45,7 +45,12 @@ object Matrix {
      * @return mirrored matrix
      */
     def mirrorX(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], zero: Zero[T]): Matrix[T] =
-      DenseMatrix.horzcat(matrix.flipX(mirrorCenter), matrix)
+      matrix.cols match {
+        case 1 if mirrorCenter => DenseMatrix.create(matrix.rows, 2, matrix.data.map(it => it :: it :: Nil)
+          .reduce((_1, _2) => _1 appendedAll _2) toArray)
+        case 1 => matrix
+        case _ => DenseMatrix.horzcat(matrix.flipX(mirrorCenter), matrix)
+      }
 
     /**
      * Mirror matrix on vertical axis
@@ -53,8 +58,12 @@ object Matrix {
      * @param mirrorCenter flip also center row or drop it
      * @return mirrored matrix
      */
-    def mirrorY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], zero: Zero[T]): Matrix[T] =
-      DenseMatrix.vertcat(matrix.flipY(mirrorCenter), matrix)
+    def mirrorY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] =
+      matrix.rows match {
+        case 1 if mirrorCenter => DenseMatrix.create(2, matrix.cols, matrix.data.appendedAll(matrix.data))
+        case 1 => matrix
+        case _ => DenseMatrix.vertcat(matrix.flipY(mirrorCenter), matrix)
+      }
 
     /**
      * Flip matrix on horizontal axis
@@ -62,9 +71,11 @@ object Matrix {
      * @param mirrorCenter flip also center column or drop it
      * @return flipped matrix
      */
-    def flipX(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T]): Matrix[T] = new DenseMatrix(matrix.rows,
-      if (mirrorCenter) matrix.cols else matrix.cols - 1, matrix.data.grouped(matrix.rows)
-        .drop(if (mirrorCenter) 0 else 1).reduce((_1, _2) => _2.appendedAll(_1)))
+    def flipX(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] = matrix.cols match {
+      case 1 => if (mirrorCenter) matrix else DenseMatrix.create(0, 0, Array.empty)
+      case _ => DenseMatrix.create(matrix.rows, matrix.cols - (if (mirrorCenter) 0 else 1), matrix.data
+        .grouped(matrix.cols).map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
+    }
 
     /**
      * Flip matrix on vertical axis
@@ -72,9 +83,12 @@ object Matrix {
      * @param mirrorCenter flip also center row or drop it
      * @return flipped matrix
      */
-    def flipY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T]): Matrix[T] =
-      new DenseMatrix(if (mirrorCenter) matrix.rows else matrix.rows - 1, matrix.cols, matrix.data.grouped(matrix.rows)
-        .map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
+    def flipY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] = matrix.rows match {
+      case 1 if mirrorCenter => matrix
+      case 1 => DenseMatrix.create(0, 0, Array.empty)
+      case _ => DenseMatrix.create(matrix.rows - (if (mirrorCenter) 0 else 1), matrix.cols,
+        matrix.data.grouped(matrix.cols).drop(if (mirrorCenter) 0 else 1).reduce((_1, _2) => _2.appendedAll(_1)))
+    }
   }
 
   implicit class ParallelMatrix[T](matrix: Matrix[T]) {

@@ -25,7 +25,7 @@ object Looper {
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
 
-    plot(environmentManager.environment)
+    //plot(environmentManager.environment)
 
     environmentManager = GeneratorClimateChange.generateClimate((environmentSize._1, environmentSize._2), iterations)
       .foldLeft(environmentManager)(addSource)

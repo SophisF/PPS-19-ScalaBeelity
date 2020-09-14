@@ -1,7 +1,7 @@
 package scala.model.environment
 
 import scala.model.environment.property.Property
-import scala.model.environment.property.source.{ContinuousSource, InstantaneousSource, PropertySource, SeasonalSource, ZoneSource}
+import scala.model.environment.property.source.{ContinuousSource, Source, PropertySource, SeasonalSource, ZoneSource}
 import scala.model.environment.time.Timed.isEnded
 
 object EnvironmentManager {
@@ -41,7 +41,7 @@ object EnvironmentManager {
         .groupMap(_ _1)(_ _2)),//manager.propertySources.foldLeft(manager.environment)((x, y) => Environment.apply(x, y)),*/
       manager.propertySources.filter {
         case _: SeasonalSource[_] => true
-        case _: InstantaneousSource[_] => false
+        case _: Source[_] => false
         case p: ContinuousSource[_] => !isEnded(p)
       }
     )

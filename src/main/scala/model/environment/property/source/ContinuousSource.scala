@@ -2,15 +2,17 @@ package scala.model.environment.property.source
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.environment.property.Property
-import scala.model.environment.time.{FiniteData, Time}
+import scala.model.environment.property.TimedProperty
+import scala.model.environment.time.{Time, Timed}
 
-case class ContinuousSource[T <: Property](
-  filter: DenseMatrix[T#Variation],
-  x: Int, y: Int,
-  width: Int, height: Int,
-  fireTime: Time = Time.now(),
-  daysDuration: Int
-) extends ZoneSource[T] with FiniteData[DenseMatrix[T#Variation]] {
-  override var evaluated: Int = 0
+class ContinuousSource[T <: TimedProperty] (
+  private val completeFilter: DenseMatrix[T#TimedVariation],
+  val x: Int, val y: Int,
+  val daysDuration: Int,
+  val fireTime: Time = Time.now()
+) extends ZoneSource[T] with Timed {
+  val width: Int = filter.cols
+  val height: Int = filter.rows
+
+  def filter: DenseMatrix[T#Variation] = completeFilter.mapValues(_.instantaneous(Time.now()))
 }

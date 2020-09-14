@@ -2,7 +2,8 @@ package scala.model.environment.property.realization
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.environment.property.{FilterBuilder, Property, Range}
+import scala.model.environment.property.{FilterBuilder, Range, TimedProperty}
+import scala.model.environment.time.Time
 import scala.util.Random
 
 /**
@@ -10,7 +11,7 @@ import scala.util.Random
  *
  * @author Paolo Baldini
  */
-trait RangedIntegerProperty extends Property with Range {
+trait IntegerProperty extends TimedProperty with Range {
   override type ValueType = Int
 
   trait RangedIntegerState extends State {
@@ -19,9 +20,16 @@ trait RangedIntegerProperty extends Property with Range {
 
   def variation(value: Int): Variation
 
-  override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[Variation] = FilterBuilder
+  override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[Variation] =
+    filter(xDecrement, yDecrement).map(variation(_))
+
+  def timedVariation(value: Int, start: Time, duration: Time): TimedVariation
+
+  override def generateTimedFilter(xDecrement: Int, yDecrement: Int, start: Time, duration: Time)
+  : DenseMatrix[TimedVariation] = filter(xDecrement, yDecrement).map(timedVariation(_, start, duration))
+
+  private def filter(xDecrement: Int, yDecrement: Int): DenseMatrix[Double] = FilterBuilder
     .gaussianFunction3d((minValue to maxValue).filter(_ != 0)(Random.nextInt(5)), 1, xDecrement, yDecrement)
-    .mapValues(variation(_))
 
   /**
    * Convert generic numeric value (e.g. Double, Float) to ValueType (Int)

@@ -54,16 +54,15 @@ object FilterBuilder {
    *               The greater it is, the higher the filter become (values descent slowly)
    * @return the 3d gaussian filter
    */
-  def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] = {
-    val ranges = correctRanges(peak, stop)
-    ranges._1.abs match {
-      case 0 => DenseMatrix.create(0, 0, Array.empty)
-      case _ => (
-          DenseVector(positive2dGaussianFunction(ranges._1, ranges._2, height) toArray) *
-          DenseVector(positive2dGaussianFunction(ranges._1, ranges._2, width) map(_ / ranges._1) toArray).t
-        ).map(_ + stop + ranges._2).mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
+  def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] =
+    correctRanges(peak, stop) match {
+      case (peak, _) if peak.abs == 0 => DenseMatrix.create(0, 0, Array.empty)
+      case (_peak, _stop) => val matrix = (DenseVector(positive2dGaussianFunction(_peak, _stop, height) toArray) *
+          DenseVector(positive2dGaussianFunction(_peak, _stop, width) map(_ / _peak) toArray).t)
+        println(matrix.cols + " " + matrix.rows)
+        matrix.map(_ + stop + _stop)
+        .mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
     }
-  }
 
   def correctRanges(peak: Int, stop: Int): (Int, Int) =
     concordantSign(peak, stop, (_1, _2) => (_1 - _2, 0), (_1, _2) => (_1, _2)) match {

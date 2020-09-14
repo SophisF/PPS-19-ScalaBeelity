@@ -1,8 +1,10 @@
 package scala.model.environment.property.realization
+import scala.model.environment.time.Time
 
-sealed trait HumidityProperty extends RangedIntegerProperty {
+sealed trait HumidityProperty extends IntegerProperty {
   trait HumidityState extends RangedIntegerState
   trait HumidityVariation extends Variation
+  trait HumidityTimedVariation extends TimedVariation
 }
 
 object HumidityProperty extends HumidityProperty {
@@ -15,6 +17,9 @@ object HumidityProperty extends HumidityProperty {
   implicit def variation(_value: Int): HumidityVariation = new HumidityVariation {
     override def vary[S <: State](_state: S): HumidityState = state(_state.value + _value)
   }
+
+  implicit def timedVariation(value: Int, start: Time, duration: Time): HumidityTimedVariation =
+    (instant: Time) => (instant - start) / duration * 100 * value
   /*
   override implicit def instantValue(time: Int): Int = maxValue * Math.sin(time % 365) toInt
 

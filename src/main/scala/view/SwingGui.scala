@@ -3,15 +3,19 @@ package view
 import java.awt._
 
 import javax.swing._
+import model.StatisticalData.{StatisticalData, updateStats}
 
 import scala.controller.GeneratorClimateChange
 import scala.model.Time
 import scala.model.environment.EnvironmentManager
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.property.Property.Property
 
 
 object SwingGui extends App {
+  Time.initialize()
   var environment = GeneratorClimateChange.generateClimate(200, 200, 10).foldLeft(EnvironmentManager(200, 200))(addSource)
+  var statisticalData = StatisticalData(environment.environment.map, Seq.empty[(Property, Array[Double])], Time.time)
 
   protected def makeTextPanel(text: String) = {
     val panel = new JPanel(false)
@@ -32,36 +36,46 @@ object SwingGui extends App {
       frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit.getScreenSize.width, Toolkit.getDefaultToolkit.getScreenSize.width))
       val tabbedPane = new JTabbedPane
 
-      Time.increment(1)
+      Time.increment(30)
       environment = evolution(environment)
+      statisticalData = updateStats(environment, statisticalData)
+      Time.increment(30)
+      environment = evolution(environment)
+      statisticalData = updateStats(environment, statisticalData)
+      Time.increment(20)
+      environment = evolution(environment)
+      statisticalData = updateStats(environment, statisticalData)
+      Time.increment(10)
+      environment = evolution(environment)
+      statisticalData = updateStats(environment, statisticalData)
+      Time.increment(40)
+      environment = evolution(environment)
+      statisticalData = updateStats(environment, statisticalData)
 
+      println(statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2))))
 
       //TODO: Modificare tipo generico Array[Array[Double]] in Matrix
       val temperature = new HeatmapChart[Array[Array[Double]]]
-      val temperatureChart = temperature.createChart(environment.environment.map.data.
-        map(it => it.temperature.toDouble).
-        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray)
+      val temperatureChart = temperature.createChart(statisticalData.temperatureMatrix())
       temperatureChart.setPreferredSize(new Dimension(410, 50))
       tabbedPane.addTab("Temperature", null, temperatureChart)
 
       val humidity = new HeatmapChart[Array[Array[Double]]]
-      val humidityChart = humidity.createChart(environment.environment.map.data.
-        map(it => it.humidity.toDouble).
-        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray)
+      val humidityChart = humidity.createChart(statisticalData.humidityMatrix())
       humidityChart.setPreferredSize(new Dimension(410, 50))
       tabbedPane.addTab("Humidity", null, humidityChart)
 
       val pressure = new HeatmapChart[Array[Array[Double]]]
-      val pressureChart = pressure.createChart(environment.environment.map.data.
-        map(it => it.pressure.toDouble).
-        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray)
+      val pressureChart = pressure.createChart(statisticalData.pressureMatrix())
       pressureChart.setPreferredSize(new Dimension(410, 50))
       tabbedPane.addTab("Pressure", null, pressureChart)
 
-//      val season = new SeasonalChart[Seq[(String, Matrix)]]
-//      val seasonalChart = season.createChart()
-//      seasonalChart.setPreferredSize(new Dimension(410, 50))
-//      tabbedPane.addTab("Seasonal Variation Diagram", null, seasonalChart)
+      val season = new SeasonalChart[Seq[(String, Array[Array[Double]])]]
+      val seasonalChart = season.createChart(
+        statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2)))
+      )
+      seasonalChart.setPreferredSize(new Dimension(410, 50))
+      tabbedPane.addTab("Seasonal Variation Diagram", null, seasonalChart)
 
       val colonies = ColoniesChart
       colonies.setPreferredSize(new Dimension(200, 200))

@@ -9,13 +9,14 @@ import scala.controller.GeneratorClimateChange
 import scala.model.Time
 import scala.model.environment.EnvironmentManager
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
-import scala.model.environment.property.Property.Property
+import scala.model.environment.property.Property.{Humidity, Pressure, Temperature}
 
 
 object ChartGui extends App {
   Time.initialize()
   var environment = GeneratorClimateChange.generateClimate(200, 200, 10).foldLeft(EnvironmentManager(200, 200))(addSource)
-  var statisticalData = StatisticalData(environment.environment.map, Seq.empty[(Property, Array[Double])], Time.time)
+  environment = GeneratorClimateChange.generateSeason().foldLeft(environment)(addSource)
+  var statisticalData = StatisticalData(Time.time, environment.environment.map)
 
   protected def makeTextPanel(text: String) = {
     val panel = new JPanel(false)
@@ -36,12 +37,13 @@ object ChartGui extends App {
       frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit.getScreenSize.width, Toolkit.getDefaultToolkit.getScreenSize.width))
       val tabbedPane = new JTabbedPane
 
-      Time.increment(1)
-      environment = evolution(environment)
-      statisticalData = updateStats(environment, statisticalData)
-      
+      0 until 30 foreach (_ => {
+        Time.increment(10)
+        environment = evolution(environment)
+        statisticalData = updateStats(environment.environment, statisticalData)
+      })
 
-      println(statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2))))
+      println(statisticalData.variationSequence().map(e => e._1 + ", " + e._2.mkString("[", ", ", "]")))
 
       //TODO: Modificare tipo generico Array[Array[Double]] in Matrix
       val temperature = new HeatmapChart[Array[Array[Double]]]
@@ -61,7 +63,7 @@ object ChartGui extends App {
 
       val season = new SeasonalChart[Seq[(String, Array[Array[Double]])]]
       val seasonalChart = season.createChart(
-        statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2)))
+        statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2)))
       )
       seasonalChart.setPreferredSize(new Dimension(410, 50))
       tabbedPane.addTab("Seasonal Variation Diagram", null, seasonalChart)

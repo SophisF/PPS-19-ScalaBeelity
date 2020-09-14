@@ -28,7 +28,7 @@ object Looper {
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
 
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
-    val statisticalData = StatisticalData(environmentManager.environment.map, Seq.empty[(Property, Array[Double])], Time.time)
+    val statisticalData = StatisticalData(Time.time, environmentManager.environment.map)
 
     plot(environmentManager.environment)
 
@@ -49,17 +49,17 @@ object Looper {
 
     //TODO: Da sostituire con Ecosystem
     @tailrec
-    def loop(environment: EnvironmentManager, statisticalData: StatisticalData, iterations: Int): EnvironmentManager = iterations match {
-      case 0 => environment
-      case _ => {
-        val env = evolution(environment)
-        val stats = updateStats(env, statisticalData)
-        if (iterations == 500) plot(env.environment)
-        Time.increment(updateStep)
-        //colonies.update(time, env)
-        loop(env, stats, iterations - updateStep)
+    def loop(environment: EnvironmentManager, statisticalData: StatisticalData, iterations: Int): EnvironmentManager =
+      iterations match {
+        case 0 => environment
+        case _ =>
+          val env = evolution(environment)
+          val stats = updateStats(env.environment, statisticalData)
+          if (iterations == 500) plot(env.environment)
+          Time.increment(updateStep)
+          //colonies.update(time, env)
+          loop(env, stats, iterations - updateStep)
       }
-    }
 
     plot(loop(environmentManager, statisticalData, iterations).environment)
   }

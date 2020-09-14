@@ -29,4 +29,11 @@ object PimpTuple {
     def average: Int = ((tuple._1 + tuple._2).toDouble / 2).toInt
   }
 
+  /**
+   * Implicit method to convert a tuple in a Prolog range term.
+   * @param tuple the tuple to convert.
+   * @return a string that represents the range term.
+   */
+  implicit def toPrologTerm(tuple: (Int, Int)): String = s"range(${tuple._1}, ${tuple._2})"
+
 }

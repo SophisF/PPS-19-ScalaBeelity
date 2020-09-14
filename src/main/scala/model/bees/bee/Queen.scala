@@ -37,6 +37,7 @@ object Queen {
   trait Queen extends Bee {
     val colony: Colony
     val position: Point
+    def canGenerate(f: (Int, Int) => Boolean): Boolean
 
   }
 
@@ -61,8 +62,7 @@ object Queen {
         )
       })
 
-    override val canGenerate: Int = if (this.colony.bees.size < this.colony.maxBees) 1 else 0
-    override val lastAgeFromBrood: Int = this.age
+    override def canGenerate(f: (Int, Int) => Boolean): Boolean = true//f(this.colony.numberOfBees, this.colony.averageReproductionRate)
   }
 
 }

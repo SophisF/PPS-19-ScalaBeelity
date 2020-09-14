@@ -58,11 +58,11 @@ object Looper {
         Time.increment(updateStep)
         //colonies.update(time, env)
         loop(env, stats, iterations - updateStep)
+      }
     }
 
     plot(loop(environmentManager, statisticalData, iterations).environment)
   }
-
 
   /**
    * Plot the environment calling the view

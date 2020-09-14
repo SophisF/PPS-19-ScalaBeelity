@@ -4,10 +4,21 @@ import java.awt.{Canvas, Color, Graphics, Toolkit}
 
 object ColoniesChart extends Canvas {
 
-  val matrixDim = 400
-  val initialX = (Toolkit.getDefaultToolkit.getScreenSize.width / 2) - (matrixDim / 2)
+  private val MULTIPLIER = 2
+  private val MAX_DIMENSION = 800
+  private var applyMultiplier = false;
+  private val environmentSize = 400 //environment.environment.map.rows //TODO: è uguale alle colonne di solito
+  //TODO: rimuovere computazione dentro la variabile
+  private val matrixDim = if (environmentSize * MULTIPLIER <= MAX_DIMENSION) {
+    applyMultiplier = true
+    environmentSize * MULTIPLIER
+  } else {
+    applyMultiplier = false
+    environmentSize
+  }
+  val initialX: Int = (Toolkit.getDefaultToolkit.getScreenSize.width / 2) - (matrixDim / 2)
   //TODO: calcolare altezza gamebar se possibile.
-  val initialY = (Toolkit.getDefaultToolkit.getScreenSize.height / 2) - (matrixDim / 2) - 100
+  val initialY: Int = (Toolkit.getDefaultToolkit.getScreenSize.height / 2) - (matrixDim / 2) - 100
 
 
   //TODO: Impostare dimensione oggetti a partire dal centro meno la dimenzion
@@ -19,9 +30,9 @@ object ColoniesChart extends Canvas {
     g.drawRect(initialX, initialY, matrixDim, matrixDim)
 
     g.setColor(Color.BLUE)
-    g.fillRect(initialX + 130, initialY + 30, 100, 80)
-    g.fillRect(initialX + 3, initialY + 3, 40, 40)
-    g.fillRect(initialX + 200, initialY + 0, 23, 23)
+    g.fillRect(initialX + 130 * MULTIPLIER, initialY + 30 * MULTIPLIER, 100 * MULTIPLIER, 80 * MULTIPLIER)
+    g.fillRect(initialX + 3 * MULTIPLIER, initialY + 3 * MULTIPLIER, 40 * MULTIPLIER, 40 * MULTIPLIER)
+    g.fillRect(initialX + 200 * MULTIPLIER, initialY + 0 * MULTIPLIER, 23 * MULTIPLIER, 23 * MULTIPLIER)
   }
 
 }

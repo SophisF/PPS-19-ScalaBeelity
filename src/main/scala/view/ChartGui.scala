@@ -12,7 +12,7 @@ import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model.environment.property.Property.Property
 
 
-object SwingGui extends App {
+object ChartGui extends App {
   Time.initialize()
   var environment = GeneratorClimateChange.generateClimate(200, 200, 10).foldLeft(EnvironmentManager(200, 200))(addSource)
   var statisticalData = StatisticalData(environment.environment.map, Seq.empty[(Property, Array[Double])], Time.time)
@@ -36,21 +36,10 @@ object SwingGui extends App {
       frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit.getScreenSize.width, Toolkit.getDefaultToolkit.getScreenSize.width))
       val tabbedPane = new JTabbedPane
 
-      Time.increment(30)
+      Time.increment(1)
       environment = evolution(environment)
       statisticalData = updateStats(environment, statisticalData)
-      Time.increment(30)
-      environment = evolution(environment)
-      statisticalData = updateStats(environment, statisticalData)
-      Time.increment(20)
-      environment = evolution(environment)
-      statisticalData = updateStats(environment, statisticalData)
-      Time.increment(10)
-      environment = evolution(environment)
-      statisticalData = updateStats(environment, statisticalData)
-      Time.increment(40)
-      environment = evolution(environment)
-      statisticalData = updateStats(environment, statisticalData)
+      
 
       println(statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2))))
 

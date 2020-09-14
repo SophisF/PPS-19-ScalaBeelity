@@ -25,33 +25,18 @@ object Looper {
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
 
-    //plot(environmentManager.environment)
+    plot(environmentManager.environment)
 
     environmentManager = GeneratorClimateChange.generateClimate((environmentSize._1, environmentSize._2), iterations)
       .foldLeft(environmentManager)(addSource)
-
-    //environmentManager = GeneratorClimateChange.generateSeason().foldLeft(environmentManager)(addSource)
-
-    /*Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
-
-      environmentManager = evolution(environmentManager)
-
-      if (i == iterations / 2) plot(environmentManager.environment)
-
-      Time increment updateStep
-    })
-
-    plot(environmentManager.environment)*/
 
     //TODO: Da sostituire con Ecosystem
     @tailrec
     def loop(environment: EnvironmentManager.EnvironmentManager, iterations: Int): EnvironmentManager.EnvironmentManager = iterations match {
       case x if x <= 0 => environment
-      case _ =>
+      case _ => Time.increment(updateStep)
         val env = evolution(environment)
-        if (iterations == 500) plot(env.environment)
-
-        Time.increment(updateStep)
+        if ((iterations % updateStep == 0 && iterations > 970) || updateStep == 500) plot(env.environment)
         //colonies.update(time, env)
         loop(env, iterations - updateStep)
     }

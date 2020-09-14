@@ -3,8 +3,9 @@ package scala.model.environment.property.realization
 import scala.model.environment.time.Time
 
 sealed trait PressureProperty extends IntegerProperty {
-  trait PressureState extends RangedIntegerState
+  trait PressureState extends IntegerState
   trait PressureVariation extends Variation
+  trait PressureTimedVariation extends IntegerTimedVariation
 }
 
 object PressureProperty extends PressureProperty {
@@ -18,6 +19,8 @@ object PressureProperty extends PressureProperty {
     override def vary[S <: State](_state: S): PressureState = state(_state.value + _value)
   }
 
-  implicit def timedVariation(value: Int, start: Time, duration: Time): TimedVariation =
-    (instant: Time) => (instant - start) / duration * 100 * value
+  implicit def timedVariation(value: Int, start: Time, duration: Time): PressureTimedVariation =
+    new PressureTimedVariation {
+      override def instantaneous(instant: Time): PressureVariation = instantaneous(value, start, duration, instant)
+    }
 }

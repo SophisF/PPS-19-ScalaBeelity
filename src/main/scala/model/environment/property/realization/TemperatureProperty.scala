@@ -3,9 +3,9 @@ package scala.model.environment.property.realization
 import scala.model.environment.time.{Time, TimeData}
 
 sealed trait TemperatureProperty extends IntegerProperty with TimeData[Int] {
-  trait TemperatureState extends RangedIntegerState
+  trait TemperatureState extends IntegerState
   trait TemperatureVariation extends Variation
-  trait TemperatureTimedVariation extends TimedVariation
+  trait TemperatureTimedVariation extends IntegerTimedVariation
 }
 
 object TemperatureProperty extends TemperatureProperty {
@@ -22,7 +22,9 @@ object TemperatureProperty extends TemperatureProperty {
   }
 
   implicit def timedVariation(value: Int, start: Time, duration: Time): TemperatureTimedVariation =
-    (instant: Time) => (instant - start) / duration * 100 * value
+    new TemperatureTimedVariation {
+      override def instantaneous(instant: Time): TemperatureVariation = instantaneous(value, start, duration, instant)
+    }
   /*
   implicit def instantValue(time: Time): Int = (0 until 6).iterator.mirror(false).map(_ * MonthlyIncrement)
     .drop(time.month).toSeq.head

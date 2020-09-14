@@ -14,11 +14,21 @@ import scala.util.Random
 trait IntegerProperty extends TimedProperty with Range {
   override type ValueType = Int
 
-  trait RangedIntegerState extends State {
+  trait IntegerState extends State {
     override def numericRepresentation: Int = (value - minValue) * 100 / (maxValue - minValue)
   }
 
-  def variation(value: Int): Variation
+  trait IntegerTimedVariation extends TimedVariation {
+    private var evaluated: Int = 0
+
+    def instantaneous(value: Int, start: Time, duration: Time, instant: Time = Time.now()): Int = {
+      val percentage = (instant - start) * 100 / duration - evaluated
+      if (percentage * value > 0) evaluated += percentage
+      percentage * value
+    }
+  }
+
+  implicit def variation(value: Int): Variation
 
   override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[Variation] =
     filter(xDecrement, yDecrement).map(variation(_))

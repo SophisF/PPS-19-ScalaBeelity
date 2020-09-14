@@ -42,11 +42,11 @@ object Environment {
    * @return an environment to which is applied the filter
    */
   def applyFilter(environment: Environment, source: ZoneSource[Property]): Environment = {
-    Environment(environment.map
-      .mapPairs {
-        case ((x, y), cell) if in(x, y, source) => cell + source.filter(y - border(source)(Top), x - border(source)(Left))
-        case (_, cell) => cell
-      })
+    val filter = source.filter
+    Environment(environment.map.mapPairs {
+      case ((x, y), cell) if in(x, y, source) => cell + filter(y - border(source)(Top), x - border(source)(Left))
+      case (_, cell) => cell
+    })
   }
 
   /**

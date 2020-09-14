@@ -1,11 +1,13 @@
 package scala.controller
 
+import model.StatisticalData._
+
 import scala.annotation.tailrec
 import scala.model.Time
 import scala.model.environment.EnvironmentManager._
 import scala.model.environment.matrix.Matrix._
 import scala.model.environment.property.Property
-import scala.model.environment.property.Property.toPercentage
+import scala.model.environment.property.Property.{Property, toPercentage}
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.view.View
 
@@ -24,9 +26,12 @@ object Looper {
    * @param updateStep      how often update the environment
    */
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
+
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
+    val statisticalData = StatisticalData(environmentManager.environment.map, Seq.empty[(Property, Array[Double])], Time.time)
 
     plot(environmentManager.environment)
+
 
     environmentManager = GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations)
       .foldLeft(environmentManager)(addSource)
@@ -44,19 +49,20 @@ object Looper {
 
     //TODO: Da sostituire con Ecosystem
     @tailrec
-    def loop(environment: EnvironmentManager, iterations: Int): EnvironmentManager = iterations match {
+    def loop(environment: EnvironmentManager, statisticalData: StatisticalData, iterations: Int): EnvironmentManager = iterations match {
       case 0 => environment
-      case _ =>
+      case _ => {
         val env = evolution(environment)
+        val stats = updateStats(env, statisticalData)
         if (iterations == 500) plot(env.environment)
         Time.increment(updateStep)
         //colonies.update(time, env)
-        loop(env, iterations - updateStep)
+        loop(env, stats, iterations - updateStep)
+      }
     }
 
-    plot(loop(environmentManager, iterations).environment)
+    plot(loop(environmentManager, statisticalData, iterations).environment)
   }
-
 
   /**
    * Plot the environment calling the view

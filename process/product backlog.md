@@ -53,9 +53,9 @@
 | I need to implement a functional looper					| evaluated monad's element										| Baldini & Gnagnarella		| 7				| 6	| 	| 	| 	| 	| 	|
 |                                                                             	| interaction between different colonies                                                               	| Fantoni & Scucchia    	| 8                          	| 1	|  	|   	|   	|   	|   	|
 |                                                                             	| evolution of a colonies                                                                              	| Fantoni & Scucchia    	| 8                          	| 1 	|  	|   	|   	|   	|  	|
-| I need to implement bees' movement						| movement rules											| 				| 5				| 5	| 5 	| 4	| 3	| 	|	|
+| I need to implement bees' movement						| movement rules											| 				| 5				| 5	| 5 	| 4	| 3	| 1	|	|
 |										| fitting rules for logic movement									|				| 2				| 0	| 0	| 0	| 0	| 0	| 0	|
-|										| integration prolog - scala										|				| 3				| 2	| 1	| 	|	|	|	|
+|										| integration prolog - scala										|				| 3				| 2	| 1	| 1	| 1	| 0	|	|
 | I need to visualize some charts with simulation data                        	| visualization of some bees’ average characteristics                                                  	|                       	| 4                          	|       |       |   	|   	|   	|   	|
 |                                                                             	| visualization of yearly environment changes                                                          	|                       	| 4                          	|       |       |   	|   	|   	|   	|
 | I need to control some basic simulation parameters (e.g., time granularity) 	| simulation speed control                                                                             	|                       	| 3                          	|       |       |   	|   	|   	|   	|

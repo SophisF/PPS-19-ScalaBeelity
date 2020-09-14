@@ -1,34 +1,18 @@
 package view
 
-import smile.interpolation.BicubicInterpolation
-import smile.plot.swing.{Contour, Palette, PlotPanel, heatmap}
-
-import scala.util.Random
+import smile.plot.swing.{Palette, PlotPanel, heatmap}
 
 
-object HeatmapChart {
-  //TODO: Il problema è l'interpolazione. Rapporto migliore è 10 volte la grandezza della matrice, ma da verificare meglio
+class HeatmapChart[T <: Array[Array[Double]]] extends Chart[T] {
 
-  var Z: Array[Array[Double]] = Array.ofDim[Double](200, 200)
+  override def createChart(data: T): PlotPanel = {
+    val Z: Array[Array[Double]] = data.map(_.toArray).toArray
+    val X = (0 until 200).toArray.map(_.toDouble)
+    val Y = (0 until 200).toArray.map(_.toDouble)
 
-  def createDataset(z: Array[Array[Double]], x: Array[Double], y: Array[Double]): Unit = {
-    Z = z
-    /*val bicubic = new BicubicInterpolation(x, y, z)
-
-    for (i <- 0 until 200) {
-      for (j <- 0 until 200) {
-        Z(i)(j) = bicubic.interpolate(i * 0.03, j * 0.03)
-        print(Z(i)(j)+" ")
-      }
-      println("")
-    }*/
-  }
-
-  def createChart(): PlotPanel = {
-    val canvas = heatmap(Z, Palette.jet(256))
+    val canvas = heatmap(X, Y, Z, Palette.redgreen(128))
     //TODO: Contorni rimovibili in base alle nostre scelte
-
-    canvas.add(Contour.of(Z))
+    //canvas.add(Contour.of(Z))
     canvas.panel()
   }
 

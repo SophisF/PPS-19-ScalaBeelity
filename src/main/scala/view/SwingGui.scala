@@ -1,7 +1,6 @@
 package view
 
 import java.awt._
-import java.awt.event.KeyEvent
 
 import javax.swing._
 
@@ -36,39 +35,37 @@ object SwingGui extends App {
       Time.increment(1)
       environment = evolution(environment)
 
-      HeatmapChart.createDataset(
-        environment.environment.map.data.
-          map(it => it.temperature.toDouble).
-          sliding(environment.environment.map.cols, environment.environment.map.cols).toArray,
-        (0 to environment.environment.map.cols).map(_.toDouble).toArray,
-        (0 to environment.environment.map.rows).map(_.toDouble).toArray
-      )
 
-      val temperature = HeatmapChart.createChart()
-      temperature.setPreferredSize(new Dimension(410, 50))
-      tabbedPane.addTab("Temperature", null, temperature)
-      tabbedPane.setMnemonicAt(0, KeyEvent.VK_1)
+      //TODO: Modificare tipo generico Array[Array[Double]] in Matrix
+      val temperature = new HeatmapChart[Array[Array[Double]]]
+      val temperatureChart = temperature.createChart(environment.environment.map.data.
+        map(it => it.temperature.toDouble).
+        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray)
+      temperatureChart.setPreferredSize(new Dimension(410, 50))
+      tabbedPane.addTab("Temperature", null, temperatureChart)
 
-      val panel2 = makeTextPanel("Panel #2")
-      panel2.setPreferredSize(new Dimension(410, 50))
+      val humidity = new HeatmapChart[Array[Array[Double]]]
+      val humidityChart = humidity.createChart(environment.environment.map.data.
+        map(it => it.humidity.toDouble).
+        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray)
+      humidityChart.setPreferredSize(new Dimension(410, 50))
+      tabbedPane.addTab("Humidity", null, humidityChart)
 
-      tabbedPane.addTab("Humidity", null, panel2)
-      tabbedPane.setMnemonicAt(1, KeyEvent.VK_2)
+      val pressure = new HeatmapChart[Array[Array[Double]]]
+      val pressureChart = pressure.createChart(environment.environment.map.data.
+        map(it => it.pressure.toDouble).
+        sliding(environment.environment.map.cols, environment.environment.map.cols).toArray)
+      pressureChart.setPreferredSize(new Dimension(410, 50))
+      tabbedPane.addTab("Pressure", null, pressureChart)
 
-      val panel3 = makeTextPanel("Panel #3")
-      panel3.setPreferredSize(new Dimension(410, 50))
-      tabbedPane.addTab("Pressure", null, panel3)
-      tabbedPane.setMnemonicAt(2, KeyEvent.VK_3)
-
-      val season = SeasonalChart.createChart
-      season.setPreferredSize(new Dimension(410, 50))
-      tabbedPane.addTab("Seasonal Variation Diagram", null, season)
-      tabbedPane.setMnemonicAt(3, KeyEvent.VK_4)
+//      val season = new SeasonalChart[Seq[(String, Matrix)]]
+//      val seasonalChart = season.createChart()
+//      seasonalChart.setPreferredSize(new Dimension(410, 50))
+//      tabbedPane.addTab("Seasonal Variation Diagram", null, seasonalChart)
 
       val colonies = ColoniesChart
       colonies.setPreferredSize(new Dimension(200, 200))
       tabbedPane.addTab("Colonies", null, colonies)
-      tabbedPane.setMnemonicAt(4, KeyEvent.VK_5)
 
       tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 
@@ -82,7 +79,7 @@ object SwingGui extends App {
 
       //Add content to the window.
       frame.add(gameBar, BorderLayout.PAGE_START)
-
+      //frame.setResizable(false)
       frame.setDefaultCloseOperation(3)
       //Add content to the window.
       frame.add(tabbedPane, BorderLayout.CENTER)
@@ -94,7 +91,6 @@ object SwingGui extends App {
 
 
   //The following line enables to use scrolling tabs.
-
 
   SwingUtilities.invokeLater(new Runnable() {
     override def run(): Unit = { //Turn off metal's use of bold fonts

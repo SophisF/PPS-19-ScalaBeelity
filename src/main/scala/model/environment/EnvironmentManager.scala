@@ -16,15 +16,15 @@ object EnvironmentManager {
   /**
    * Manager of the environment, that control its evolution.
    *
-   * @param environment, the environment to manage.
-   * @param propertySource, the property to at the environment.
+   * @param environment    , the environment to manage.
+   * @param propertySource , the property to at the environment.
    */
   case class EnvironmentManager(environment: Environment, propertySource: Array[PropertySource])
 
   /**
    * Apply function.
    *
-   * @param width of environment.
+   * @param width  of environment.
    * @param height of environment.
    * @return an environment manager.
    */
@@ -36,11 +36,11 @@ object EnvironmentManager {
   /**
    * Apply property source at the environment and control property source.
    *
-   * @param manager, environment manager to evolute.
+   * @param manager , environment manager to evolute.
    * @return environment manager evoluted.
    *
    */
-  def evolution(manager: EnvironmentManager): EnvironmentManager =
+  def evolution(manager: EnvironmentManager): EnvironmentManager = {
     EnvironmentManager(
       manager.propertySource.foldLeft(manager.environment)(Environment.apply),
       manager.propertySource.filter {
@@ -49,12 +49,13 @@ object EnvironmentManager {
         case p: ContinuousZonePropertySource => !isEnded(p)
       }
     )
+  }
 
   /**
    * Add property source to the environment manager.
    *
-   * @param manager, the environment manager.
-   * @param propertySource, property source to add.
+   * @param manager        , the environment manager.
+   * @param propertySource , property source to add.
    * @return an enviroment manager with the property added.
    */
   def addSource(manager: EnvironmentManager, propertySource: PropertySource): EnvironmentManager =

@@ -57,10 +57,8 @@ object FilterBuilder {
   def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] =
     correctRanges(peak, stop) match {
       case (peak, _) if peak.abs == 0 => DenseMatrix.create(0, 0, Array.empty)
-      case (_peak, _stop) => val matrix = (DenseVector(positive2dGaussianFunction(_peak, _stop, height) toArray) *
-          DenseVector(positive2dGaussianFunction(_peak, _stop, width) map(_ / _peak) toArray).t)
-        println(matrix.cols + " " + matrix.rows)
-        matrix.map(_ + stop + _stop)
+      case (_peak, _stop) => (DenseVector(positive2dGaussianFunction(_peak, _stop, height) toArray) *
+          DenseVector(positive2dGaussianFunction(_peak, _stop, width) map(_ / _peak) toArray).t).map(_ + stop + _stop)
         .mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
     }
 

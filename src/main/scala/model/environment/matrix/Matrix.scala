@@ -73,8 +73,8 @@ object Matrix {
      */
     def flipX(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] = matrix.cols match {
       case 1 => if (mirrorCenter) matrix else DenseMatrix.create(0, 0, Array.empty)
-      case _ => DenseMatrix.create(matrix.rows, matrix.cols - (if (mirrorCenter) 0 else 1), matrix.data
-        .grouped(matrix.cols).map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
+      case _ => DenseMatrix.create(matrix.rows, matrix.cols - (if (mirrorCenter) 0 else 1),
+        matrix.data.grouped(matrix.rows).drop(if (mirrorCenter) 0 else 1).reduce((_1, _2) => _2.appendedAll(_1)))
     }
 
     /**
@@ -86,8 +86,8 @@ object Matrix {
     def flipY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] = matrix.rows match {
       case 1 if mirrorCenter => matrix
       case 1 => DenseMatrix.create(0, 0, Array.empty)
-      case _ => DenseMatrix.create(matrix.rows - (if (mirrorCenter) 0 else 1), matrix.cols,
-        matrix.data.grouped(matrix.cols).drop(if (mirrorCenter) 0 else 1).reduce((_1, _2) => _2.appendedAll(_1)))
+      case _ => DenseMatrix.create(matrix.rows - (if (mirrorCenter) 0 else 1), matrix.cols, matrix.data
+        .grouped(matrix.rows).map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
     }
   }
 

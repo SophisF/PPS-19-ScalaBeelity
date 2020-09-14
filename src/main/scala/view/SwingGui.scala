@@ -72,7 +72,17 @@ object SwingGui extends App {
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 
     frame.setDefaultCloseOperation(3)
+    val gameBar = new JPanel()
+    val playButton = new JButton("Play")
+    val pauseButton = new JButton("Pause")
+    val stopButton = new JButton("Accelerate")
+    gameBar.add(playButton)
+    gameBar.add(pauseButton)
+    gameBar.add(stopButton)
+
     //Add content to the window.
+    frame.add(gameBar, BorderLayout.PAGE_START)
+
     frame.add(tabbedPane, BorderLayout.CENTER)
     //Display the window.
     frame.pack()

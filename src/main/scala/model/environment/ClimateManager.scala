@@ -37,9 +37,10 @@ object ClimateManager {
    * @return
    */
   private def randomContinuousFilter(property: TimeDependentProperty, environmentSize: Size, iterations: Int)
-  : ContinuousSource[TimeDependentProperty] = new ContinuousSource[TimeDependentProperty](property
-    .timedFilter(70, 70, Time.now(), Time delay 100).asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
-    Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), 5)
+  : ContinuousSource[TimeDependentProperty] = new ContinuousSource[TimeDependentProperty](
+    property.timedFilter(70, 70, Time.now(), Time delay iterations)
+      .asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
+    Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), iterations)
 
   private def seasonalChanges(property: TimeDependentProperty): SeasonalSource[TimeDependentProperty] =
     SeasonalSource(property.seasonalTrend)

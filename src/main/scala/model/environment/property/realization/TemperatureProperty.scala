@@ -30,8 +30,9 @@ object TemperatureProperty extends TemperatureProperty {
 
   override def seasonalTrend: TemperatureTimedVariation =  new TemperatureTimedVariation {
     private var lastGet: Int = 0
+
     override def instantaneous(instant: Time): TemperatureVariation = {
-      val monthlyValue = (0 until 6).iterator.mirror(false).map(_ * MonthlyIncrement).drop(instant month).toSeq.head
+      val monthlyValue = (0 to 6).iterator.mirror(false).map(_ * MonthlyIncrement).drop(instant month).toSeq.head
       val variation = monthlyValue - lastGet
       lastGet = monthlyValue
       variation

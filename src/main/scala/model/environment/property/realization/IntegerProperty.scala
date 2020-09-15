@@ -5,7 +5,6 @@ import breeze.linalg.DenseMatrix
 import scala.model.environment.property.{FilterBuilder, Range, TimeDependentProperty}
 import scala.model.environment.time.Time
 import scala.model.environment.utility.SequenceHelper.RichSequence
-import scala.util.Random
 
 /**
  * Simplify the use (and help DRY) of numeric properties
@@ -47,7 +46,7 @@ trait IntegerProperty extends TimeDependentProperty with Range {
   : DenseMatrix[TimedVariation] = filter(xDecrement, yDecrement).map(timedVariation(_, start, duration))
 
   private def filter(xDecrement: Int, yDecrement: Int): DenseMatrix[Double] = FilterBuilder
-    .gaussianFunction3d((minValue to maxValue).filter(_ != 0).random().get, 1, xDecrement, yDecrement)
+    .gaussianFunction3d((minValue to maxValue).filter(_ != 0).random().get, 0, xDecrement, yDecrement)
 
   /**
    * Convert generic numeric value (e.g. Double, Float) to ValueType (Int)

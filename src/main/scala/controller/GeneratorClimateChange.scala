@@ -20,8 +20,7 @@ object GeneratorClimateChange {
    * @return
    */
   def generateClimate(environmentWidth: Int, environmentHeight: Int, iterations: Int): Iterator[PropertySource] = {
-    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations))
-      .take(7)
+    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations)).take(7)
     //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
   }
 

@@ -26,7 +26,7 @@ object Looper {
 
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
     val statisticalData = StatisticalData(Time.time, environmentManager.environment.map)
-    createAndShowGUI(statisticalData)
+    createAndShowGUI(statisticalData, Time.time)
 
 
     //plot(environmentManager.environment)
@@ -56,16 +56,16 @@ object Looper {
     loop(environmentManager, statisticalData, iterations).environment
   }
 
- /* /**
-   * Plot the environment calling the view
-   *
-   * @param environment to plot
-   */
-  private def plot(environment: Environment): Unit = Property.values.foreach(property => BreezeView.plot(
-    environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
-    0,
-    100,
-    s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
-  ))*/
+  /* /**
+    * Plot the environment calling the view
+    *
+    * @param environment to plot
+    */
+   private def plot(environment: Environment): Unit = Property.values.foreach(property => BreezeView.plot(
+     environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
+     0,
+     100,
+     s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
+   ))*/
 
 }

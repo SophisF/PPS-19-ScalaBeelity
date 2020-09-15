@@ -1,15 +1,12 @@
 package scala.controller
 
 import model.StatisticalData._
+import view.ViewImpl._
 
 import scala.annotation.tailrec
 import scala.model.Time
+import scala.model.environment.EnvironmentManager
 import scala.model.environment.EnvironmentManager._
-import scala.model.environment.matrix.Matrix._
-import scala.model.environment.property.Property
-import scala.model.environment.property.Property.{Property, toPercentage}
-import scala.model.environment.{Environment, EnvironmentManager}
-import scala.view.View
 
 /**
  * Simply controller of the test
@@ -29,8 +26,10 @@ object Looper {
 
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
     val statisticalData = StatisticalData(Time.time, environmentManager.environment.map)
+    createAndShowGUI(statisticalData)
 
-    plot(environmentManager.environment)
+
+    //plot(environmentManager.environment)
 
 
     environmentManager = GeneratorClimateChange.generateClimate(environmentSize._1, environmentSize._2, iterations)
@@ -38,14 +37,6 @@ object Looper {
 
     environmentManager = GeneratorClimateChange.generateSeason().foldLeft(environmentManager)(addSource)
 
-    //    Iterator.range(0, iterations).filter(_ % updateStep == 0).foreach(i => {
-    //
-    //      environmentManager = evolution(environmentManager)
-    //
-    //      if (i == iterations / 2) plot(environmentManager.environment)
-    //
-    //      Time increment 1
-    //    })
 
     //TODO: Da sostituire con Ecosystem
     @tailrec
@@ -55,24 +46,26 @@ object Looper {
         case _ =>
           val env = evolution(environment)
           val stats = updateStats(env.environment, statisticalData)
-          if (iterations == 500) plot(env.environment)
+          updateGui(stats, Time.time)
+          //if (iterations == 500) plot(env.environment)
           Time.increment(updateStep)
           //colonies.update(time, env)
           loop(env, stats, iterations - updateStep)
       }
 
-    plot(loop(environmentManager, statisticalData, iterations).environment)
+    loop(environmentManager, statisticalData, iterations).environment
   }
 
-  /**
+ /* /**
    * Plot the environment calling the view
    *
    * @param environment to plot
    */
-  private def plot(environment: Environment): Unit = Property.values.foreach(property => View.plot(
+  private def plot(environment: Environment): Unit = Property.values.foreach(property => BreezeView.plot(
     environment.map.dropColumns(0.5).dropRows(0.5).mapValues(c => toPercentage(property, c get property) toDouble),
     0,
     100,
     s"${property.toString} (${Property.range(property).minValue}, ${Property.range(property).maxValue})"
-  ))
+  ))*/
+
 }

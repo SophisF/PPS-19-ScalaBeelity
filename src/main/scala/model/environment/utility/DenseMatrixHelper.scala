@@ -1,4 +1,4 @@
-package scala.model.environment.matrix
+package scala.model.environment.utility
 
 import breeze.linalg._
 import breeze.storage.Zero
@@ -12,7 +12,7 @@ import scala.reflect.ClassTag
  *
  * @author Paolo Baldini
  */
-object Matrix {
+object DenseMatrixHelper {
   type Matrix[T] = DenseMatrix[T]
 
   implicit class DroppableMatrix[T](matrix: Matrix[T]) {
@@ -46,8 +46,7 @@ object Matrix {
      */
     def mirrorX(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], zero: Zero[T]): Matrix[T] =
       matrix.cols match {
-        case 1 if mirrorCenter => DenseMatrix.create(matrix.rows, 2, matrix.data.map(it => it :: it :: Nil)
-          .reduce((_1, _2) => _1 appendedAll _2) toArray)
+        case 1 if mirrorCenter => create(2, matrix.data.map(it => it :: it :: Nil).reduce((_1, _2) => _1 appendedAll _2))
         case 1 => matrix
         case _ => DenseMatrix.horzcat(matrix.flipX(mirrorCenter), matrix)
       }
@@ -60,7 +59,7 @@ object Matrix {
      */
     def mirrorY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] =
       matrix.rows match {
-        case 1 if mirrorCenter => DenseMatrix.create(2, matrix.cols, matrix.data.appendedAll(matrix.data))
+        case 1 if mirrorCenter => create(matrix.cols, matrix.data.appendedAll(matrix.data))
         case 1 => matrix
         case _ => DenseMatrix.vertcat(matrix.flipY(mirrorCenter), matrix)
       }
@@ -72,7 +71,7 @@ object Matrix {
      * @return flipped matrix
      */
     def flipX(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] = matrix.cols match {
-      case 1 => if (mirrorCenter) matrix else DenseMatrix.create(0, 0, Array.empty)
+      case 1 => if (mirrorCenter) matrix else empty
       case _ => DenseMatrix.create(matrix.rows, matrix.cols - (if (mirrorCenter) 0 else 1),
         matrix.data.grouped(matrix.rows).drop(if (mirrorCenter) 0 else 1).reduce((_1, _2) => _2.appendedAll(_1)))
     }
@@ -85,21 +84,25 @@ object Matrix {
      */
     def flipY(mirrorCenter: Boolean = true)(implicit classTag: ClassTag[T], z: Zero[T]): Matrix[T] = matrix.rows match {
       case 1 if mirrorCenter => matrix
-      case 1 => DenseMatrix.create(0, 0, Array.empty)
+      case 1 => empty
       case _ => DenseMatrix.create(matrix.rows - (if (mirrorCenter) 0 else 1), matrix.cols, matrix.data
-        .grouped(matrix.rows).map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((_1, _2) => _1.appendedAll(_2)))
+        .grouped(matrix.rows).map(_.drop(if (mirrorCenter) 0 else 1).reverse).reduce((f, s) => f appendedAll s))
     }
   }
 
   implicit class ParallelMatrix[T](matrix: Matrix[T]) {
-    // TODO move in trasformable after adjusted double problem
-    def parallelMap[R: ClassTag](op: T => R)(zero: R): Matrix[R] =
-      DenseMatrix.create(matrix rows, matrix cols, matrix.data.par.map(op))(Zero apply zero)
 
-    def indexedParallelMap[R: ClassTag](op: (T, Int) => R)(zero: R): Matrix[R] =
-      DenseMatrix.create(matrix rows, matrix cols, matrix.data.par.zipWithIndex
-        .map[R](it => op(it._1, it._2)))(Zero apply zero)
+    def parallelMap[R: ClassTag](op: T => R)(implicit zero: Zero[R]): Matrix[R] =
+      create(matrix cols, matrix.data.par.map(op))
+
+    def indexedParallelMap[R: ClassTag](op: (T, Int) => R)(implicit zero: Zero[R]): Matrix[R] =
+      create(matrix cols, matrix.data.par.zipWithIndex.map[R](it => op(it._1, it._2)))
   }
 
-  implicit def toArray[T: ClassTag](iterable: ParIterable[T]): Array[T] = iterable.toArray
+  implicit def toArray[T: ClassTag](iterable: ParIterable[T]): Iterable[T] = iterable.seq
+
+  def empty[T: ClassTag]()(implicit zero: Zero[T]): Matrix[T] = DenseMatrix.create[T](0, 0, Array empty)
+
+  def create[T: ClassTag](cols: Int, iterable: Iterable[T])(implicit zero: Zero[T]): DenseMatrix[T] =
+    DenseMatrix.create(iterable.size / cols, cols, iterable toArray)
 }

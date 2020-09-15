@@ -4,8 +4,9 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.PropertyType.PropertyValue
-import scala.model.environment.property.{Property, PropertyType, TimedProperty}
-import scala.model.environment.property.source.{ContinuousSource, PropertySource, SeasonalSource}
+import scala.model.environment.property.source.GlobalSource.SeasonalSource
+import scala.model.environment.property.{PropertyType, TimeDependentProperty}
+import scala.model.environment.property.source.{ContinuousSource, PropertySource}
 import scala.model.environment.time.Time
 import scala.util.Random
 
@@ -19,12 +20,13 @@ object ClimateManager {
    * @param iterations
    * @return
    */
-  def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimedProperty]] =
-    Iterator.continually(randomContinuousFilter(environmentSize, iterations)).take(7)
+  def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimeDependentProperty]] =
+    Iterator.continually(PropertyType.random(_.isInstanceOf[TimeDependentProperty])).filter(_ nonEmpty)
+      .map(_.get.property.asInstanceOf[TimeDependentProperty]).map(randomContinuousFilter(_, environmentSize, iterations)).take(7)
     //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
 
-  def generateSeason(): Iterator[PropertySource[TimedProperty]] = PropertyType.properties(_.isInstanceOf[TimedProperty])
-    .map(_.asInstanceOf[PropertyValue[TimedProperty]]).map(it => seasonalChanges(it())).iterator
+  def generateSeason(): Iterator[PropertySource[TimeDependentProperty]] = PropertyType.properties(_.isInstanceOf[TimeDependentProperty])
+    .map(_.asInstanceOf[PropertyValue[TimeDependentProperty]]).map(it => seasonalChanges(it())).iterator
 
   /**
    *
@@ -33,15 +35,11 @@ object ClimateManager {
    * @param iterations
    * @return
    */
-  private def randomContinuousFilter(environmentSize: Size, iterations: Int): ContinuousSource[TimedProperty] = {
-    val property = PropertyType.random(_.isInstanceOf[TimedProperty]).map(_().asInstanceOf[TimedProperty])
-    val filter = property.map(_.generateTimedFilter(70, 70, Time.now(), Time.delay(Time.now(), 100)))
+  private def randomContinuousFilter(property: TimeDependentProperty, environmentSize: Size, iterations: Int)
+  : ContinuousSource[TimeDependentProperty] = new ContinuousSource[TimeDependentProperty](property
+    .timedFilter(70, 70, Time.now(), Time delay 100).asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
+    Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), 5)
 
-    new ContinuousSource(filter.get.asInstanceOf[DenseMatrix[TimedProperty#TimedVariation]],
-      Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), 5)
-  }
-
-  private def seasonalChanges(property: TimedProperty): SeasonalSource[TimedProperty] = {
-    new SeasonalSource(property.seasonalTrend(Time.now()))
-  }
+  private def seasonalChanges(property: TimeDependentProperty): SeasonalSource[TimeDependentProperty] =
+    SeasonalSource(property.seasonalTrend)
 }

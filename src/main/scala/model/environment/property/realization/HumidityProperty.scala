@@ -1,6 +1,5 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.realization
 import scala.model.environment.time.Time
 
 sealed trait HumidityProperty extends IntegerProperty {
@@ -25,12 +24,8 @@ object HumidityProperty extends HumidityProperty {
     new HumidityTimedVariation {
       override def instantaneous(instant: Time): HumidityVariation = instantaneous(value, start, duration, instant)
     }
-  /*
-  override implicit def instantValue(time: Int): Int = maxValue * Math.sin(time % 365) toInt
 
-  override def variation(olderTime: Int, newerTime: Int): Int => Int =
-    value => value + instantValue(olderTime) - instantValue(newerTime)*/
-  def seasonalTrend(instant: Time = Time.now()): HumidityTimedVariation = new HumidityTimedVariation {
+  def seasonalTrend: HumidityTimedVariation = new HumidityTimedVariation {
     private var lastGet: Int = 0
     override def instantaneous(instant: Time): HumidityVariation = {
       val monthlyValue = maxValue * Math.sin(instant % 365) toInt

@@ -25,5 +25,5 @@ object PressureProperty extends PressureProperty {
       override def instantaneous(instant: Time): PressureVariation = instantaneous(value, start, duration, instant)
     }
 
-  override def seasonalTrend(instant: Time): PressureTimedVariation = (_: Time) => 0
+  override def seasonalTrend: PressureTimedVariation = (_: Time) => 0
 }

@@ -1,10 +1,11 @@
 package scala.model.environment.property
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
 import breeze.numerics.exp
 
 import scala.model.environment.utility.IteratorHelper.RichIterator
-import scala.model.environment.matrix.Matrix.TransformableMatrix
+import scala.model.environment.utility.DenseVectorHelper._
+import scala.model.environment.utility.DenseMatrixHelper.{TransformableMatrix, empty}
 
 /**
  * TODO maybe rename to GaussianFilterBuilder.<br>
@@ -56,10 +57,9 @@ object FilterBuilder {
    */
   def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] =
     correctRanges(peak, stop) match {
-      case (peak, _) if peak.abs == 0 => DenseMatrix.create(0, 0, Array.empty)
-      case (_peak, _stop) => (DenseVector(positive2dGaussianFunction(_peak, _stop, height) toArray) *
-          DenseVector(positive2dGaussianFunction(_peak, _stop, width) map(_ / _peak) toArray).t).map(_ + stop + _stop)
-        .mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
+      case (peak, _) if peak.abs == 0 => empty
+      case (p, s) => (positive2dGaussianFunction(p, s, height) * positive2dGaussianFunction(p, s, width).map(_ / p).t)
+        .map(_ + stop + s).mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
     }
 
   def correctRanges(peak: Int, stop: Int): (Int, Int) =

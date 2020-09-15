@@ -1,7 +1,7 @@
 package scala.model.environment.time
 
 import scala.model.environment.time.Timed.inProgress
-
+// TODO delete or use
 /**
  * Represent a data whose value is related to a specific life-time
  *
@@ -24,5 +24,5 @@ object FiniteData {
    * @return the data at actual time or null if the data is dead (out of lifetime)
    */
   def dataAtInstant[R, T <: FiniteData[R]](data: T)(implicit operation: T => R): Option[R] =
-    Option.when(inProgress(data, Time.now()))(operation(data))
+    Option.when(inProgress(data))(operation(data))
 }

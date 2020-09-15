@@ -1,9 +1,5 @@
 package scala.model.environment.time
-
-/**
- * TODO valori variazione stagionali verranno settati dal controller (magari introducendo dei val max-min)
- */
-
+// TODO delete or use
 /**
  * Represent a data whose value is related to time
  *

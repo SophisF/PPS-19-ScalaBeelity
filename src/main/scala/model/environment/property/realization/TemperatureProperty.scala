@@ -1,9 +1,9 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.time.{Time, TimeData}
+import scala.model.environment.time.Time
 import scala.model.environment.utility.IteratorHelper.RichIterator
 
-sealed trait TemperatureProperty extends IntegerProperty with TimeData[Int] {
+sealed trait TemperatureProperty extends IntegerProperty {
   trait TemperatureState extends IntegerState
   trait TemperatureVariation extends IntegerVariation
   trait TemperatureTimedVariation extends IntegerTimedVariation
@@ -27,12 +27,8 @@ object TemperatureProperty extends TemperatureProperty {
     new TemperatureTimedVariation {
       override def instantaneous(instant: Time): TemperatureVariation = instantaneous(value, start, duration, instant)
     }
-  /*
-  implicit def instantValue(time: Time): Int = (0 until 6).iterator.mirror(false).map(_ * MonthlyIncrement)
-    .drop(time.month).toSeq.head
 
-  implicit def variation(older: Time, newer: Time): Int = instantValue(newer) - instantValue(older)*/
-  override def seasonalTrend(instant: Time): TemperatureTimedVariation =  new TemperatureTimedVariation {
+  override def seasonalTrend: TemperatureTimedVariation =  new TemperatureTimedVariation {
     private var lastGet: Int = 0
     override def instantaneous(instant: Time): TemperatureVariation = {
       val monthlyValue = (0 until 6).iterator.mirror(false).map(_ * MonthlyIncrement).drop(instant month).toSeq.head

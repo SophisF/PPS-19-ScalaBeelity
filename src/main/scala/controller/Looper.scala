@@ -3,7 +3,7 @@ package scala.controller
 import scala.annotation.tailrec
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason}
-import scala.model.environment.matrix.Matrix.DroppableMatrix
+import scala.model.environment.utility.DenseMatrixHelper.DroppableMatrix
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.property.PropertyType
 import scala.model.environment.time.Time
@@ -35,9 +35,10 @@ object Looper {
 
     //TODO: Da sostituire con Ecosystem
     @tailrec
-    def loop(environment: EnvironmentManager.EnvironmentManager, iterations: Int): EnvironmentManager.EnvironmentManager = iterations match {
+    def loop(environment: EnvironmentManager, iterations: Int): EnvironmentManager = iterations match {
       case x if x <= 0 => environment
-      case _ => Time.increment(updateStep)
+      case _ =>
+        Time.increment(updateStep)
         val env = evolution(environment)
         if ((iterations % updateStep == 0 && iterations > 970) || updateStep == 500) plot(env.environment)
         //colonies.update(time, env)

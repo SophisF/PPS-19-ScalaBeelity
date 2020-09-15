@@ -9,7 +9,7 @@ sealed trait Time {
 object Time extends Ordering[Time] {
   private var _time: Time = 0
 
-  private class TimeImpl (val _days: Int) extends Time {
+  private class TimeImpl(val _days: Int) extends Time {
     override def days: Int = _days % 30
 
     override def month: Int = (_days / 30) % 12
@@ -19,7 +19,7 @@ object Time extends Ordering[Time] {
 
   def now(): Time = _time
 
-  def delay(time: Time = Time.now(), days: Int): Time = _time.days + days
+  def delay(days: Int, from: Time = Time.now()): Time = from + days
 
   def increment(days: Int = 1): Unit = days match {
     case value if value > 0 => _time = _time.days + value

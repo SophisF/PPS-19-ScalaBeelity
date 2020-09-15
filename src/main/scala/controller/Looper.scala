@@ -1,13 +1,15 @@
 package scala.controller
 
 import scala.annotation.tailrec
+import scala.model.StatisticalData.{StatisticalData, updateStats}
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
 import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason}
 import scala.model.environment.utility.DenseMatrixHelper.DroppableMatrix
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.property.PropertyType
 import scala.model.environment.time.Time
-import scala.view.View
+import scala.view.BreezeView
+import scala.view.View.{createAndShowGUI, updateGui}
 
 /**
  * Simply controller of the test
@@ -26,7 +28,10 @@ object Looper {
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
 
-    plot(environmentManager.environment)
+    val statisticalData = StatisticalData(Time.now(), environmentManager.environment.map)
+    createAndShowGUI(statisticalData, Time.now())
+
+    //plot(environmentManager.environment)
 
     environmentManager = generateLocalChanges((environmentSize._1, environmentSize._2), iterations)
       .foldLeft(environmentManager)(addSource)
@@ -40,12 +45,17 @@ object Looper {
       case _ =>
         Time.increment(updateStep)
         val env = evolution(environment)
-        if ((iterations % updateStep == 0 && iterations > 970) || updateStep == 500) plot(env.environment)
+        //if ((iterations % updateStep == 0 && iterations > 970) || updateStep == 500) plot(env.environment)
         //colonies.update(time, env)
+
+        val stats = updateStats(env.environment, statisticalData)
+        updateGui(stats, Time.now())
         loop(env, iterations - updateStep)
     }
 
-    plot(loop(environmentManager, iterations).environment)
+    //plot(
+      loop(environmentManager, iterations).environment
+    //)
   }
 
   /**
@@ -54,7 +64,7 @@ object Looper {
    * @param environment to plot
    */
   private def plot(environment: Environment): Unit = PropertyType.properties().foreach(property =>
-    View.plot(environment.map.dropColumns(0.5).dropRows(0.5)
+    BreezeView.plot(environment.map.dropColumns(0.5).dropRows(0.5)
       .mapValues(cell => cell(property).numericRepresentation.toDouble), s"${property.toString}")
   )
 }

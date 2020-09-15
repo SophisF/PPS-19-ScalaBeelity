@@ -11,7 +11,7 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
 
   override def createChart(data: T): Component = {
     val xAxisLabel = "Month"
-    val yAxisLabel = "Value"
+    val yAxisLabel = "Value in Percentage"
     val dataset = createDataset(data)
     val chart = ChartFactory.createXYLineChart("", xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, true)
     customizeChart(chart, data.size)

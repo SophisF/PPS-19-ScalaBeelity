@@ -9,7 +9,6 @@ import scala.controller.GeneratorClimateChange
 import scala.model.Time
 import scala.model.environment.EnvironmentManager
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
-import scala.model.environment.property.Property.{Humidity, Pressure, Temperature}
 
 
 object ChartGui extends App {
@@ -43,7 +42,7 @@ object ChartGui extends App {
         statisticalData = updateStats(environment.environment, statisticalData)
       })
 
-      println(statisticalData.variationSequence().map(e => e._1 + ", " + e._2.mkString("[", ", ", "]")))
+      //println(statisticalData.variationSequence().map(e => e._1 + ", " + e._2.mkString("[", ", ", "]")))
 
       //TODO: Modificare tipo generico Array[Array[Double]] in Matrix
       val temperature = new HeatmapChart[Array[Array[Double]]]
@@ -68,9 +67,10 @@ object ChartGui extends App {
       seasonalChart.setPreferredSize(new Dimension(410, 50))
       tabbedPane.addTab("Seasonal Variation Diagram", null, seasonalChart)
 
-      val colonies = ColoniesChart
-      colonies.setPreferredSize(new Dimension(200, 200))
-      tabbedPane.addTab("Colonies", null, colonies)
+      val colonies = new ColoniesChart[Seq[(Dimension, Int)]]
+      val coloniesChart = colonies.createChart(Seq.empty[(Dimension, Int)])
+      coloniesChart.setPreferredSize(new Dimension(200, 200))
+      tabbedPane.addTab("Colonies", null, coloniesChart)
 
       tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 

@@ -29,7 +29,6 @@ object StatisticalData {
   def updateStats(environment: Environment, statistics: StatisticalData): StatisticalData = statistics.lastUpdate match {
     case time if Time.time - time > 30 =>
       val sumCell = environment.map.data.reduce((a, b) => Cell(a.temperature + b.temperature, a.humidity + b.humidity, a.pressure + b.pressure))
-      //TODO: da modificare il case
       StatisticalData(Time.time, environment.map, statistics.variationSeq
         .map(el => (el._1, el._2.appended(toPercentage(el._1, sumCell.get(el._1) / environment.map.data.length)))
       ))

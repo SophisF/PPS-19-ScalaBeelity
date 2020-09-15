@@ -5,7 +5,7 @@ import java.awt.{BorderLayout, Dimension, Toolkit}
 import javax.swing._
 import model.StatisticalData._
 
-object ViewImpl extends View {
+object ChartViewImpl extends View {
 
   val frame = new JFrame()
   frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit.getScreenSize.width, Toolkit.getDefaultToolkit.getScreenSize.width))

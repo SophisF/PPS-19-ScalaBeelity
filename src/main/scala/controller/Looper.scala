@@ -1,7 +1,7 @@
 package scala.controller
 
 import model.StatisticalData._
-import view.ViewImpl._
+import view.ChartViewImpl._
 
 import scala.annotation.tailrec
 import scala.model.Time

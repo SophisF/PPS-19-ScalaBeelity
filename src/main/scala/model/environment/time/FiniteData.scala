@@ -7,9 +7,7 @@ import scala.model.environment.time.Timed.inProgress
  *
  * @tparam R type of data returned
  */
-trait FiniteData[R] extends TimeData[R] with Timed {
-  var evaluated: Int
-}
+trait FiniteData[R] extends TimeData[R] with Timed
 
 object FiniteData {
 

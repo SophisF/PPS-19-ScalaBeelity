@@ -22,7 +22,8 @@ object ClimateManager {
    */
   def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimeDependentProperty]] =
     Iterator.continually(PropertyType.random(_.isInstanceOf[TimeDependentProperty])).filter(_ nonEmpty)
-      .map(_.get.property.asInstanceOf[TimeDependentProperty]).map(randomContinuousFilter(_, environmentSize, iterations)).take(7)
+      .map(_.get.property.asInstanceOf[TimeDependentProperty])
+      .map(randomContinuousFilter(_, environmentSize, iterations)).take(7)
     //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
 
   def generateSeason(): Iterator[PropertySource[TimeDependentProperty]] = PropertyType.properties(_.isInstanceOf[TimeDependentProperty])

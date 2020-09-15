@@ -59,7 +59,7 @@ object FilterBuilder {
     correctRanges(peak, stop) match {
       case (peak, _) if peak.abs == 0 => empty
       case (p, s) => (positive2dGaussianFunction(p, s, height) * positive2dGaussianFunction(p, s, width).map(_ / p).t)
-        .map(_ + stop + s).mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
+        .map(_ + stop - s).mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
     }
 
   def correctRanges(peak: Int, stop: Int): (Int, Int) =

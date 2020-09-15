@@ -2,7 +2,7 @@ package scala.controller
 
 import scala.annotation.tailrec
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
-import scala.model.environment.ClimateManager.generateLocalChanges
+import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason}
 import scala.model.environment.matrix.Matrix.DroppableMatrix
 import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.property.PropertyType
@@ -31,8 +31,7 @@ object Looper {
     environmentManager = generateLocalChanges((environmentSize._1, environmentSize._2), iterations)
       .foldLeft(environmentManager)(addSource)
 
-    environmentManager = generateLocalChanges((environmentSize._1, environmentSize._2), iterations)
-      .foldLeft(environmentManager)(addSource)
+    environmentManager = generateSeason().foldLeft(environmentManager)(addSource)
 
     //TODO: Da sostituire con Ecosystem
     @tailrec
@@ -53,7 +52,7 @@ object Looper {
    *
    * @param environment to plot
    */
-  private def plot(environment: Environment): Unit = PropertyType.properties.foreach(property =>
+  private def plot(environment: Environment): Unit = PropertyType.properties().foreach(property =>
     View.plot(environment.map.dropColumns(0.5).dropRows(0.5)
       .mapValues(cell => cell(property).numericRepresentation.toDouble), s"${property.toString}")
   )

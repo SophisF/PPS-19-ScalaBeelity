@@ -33,7 +33,7 @@ object EnvironmentManager {
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager = {
     EnvironmentManager(
-      manager.propertySources.filter(_.isInstanceOf[ZoneSource[_]]).foldLeft(manager.environment)(Environment.apply),
+      manager.propertySources.foldLeft(manager.environment)(Environment.apply),
       /*Environment(manager.environment, manager.propertySources.filter(_.isInstanceOf[ZoneSource[_]]).map {
         case source: ContinuousSource[Property] => instantaneous(source)
         case source: InstantaneousSource[Property] => Option(source)

@@ -4,8 +4,8 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.matrix.Zone.{border, in}
 import scala.model.environment.matrix.Size.Border._
-import scala.model.environment.property.Property
-import scala.model.environment.property.source.{PropertySource, ZoneSource}
+import scala.model.environment.property.{Property, TimedProperty}
+import scala.model.environment.property.source.{PropertySource, SeasonalSource, ZoneSource}
 
 /**
  * A first scratch of the environment class.
@@ -29,9 +29,10 @@ object Environment {
   def apply(width: Int, height: Int, defaultCell: Cell = Cell()): Environment = Environment(
     DenseMatrix.create(width, height, Iterator continually defaultCell take(width * height) toArray))
 
-  def apply(environment: Environment, source: PropertySource[Property]): Environment = source match {
+  def apply(environment: Environment, source: PropertySource[_]): Environment = source match {
     case source: ZoneSource[Property] => applyFilter(environment, source)
-    //case propertySource: SeasonalSource[Property] => applySeason(environment, propertySource)
+    case source: SeasonalSource[TimedProperty] => applySeason(environment, source)
+    case _ => environment
   }
 
   /**
@@ -56,10 +57,9 @@ object Environment {
    * @param variator to apply
    * @return an environment to which is applied the filter
    */
-  /*def applySeason(environment: Environment, source: GlobalSource[Property]): Environment = {
-    source.
-    val variation = GenericVariation(SeasonalSource.nextValue(variator))
-    Environment(environment.map.map(_ + variation))
-    //Environment(environment.map.parallelMap(_ + variation)(Cell()))
-  }*/
+  def applySeason(environment: Environment, source: SeasonalSource[TimedProperty]): Environment =
+    source.nextValue() match {
+      case variation if variation isNull => environment
+      case variation => Environment(environment.map.map(_ + variation))
+    }
 }

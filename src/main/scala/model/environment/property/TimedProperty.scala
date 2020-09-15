@@ -10,5 +10,7 @@ trait TimedProperty extends Property {
     def instantaneous(instant: Time): Variation
   }
 
+  def seasonalTrend(instant: Time): TimedVariation
+
   def generateTimedFilter(xDecrement: Int, yDecrement: Int, start: Time, duration: Time): DenseMatrix[TimedVariation]
 }

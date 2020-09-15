@@ -18,6 +18,13 @@ trait IntegerProperty extends TimedProperty with Range {
     override def numericRepresentation: Int = (value - minValue) * 100 / (maxValue - minValue)
   }
 
+  trait IntegerVariation extends Variation {
+
+    def value: Int
+
+    def isNull: Boolean = value == 0
+  }
+
   trait IntegerTimedVariation extends TimedVariation {
     private var evaluated: Double = 0
 

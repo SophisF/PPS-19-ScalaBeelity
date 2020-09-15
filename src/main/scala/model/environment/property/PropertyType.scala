@@ -30,9 +30,10 @@ object PropertyType extends Enumeration {
   val Humidity: PropertyValue[HumidityProperty] = PropertyValue(HumidityProperty)
   val Pressure: PropertyValue[PressureProperty] = PropertyValue(PressureProperty)
 
-  def properties: Seq[PropertyValue[Property]] = super.values.toSeq.asInstanceOf[Seq[PropertyValue[Property]]]
+  def properties(filterCondition: Property => Boolean = _ => true): Seq[PropertyValue[Property]] =
+    values.toSeq.asInstanceOf[Seq[PropertyValue[Property]]].filter(it => filterCondition(it()))
 
-  def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] = properties
+  def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] = properties()
     .filter(property => filterCondition(property())).toIndexedSeq match {
     case seq if seq.isEmpty => Option.empty
     case seq => Option(seq(Random.nextInt(seq.size)))

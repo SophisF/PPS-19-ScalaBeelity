@@ -30,6 +30,9 @@ trait Property {
   }
 
   trait Variation {
+
+    def isNull: Boolean
+
     def vary[S <: State](state: S): State
   }
 

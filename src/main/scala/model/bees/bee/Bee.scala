@@ -28,7 +28,7 @@ object Bee {
     val effectiveLongevity: Int
     val effectiveReproductionRate: Int
     val effectiveAggression: Int
-    def update(time: Int, temperature: Int, pressure: Int, humidity: Int): Bee = {
+    def update(time: Int)(temperature: Int)(pressure: Int)(humidity: Int): Bee = {
 
       Bee(this.genotype, this.phenotype, this.age + time, temperature, pressure, humidity)
 

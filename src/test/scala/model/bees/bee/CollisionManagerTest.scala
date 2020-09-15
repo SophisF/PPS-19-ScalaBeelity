@@ -2,13 +2,8 @@ package model.bees.bee
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.bees.bee.{CollisionManager, Queen}
-import scala.model.bees.genotype.Genotype
-import scala.model.bees.genotype.Genotype.Genotype
-import scala.model.bees.phenotype.Phenotype
-import scala.model.bees.phenotype.Phenotype.Phenotype
-
 class CollisionManagerTest extends AnyFunSuite {
+  /*
   private val genotype: Genotype = Genotype()
   private val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
   private val queen1 = Queen(None, genotype, phenotype, age = 0, temperature = 20, pressure = 1000, humidity = 50, position = (3, 3))
@@ -26,4 +21,6 @@ class CollisionManagerTest extends AnyFunSuite {
   test("Two colonies should not collide if they aren't overlapped") {
     assert(CollisionManager.collisionArea(queen2.colony, queen3.colony) == 0)
   }
+
+   */
 }

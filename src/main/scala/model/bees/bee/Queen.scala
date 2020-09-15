@@ -22,13 +22,14 @@ object Queen {
             genotype: Genotype, phenotype: Phenotype,
             age: Int, temperature: Int,
             pressure: Int, humidity: Int,
-            position: Point = (Random.nextInt(Ecosystem.width), Random.nextInt(Ecosystem.height))): Queen = {
+            position: Point,
+            generateNewColony: Point => Colony): Queen = {
     val fitValue: Double = Fitter.calculateFitValue(phenotype)(temperature)(pressure)(humidity)
 
     QueenImpl(colonyOpt, genotype, phenotype, age, Fitter.applyFitValue(fitValue)(phenotype.longevity.expression - age)(_ * _),
       Fitter.applyFitValue(fitValue)(phenotype.reproductionRate.expression)(_ * _),
       Fitter.applyFitValue(fitValue)(phenotype.aggression.expression)(_ * _),
-      temperature, pressure, humidity, position)
+      temperature, pressure, humidity, position, generateNewColony)
   }
 
   /**
@@ -37,7 +38,8 @@ object Queen {
   trait Queen extends Bee {
     val colony: Colony
     val position: Point
-    def canGenerate(f: (Int, Int) => Boolean): Boolean
+    val canGenerate: Boolean
+    val generateNewColony: Point => Colony
 
   }
 
@@ -45,7 +47,7 @@ object Queen {
                                override val genotype: Genotype, override val phenotype: Phenotype,
                                override val age: Int, override val effectiveLongevity: Int, override val effectiveReproductionRate: Int,
                                override val effectiveAggression: Int, private val temperature: Int, private val pressure: Int,
-                               private val humidity: Int, override val position: Point) extends Queen {
+                               private val humidity: Int, override val position: Point, override val generateNewColony: Point => Colony) extends Queen {
 
     override val colony: Colony = colonyOpt getOrElse ColonyImpl(this, generateBee)
 
@@ -62,7 +64,7 @@ object Queen {
         )
       })
 
-    override def canGenerate(f: (Int, Int) => Boolean): Boolean = true//f(this.colony.numberOfBees, this.colony.averageReproductionRate)
+    override val canGenerate: Boolean = this.colony.numberOfBees < this.colony.maxBees
   }
 
 }

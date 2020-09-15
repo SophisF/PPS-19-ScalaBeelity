@@ -12,7 +12,8 @@ object ColonyManager {
 
   /**
    * Method to manage the colonies. It combines and adjust them if there are the conditions.
-   * @param colonies, the colonies of bees.
+   *
+   * @param colonies , the colonies of bees.
    * @return a new list of colonies with the new colonies managed.
    */
   def manage(colonies: List[Colony]): List[Colony] = {
@@ -22,7 +23,8 @@ object ColonyManager {
 
   /**
    * Combines a colony with all the other that colliding with it and respect some conditions.
-   * @param col the initial colonies.
+   *
+   * @param col         the initial colonies.
    * @param newColonies the new colonies after the combinations.
    * @return the new colonies.
    */
@@ -33,7 +35,8 @@ object ColonyManager {
 
       /**
        * Method to merge all the colony of a list with another colony.
-       * @param colony the colony.
+       *
+       * @param colony          the colony.
        * @param coloniesToMerge the list of colonies
        * @return the new colony after the merge.
        */
@@ -42,6 +45,7 @@ object ColonyManager {
         case h :: t => mergeAll(merge(colony, h), t)
         case _ => colony
       }
+
       val merged = mergeAll(h, toMerge)
       combine(t diff toMerge, merged :: (newColonies diff (h :: toMerge)))
     case _ => newColonies
@@ -49,8 +53,9 @@ object ColonyManager {
 
   /**
    * Method to adjust the number of bees in the colonies if some conditions take place.
-   * @param colonies the colonies of bees.
-   * @param col the initial colonies.
+   *
+   * @param colonies    the colonies of bees.
+   * @param col         the initial colonies.
    * @param newColonies the new colonies.
    * @return the new colonies.
    */
@@ -61,22 +66,29 @@ object ColonyManager {
 
       /**
        * Method to adjust the number of bees of a colony with respect to each other that collide with it and under some conditions.
-       * @param colony the colony.
+       *
+       * @param colony   the colony.
        * @param colonies the other colonies.
        * @return a new colony with the new number of bees.
        */
       @scala.annotation.tailrec
-      def fightAll(colony: Colony, colonies: List[Colony]): Colony = colonies match {
-        case h :: t => fightAll(kill(colony, h), t)
-        case _ => colony
+      def fightAll(colony: Option[Colony], colonies: List[Colony]): Option[Colony] = colony match {
+        case Some(colony) =>
+          colonies
+          match {
+            case h :: t => fightAll(kill(colony, h), t)
+            case _ => Some(colony)
+          }
+        case _ => None
       }
-      val fought = fightAll(h, toFight)
-      fight(colonies, t, fought :: newColonies)
-    case _ => newColonies
+      val fought = fightAll(Some(h), toFight)
+      fight(colonies, t, (if (fought.nonEmpty) fought.get :: newColonies else newColonies))
+    case _ => newColonies.filter(_.isColonyAlive)
   }
 
   /**
    * Method to check if there are the conditions to merge two colony.
+   *
    * @param colony1 the first colony
    * @param colony2 the second colony
    * @return true if the colonies can be merged, false otherwise.
@@ -88,6 +100,7 @@ object ColonyManager {
 
   /**
    * Method to check if a colony respect the condition to fight against other colonies.
+   *
    * @param colony the colony.
    * @return true if the colony can fight, false otherwise.
    */
@@ -97,6 +110,7 @@ object ColonyManager {
 
   /**
    * Defines how two colony can be merged.
+   *
    * @param colony1 the first colony.
    * @param colony2 the second colony.
    * @return a new colony, made up by the two colonies merged together.
@@ -107,14 +121,16 @@ object ColonyManager {
 
   /**
    * Define how to adjust the number of bees of a colony.
+   *
    * @param colony1 the colony to adjust.
    * @param colony2 the colony to fight.
    * @return a new colony with the number of bees adjusted.
    */
-  private def kill(colony1: Colony, colony2: Colony): Colony = {
+  private def kill(colony1: Colony, colony2: Colony): Option[Colony] = {
     val collisionArea = CollisionManager.collisionArea(colony1, colony2)
     val colony2Aggression = EvolutionManager.calculateAveragePhenotype(colony2.bees).aggression.expression
-    Colony(colony1.queen, colony1.bees diff colony1.bees.take(colony2Aggression * collisionArea))
+    val newBees = colony1.bees diff colony1.bees.take(colony2Aggression * collisionArea)
+    if (newBees.nonEmpty) Some(Colony(colony1.queen, newBees)) else None
   }
 
 }

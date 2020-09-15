@@ -37,7 +37,10 @@ object Main extends App {
    */
 
   Ecosystem.initialize(1)
-  Ecosystem.colonies.foreach(c=> println(c.bees.size))
+  for (i <- 1 to 1000){
+    println("iteration " + i)
+    Ecosystem.update(1)
+  }
 
 
 }

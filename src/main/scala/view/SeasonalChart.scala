@@ -30,7 +30,7 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
     val renderer = new XYLineAndShapeRenderer
     (0 until numLines).foreach(x => {
       // sets paint color for each series
-      renderer.setSeriesPaint(x, Color.getHSBColor(1 / numLines, 1, 1))
+      renderer.setSeriesPaint(x, Color.getHSBColor(100 * (x + 1), 100 * (x + 1), 100 * (x + 1)))
       // sets thickness for series (using strokes)
       renderer.setSeriesStroke(x, new BasicStroke(4.0f))
     })
@@ -47,4 +47,5 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
     plot.setDomainGridlinesVisible(true)
     plot.setDomainGridlinePaint(Color.BLACK)
   }
+
 }

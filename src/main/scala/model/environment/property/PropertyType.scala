@@ -32,5 +32,9 @@ object PropertyType extends Enumeration {
 
   def properties: Seq[PropertyValue[Property]] = super.values.toSeq.asInstanceOf[Seq[PropertyValue[Property]]]
 
-  def random(): PropertyValue[Property] = properties.toIndexedSeq(Random.nextInt(values.size))
+  def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] = properties
+    .filter(property => filterCondition(property())).toIndexedSeq match {
+    case seq if seq.isEmpty => Option.empty
+    case seq => Option(seq(Random.nextInt(seq.size)))
+  }
 }

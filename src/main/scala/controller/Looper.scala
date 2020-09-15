@@ -2,8 +2,9 @@ package scala.controller
 
 import scala.annotation.tailrec
 import scala.model.environment.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.ClimateManager.generateLocalChanges
 import scala.model.environment.matrix.Matrix.DroppableMatrix
-import scala.model.environment.{Environment, EnvironmentManager, GeneratorClimateChange}
+import scala.model.environment.{Environment, EnvironmentManager}
 import scala.model.environment.property.PropertyType
 import scala.model.environment.time.Time
 import scala.view.View
@@ -27,7 +28,10 @@ object Looper {
 
     plot(environmentManager.environment)
 
-    environmentManager = GeneratorClimateChange.generateClimate((environmentSize._1, environmentSize._2), iterations)
+    environmentManager = generateLocalChanges((environmentSize._1, environmentSize._2), iterations)
+      .foldLeft(environmentManager)(addSource)
+
+    environmentManager = generateLocalChanges((environmentSize._1, environmentSize._2), iterations)
       .foldLeft(environmentManager)(addSource)
 
     //TODO: Da sostituire con Ecosystem

@@ -3,12 +3,12 @@ package scala.model.environment
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.matrix.Size
-import scala.model.environment.property.{Property, PropertyType, TimedProperty}
+import scala.model.environment.property.{PropertyType, TimedProperty}
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
 import scala.model.environment.time.Time
 import scala.util.Random
 
-object GeneratorClimateChange {
+object ClimateManager {
 
   /**
    * Timed generator for non periodically climate changes.
@@ -18,11 +18,11 @@ object GeneratorClimateChange {
    * @param iterations
    * @return
    */
-  def generateClimate(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimedProperty]] =
+  def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimedProperty]] =
     Iterator.continually(randomContinuousFilter(environmentSize, iterations)).take(7)
     //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
 
-  //def generateSeason[T <: Property](): Iterable[PropertySource[T]] = PropertyType.values.toArray.map(SeasonalSourceImpl).toIterable
+  //def generateSeason(): Iterable[PropertySource[TimedProperty]] = PropertyType.values.toArray.map(SeasonalSourceImpl).toIterable
 
   /**
    *
@@ -32,11 +32,10 @@ object GeneratorClimateChange {
    * @return
    */
   private def randomContinuousFilter(environmentSize: Size, iterations: Int): ContinuousSource[TimedProperty] = {
-    val properties = PropertyType.properties.filter(_.property.isInstanceOf[TimedProperty])
-    val property = properties.toIndexedSeq(Random.nextInt(properties.length))().asInstanceOf[TimedProperty]
-    val filter = property.generateTimedFilter(70, 70, Time.now(), Time.delay(Time.now(), 100))
+    val property = PropertyType.random(_.isInstanceOf[TimedProperty]).map(_.asInstanceOf[TimedProperty])
+    val filter = property.map(_.generateTimedFilter(70, 70, Time.now(), Time.delay(Time.now(), 100)))
 
-    new ContinuousSource(filter.asInstanceOf[DenseMatrix[TimedProperty#TimedVariation]],
+    new ContinuousSource(filter.get.asInstanceOf[DenseMatrix[TimedProperty#TimedVariation]],
       Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), 5)
   }
 }

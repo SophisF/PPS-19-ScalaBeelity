@@ -22,7 +22,7 @@ object Time extends Ordering[Time] {
   def delay(days: Int, from: Time = Time.now()): Time = from + days
 
   def increment(days: Int = 1): Unit = days match {
-    case value if value > 0 => _time = _time.days + value
+    case value if value > 0 => _time = _time + value
   }
 
   def reset(): Unit = _time = 0

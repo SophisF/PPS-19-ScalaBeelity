@@ -19,10 +19,10 @@ trait IntegerProperty extends TimedProperty with Range {
   }
 
   trait IntegerTimedVariation extends TimedVariation {
-    private var evaluated: Int = 0
+    private var evaluated: Double = 0
 
     def instantaneous(value: Int, start: Time, duration: Time, instant: Time = Time.now()): Int = {
-      val percentage = (instant - start) * 100 / duration - evaluated
+      val percentage = (instant - start) / duration.toDouble - evaluated
       if (percentage * value > 0) evaluated += percentage
       percentage * value
     }

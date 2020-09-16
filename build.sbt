@@ -4,8 +4,9 @@ version := "0.1"
 
 scalaVersion := "2.13.3"
 
+scalaSource in Test := baseDirectory.value / "src" / "test"
 
-
+scalaSource in Compile := baseDirectory.value / "src" / "main"
 
 libraryDependencies ++= Seq(
 

@@ -15,5 +15,5 @@ class ContinuousSource[T <: TimeDependentProperty](
   val width: Int = filter cols
   val height: Int = filter rows
 
-  override def filter: DenseMatrix[T#Variation] = completeFilter mapValues(_ instantaneous Time.now())
+  override def filter: DenseMatrix[T#Variation] = completeFilter map(i => (i instantaneous Time.now()).asInstanceOf[T#Variation])
 }

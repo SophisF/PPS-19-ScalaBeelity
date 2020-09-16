@@ -2,11 +2,10 @@ package view
 
 import java.awt.{BorderLayout, Dimension, GridLayout}
 
-import javax.swing.{JComboBox, JFrame, JLabel, JOptionPane, JPanel, JTextField, WindowConstants}
+import javax.swing.{JComboBox, JFrame, JLabel, JOptionPane, JPanel, JTextField, SwingUtilities, UIManager, WindowConstants}
 
 
-object StartViewImpl /*extends App*/ {
-
+object StartViewImpl extends App {
   val DIMENSION = 200
   val frame = new JFrame("ScalaBeelity")
   frame.setPreferredSize(new Dimension(DIMENSION, DIMENSION))
@@ -40,11 +39,11 @@ object StartViewImpl /*extends App*/ {
 
   }
 
-//  SwingUtilities.invokeLater(new Runnable() {
-//    override def run(): Unit = { //Turn off metal's use of bold fonts
-//      UIManager.put("swing.boldMetal", false)
-//      createAndShowGUI()
-//    }
-//  })
+  SwingUtilities.invokeLater(new Runnable() {
+    override def run(): Unit = { //Turn off metal's use of bold fonts
+      UIManager.put("swing.boldMetal", false)
+      createAndShowGUI()
+    }
+  })
 
 }

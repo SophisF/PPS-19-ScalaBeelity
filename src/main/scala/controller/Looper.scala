@@ -28,10 +28,10 @@ object Looper {
   def run(environmentSize: (Int, Int), iterations: Int, updateStep: Int): Unit = {
     var environmentManager = EnvironmentManager(environmentSize._1, environmentSize._2)
 
-    val statisticalData = StatisticalData(Time.now(), environmentManager.environment.map)
-    createAndShowGUI(statisticalData, Time.now())
+    //val statisticalData = StatisticalData(Time.now(), environmentManager.environment.map)
+    //createAndShowGUI(statisticalData, Time.now())
 
-    //plot(environmentManager.environment)
+    plot(environmentManager.environment)
 
     environmentManager = generateLocalChanges((environmentSize._1, environmentSize._2), iterations)
       .foldLeft(environmentManager)(addSource)
@@ -48,14 +48,14 @@ object Looper {
         //if ((iterations % updateStep == 0 && iterations > 970) || updateStep == 500) plot(env.environment)
         //colonies.update(time, env)
 
-        val stats = updateStats(env.environment, statisticalData)
-        updateGui(stats, Time.now())
+        //val stats = updateStats(env.environment, statisticalData)
+        //updateGui(stats, Time.now())
         loop(env, iterations - updateStep)
     }
 
-    //plot(
+    plot(
       loop(environmentManager, iterations).environment
-    //)
+    )
   }
 
   /**

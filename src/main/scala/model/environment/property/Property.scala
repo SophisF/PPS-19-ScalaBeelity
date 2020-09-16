@@ -14,6 +14,8 @@ trait Property {
    * Type of values of the property
    */
   type ValueType
+  type StateType <: State
+  type VariationType <: Variation
 
   /**
    * Represent the state of a property
@@ -33,8 +35,8 @@ trait Property {
 
     def isNull: Boolean
 
-    def vary[S <: State](state: S): State
+    def vary[S <: StateType](state: S): StateType
   }
 
-  def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[Variation]
+  def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType]
 }

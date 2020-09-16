@@ -14,10 +14,9 @@ import scala.model.environment.time.TimeData.dataAtInstant
  * A first scratch of the environment class.
  *
  * @param map of the environment. Represented as a grid.
- *
  * @author Paolo Baldini
  */
-case class Environment private (map: DenseMatrix[Cell])
+case class Environment private(map: DenseMatrix[Cell])
 
 object Environment {
   type Matrix[T] = Array[Array[T]]
@@ -26,7 +25,7 @@ object Environment {
   /**
    * Create a new environment
    *
-   * @param size of the grid/map
+   * @param size        of the grid/map
    * @param defaultCell initial value for the cells of the map
    * @return the environment
    */
@@ -49,7 +48,7 @@ object Environment {
    * Apply a filter to an environment
    *
    * @param environment to which apply the filter
-   * @param filter to apply
+   * @param filter      to apply
    * @return an environment to which is applied the filter
    */
   def applyFilter(environment: Environment, filter: InstantaneousZonePropertySource): Environment =
@@ -63,7 +62,7 @@ object Environment {
    * Apply a seasonal variation to an environment
    *
    * @param environment to which apply the filter
-   * @param variator to apply
+   * @param variator    to apply
    * @return an environment to which is applied the filter
    */
   def applySeason(environment: Environment, variator: SeasonalPropertySource): Environment = {

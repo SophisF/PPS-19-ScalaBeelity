@@ -20,13 +20,12 @@ object GeneratorClimateChange {
    * @return
    */
   def generateClimate(environmentWidth: Int, environmentHeight: Int, iterations: Int): Iterator[PropertySource] = {
-    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations))
-      .take(7)
+    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations)).take(7)
     //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
   }
 
   def generateSeason(): Iterable[PropertySource] =
-  Property.values.toArray.map(SeasonalPropertySource).toIterable
+    Property.values.toArray.map(SeasonalPropertySource).toIterable
 
   /**
    *
@@ -42,7 +41,7 @@ object GeneratorClimateChange {
     //    val values = if (Random.nextBoolean()) (property.maxValue, property.default)
     //    else (property.minValue, property.default)
     val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-    val filter = FilterBuilder.gaussianFunction3d(values._1, values._2, 70, 70)
+    val filter = FilterBuilder.gaussianFunction3d(500, 1, 20, 20)
     ZonePropertySource(
       Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
       filter.cols, filter.rows,

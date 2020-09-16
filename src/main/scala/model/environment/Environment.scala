@@ -30,7 +30,7 @@ object Environment {
    * @return the environment
    */
   def apply(size: SizeWH, defaultCell: Cell) = new Environment(DenseMatrix.create(size._1, size._2, Iterator
-    .continually(defaultCell).take(size._1 * size._2).toArray))
+    .continually(defaultCell).take(size._1 * size._2 - 2).toArray.appended(Cell(10,56, 990)).appended(Cell(3,56, 990))))
 
   //TODO: Cercare un metodo per rimuovere i case match innestati.
   def apply(environment: Environment, propertySource: PropertySource): Environment = propertySource match {

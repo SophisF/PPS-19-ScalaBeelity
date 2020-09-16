@@ -21,6 +21,8 @@ object EnvironmentManager {
    */
   case class EnvironmentManager(environment: Environment, propertySource: Array[PropertySource])
 
+  def empty(): EnvironmentManager = apply(0,0)
+
   /**
    * Apply function.
    *
@@ -32,6 +34,8 @@ object EnvironmentManager {
     EnvironmentManager(Environment((width, height), Cell(range(Temperature).default, range(Humidity).default,
       range(Pressure).default)), Array())
   }
+
+
 
   /**
    * Apply property source at the environment and control property source.

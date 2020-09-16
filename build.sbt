@@ -5,6 +5,8 @@ version := "0.1"
 scalaVersion := "2.13.3"
 
 
+
+
 libraryDependencies ++= Seq(
 
   "it.unibo.alice.tuprolog" % "tuprolog" % "3.3.0",

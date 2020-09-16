@@ -1,49 +1,47 @@
 package view
 
-import java.awt.{BorderLayout, Dimension, GridLayout}
+import java.awt.GridLayout
 
-import javax.swing.{JComboBox, JFrame, JLabel, JOptionPane, JPanel, JTextField, SwingUtilities, UIManager, WindowConstants}
-
-
-object StartViewImpl extends App {
-  val DIMENSION = 200
-  val frame = new JFrame("ScalaBeelity")
-  frame.setPreferredSize(new Dimension(DIMENSION, DIMENSION))
+import javax.swing._
 
 
-  def createAndShowGUI(): Unit = {
+class StartViewImpl {
+  //  val DIMENSION = 200
+  //  val frame = new JFrame("ScalaBeelity")
+  //  frame.setPreferredSize(new Dimension(DIMENSION, DIMENSION))
+
+
+  def createAndShowGUI(callback: (Int, Int, Int, Int) => Unit): Unit = {
 
     val matrixDim = Array("100", "200", "300")
     val comboMatrix = new JComboBox(matrixDim)
     val iterations = Array("1000", "5000", "infinite")
     val comboIter = new JComboBox(iterations)
 
-    val field1 = new JTextField()
-    val field2 = new JTextField()
+    val numColonies = new JTextField()
+    val temporalGranularity = new JTextField()
     val panel = new JPanel(new GridLayout(0, 1))
     panel.add(new JLabel("N° Colonies (queens):"))
-    panel.add(field1)
+    panel.add(numColonies)
     panel.add(new JLabel("Temporal Granularity :"))
-    panel.add(field2)
+    panel.add(temporalGranularity)
     panel.add(new JLabel("N° max iterations:"))
     panel.add(comboIter)
     panel.add(new JLabel("Dim of Matrix:"))
     panel.add(comboMatrix)
     val result = JOptionPane.showConfirmDialog(null, panel, "Test", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)
-    if (result == JOptionPane.OK_OPTION) System.out.println(comboIter.getSelectedItem + " " + field1.getText + " " + field2.getText)
-    else System.out.println("Cancelled")
-    frame.add(panel, BorderLayout.CENTER)
-    frame.pack()
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
-    frame.setVisible(true)
+    if (result == JOptionPane.OK_OPTION) {
+      //TODO : refactor with enumeration
+      callback(numColonies.getText.toInt, temporalGranularity.getText.toInt, comboIter.getSelectedItem match {
+        case "infinite" => -1
+        case x => x.toString.toInt
+      }, comboMatrix.getSelectedItem.toString.toInt)
+      System.out.println(comboIter.getSelectedItem + " " + numColonies.getText + " " + temporalGranularity.getText)
+    } else System.out.println("Cancelled")
+    //    frame.add(panel, BorderLayout.CENTER)
+    //    frame.pack()
+    //    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
+    //    frame.setVisible(true)
 
   }
-
-  SwingUtilities.invokeLater(new Runnable() {
-    override def run(): Unit = { //Turn off metal's use of bold fonts
-      UIManager.put("swing.boldMetal", false)
-      createAndShowGUI()
-    }
-  })
-
 }

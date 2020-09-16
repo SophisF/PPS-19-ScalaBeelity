@@ -1,11 +1,14 @@
 package view
 
-import java.awt.{BorderLayout, Dimension, Toolkit}
+import java.awt.{BorderLayout, Component, Dimension, Toolkit}
 
 import javax.swing._
-import model.StatisticalData._
 
-object ChartViewImpl extends View {
+import scala.controller.Controller
+import scala.model.Time
+
+class ChartViewImpl(controller: Controller) {
+  private type Matrix = Array[Array[Double]]
 
   val frame = new JFrame()
   frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit.getScreenSize.width, Toolkit.getDefaultToolkit.getScreenSize.width))
@@ -13,31 +16,18 @@ object ChartViewImpl extends View {
   val gameBar = new JPanel()
   val timeLabel = new JLabel()
 
+  def createAndShowGUI(): Unit = {
 
-  override def createAndShowGUI(statisticalData: StatisticalData, time: Int): Unit = {
+    controller.properties.foreach(p => tabbedPane.addTab(p._1, null, heatmapChart(p._2)))
 
-    //TODO: Modificare tipo generico Array[Array[Double]] in Matrix
-    val temperature = new HeatmapChart[Array[Array[Double]]]
-    val temperatureChart = temperature.createChart(statisticalData.temperatureMatrix())
-    temperatureChart.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Temperature", null, temperatureChart)
-
-    val humidity = new HeatmapChart[Array[Array[Double]]]
-    val humidityChart = humidity.createChart(statisticalData.humidityMatrix())
-    humidityChart.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Humidity", null, humidityChart)
-
-    val pressure = new HeatmapChart[Array[Array[Double]]]
-    val pressureChart = pressure.createChart(statisticalData.pressureMatrix())
-    pressureChart.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Pressure", null, pressureChart)
+    tabbedPane.addChangeListener(_ => updateGui())
 
     val season = new SeasonalChart[Seq[(String, Array[Array[Double]])]]
     val seasonalChart = season.createChart(
-      statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2)))
+      controller.statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2)))
     )
     seasonalChart.setPreferredSize(new Dimension(410, 50))
-    tabbedPane.addTab("Seasonal Variation Diagram", null, seasonalChart)
+    tabbedPane.addTab("Seasonal Variation", null, seasonalChart)
 
     val colonies = new ColoniesChart[Seq[(Dimension, Int)]]
     val coloniesChart = colonies.createChart(Seq.empty[(Dimension, Int)])
@@ -58,7 +48,7 @@ object ChartViewImpl extends View {
     stopButton.addActionListener((e) => {
       //TODO:Implement action listener
     })
-    timeLabel.setText("Execution Time: " + time)
+    timeLabel.setText("Execution Time: " + Time.time)
     gameBar.add(playButton)
     gameBar.add(pauseButton)
     gameBar.add(stopButton)
@@ -69,44 +59,30 @@ object ChartViewImpl extends View {
     frame.add(tabbedPane, BorderLayout.CENTER)
     frame.pack()
     frame.setVisible(true)
-
   }
 
-  override def updateGui(statisticalData: StatisticalData, time: Int): Unit = {
-    SwingUtilities.invokeLater(new Runnable() {
-      override def run(): Unit = {
-        timeLabel.setText("Execution Time: " + time)
-        gameBar.add(timeLabel)
-        tabbedPane.getSelectedIndex match {
-          case 0 =>
-            val temperature = new HeatmapChart[Array[Array[Double]]]
-            val temperatureChart = temperature.createChart(statisticalData.temperatureMatrix())
-            temperatureChart.setPreferredSize(new Dimension(410, 50))
-            tabbedPane.setComponentAt(tabbedPane.getSelectedIndex, temperatureChart)
-          case 1 =>
-            val humidity = new HeatmapChart[Array[Array[Double]]]
-            val humidityChart = humidity.createChart(statisticalData.humidityMatrix())
-            humidityChart.setPreferredSize(new Dimension(410, 50))
-            tabbedPane.setComponentAt(tabbedPane.getSelectedIndex, humidityChart)
-          case 2 =>
-            val pressure = new HeatmapChart[Array[Array[Double]]]
-            val pressureChart = pressure.createChart(statisticalData.pressureMatrix())
-            pressureChart.setPreferredSize(new Dimension(410, 50))
-            tabbedPane.setComponentAt(tabbedPane.getSelectedIndex, pressureChart)
-          case 3 =>
-            val season = new SeasonalChart[Seq[(String, Array[Array[Double]])]]
-            val seasonalChart = season.createChart(
-              statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2)))
-            )
-            seasonalChart.setPreferredSize(new Dimension(410, 50))
-            tabbedPane.setComponentAt(tabbedPane.getSelectedIndex, seasonalChart)
-          case 4 =>
-            val colonies = new ColoniesChart[Seq[(Dimension, Int)]]
-            val coloniesChart = colonies.createChart(Seq.empty[(Dimension, Int)])
-            coloniesChart.setPreferredSize(new Dimension(200, 200))
-            tabbedPane.setComponentAt(tabbedPane.getSelectedIndex, coloniesChart)
-        }
-      }
-    })
+  val tabsComponents: Map[String, () => Component] = Map(
+    "Temperature" -> (() => heatmapChart(controller.properties("Temperature"))),
+    "Humidity" -> (() => heatmapChart(controller.properties("Humidity"))),
+    "Pressure" -> (() => heatmapChart(controller.properties("Pressure"))),
+    "Seasonal Variation" -> (() => new SeasonalChart[Seq[(String, Matrix)]]
+      .createChart(controller.statisticalData.variationSequence()
+        .map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2))))
+      ),
+    "Colonies" -> (() => new ColoniesChart[Seq[(Dimension, Int)]].createChart(Seq.empty[(Dimension, Int)]))
+  )
+
+  def updateGui(): Unit = SwingUtilities.invokeLater(() => {
+    val index = tabbedPane.getSelectedIndex
+    if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane.getTitleAt(index))())
+
+    timeLabel.setText("Execution Time: " + Time.time)
+    gameBar.add(timeLabel)
+  })
+
+  private def heatmapChart(matrix: Matrix): Component = {
+    val heatmap = new HeatmapChart[Array[Array[Double]]]
+    val chart = heatmap.createChart(matrix)
+    chart
   }
 }

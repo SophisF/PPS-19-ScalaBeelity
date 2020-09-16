@@ -1,11 +1,30 @@
-package view
+package scala.view
 
-import model.StatisticalData.StatisticalData
+import view.StartViewImpl
+import view.ChartViewImpl
+
+import scala.controller.Controller
+
 
 trait View {
 
-  def createAndShowGUI(statisticalData: StatisticalData, time: Int)
+  def createSimulationGUI()
 
-  def updateGui(statisticalData: StatisticalData, time: Int)
+  def update()
 
+}
+object View {
+
+  val initialView = new StartViewImpl
+
+  def createInitialGUI(callback: (Int, Int, Int, Int) => Unit): Unit = initialView.createAndShowGUI(callback)
+
+  class ViewImpl(controller: Controller) extends View {
+
+    val simulationView = new ChartViewImpl(controller)
+
+    override def createSimulationGUI(): Unit = simulationView.createAndShowGUI()
+
+    override def update(): Unit = simulationView.updateGui()
+  }
 }

@@ -75,7 +75,7 @@ object Colony {
         if i - this.dimension > 0 && i + this.dimension < environmentManager.environment.map.rows &&
           j - this.dimension > 0 && j + this.dimension < environmentManager.environment.map.cols
       } yield PrologEngine.buildCellTerm(environmentManager.environment.map.valueAt(i, j), Point(i, j))
-      println(reachableCells.size)
+      //println(reachableCells.size)
       MovementLogic.solveLogic(reachableCells, this.queen.phenotype.temperatureCompatibility.expression, this.queen.phenotype.pressureCompatibility.expression, this.queen.phenotype.humidityCompatibility.expression)
     }
 

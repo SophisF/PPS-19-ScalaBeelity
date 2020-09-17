@@ -36,7 +36,7 @@ class StartViewImpl {
         case "infinite" => -1
         case x => x.toString.toInt
       }, comboMatrix.getSelectedItem.toString.toInt)
-      System.out.println(comboIter.getSelectedItem + " " + numColonies.getText + " " + temporalGranularity.getText)
+      //System.out.println(comboIter.getSelectedItem + " " + numColonies.getText + " " + temporalGranularity.getText)
     } else System.out.println("Cancelled")
     //    frame.add(panel, BorderLayout.CENTER)
     //    frame.pack()

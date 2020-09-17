@@ -2,7 +2,7 @@ package scala.model.environment.property
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.environment.time.Time
+import scala.model.Time
 
 trait TimeDependentProperty extends Property {
   type TimedVariationType <: TimedVariation

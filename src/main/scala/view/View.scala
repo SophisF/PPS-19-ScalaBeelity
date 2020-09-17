@@ -1,10 +1,6 @@
 package scala.view
 
-import view.StartViewImpl
-import view.ChartViewImpl
-
 import scala.controller.Controller
-
 
 trait View {
 

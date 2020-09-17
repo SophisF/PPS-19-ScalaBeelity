@@ -1,7 +1,7 @@
 package scala.model.environment.property.source
 
+import scala.model.Time
 import scala.model.environment.property.{Property, TimeDependentProperty}
-import scala.model.environment.time.Time
 
 /**
  * A property source that influence the whole environment

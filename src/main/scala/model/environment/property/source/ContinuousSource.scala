@@ -2,8 +2,9 @@ package scala.model.environment.property.source
 
 import breeze.linalg.DenseMatrix
 
+import scala.model.Time
 import scala.model.environment.property.TimeDependentProperty
-import scala.model.environment.time.{Time, Timed}
+import scala.model.environment.time.Timed
 
 class ContinuousSource[T <: TimeDependentProperty](
   private val completeFilter: DenseMatrix[T#TimedVariation],

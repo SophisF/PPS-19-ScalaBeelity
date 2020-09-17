@@ -2,12 +2,12 @@ package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
+import scala.model.Time
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.PropertyType.PropertyValue
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.{PropertyType, TimeDependentProperty}
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
-import scala.model.environment.time.Time
 import scala.util.Random
 
 object ClimateManager {
@@ -38,7 +38,7 @@ object ClimateManager {
    */
   private def randomContinuousFilter(property: TimeDependentProperty, environmentSize: Size, iterations: Int)
   : ContinuousSource[TimeDependentProperty] = new ContinuousSource[TimeDependentProperty](
-    property.timedFilter(70, 70, Time.now(), Time delay iterations)
+    property.timedFilter(5, 5, Time.now(), Time delay iterations)
       .asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
     Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), iterations)
 

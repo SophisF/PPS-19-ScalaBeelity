@@ -8,7 +8,7 @@ scalaSource in Test := baseDirectory.value / "src" / "test"
 
 scalaSource in Compile := baseDirectory.value / "src" / "main"
 
-libraryDependencies  ++= Seq(
+libraryDependencies ++= Seq(
 
   "it.unibo.alice.tuprolog" % "tuprolog" % "3.3.0",
 

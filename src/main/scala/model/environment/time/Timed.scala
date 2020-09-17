@@ -1,6 +1,7 @@
 package scala.model.environment.time
 
-import scala.model.environment.time.Time.{compare, delay}
+import scala.model.Time
+import scala.model.Time.{compare, delay}
 
 /**
  * Represent a duration

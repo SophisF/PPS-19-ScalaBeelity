@@ -1,7 +1,6 @@
-package view
+package scala.view
 
 import smile.plot.swing.{Palette, PlotPanel, heatmap}
-
 
 class HeatmapChart[T <: Array[Array[Double]]] extends Chart[T] {
 
@@ -13,5 +12,4 @@ class HeatmapChart[T <: Array[Array[Double]]] extends Chart[T] {
     val canvas = heatmap(X, Y, Z, Palette.redgreen(128))
     canvas.panel()
   }
-
 }

@@ -2,8 +2,8 @@ package scala.model.environment.property.realization
 
 import breeze.linalg.DenseMatrix
 
+import scala.model.Time
 import scala.model.environment.property.{FilterBuilder, TimeDependentProperty}
-import scala.model.environment.time.Time
 import scala.model.environment.utility.SequenceHelper.RichSequence
 
 trait IntegerTimedProperty extends TimeDependentProperty {

@@ -20,7 +20,6 @@ trait Model {
   def pressureMatrix(): Array[Array[Double]]
 }
 
-
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
 
   Time.initialize()

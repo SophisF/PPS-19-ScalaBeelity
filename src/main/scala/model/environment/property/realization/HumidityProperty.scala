@@ -1,11 +1,11 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.time.Time
+import scala.model.Time
 
 sealed trait HumidityProperty extends IntegerProperty with IntegerTimedProperty
 
 object HumidityProperty extends HumidityProperty {
-  override val default: Int = 10
+  override val default: Int = 30
   override val maxValue: Int = 100
   override val minValue: Int = 0
 

@@ -1,4 +1,4 @@
-package view
+package scala.view
 
 import java.awt.{BorderLayout, Component, Dimension, Toolkit}
 

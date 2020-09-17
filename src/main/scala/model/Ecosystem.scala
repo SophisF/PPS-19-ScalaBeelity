@@ -7,20 +7,15 @@ import scala.model.bees.bee.Queen
 import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Phenotype
-import scala.model.environment.{Cell, ClimateManager, EnvironmentManager}
-import scala.model.environment.EnvironmentManager.{addSource, evolution}
+import scala.model.environment.EnvironmentManager.evolution
 import scala.model.environment.matrix.Point
+import scala.model.environment.{Cell, EnvironmentManager}
 import scala.util.Random
 
 class Ecosystem(nColonies: Int, width: Int, height: Int) {
 
   var environmentManager: EnvironmentManager = EnvironmentManager(width, height)
   var colonies: List[Colony] = (0 to nColonies).map(_ => createQueen()).toList
-
-  environmentManager = ClimateManager.generateLocalChanges((width, height), 1000)
-    .foldLeft(environmentManager)(addSource)
-
-  environmentManager = ClimateManager.generateSeason().foldLeft(environmentManager)(addSource)
 
   def update(): Unit = {
     this.environmentManager = evolution(environmentManager)

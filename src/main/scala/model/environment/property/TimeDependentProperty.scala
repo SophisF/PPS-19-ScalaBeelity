@@ -13,5 +13,5 @@ trait TimeDependentProperty extends Property {
 
   def seasonalTrend: TimedVariationType
 
-  def timedFilter(xDecrement: Int, yDecrement: Int, start: Time, duration: Time): DenseMatrix[TimedVariationType]
+  def timedFilter(width: Int, height: Int, duration: Time, start: Time = Time.now()): DenseMatrix[TimedVariationType]
 }

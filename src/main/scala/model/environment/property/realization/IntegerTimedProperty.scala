@@ -3,8 +3,7 @@ package scala.model.environment.property.realization
 import breeze.linalg.DenseMatrix
 
 import scala.model.Time
-import scala.model.environment.property.{FilterBuilder, TimeDependentProperty}
-import scala.model.environment.utility.SequenceHelper.RichSequence
+import scala.model.environment.property.TimeDependentProperty
 
 trait IntegerTimedProperty extends TimeDependentProperty {
   override type TimedVariationType = IntegerTimedVariation
@@ -17,7 +16,7 @@ trait IntegerTimedProperty extends TimeDependentProperty {
     override def instantaneous(instant: Time): VariationType = {
       val percentage = (instant - start) / duration.toDouble - evaluated
       if (percentage * value > 0) evaluated += percentage
-      variation(percentage * value toInt)
+      variation((percentage * value) toInt)
     }
   }
 
@@ -26,9 +25,8 @@ trait IntegerTimedProperty extends TimeDependentProperty {
   def maxValue: Int
   def minValue: Int
 
-  override def timedFilter(xDecrement: Int, yDecrement: Int, start: Time, duration: Time)
-  : DenseMatrix[TimedVariationType] = FilterBuilder.gaussianFunction3d((minValue to maxValue)
-    .filter(_ != 0).random().get, 0, xDecrement, yDecrement).map(d => timedVariation(d.toInt, start, duration))
+  override def timedFilter(width: Int, height: Int, duration: Time, start: Time): DenseMatrix[TimedVariationType] =
+    IntegerProperty.filter(width, height)(minValue, maxValue).map(d => timedVariation(d.toInt, start, duration))
 
   override def seasonalTrend: TimedVariationType = (_: Time) => 0
 }

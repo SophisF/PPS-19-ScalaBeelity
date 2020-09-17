@@ -2,7 +2,8 @@ package scala.model.environment.property.realization
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.environment.property.{FilterBuilder, Property, Range}
+import scala.model.environment.property.GaussianFilterBuilder.function3d
+import scala.model.environment.property.{Property, Range}
 import scala.model.environment.utility.SequenceHelper.RichSequence
 import scala.model.environment.utility.MathHelper._
 
@@ -18,7 +19,9 @@ trait IntegerProperty extends Property with Range {
 
   def default: Int
 
-  implicit def state(_value: Int = default): IntegerState = new IntegerState { override val value: Int = limit(_value) }
+  implicit def state(_value: Int): IntegerState = new IntegerState {
+    override val value: Int = limit(_value)
+  }
 
   trait IntegerState extends State {
 
@@ -26,9 +29,14 @@ trait IntegerProperty extends Property with Range {
       case true => (value - minValue) * 100 / (maxValue - minValue)
       case _ => value
     }
+
+    override def equals(obj: Any): Boolean = obj.isInstanceOf[IntegerState] &&
+      obj.asInstanceOf[IntegerState].value == value
   }
 
-  implicit def variation(_value: Int): VariationType = new IntegerVariation { override def value: Int = _value }
+  implicit def variation(_value: Int): VariationType = new IntegerVariation {
+    override def value: Int = _value
+  }
 
   trait IntegerVariation extends Variation {
 
@@ -40,8 +48,10 @@ trait IntegerProperty extends Property with Range {
   }
 
   override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] =
-    filter(xDecrement, yDecrement).map(variation(_))
+    IntegerProperty.filter(xDecrement, yDecrement)(minValue, maxValue).map(variation(_))
+}
 
-  private def filter(xDecrement: Int, yDecrement: Int): DenseMatrix[Double] = FilterBuilder
-    .gaussianFunction3d((minValue to maxValue).filter(_ != 0).random().get, 0, xDecrement, yDecrement)
+object IntegerProperty {
+  def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
+    function3d((minValue to maxValue).filter(_ != 0).random().get, 0, xDecrement, yDecrement)
 }

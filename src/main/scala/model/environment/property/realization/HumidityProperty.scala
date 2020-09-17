@@ -1,5 +1,7 @@
 package scala.model.environment.property.realization
 
+import Math.{sin, toRadians}
+
 import scala.model.Time
 
 sealed trait HumidityProperty extends IntegerProperty with IntegerTimedProperty
@@ -13,7 +15,7 @@ object HumidityProperty extends HumidityProperty {
     private var lastGet: Int = 0
 
     override def instantaneous(instant: Time): VariationType = {
-      val monthlyValue = maxValue * Math.sin(instant % 365) toInt
+      val monthlyValue = maxValue * sin(toRadians(Time.toDays(instant) % 365)) toInt
       val variation = monthlyValue - lastGet
       lastGet = monthlyValue
       variation

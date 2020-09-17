@@ -14,7 +14,7 @@ object GeneManager {
    * @param geneTaxonomy the taxonomy of the gene.
    * @return a genetic information.
    */
-  implicit def geneticMapper(geneTaxonomy: GeneTaxonomy): GeneticInformation = {
+  def geneticMapper(geneTaxonomy: GeneTaxonomy): GeneticInformation = {
     geneTaxonomy match {
       case GeneTaxonomy.TEMPERATURE_GENE => GeneticInformation((CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY, Influence()))
       case GeneTaxonomy.PRESSURE_GENE => GeneticInformation((CharacteristicTaxonomy.PRESSURE_COMPATIBILITY, Influence()))
@@ -33,18 +33,17 @@ object GeneManager {
   }
 
 
-  //TODO forse più corretto che prenda una informazione.
   /**
-   * Implicit strategy that defines which gene has influence on the environmental characteristics.
-   * @param geneTaxonomy the taxonomy of the gene.
+   * Strategy that defines which gene has influence on the environmental characteristics.
+   * @param geneticInformation the genetic information of the gene.
    * @return a boolean, true if the gene influence the adaptation to the environment, false otherwise.
    */
-  implicit def environmentalDefiner(geneTaxonomy: GeneTaxonomy): Boolean = {
-    geneTaxonomy match {
-      case GeneTaxonomy.TEMPERATURE_GENE => true
-      case GeneTaxonomy.PRESSURE_GENE => true
-      case GeneTaxonomy.HUMIDITY_GENE => true
+  def environmentalDefiner(geneticInformation: GeneticInformation): Boolean = {
+    geneticInformation.characteristics.exists(_ match {
+      case CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY => true
+      case CharacteristicTaxonomy.PRESSURE_COMPATIBILITY => true
+      case CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY => true
       case _ => false
-    }
+    })
   }
 }

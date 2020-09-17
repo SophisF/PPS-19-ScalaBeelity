@@ -21,7 +21,7 @@ class FitterTest extends AnyFunSuite {
       Gene(GeneTaxonomy.PRESSURE_GENE, maxFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, maxFrequency)))
     val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
-    assert(Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity) == 1)
+    assert(Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)((temperature, pressure, humidity) => (temperature + pressure + humidity) / 3) == 1)
   }
 
   test("The fit value should be between 0 and 1 if the environmental expressions not corresponds to environment parameters"){
@@ -31,7 +31,7 @@ class FitterTest extends AnyFunSuite {
       Gene(GeneTaxonomy.PRESSURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, middleFrequency)))
     val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
-    val fitValue = Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)
+    val fitValue = Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)((temperature, pressure, humidity) => (temperature + pressure + humidity) / 3)
     assert(fitValue > 0 && fitValue < 1)
   }
 

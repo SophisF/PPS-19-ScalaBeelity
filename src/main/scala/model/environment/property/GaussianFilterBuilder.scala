@@ -13,7 +13,7 @@ import scala.model.environment.utility.DenseMatrixHelper.{TransformableMatrix, e
  *
  * @author Paolo Baldini
  */
-object FilterBuilder {
+object GaussianFilterBuilder {
 
   /**
    * Build an 'half' (only values at right of the center) 2d gaussian filter
@@ -23,7 +23,7 @@ object FilterBuilder {
    * @param decrementRate influences the 'width' of the function. The greater it is, the more the values descent slowly
    * @return the right side (from the center) of a 2d gaussian curve
    */
-  def positive2dGaussianFunction(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] = {
+  def function2dOneSided(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] = {
     val ranges = correctRanges(peak, stop)
     readjustRanges(peak, stop, Iterator.iterate(0)(_ + 1)
       .map(it => ranges._1 * exp( (it * it) / -(2.0 * decrementRate * decrementRate) ))
@@ -40,8 +40,8 @@ object FilterBuilder {
    * @param decrementRate influences the 'width' of the function. The greater it is, the more the values descent slowly
    * @return the 2d gaussian function
    */
-  def gaussianFunction2d(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] =
-    positive2dGaussianFunction(peak, stop, decrementRate).toArray.reverseIterator.mirror(false).toArray
+  def function2d(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] =
+    function2dOneSided(peak, stop, decrementRate).toArray.reverseIterator.mirror(false).toArray
 
   /**
    * Build a matrix representing the 3d gaussian function
@@ -55,25 +55,25 @@ object FilterBuilder {
    *               The greater it is, the higher the filter become (values descent slowly)
    * @return the 3d gaussian filter
    */
-  def gaussianFunction3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] =
+  def function3d(peak: Int, stop: Int = 1, width: Int = 1, height: Int = 1): DenseMatrix[Double] =
     correctRanges(peak, stop) match {
       case (peak, _) if peak.abs == 0 => empty
-      case (p, s) => (positive2dGaussianFunction(p, s, height) * positive2dGaussianFunction(p, s, width).map(_ / p).t)
+      case (p, s) => (function2dOneSided(p, s, height) * function2dOneSided(p, s, width).map(_ / p).t)
         .map(_ + stop - s).mirrorX(mirrorCenter = false).mirrorY(mirrorCenter = false)
     }
 
-  def correctRanges(peak: Int, stop: Int): (Int, Int) =
+  private def correctRanges(peak: Int, stop: Int): (Int, Int) =
     concordantSign(peak, stop, (_1, _2) => (_1 - _2, 0), (_1, _2) => (_1, _2)) match {
       case t if t._2 == 0 => (t._1 + math.signum(t._1) * 1, t._2 + math.signum(t._1) * 1)
       case t => t
     }
 
-  def readjustRanges(peak: Int, stop: Int, iterator: Iterable[Double]): Iterable[Double] = {
+  private def readjustRanges(peak: Int, stop: Int, iterator: Iterable[Double]): Iterable[Double] = {
     val t = correctRanges(peak, stop)
     iterator.map(_ + stop - t._2)
   }
 
-  def concordantSign[T](value1: Int, value2: Int, discordant: (Int, Int) => T, concordant: (Int, Int) => T): T =
+  private def concordantSign[T](value1: Int, value2: Int, discordant: (Int, Int) => T, concordant: (Int, Int) => T): T =
     value1 * value2 match {
       case signedResult if signedResult < 0 => discordant(value1, value2)
       case _ => concordant(value1, value2)

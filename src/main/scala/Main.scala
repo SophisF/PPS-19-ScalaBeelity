@@ -1,5 +1,4 @@
 package scala
-
 import scala.controller.Controller
 import scala.view.View
 

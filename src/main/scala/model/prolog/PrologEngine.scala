@@ -1,9 +1,8 @@
 package scala.model.prolog
 
-
 import alice.tuprolog.{Prolog, SolveInfo, Struct, Term, Theory}
 
-import scala.model.environment.Cell
+import scala.model.adapter.Cell
 import scala.model.environment.matrix.Point
 
 /**

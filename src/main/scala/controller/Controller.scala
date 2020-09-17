@@ -1,9 +1,8 @@
 package scala.controller
 
-import model.ModelImpl
-import model.StatisticalData.StatisticalData
-
-import scala.model.environment.property.Property.{Humidity, Pressure, Temperature}
+import scala.model.ModelImpl
+import scala.model.StatisticalData.StatisticalData
+import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
 import scala.view.View.ViewImpl
 
 class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: Int) {

@@ -1,11 +1,8 @@
-package model
+package scala.model
 
-import model.StatisticalData.{StatisticalData, updateStats}
-
+import scala.model.StatisticalData.{StatisticalData, updateStats}
 import scala.model.environment.Cell
 import scala.model.environment.matrix.Point
-import scala.model.{Ecosystem, Time}
-
 
 trait Model {
   def time(): Int
@@ -43,11 +40,11 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def colonies: List[(Point, Int)] = ecosystem.colonies.map(c => (c.position, c.dimension))
 
-  override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.toDouble)
+  override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.numericRepresentation())
 
-  override def humidityMatrix(): Array[Array[Double]] = propertyMatrix(_.humidity.toDouble)
+  override def humidityMatrix(): Array[Array[Double]] = propertyMatrix(_.humidity.numericRepresentation())
 
-  override def pressureMatrix(): Array[Array[Double]] = propertyMatrix(_.pressure.toDouble)
+  override def pressureMatrix(): Array[Array[Double]] = propertyMatrix(_.pressure.numericRepresentation())
 
   private def propertyMatrix(strategy: Cell => Double): Array[Array[Double]] = {
     val env = ecosystem.environmentManager.environment.map

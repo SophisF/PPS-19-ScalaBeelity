@@ -8,6 +8,7 @@ import scala.annotation.tailrec
  * @author Paolo Baldini
  */
 object Looper {
+
   /*
     /**
      * Run a simulation

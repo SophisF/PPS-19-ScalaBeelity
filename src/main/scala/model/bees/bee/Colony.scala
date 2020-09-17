@@ -7,12 +7,12 @@ import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Phenotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.environment.EnvironmentManager.EnvironmentManager
+import scala.model.environment.EnvironmentManager
 import scala.model.environment.matrix.Point
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
 import scala.model.bees.utility.PimpTuple._
-import scala.model.environment.Cell
+import scala.model.adapter.Cell
 
 /**
  * Object that represents colony
@@ -106,7 +106,7 @@ object Colony {
       for {
         i <- newCenter.x - this.dimension to newCenter.x + this.dimension
         j <- newCenter.y - this.dimension to newCenter.y + this.dimension
-      } yield environmentManager.environment.map.valueAt(i, j)
+      } yield environmentManager.cells().valueAt(i, j)
     }
 
     private def updatePopulation(time: Int)(temperature: Int)(pressure: Int)(humidity: Int): List[Bee] = {

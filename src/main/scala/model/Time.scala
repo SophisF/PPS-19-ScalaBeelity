@@ -19,7 +19,7 @@ object Time extends Ordering[Time] {
   }
 
   def now(): Time = _time
-  def time = _time
+  def time = toDays(_time)
 
   def delay(days: Int, from: Time = Time.now()): Time = from + days
 

@@ -39,7 +39,7 @@ object EnvironmentManager {
    *
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager =
-    ClimateManager.generateLocalChanges((manager.environment.map.cols, manager.environment.map.rows), 1000)
+    ClimateManager.generateLocalChanges((manager.environment.map.cols, manager.environment.map.rows), 200)
       .foldLeft(EnvironmentManager(
       manager.propertySources.foldLeft(manager.environment)(Environment.apply),
       manager.propertySources.filter {

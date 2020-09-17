@@ -1,6 +1,6 @@
 package scala.view
 
-import java.awt.Color
+import java.awt.{Color, Component}
 
 import breeze.linalg._
 import breeze.plot._

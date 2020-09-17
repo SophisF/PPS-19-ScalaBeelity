@@ -18,8 +18,8 @@ class StartViewImpl {
     val iterations = Array("1000", "5000", "infinite")
     val comboIter = new JComboBox(iterations)
 
-    val numColonies = new JTextField()
-    val temporalGranularity = new JTextField()
+    val numColonies = new JTextField("1")
+    val temporalGranularity = new JTextField("1")
     val panel = new JPanel(new GridLayout(0, 1))
     panel.add(new JLabel("N° Colonies (queens):"))
     panel.add(numColonies)

@@ -8,9 +8,9 @@ sealed trait TemperatureProperty extends IntegerProperty with IntegerTimedProper
 object TemperatureProperty extends TemperatureProperty {
   private val MonthlyIncrement = 3
 
-  override val default: Int = 0
-  override val maxValue: Int = 50
-  override val minValue: Int = -50
+  override val default: Int = 20
+  override val maxValue: Int = 40
+  override val minValue: Int = -10
 
   override def seasonalTrend: TimedVariationType =  new TimedVariationType {
     private var lastGet: Int = 0

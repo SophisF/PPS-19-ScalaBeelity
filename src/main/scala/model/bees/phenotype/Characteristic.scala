@@ -9,6 +9,27 @@ import scala.model.bees.phenotype.ExpressionMapper._
 object Characteristic {
 
   /**
+   * Implicit method to convert an expression to a tuple of Int.
+   * @param expression the expression.
+   * @return a tuple with an expression range.
+   */
+  implicit def toTuple(expression: Characteristic#Expression): (Int, Int) = expression.asInstanceOf[(Int, Int)]
+
+  /**
+   * Implicit method to convert an expression to a Int.
+   * @param expression the expression.
+   * @return a Int expression.
+   */
+  implicit def toInt(expression: Characteristic#Expression): Int = expression.asInstanceOf[Int]
+
+  /**
+   * Implicit method to convert an expression to Double.
+   * @param expression the expression.
+   * @return a Double expression.
+   */
+  implicit def toDouble(expression: Characteristic#Expression): Double = expression.asInstanceOf[Double]
+
+  /**
    * Implementation of apply as a factory
    * @param taxonomy the taxonomy of the characteristic.
    * @param influenceValue the influence value matches with the taxonomy.
@@ -60,7 +81,6 @@ object Characteristic {
     type Expression = Int
   }
 
-  //TODO non mi piace min e max siano diversi dai valori inseriti
   /**
    * Class that represents temperature characteristic.
    * @param influenceValue a double value that represents influence value.

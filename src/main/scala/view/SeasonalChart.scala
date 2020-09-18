@@ -47,6 +47,6 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
     plot.setRangeGridlinePaint(Color.BLACK)
     plot.setDomainGridlinesVisible(true)
     plot.setDomainGridlinePaint(Color.BLACK)
+    plot.getRangeAxis.setRange(-5, 105)
   }
-
 }

@@ -15,7 +15,7 @@ object HumidityProperty extends HumidityProperty {
     private var lastGet: Int = 0
 
     override def instantaneous(instant: Time): VariationType = {
-      val monthlyValue = maxValue * sin(toRadians(Time.toDays(instant) % 365)) toInt
+      val monthlyValue = ((maxValue - minValue) / 2 + minValue) * .25 * sin(toRadians(Time.toDays(instant) % 365)) toInt
       val variation = monthlyValue - lastGet
       lastGet = monthlyValue
       variation

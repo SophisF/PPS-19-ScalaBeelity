@@ -6,7 +6,7 @@ import scala.model.environment.utility.IteratorHelper.RichIterator
 sealed trait TemperatureProperty extends IntegerProperty with IntegerTimedProperty
 
 object TemperatureProperty extends TemperatureProperty {
-  private val MonthlyIncrement = 3
+  private val MonthlyIncrement = 2
 
   override val default: Int = 20
   override val maxValue: Int = 40

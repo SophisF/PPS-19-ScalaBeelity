@@ -2,9 +2,10 @@ package scala.view
 
 import java.awt.{BasicStroke, Color, Component}
 
+import org.jfree.chart.ChartFactory.createXYLineChart
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
-import org.jfree.chart.{ChartFactory, ChartPanel, JFreeChart}
+import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.DefaultXYDataset
 
 class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
@@ -13,7 +14,7 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
     val xAxisLabel = "Month"
     val yAxisLabel = "Value in Percentage"
     val dataset = createDataset(data)
-    val chart = ChartFactory.createXYLineChart("", xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, true)
+    val chart = createXYLineChart("", xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, true)
     customizeChart(chart, data.size)
     new ChartPanel(chart)
   }
@@ -30,7 +31,7 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
     val renderer = new XYLineAndShapeRenderer
     (0 until numLines).foreach(x => {
       // sets paint color for each series
-      renderer.setSeriesPaint(x, Color.getHSBColor(100 * (x + 1), 100 * (x + 1), 100 * (x + 1)))
+      renderer.setSeriesPaint(x, Color.getHSBColor(x / numLines.toFloat, 1, 1))
       // sets thickness for series (using strokes)
       renderer.setSeriesStroke(x, new BasicStroke(4.0f))
     })

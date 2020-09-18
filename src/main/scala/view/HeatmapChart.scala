@@ -49,6 +49,7 @@ object HeatmapChart {
     legend setBackgroundPaint panel.getBackground
     legend setPosition RIGHT
     chart addSubtitle legend
+    chart.removeLegend()
 
     panel add new ChartPanel(chart)
     panel setBorder new EmptyBorder(50, 50, 50, 50)

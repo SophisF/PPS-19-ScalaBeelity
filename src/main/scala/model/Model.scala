@@ -24,7 +24,7 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   Time.initialize()
   Time.setIncrementValue(updateTime)
-  private var _statisticalData: StatisticalData = StatisticalData(Time.time)
+  private var _statisticalData: StatisticalData = StatisticalData()
   private val ecosystem = new Ecosystem(numColonies, dimension, dimension)
 
   override def update(): Unit = {

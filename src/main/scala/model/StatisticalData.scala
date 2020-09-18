@@ -1,9 +1,8 @@
 package scala.model
 
-import model.bees.bee.EvolutionManager
+import model.bees.bee.EvolutionManager.calculateAveragePhenotype
 
-import scala.Array.empty
-
+import scala.Iterable.empty
 import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.property.Property
 import scala.model.environment.property.PropertyType._
@@ -14,15 +13,15 @@ import scala.model.environment.Environment
 import scala.model.bees.phenotype.Characteristic._
 
 object StatisticalData {
-
+  type PropertyType = PropertyValue[Property]
   type Range = (Int, Int)
 
   case class StatisticalData(
-    lastUpdate: Int,
     colonies: List[Colony] = List.empty,
-    variationSeq: Seq[(PropertyValue[Property], Array[Double])] = properties().map(it => (it, empty))
+    averageProperties: Map[PropertyType, Iterable[Double]] = properties().map(it => (it, empty[Double])).toMap,
+    lastUpdate: Time = Time.now()
   ) {
-    def variationSequence(): Seq[(String, Array[Double])] = variationSeq.map(elem => (elem._1 toString, elem _2))
+    def variationSequence(): Seq[(String, Iterable[Double])] = averageProperties.map(e => (e._1 toString, e _2)) toSeq
 
     def temperatureRange: List[Range] =  this expression CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY map toTuple
 
@@ -38,29 +37,18 @@ object StatisticalData {
 
     def averageLongevity: List[Int] = this expression CharacteristicTaxonomy.LONGEVITY map toInt
 
-    private def expression(characteristicTaxonomy: CharacteristicTaxonomy): List[Characteristic#Expression] = {
-      colonies.map(c => EvolutionManager.calculateAveragePhenotype(List(c.queen) ++ c.bees)
-        .expressionOf(characteristicTaxonomy))
+    private def expression(characteristicTaxonomy: CharacteristicTaxonomy): List[Characteristic#Expression] =
+      colonies.map(c => calculateAveragePhenotype(List(c.queen) ++ c.bees).expressionOf(characteristicTaxonomy))
+  }
+
+  def updateStats(environment: Environment, colonies: List[Colony], statistics: StatisticalData): StatisticalData =
+    statistics.lastUpdate match {
+      case time if Time.elapsed(time, 30) =>
+        val sum = environment.map.data.foldLeft(Map.empty[PropertyType, Double])((propertyTrend, cell) => properties()
+          .map(property => (property, propertyTrend.getOrElse(property, .0) + cell(property).numericRepresentation()))
+          .toMap)
+        StatisticalData(colonies, properties().map(property => (property, statistics.averageProperties
+          .getOrElse(property, empty).toSeq.appended(sum(property) / environment.map.data.length))).toMap)
+      case _ => StatisticalData(colonies, statistics averageProperties, statistics lastUpdate)
     }
-  }
-
-  def updateStats(environment: Environment, colonies: List[Colony], statistics: StatisticalData): StatisticalData = statistics.lastUpdate match {
-    /*case time if Time.time - time > 30 =>
-      val sumCell = environment.map.data.reduce((a, b) => Cell(a.temperature + b.temperature, a.humidity + b.humidity, a.pressure + b.pressure))
-      StatisticalData(Time.time, colonies, statistics.variationSeq
-        .map(el => (el._1, el._2.appended(toPercentage(el._1, sumCell.get(el._1) / environment.map.data.length)))
-        ))*/
-    case _ => StatisticalData(statistics.lastUpdate, colonies, statistics.variationSeq)
-  }
 }
-/*
-
-  def updateStats(environment: Environment, statistics: StatisticalData): StatisticalData = statistics.lastUpdate match {
-    case time if compare(Time.now(), delay(30, time)) > 0 => StatisticalData(statistics.lastUpdate, environment.map, statistics.variationSeq)
-      /*val sumCell = environment.map.data.reduce((a, b) => Cell(a.temperature + b.temperature, a.humidity + b.humidity, a.pressure + b.pressure))
-      StatisticalData(Time.now(), environment.map, statistics.variationSeq
-        .map(el => (el._1, el._2.appended(toPercentage(el._1, sumCell.get(el._1) / environment.map.data.length)))
-        ))*/
-    case _ => StatisticalData(statistics.lastUpdate, environment.map, statistics.variationSeq)
-  }
-}*/

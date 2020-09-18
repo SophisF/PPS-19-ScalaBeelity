@@ -24,9 +24,8 @@ class ChartViewImpl(controller: Controller) {
     tabbedPane.addChangeListener(_ => updateGui())
 
     val season = new SeasonalChart[Seq[(String, Array[Array[Double]])]]
-    val seasonalChart = season.createChart(
-      controller.statisticalData.variationSequence().map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2)))
-    )
+    val seasonalChart = season.createChart(controller.statisticalData.variationSequence()
+      .map(e => (e._1, Array((1 to e._2.size).map(_ toDouble).toArray, e._2.toArray))))
     seasonalChart.setPreferredSize(new Dimension(410, 50))
     tabbedPane.addTab("Seasonal Variation", null, seasonalChart)
 
@@ -68,8 +67,7 @@ class ChartViewImpl(controller: Controller) {
     "Pressure" -> (() => heatmapChart(controller.properties("Pressure"))),
     "Seasonal Variation" -> (() => new SeasonalChart[Seq[(String, Matrix)]]
       .createChart(controller.statisticalData.variationSequence()
-        .map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2))))
-      ),
+        .map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2.toArray))))),
     "Colonies" -> (() => new ColoniesChart[Seq[(Point, Int, Double)]](controller).createChart(controller.colonies))
   )
 

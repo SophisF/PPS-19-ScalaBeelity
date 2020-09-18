@@ -37,7 +37,7 @@ object ClimateManager {
    * @return
    */
   private def randomContinuousFilter(property: TimeDependentProperty, environmentSize: Size, iterations: Int)
-  : ContinuousSource[TimeDependentProperty] = new ContinuousSource(property.timedFilter(5, 5, iterations)
+  : ContinuousSource[TimeDependentProperty] = new ContinuousSource(property.timedFilter(10, 10, iterations)
       .asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
     Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), iterations)
 

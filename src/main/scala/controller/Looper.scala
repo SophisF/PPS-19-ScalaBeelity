@@ -44,6 +44,7 @@ object Looper {
       case _ =>
         updateModel()
         updateView()
+        Thread.sleep(60)
         loop(iterations - 1)(updateModel)(updateView)
     }
   }

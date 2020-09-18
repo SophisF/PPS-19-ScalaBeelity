@@ -1,0 +1,8 @@
+Meeting di gruppo con analisi e sviluppo dei seguenti punti:
+
+- Merging in develop delle interfacce grafiche
+- Unione di ambiente e colonie con creazione del concetto di ecosistema
+- Apertura del branch controller per lo sviluppo di questa feature
+- Analisi e progettazione del Controller per la gestione ottimale dell'interfaccia fra View e Model
+- Refactoring della struttura del progetto
+

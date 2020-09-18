@@ -1,6 +1,7 @@
 package scala.model.environment.matrix
 
 import scala.model.environment.matrix.Size.Border._
+import scala.utility.Point
 
 trait Zone extends Point with Size
 

@@ -2,13 +2,12 @@ package model.bees.bee
 
 import scala.model.bees.bee.{CollisionManager, Colony}
 import scala.model.bees.bee.Colony.Colony
+import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 object ColonyManager {
 
-  //TODO potrebbe prendere in input l'ambiente e fare tutto internamente
-
-  private val maxAggressionToMerge: Int = 5
-  private val minAggressionToAttack: Int = 6
+  private val maxAggressionToMerge: Int = 4
+  private val minAggressionToAttack: Int = 8
 
   /**
    * Method to manage the colonies. It combines and adjust them if there are the conditions.
@@ -79,8 +78,11 @@ object ColonyManager {
             case h :: t => fightAll(kill(colony, h), t)
             case _ => Some(colony)
           }
+
         case _ => None
+
       }
+
       val fought = fightAll(Some(h), toFight)
       fight(colonies, t, (if (fought.nonEmpty) fought.get :: newColonies else newColonies))
     case _ => newColonies.filter(_.isColonyAlive)
@@ -94,8 +96,10 @@ object ColonyManager {
    * @return true if the colonies can be merged, false otherwise.
    */
   private def checkMerge(colony1: Colony, colony2: Colony): Boolean = {
-    EvolutionManager.calculateAveragePhenotype(colony1.bees).aggression.expression < maxAggressionToMerge &&
-      EvolutionManager.calculateAveragePhenotype(colony2.bees).aggression.expression < maxAggressionToMerge
+    val aggressionColony1: Int = EvolutionManager calculateAveragePhenotype colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+    val aggressionColony2: Int = EvolutionManager calculateAveragePhenotype colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+    aggressionColony1 < maxAggressionToMerge &&
+      aggressionColony2 < maxAggressionToMerge
   }
 
   /**
@@ -105,7 +109,8 @@ object ColonyManager {
    * @return true if the colony can fight, false otherwise.
    */
   private def checkFight(colony: Colony): Boolean = {
-    EvolutionManager.calculateAveragePhenotype(colony.bees).aggression.expression > minAggressionToAttack
+    val aggression: Int = EvolutionManager calculateAveragePhenotype colony.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+    aggression > minAggressionToAttack
   }
 
   /**
@@ -116,7 +121,7 @@ object ColonyManager {
    * @return a new colony, made up by the two colonies merged together.
    */
   private def merge(colony1: Colony, colony2: Colony): Colony = {
-    Colony(if (colony1.area > colony2.area) colony1.queen else colony2.queen, colony1.bees ++ colony2.bees)
+    Colony(if (colony1.area > colony2.area) colony1.color else colony2.color, if (colony1.area > colony2.area) colony1.queen else colony2.queen, colony1.bees ++ colony2.bees)
   }
 
   /**
@@ -128,9 +133,9 @@ object ColonyManager {
    */
   private def kill(colony1: Colony, colony2: Colony): Option[Colony] = {
     val collisionArea = CollisionManager.collisionArea(colony1, colony2)
-    val colony2Aggression = EvolutionManager.calculateAveragePhenotype(colony2.bees).aggression.expression
+    val colony2Aggression: Int = if (colony2.isColonyAlive) EvolutionManager.calculateAveragePhenotype(colony2.bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE) else 0
     val newBees = colony1.bees diff colony1.bees.take(colony2Aggression * collisionArea)
-    if (newBees.nonEmpty) Some(Colony(colony1.queen, newBees)) else None
-  }
+    if (newBees.nonEmpty) Some(Colony(colony1.color, colony1.queen, newBees)) else None
 
+  }
 }

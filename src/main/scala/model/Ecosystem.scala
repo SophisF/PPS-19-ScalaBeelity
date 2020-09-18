@@ -8,8 +8,8 @@ import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Phenotype
 import scala.model.environment.EnvironmentManager.evolution
-import scala.model.environment.matrix.Point
 import scala.model.environment.{Cell, EnvironmentManager}
+import scala.utility.Point
 import scala.util.Random
 
 class Ecosystem(nColonies: Int, width: Int, height: Int) {
@@ -23,7 +23,7 @@ class Ecosystem(nColonies: Int, width: Int, height: Int) {
       .filter(_.isColonyAlive)).filter(_.isColonyAlive)
   }
 
-  def createQueen(position: Point = (Random.nextInt(environmentManager.environment.map.rows), Random.nextInt(environmentManager.environment.map.cols))): Colony = {
+  def createQueen(position: Point = (Random.nextInt(environmentManager.environment.map.rows - 1), Random.nextInt(environmentManager.environment.map.cols - 1))): Colony = {
     val genotype = Genotype()
     val cell: Cell = environmentManager.environment.map(position.x, position.y)
     val queen: Queen = Queen(None, genotype, Phenotype(Genotype.calculateExpression(genotype)), 0,

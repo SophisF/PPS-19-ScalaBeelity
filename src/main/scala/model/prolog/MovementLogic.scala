@@ -3,9 +3,9 @@ package scala.model.prolog
 import java.io.FileInputStream
 
 import alice.tuprolog._
-import scala.model.prolog.PrologEngine._
 
-import scala.model.environment.matrix.Point
+import scala.model.prolog.PrologEngine._
+import scala.utility.Point
 
 /**
  *  Object to solve the movement logic.

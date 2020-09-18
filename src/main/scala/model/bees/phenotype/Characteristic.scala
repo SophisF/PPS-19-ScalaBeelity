@@ -9,6 +9,27 @@ import scala.model.bees.phenotype.ExpressionMapper._
 object Characteristic {
 
   /**
+   * Implicit method to convert an expression to a tuple of Int.
+   * @param expression the expression.
+   * @return a tuple with an expression range.
+   */
+  implicit def toTuple(expression: Characteristic#Expression): (Int, Int) = expression.asInstanceOf[(Int, Int)]
+
+  /**
+   * Implicit method to convert an expression to a Int.
+   * @param expression the expression.
+   * @return a Int expression.
+   */
+  implicit def toInt(expression: Characteristic#Expression): Int = expression.asInstanceOf[Int]
+
+  /**
+   * Implicit method to convert an expression to Double.
+   * @param expression the expression.
+   * @return a Double expression.
+   */
+  implicit def toDouble(expression: Characteristic#Expression): Double = expression.asInstanceOf[Double]
+
+  /**
    * Implementation of apply as a factory
    * @param taxonomy the taxonomy of the characteristic.
    * @param influenceValue the influence value matches with the taxonomy.
@@ -22,7 +43,6 @@ object Characteristic {
       case CharacteristicTaxonomy.AGGRESSION_RATE => AggressionRateCharacteristic(influenceValue)
       case CharacteristicTaxonomy.REPRODUCTION_RATE => ReproductionRateCharacteristic(influenceValue)
       case CharacteristicTaxonomy.LONGEVITY => LongevityRateCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.COLOR => ColorRateCharacteristic(influenceValue)
       case _ => SpeedRateCharacteristic(influenceValue)
     }
   }
@@ -45,14 +65,6 @@ object Characteristic {
   }
 
   /**
-   * Different definition of the abstract type expression as double value.
-   */
-  trait DoubleExpression {
-    characteristic: Characteristic =>
-    type Expression = Double
-  }
-
-  /**
    * Different definition of the abstract type expression as int value.
    */
   trait IntExpression {
@@ -60,7 +72,6 @@ object Characteristic {
     type Expression = Int
   }
 
-  //TODO non mi piace min e max siano diversi dai valori inseriti
   /**
    * Class that represents temperature characteristic.
    * @param influenceValue a double value that represents influence value.
@@ -129,15 +140,6 @@ object Characteristic {
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.LONGEVITY
     override val expression: Int = mapper(30)(120)(influenceValue)
-  }
-
-  /**
-   * Class that represents color characteristic.
-   * @param influenceValue a double value that represents influence value.
-   */
-  private case class ColorRateCharacteristic(influenceValue: Double) extends Characteristic with DoubleExpression {
-    override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.COLOR
-    override val expression: Double = influenceValue
   }
 
   /**

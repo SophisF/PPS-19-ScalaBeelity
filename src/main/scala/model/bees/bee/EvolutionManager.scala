@@ -5,7 +5,6 @@ import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
-import scala.model.bees.phenotype.Characteristic.{Characteristic, RangeExpression}
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
@@ -16,10 +15,12 @@ object EvolutionManager {
 
   /**
    * Private method to calculate the evolutionary rate based on time spent.
+   *
    * @param time the time spent.
+   * @param calculateEvolutionaryRate a strategy to calculate the evolutionary rate.
    * @return the evolutionary rate.
    */
-  private def evolutionaryRate(time: Int): Int = math.sqrt(time).toInt
+  private def evolutionaryRate(time: Int)(calculateEvolutionaryRate: Int => Int): Int = calculateEvolutionaryRate (time)
 
   /**
    * Method that build a new genotype with a better adaptation to the environment and casual variations.
@@ -34,7 +35,7 @@ object EvolutionManager {
    */
   def buildGenotype(genotype: Genotype)(phenotype: Phenotype)(temperature: Int)(pressure: Int)(humidity: Int)(time: Int): Genotype = {
 
-    val evolutionaryRate = this.evolutionaryRate(time)
+    val evolutionaryRate = this.evolutionaryRate(time)(time => 2* Math.sqrt(time).toInt)
 
     var genes: Set[Gene] = Set.empty
     genes = genes ++ genotype.genes.filter(_.isEnvironmental).map(gene => gene.name match {
@@ -62,21 +63,19 @@ object EvolutionManager {
   private def environmentalAdaptation(genotype: Genotype)(phenotype: Phenotype)(parameter: Int)
                                      (geneTaxonomy: GeneTaxonomy)(characteristicTaxonomy: CharacteristicTaxonomy)(evolutionaryRate: Int): Gene = {
     val frequency: Int = genotype.frequency(geneTaxonomy)
-    val characteristicOpt: Option[Characteristic] = phenotype.characteristics.find(_.name.equals(characteristicTaxonomy))
-    val expressionOpt: Option[(Int, Int)] = if (characteristicOpt.nonEmpty && characteristicOpt.get.isInstanceOf[Characteristic with RangeExpression])
-      Some(characteristicOpt.get.asInstanceOf[Characteristic with RangeExpression].expression) else None
+    val expression: (Int, Int) = phenotype.expressionOf(characteristicTaxonomy)
 
-    expressionOpt match {
-      case Some(expression) => if (parameter in expression) Gene(geneTaxonomy, frequency)
-      else if (parameter < expression)
-        Gene(geneTaxonomy, frequency - evolutionaryRate)
-      else Gene(geneTaxonomy, frequency + evolutionaryRate)
-      case _ => Gene(geneTaxonomy, frequency)
-    }
+    if (parameter in expression) Gene(geneTaxonomy, frequency)
+    else if (parameter < expression)
+      Gene(geneTaxonomy, frequency - evolutionaryRate)
+    else Gene(geneTaxonomy, frequency + evolutionaryRate)
+
+
   }
 
   /**
    * Method to calculate the average genotype in a sequence of bees.
+   *
    * @param bees the sequence of bees.
    * @return the average genotype.
    */
@@ -88,6 +87,7 @@ object EvolutionManager {
 
   /**
    * Method to calculate the average phenotype in a sequence of bees.
+   *
    * @param bees the sequence of bees.
    * @return the average phenotype.
    */

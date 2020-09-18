@@ -3,6 +3,8 @@ package scala.controller
 import scala.model.ModelImpl
 import scala.model.StatisticalData.StatisticalData
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
+
+import scala.utility.Point
 import scala.view.View.ViewImpl
 
 class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: Int) {
@@ -26,6 +28,10 @@ class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: 
     Humidity.toString -> model.humidityMatrix(),
     Pressure.toString -> model.pressureMatrix()
   )
+
+  def environmentDimension(): (Int, Int) = (dimension, dimension)
+
+  def colonies: Seq[(Point, Int, Double)] = model.colonies
 
   def statisticalData: StatisticalData = model.statisticalData()
 }

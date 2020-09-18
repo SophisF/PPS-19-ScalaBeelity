@@ -50,13 +50,24 @@
 |                                                                             	|                                                                                                      	|                       	|                            	| 	| 	|   	|   	|   	|   	|
 |-----------------------------------------------------------------------------	|------------------------------------------------------------------------------------------------------	|-----------------------	|----------------------------	|---	|---	|---	|---	|---	|---	|
 | Product Backlog Item                                                        	| Sprint Task                                                                                          	| Volunteer             	| Initial Estimate of Effort 	| 1     | 2     | 3 	| 4 	| 5 	| 6 	|
-| I need to implement a functional looper					| evaluated monad's element										| Baldini & Gnagnarella		| 7				| 6	| 	| 	| 	| 	| 	|
-|                                                                             	| interaction between different colonies                                                               	| Fantoni & Scucchia    	| 8                          	| 1	|  	|   	|   	|   	|   	|
-|                                                                             	| evolution of a colonies                                                                              	| Fantoni & Scucchia    	| 8                          	| 1 	|  	|   	|   	|   	|  	|
-| I need to implement bees' movement						| movement rules											| 				| 5				| 5	| 5 	| 4	| 3	| 1	|	|
+| I need to implement a functional looper					| evaluated monad's element										| Baldini & Gnagnarella		| 7				| 6	| 6	| 6	| 6	| 6	| 0	|
+|                                                                             	| interaction between different colonies                                                               	| Fantoni & Scucchia    	| 8                          	| 1	| 1 	| 1  	| 1 	| 1  	| 1  	|
+|                                                                             	| evolution of a colonies                                                                              	| Fantoni & Scucchia    	| 8                          	| 1 	| 1 	| 1  	| 0  	| 0  	| 0 	|
+| I need to implement bees' movement						| movement rules											| 				| 5				| 5	| 5 	| 4	| 3	| 1	| 0	|
 |										| fitting rules for logic movement									|				| 2				| 0	| 0	| 0	| 0	| 0	| 0	|
-|										| integration prolog - scala										|				| 3				| 2	| 1	| 1	| 1	| 0	|	|
-| I need to visualize some charts with simulation data                        	| visualization of some bees’ average characteristics                                                  	|                       	| 4                          	|       |       |   	|   	|   	|   	|
-|                                                                             	| visualization of yearly environment changes                                                          	|                       	| 4                          	|       |       |   	|   	|   	|   	|
+|										| integration prolog - scala										|				| 3				| 2	| 1	| 1	| 1	| 0	| 0	|
+| I need to visualize some charts with simulation data                        	| visualization of some bees’ average characteristics                                                  	|                       	| 4                          	| 4     | 4     | 4  	| 4 	| 4	| 4  	|
+|                                                                             	| visualization of yearly environment changes                                                          	|                       	| 4                          	| 4     | 3     | 3  	| 3  	| 1  	| 1  	|
 | I need to control some basic simulation parameters (e.g., time granularity) 	| simulation speed control                                                                             	|                       	| 3                          	|       |       |   	|   	|   	|   	|
-|                                                                             	| give the user the opportunity to select some parameters in range (i.e., temperature, pressure, etc.) 	|                       	| 5                          	|       |       |   	|   	|   	|   	|
+|                                                                             	| give the user the opportunity to select some parameters in range 				 	|                       	| 5                          	| 5     | 5     | 5  	| 5  	| 4  	| 0  	|
+
+
+
+17 settembre - 22 settembre		New Estimates of effort remaining at the end of day 
+
+|                                                                             	|                                                                                                      	|                       	|                            	| 	| 	|   	|   	|   	|   	|
+|-----------------------------------------------------------------------------	|------------------------------------------------------------------------------------------------------	|-----------------------	|----------------------------	|---	|---	|---	|---	|---	|---	|
+| Product Backlog Item                                                        	| Sprint Task                                                                                          	| Volunteer             	| Initial Estimate of Effort 	| 1     | 2     | 3 	| 4 	| 5 	| 6 	|
+| I need to visualize some charts with simulation data                        	| visualization of some bees’ average characteristics                                                  	|                       	| 4                          	| 	|	|   	|  	| 	|   	|
+| I need to refactor code							| 													| 				| 15				| 	| 	| 	| 	| 	| 	|
+

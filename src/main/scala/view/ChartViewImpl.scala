@@ -6,6 +6,7 @@ import javax.swing._
 
 import scala.controller.Controller
 import scala.model.Time
+import scala.utility.Point
 
 class ChartViewImpl(controller: Controller) {
   private type Matrix = Array[Array[Double]]
@@ -29,8 +30,8 @@ class ChartViewImpl(controller: Controller) {
     seasonalChart.setPreferredSize(new Dimension(410, 50))
     tabbedPane.addTab("Seasonal Variation", null, seasonalChart)
 
-    val colonies = new ColoniesChart[Seq[((Int,Int), Int)]]
-    val coloniesChart = colonies.createChart(Seq.empty[((Int,Int), Int)])
+    val colonies = new ColoniesChart[Seq[(Point, Int, Double)]](controller)
+    val coloniesChart = colonies.createChart(controller.colonies)
     coloniesChart.setPreferredSize(new Dimension(200, 200))
     tabbedPane.addTab("Colonies", null, coloniesChart)
 
@@ -69,7 +70,7 @@ class ChartViewImpl(controller: Controller) {
       .createChart(controller.statisticalData.variationSequence()
         .map(e => (e._1, Array((1 to e._2.length).map(_.toDouble).toArray, e._2))))
       ),
-    "Colonies" -> (() => new ColoniesChart[Seq[((Int,Int), Int)]].createChart(Seq.empty[((Int,Int), Int)]))
+    "Colonies" -> (() => new ColoniesChart[Seq[(Point, Int, Double)]](controller).createChart(controller.colonies))
   )
 
   def updateGui(): Unit = SwingUtilities.invokeLater(() => {

@@ -8,3 +8,5 @@ trait Chart[T] {
   def createChart(data: T): Component
 
 }
+
+

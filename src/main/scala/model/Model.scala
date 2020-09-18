@@ -3,7 +3,7 @@ package model
 import model.StatisticalData.{StatisticalData, updateStats}
 
 import scala.model.environment.Cell
-import scala.model.environment.matrix.Point
+import scala.utility.Point
 import scala.model.{Ecosystem, Time}
 
 

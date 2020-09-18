@@ -10,8 +10,8 @@ import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.bees.utility.PimpTuple._
 import scala.model.environment.Cell
 import scala.model.environment.EnvironmentManager.EnvironmentManager
-import scala.model.environment.matrix.Point
 import scala.model.prolog.{MovementLogic, PrologEngine}
+import scala.utility.Point
 import scala.util.Random
 
 /**
@@ -23,7 +23,7 @@ object Colony {
 
   def apply(color: Color = Random.nextDouble(), queen: Queen, bees: Seq[Bee]): Colony = ColonyImpl(color, queen, bees)
 
-  private val limitBeesForCell: Int = 10
+  private val limitBeesForCell: Int = 2
 
   /**
    * Trait that represents colony
@@ -131,7 +131,7 @@ object Colony {
 
     private def generateColony: Option[Colony] = {
       // println("generate")
-      if (Random.nextInt(100000) < 1) Some(this.queen.generateNewColony(this.proximity())) else None
+      if (Random.nextInt(1000) < 1) Some(this.queen.generateNewColony(this.proximity())) else None
     }
 
     private def proximity(): Point = {

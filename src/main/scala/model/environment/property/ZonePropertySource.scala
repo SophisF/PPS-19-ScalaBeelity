@@ -6,6 +6,7 @@ import scala.model.Time
 import scala.model.environment.matrix._
 import scala.model.environment.property.PropertyVariation._
 import scala.model.environment.time.FiniteData
+import scala.utility.Point
 
 trait ZonePropertySource extends PropertySource with Point with Size
 

@@ -9,7 +9,7 @@ import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.bees.utility.PimpTuple._
-import scala.model.environment.matrix.Point
+import scala.utility.Point
 
 /**
  * Object that represents the queen bee

@@ -4,7 +4,7 @@ package scala.model.prolog
 import alice.tuprolog.{Prolog, SolveInfo, Struct, Term, Theory}
 
 import scala.model.environment.Cell
-import scala.model.environment.matrix.Point
+import scala.utility.Point
 
 /**
  * Utility object to manage Prolog engine.

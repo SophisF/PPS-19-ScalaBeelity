@@ -2,7 +2,7 @@ package model.environment.matrix
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.environment.matrix.Point
+import scala.utility.Point
 
 class PointTest extends AnyFunSuite {
   private val P = "Point"

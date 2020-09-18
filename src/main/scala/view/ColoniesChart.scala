@@ -1,20 +1,35 @@
 package view
 
-import java.awt.{BorderLayout, Component}
+import java.awt.{BorderLayout, Color, Component}
 
-import javax.swing.JPanel
+import javax.swing.{JPanel, JTextArea}
 
-class ColoniesChart[T <: Seq[((Int, Int), Int)]] extends Chart[T] {
+import scala.controller.Controller
+import scala.utility.Point
+
+
+class ColoniesChart[T <: Seq[(Point, Int, Double)]](controller: Controller) extends Chart[T] {
+
 
   override def createChart(data: T): Component = {
     val panel = new JPanel()
-    //    val statistics = new JTextArea()
-    //    statistics.setEditable(false)
-    //    statistics.append("ADmdsonfosdfnosdfnsodinfosdfnsoifsd")
-    //panel add(new JPanel().add(statistics), BorderLayout.WEST)
-    panel.add(new ColoniesComponent(data), BorderLayout.CENTER)
+    //panel.setSize(new Dimension(100,200))
+    val statistics = new JTextArea()
+    statistics.setEditable(false)
+    statistics.append("ADmdsonfosdfnosdfnsodinfosdfnsoifsd")
+    panel add(new JPanel().add(statistics), BorderLayout.WEST)
+    val colonies = new ColoniesComponent(controller.environmentDimension(), data)
+    colonies.setSize(500, 500)
+    panel.add(colonies, BorderLayout.EAST)
+    panel.setForeground(Color.BLACK)
     panel.setVisible(true)
+    println(panel.getWidth + " " + panel.getHeight)
+
+    panel.repaint()
+    colonies.repaint()
+
     panel
+
   }
 
 }

@@ -1,7 +1,7 @@
 package scala.model.environment.property
 
-import scala.model.environment.matrix.Point
 import scala.model.environment.property.Property.Property
+import scala.utility.Point
 
 trait PropertyVariation {
 

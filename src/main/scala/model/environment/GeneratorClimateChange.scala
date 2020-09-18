@@ -1,4 +1,4 @@
-package scala.controller
+package model.environment
 
 import scala.model.environment.property.PropertySource.SeasonalPropertySource
 import scala.model.environment.property.PropertyVariation.Variation
@@ -8,8 +8,7 @@ import scala.util.Random
 
 object GeneratorClimateChange {
 
-  private val TimeInterval = 1
-
+  private val maxFilter = 2
 
   /**
    * Timed generator for non periodically climate changes.
@@ -20,8 +19,7 @@ object GeneratorClimateChange {
    * @return
    */
   def generateClimate(environmentWidth: Int, environmentHeight: Int, iterations: Int): Iterator[PropertySource] = {
-    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations)).take(7)
-    //.takeWhile(_ => Random.nextInt(TimeInterval) == Time.time % TimeInterval)
+    Iterator.continually(randomContinuousFilter(environmentWidth, environmentHeight, iterations)).take(Random.nextInt(maxFilter))
   }
 
   def generateSeason(): Iterable[PropertySource] =
@@ -41,7 +39,8 @@ object GeneratorClimateChange {
     //    val values = if (Random.nextBoolean()) (property.maxValue, property.default)
     //    else (property.minValue, property.default)
     val values = if (Random.nextBoolean()) (50, 1) else (-50, -1)
-    val filter = FilterBuilder.gaussianFunction3d(500, 1, 20, 20)
+    //val filter = FilterBuilder.gaussianFunction3d((500), 1, 5, 5)
+    val filter = FilterBuilder.gaussianFunction3d(500, 1, 5, 5)
     ZonePropertySource(
       Random.nextInt(environmentWidth), Random.nextInt(environmentHeight),
       filter.cols, filter.rows,

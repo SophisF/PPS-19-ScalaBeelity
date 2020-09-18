@@ -75,6 +75,7 @@ object Colony {
       val p: (Int, Int) = this.queen.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)
       val h: (Int, Int) = this.queen.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)
       MovementLogic.solveLogic(reachableCells, t, p, h)
+
     }
 
     override def update(time: Int)(environmentManager: EnvironmentManager): List[Colony] = {

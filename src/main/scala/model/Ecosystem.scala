@@ -7,50 +7,28 @@ import scala.model.bees.bee.Queen
 import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Phenotype
-import scala.model.environment.EnvironmentManager
+import scala.model.environment.EnvironmentManager.evolution
 import scala.model.environment.matrix.Point
+import scala.model.environment.{Cell, EnvironmentManager}
 import scala.util.Random
 
-object Ecosystem {
+class Ecosystem(nColonies: Int, width: Int, height: Int) {
 
-  var colonies: List[Colony] = List.empty
 
-  val environment = EnvironmentManager(300, 300)
+  var environmentManager: EnvironmentManager.EnvironmentManager = EnvironmentManager(width, height)
+  var colonies: List[Colony] = (0 to nColonies).map(_ => createQueen()).toList
 
-  def initialize(nColonies: Int): Unit = {
-    List.range(0, nColonies).foreach(_ => {
-      this.colonies = createQueen(Point(50, 50)) :: this.colonies
-    })
+  def update(): Unit = {
+    this.environmentManager = evolution(environmentManager)
+    this.colonies = ColonyManager.manage(this.colonies.flatMap(_.update(Time.incrementValue)(environmentManager))
+      .filter(_.isColonyAlive)).filter(_.isColonyAlive)
   }
 
-
-  def update(time: Int): Unit = {
-
-
-    this.colonies = this.colonies.flatMap(_.update(time)(environment)).filter(_.isColonyAlive)
-
-    this.colonies.foreach(e => println(e.bees.size))
-
-    //println("manage")
-
-    // this.colonies.foreach(e => println(e.position.x + " " + e.bees.size))
-
-    this.colonies = ColonyManager.manage(colonies).filter(_.isColonyAlive)
-
-
-
-
-
-
-    //Tutto si riassume in questo
-    // this.colonies = ColonyManager.manage(this.colonies.map(_.update(time)(20)(1000)(50)).filter(_.isColonyAlive)).filter(_.isColonyAlive)
-
-  }
-
-  def createQueen(position: Point = (Random.nextInt(environment.environment.map.rows), Random.nextInt(environment.environment.map.cols))): Colony = {
-    //println("new")
+  def createQueen(position: Point = (Random.nextInt(environmentManager.environment.map.rows), Random.nextInt(environmentManager.environment.map.cols))): Colony = {
     val genotype = Genotype()
-    val queen: Queen = Queen(None, genotype, Phenotype(Genotype.calculateExpression(genotype)), 0, 20, 1000, 50, position, this.createQueen)
+    val cell: Cell = environmentManager.environment.map(position.x, position.y)
+    val queen: Queen = Queen(None, genotype, Phenotype(Genotype.calculateExpression(genotype)), 0,
+      cell.temperature, cell.pressure, cell.humidity, position, this.createQueen)
     queen.colony
   }
 

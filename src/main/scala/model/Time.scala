@@ -34,7 +34,7 @@ object Time {
   def incrementValue: Int = _incrementValue
 
   def setIncrementValue(value: Int = 1): Unit = value match {
-    case value if value > 0 => _incrementValue += value
+    case value if value > 0 => _incrementValue = value
     case _ =>
   }
 }

@@ -1,5 +1,7 @@
 package scala.model.environment
 
+import model.environment.GeneratorClimateChange
+
 import scala.model.environment.property.Property.{Humidity, Pressure, Temperature, range}
 import scala.model.environment.property.PropertySource
 import scala.model.environment.property.PropertySource.SeasonalPropertySource
@@ -21,6 +23,8 @@ object EnvironmentManager {
    */
   case class EnvironmentManager(environment: Environment, propertySource: Array[PropertySource])
 
+  def empty(): EnvironmentManager = apply(0, 0)
+
   /**
    * Apply function.
    *
@@ -29,8 +33,11 @@ object EnvironmentManager {
    * @return an environment manager.
    */
   def apply(width: Int, height: Int): EnvironmentManager = {
-    EnvironmentManager(Environment((width, height), Cell(range(Temperature).default, range(Humidity).default,
-      range(Pressure).default)), Array())
+    GeneratorClimateChange.generateSeason().foldLeft(
+      EnvironmentManager(
+        Environment((width, height), Cell(range(Temperature).default, range(Humidity).default, range(Pressure).default)),
+        Array())
+    )(addSource)
   }
 
   /**
@@ -41,14 +48,19 @@ object EnvironmentManager {
    *
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager = {
-    EnvironmentManager(
-      manager.propertySource.foldLeft(manager.environment)(Environment.apply),
-      manager.propertySource.filter {
-        case _: SeasonalPropertySource => true
-        case _: InstantaneousZonePropertySource => false
-        case p: ContinuousZonePropertySource => !isEnded(p)
-      }
-    )
+    GeneratorClimateChange.generateClimate(manager.environment.map.cols, manager.environment.map.rows, 1000)
+      .foldLeft(
+        EnvironmentManager(
+          manager.propertySource.foldLeft(manager.environment)(Environment.apply),
+          manager.propertySource.filter {
+            case _: SeasonalPropertySource => true
+            case _: InstantaneousZonePropertySource => false
+            case p: ContinuousZonePropertySource => !isEnded(p)
+          }
+        )
+      )(addSource)
+
+
   }
 
   /**

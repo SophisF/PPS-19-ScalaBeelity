@@ -28,9 +28,8 @@ object EnvironmentManager {
    * @param height of environment.
    * @return an environment manager.
    */
-  def apply[T <: Property](width: Int, height: Int): EnvironmentManager = EnvironmentManager(Environment(width, height))
-
-  //ClimateManager.generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
+  def apply[T <: Property](width: Int, height: Int): EnvironmentManager =
+    ClimateManager.generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
 
   /**
    * Apply property source at the environment and control property source.
@@ -50,6 +49,5 @@ object EnvironmentManager {
       ))(addSource)
 
   def addSource[T <: Property](manager: EnvironmentManager, source: PropertySource[T]): EnvironmentManager =
-    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]: _*)
-
+    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]:_*)
 }

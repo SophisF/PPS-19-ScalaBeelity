@@ -27,8 +27,12 @@ trait IntegerTimedProperty extends TimeDependentProperty {
   def maxValue: Int
   def minValue: Int
 
+  private def rangeWidth: Int = maxValue - minValue
+  private def rangeCenter: Int = minValue + rangeWidth / 2
+  private def zeroCenteredRange: (Int, Int) = (minValue - rangeCenter, maxValue - rangeCenter)
+
   override def timedFilter(width: Int, height: Int, duration: Time, start: Time): DenseMatrix[TimedVariationType] =
-    filter(width, height)(minValue, maxValue).map(d => timedVariation(d toInt, start, duration))
+    filter(width, height)(zeroCenteredRange._1, zeroCenteredRange._2).map(d => timedVariation(d toInt, start, duration))
 
   override def seasonalTrend: TimedVariationType = (_: Time) => 0
 }

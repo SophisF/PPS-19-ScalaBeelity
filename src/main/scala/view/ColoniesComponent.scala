@@ -29,9 +29,6 @@ class ColoniesComponent[T <: Seq[(Point, Int, Double)]](dimension: (Int, Int), d
       g.setColor(Color.getHSBColor(d._3.toFloat, 1, 1))
       g.fillRect((initialX + d._1.x - d._2) * MULTIPLIER, (initialY + d._1.y - d._2 )* MULTIPLIER, d._2 * MULTIPLIER, d._2 * MULTIPLIER)
     })
-    g.setColor(Color.RED)
-    g.fillRect(0, 0, 100, 80)
-    setSize(100,100)
     //    g.fillRect(initialX + 3 * MULTIPLIER, initialY + 3 * MULTIPLIER, 40 * MULTIPLIER, 40 * MULTIPLIER)
     //    g.fillRect(initialX + 200 * MULTIPLIER, initialY + 0 * MULTIPLIER, 23 * MULTIPLIER, 23 * MULTIPLIER)
   }

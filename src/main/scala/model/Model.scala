@@ -14,7 +14,7 @@ trait Model {
 
   def statisticalData(): StatisticalData
 
-  def colonies: List[(Point, Int)]
+  def colonies: List[(Point, Int, Double)]
 
   def temperatureMatrix(): Array[Array[Double]]
 
@@ -41,7 +41,7 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def statisticalData(): StatisticalData = _statisticalData
 
-  override def colonies: List[(Point, Int)] = ecosystem.colonies.map(c => (c.position, c.dimension))
+  override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.position, c.dimension, c.color))
 
   override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.toDouble)
 

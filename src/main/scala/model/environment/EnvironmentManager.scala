@@ -48,7 +48,7 @@ object EnvironmentManager {
    *
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager = {
-    GeneratorClimateChange.generateClimate(manager.environment.map.cols, manager.environment.map.cols, 1000)
+    GeneratorClimateChange.generateClimate(manager.environment.map.cols, manager.environment.map.rows, 1000)
       .foldLeft(
         EnvironmentManager(
           manager.propertySource.foldLeft(manager.environment)(Environment.apply),

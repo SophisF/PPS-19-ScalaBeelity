@@ -46,7 +46,7 @@ object Queen {
                                override val effectiveAggression: Int, private val temperature: Int, private val pressure: Int,
                                private val humidity: Int, override val position: Point, override val generateNewColony: Point => Colony) extends Queen {
 
-    override val colony: Colony = colonyOpt getOrElse Colony(this, generateBee)
+    override val colony: Colony = colonyOpt getOrElse Colony(queen = this, bees = generateBee)
 
     private def generateBee: Seq[Bee] = (0 to this.effectiveReproductionRate + 1)
       .map(_ => {

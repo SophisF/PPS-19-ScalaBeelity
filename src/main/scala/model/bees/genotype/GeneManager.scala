@@ -23,7 +23,6 @@ object GeneManager {
       case GeneTaxonomy.REPRODUCTION_GENE => GeneticInformation((CharacteristicTaxonomy.REPRODUCTION_RATE,
         Influence()))
       case GeneTaxonomy.LONGEVITY_GENE => GeneticInformation((CharacteristicTaxonomy.LONGEVITY, Influence()))
-      case GeneTaxonomy.COLOR_GENE => GeneticInformation((CharacteristicTaxonomy.COLOR, Influence()))
       case GeneTaxonomy.GROWTH_GENE => GeneticInformation((CharacteristicTaxonomy.SPEED, Influence(
         typeOfInfluence = InfluenceType.NEGATIVE,
         influenceInPercentage = 10

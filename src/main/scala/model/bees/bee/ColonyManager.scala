@@ -121,7 +121,7 @@ object ColonyManager {
    * @return a new colony, made up by the two colonies merged together.
    */
   private def merge(colony1: Colony, colony2: Colony): Colony = {
-    Colony(if (colony1.area > colony2.area) colony1.queen else colony2.queen, colony1.bees ++ colony2.bees)
+    Colony(if (colony1.area > colony2.area) colony1.color else colony2.color, if (colony1.area > colony2.area) colony1.queen else colony2.queen, colony1.bees ++ colony2.bees)
   }
 
   /**
@@ -135,7 +135,7 @@ object ColonyManager {
     val collisionArea = CollisionManager.collisionArea(colony1, colony2)
     val colony2Aggression: Int = if (colony2.isColonyAlive) EvolutionManager.calculateAveragePhenotype(colony2.bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE) else 0
     val newBees = colony1.bees diff colony1.bees.take(colony2Aggression * collisionArea)
-    if (newBees.nonEmpty) Some(Colony(colony1.queen, newBees)) else None
+    if (newBees.nonEmpty) Some(Colony(colony1.color, colony1.queen, newBees)) else None
 
   }
 }

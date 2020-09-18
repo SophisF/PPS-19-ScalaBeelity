@@ -43,7 +43,6 @@ object Characteristic {
       case CharacteristicTaxonomy.AGGRESSION_RATE => AggressionRateCharacteristic(influenceValue)
       case CharacteristicTaxonomy.REPRODUCTION_RATE => ReproductionRateCharacteristic(influenceValue)
       case CharacteristicTaxonomy.LONGEVITY => LongevityRateCharacteristic(influenceValue)
-      case CharacteristicTaxonomy.COLOR => ColorRateCharacteristic(influenceValue)
       case _ => SpeedRateCharacteristic(influenceValue)
     }
   }
@@ -63,14 +62,6 @@ object Characteristic {
   trait RangeExpression {
     characteristic: Characteristic =>
     type Expression = (Int, Int) //Int or Double??
-  }
-
-  /**
-   * Different definition of the abstract type expression as double value.
-   */
-  trait DoubleExpression {
-    characteristic: Characteristic =>
-    type Expression = Double
   }
 
   /**
@@ -149,15 +140,6 @@ object Characteristic {
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.LONGEVITY
     override val expression: Int = mapper(30)(120)(influenceValue)
-  }
-
-  /**
-   * Class that represents color characteristic.
-   * @param influenceValue a double value that represents influence value.
-   */
-  private case class ColorRateCharacteristic(influenceValue: Double) extends Characteristic with DoubleExpression {
-    override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.COLOR
-    override val expression: Double = influenceValue
   }
 
   /**

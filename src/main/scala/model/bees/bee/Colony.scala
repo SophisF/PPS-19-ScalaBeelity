@@ -5,21 +5,23 @@ import model.bees.bee.EvolutionManager
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
-import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
+import scala.model.bees.utility.PimpTuple._
+import scala.model.environment.Cell
 import scala.model.environment.EnvironmentManager.EnvironmentManager
 import scala.model.environment.matrix.Point
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
-import scala.model.bees.utility.PimpTuple._
-import scala.model.environment.Cell
 
 /**
  * Object that represents colony
  */
 object Colony {
 
-  def apply(queen: Queen, bees: Seq[Bee]): Colony = ColonyImpl(queen, bees)
+  type Color = Double
+
+  def apply(color: Color = Random.nextDouble(), queen: Queen, bees: Seq[Bee]): Colony = ColonyImpl(color, queen, bees)
 
   private val limitBeesForCell: Int = 10
 
@@ -28,7 +30,10 @@ object Colony {
    */
   trait Colony {
 
+
+
     val queen: Queen
+    val color: Color
 
 
     val dimension: Int
@@ -48,7 +53,7 @@ object Colony {
   }
 
   //TODO require bees non empty
-  case class ColonyImpl(override val queen: Queen, override val bees: Seq[Bee] = List.empty) extends Colony {
+  case class ColonyImpl(override val color: Color, override val queen: Queen, override val bees: Seq[Bee] = List.empty) extends Colony {
 
     // println(bees.size)
 
@@ -91,7 +96,7 @@ object Colony {
       val queen = Queen(Some(this), this.queen.genotype, this.queen.phenotype, this.queen.age + time,
         temperature, pressure, humidity, newCenter, this.queen.generateNewColony)
       val newColony = this.generateColony
-      Colony(if (queen.isAlive) queen else {
+      Colony(this.color, if (queen.isAlive) queen else {
         val similarGenotype = EvolutionManager.calculateAverageGenotype(bees)
         Queen(Some(this), similarGenotype, Phenotype(Genotype.calculateExpression(similarGenotype)), 0,
           temperature, pressure, humidity, newCenter, this.queen.generateNewColony)

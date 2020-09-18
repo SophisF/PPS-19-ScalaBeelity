@@ -36,17 +36,12 @@ object Looper {
 
   //TODO: Da sostituire con Ecosystem
   @tailrec
-  def loop(iterations: Int)(updateModel: () => Unit)(updateView: () => Unit): Unit = {
-
-
-    iterations match {
-      case 0 =>
-      case _ =>
-        updateModel()
-        updateView()
-        Thread.sleep(60)
-        loop(iterations - 1)(updateModel)(updateView)
-    }
+  def loop(iterations: Int)(updateModel: () => Unit)(updateView: () => Unit): Unit = iterations match {
+    case 0 =>
+    case _ =>
+      updateModel()
+      updateView()
+      loop(iterations - 1)(updateModel)(updateView)
   }
 
 

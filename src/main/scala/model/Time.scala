@@ -11,9 +11,9 @@ object Time extends Ordering[Time] {
   private var _incrementValue: Int = 1
 
   private class TimeImpl(val _days: Int) extends Time {
-    override def days: Int = _days % 30
+    override def days: Int = _days - year * 365 - month * 30//_days % 30 +1
 
-    override def month: Int = (_days / 30) % 12
+    override def month: Int = (_days - year * 365) / 30//(_days / 30) % 12 +1
 
     override def year: Int = _days / 365
   }
@@ -23,7 +23,7 @@ object Time extends Ordering[Time] {
 
   def delay(days: Int, from: Time = Time.now()): Time = from + days
 
-  def increment(days: Int = 1): Unit = days match {
+  def increment(days: Int = _incrementValue): Unit = days match {
     case value if value > 0 => _time = _time + value
   }
 

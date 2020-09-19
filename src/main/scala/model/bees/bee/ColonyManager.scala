@@ -6,7 +6,7 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 object ColonyManager {
 
-  private val maxAggressionToMerge: Int = 4
+  private val maxAggressionToMerge: Int = 3
   private val minAggressionToAttack: Int = 8
 
   /**

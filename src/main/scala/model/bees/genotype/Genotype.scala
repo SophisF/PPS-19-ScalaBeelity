@@ -26,7 +26,10 @@ object Genotype {
   def calculateExpression(genotype: Genotype): Map[CharacteristicTaxonomy, Double] = {
     CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, genotype.genes
       .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
-      .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _))).toMap
+      .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _)
+      / genotype.genes.count(_.geneticInformation.influence(taxonomy).nonEmpty)
+
+    )).toMap
   }
 
   /**

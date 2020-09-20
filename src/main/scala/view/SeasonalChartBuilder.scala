@@ -8,9 +8,10 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
 import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.DefaultXYDataset
 
-class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
+object SeasonalChartBuilder extends ChartBuilder[Seq[(String, Array[Array[Double]])]] {
+  override type ChartType = Component
 
-  override def createChart(data: T): Component = {
+  override def createChart(data: Seq[(String, Array[Array[Double]])]): Component = {
     val xAxisLabel = "Month"
     val yAxisLabel = "Value in Percentage"
     val dataset = createDataset(data)
@@ -19,10 +20,12 @@ class SeasonalChart[T <: Seq[(String, Array[Array[Double]])]] extends Chart[T] {
     new ChartPanel(chart)
   }
 
+  override def updateChart(chart: Component, data: Seq[(String, Array[Array[Double]])]): Component = createChart(data)
+
   //TODO: vedere se fare impliciti
-  private def createDataset(data: T) = { // this method creates the data as time series
+  private def createDataset(data: Seq[(String, Array[Array[Double]])]) = { // this method creates the data as time series
     val ds = new DefaultXYDataset
-    data.foreach(d => ds.addSeries(d._1, d._2.map(_.toArray).toArray))
+    data.foreach(d => ds.addSeries(d._1, d._2.map(_ toArray)))
     ds
   }
 

@@ -15,15 +15,13 @@ import java.awt.{BorderLayout, Color, Component, Paint}
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
 
-import scala.view.HeatmapChart.createHeatMap
+object HeatmapChartBuilder extends ChartBuilder[Array[Array[Double]]] {
+  override type ChartType = Component
 
-class HeatmapChart[T <: Array[Array[Double]]] extends Chart[T] {
+  override def createChart(data: Array[Array[Double]]): Component =
+    createHeatMap(create(data.headOption.getOrElse(empty).length, data length, data reduce((f, s) => f appendedAll s)))
 
-  override def createChart(data: T): Component = createHeatMap(create(data.headOption.getOrElse(empty).length,
-    data length, data reduce((r1, r2) => r1 appendedAll r2)))
-}
-
-object HeatmapChart {
+  override def updateChart(chart: ChartType, data: Array[Array[Double]]): Component = createChart(data)
 
   private def createHeatMap(data: DenseMatrix[Double]): JPanel = {
     val panel = new JPanel(new BorderLayout())

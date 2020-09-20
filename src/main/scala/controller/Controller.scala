@@ -9,8 +9,8 @@ import scala.view.View.ViewImpl
 
 class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: Int) {
 
-  private val view = new ViewImpl(this)
   private val model = new ModelImpl(numColonies, updateTime, dimension)
+  private val view = new ViewImpl(this)
 
   view.createSimulationGUI()
 

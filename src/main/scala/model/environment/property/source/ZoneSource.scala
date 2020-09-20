@@ -27,6 +27,10 @@ object ZoneSource {
   case class Source[T <: Property](
     filter: DenseMatrix[T#Variation],
     x: Int, y: Int,
-    width: Int, height: Int
-  ) extends ZoneSource[T]
+  ) extends ZoneSource[T] {
+
+    val width: Int = filter cols
+    val height: Int = filter rows
+
+  }
 }

@@ -4,8 +4,8 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.GaussianFilterBuilder.function3d
 import scala.model.environment.property.{Property, Range}
-import scala.model.environment.utility.SequenceHelper.RichSequence
 import scala.model.environment.utility.MathHelper._
+import scala.model.environment.utility.SequenceHelper.RichSequence
 
 /**
  * Simplify the use (and help DRY) of numeric properties
@@ -47,11 +47,20 @@ trait IntegerProperty extends Property with Range {
     override def vary[S <: State](_state: S): StateType = state(_state.value + value)
   }
 
+
+  //TODO: Applicare principio DRY e rimuovere ripetizione.
+  private def rangeWidth: Int = maxValue - minValue
+
+  private def rangeCenter: Int = minValue + rangeWidth / 2
+
+  private def zeroCenteredRange: (Int, Int) = (minValue - rangeCenter, maxValue - rangeCenter)
+
   override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] =
-    IntegerProperty.filter(xDecrement, yDecrement)(minValue, maxValue).map(variation(_))
+    IntegerProperty.filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
 }
 
 object IntegerProperty {
+
   def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
     function3d((minValue to maxValue).filter(_ != 0).random().get, 0, xDecrement, yDecrement)
 }

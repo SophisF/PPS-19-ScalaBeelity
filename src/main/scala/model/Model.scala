@@ -2,9 +2,11 @@ package scala.model
 
 import scala.model.StatisticalData.{StatisticalData, updateStats}
 import scala.model.environment.Cell
+import scala.util.Random
 import scala.utility.Point
 
 trait Model {
+
   def time(): Int
 
   def update(): Unit
@@ -49,4 +51,21 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
     val env = ecosystem.environmentManager.environment.map
     env.data.map(strategy).sliding(env cols, env cols) toArray
   }
+
+
+  //TODO: verificare se va bene qui
+  
+  val diffPosition = 10
+
+  def proximityOf(position: Point): Point = {
+    val cells = for {
+      i <- position.x - diffPosition to position.x + diffPosition
+      j <- position.y - diffPosition to position.y + diffPosition
+      if i > 0 && i < ecosystem.environmentManager.environment.map.rows &&
+        j > 0 && j < ecosystem.environmentManager.environment.map.cols
+    } yield (i, j)
+    val index = Random.nextInt(cells.size)
+    Point(cells(index)._1, cells(index)._2)
+  }
+
 }

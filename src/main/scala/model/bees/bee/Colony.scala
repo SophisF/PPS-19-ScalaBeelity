@@ -7,12 +7,12 @@ import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.model.environment.EnvironmentManager
+import scala.model.adapter.Cell
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.utility.Point
 import scala.util.Random
 import scala.model.bees.utility.PimpTuple._
-import scala.model.adapter.Cell
 
 
 /**
@@ -24,7 +24,7 @@ object Colony {
 
   def apply(color: Color = Random.nextDouble(), queen: Queen, bees: Seq[Bee]): Colony = ColonyImpl(color, queen, bees)
 
-  private val limitBeesForCell: Int = 2
+  private val limitBeesForCell: Int = 10
 
   /**
    * Trait that represents colony
@@ -95,7 +95,7 @@ object Colony {
       val bees = this.updatePopulation(time)(temperature)(pressure)(humidity)
       val queen = Queen(Some(this), this.queen.genotype, this.queen.phenotype, this.queen.age + time,
         temperature, pressure, humidity, newCenter, this.queen.generateNewColony)
-      val newColony = this.generateColony
+      val newColony = this.generateColony(time)
       Colony(this.color, if (queen.isAlive) queen else {
         val similarGenotype = EvolutionManager.calculateAverageGenotype(bees)
         Queen(Some(this), similarGenotype, Phenotype(Genotype.calculateExpression(similarGenotype)), 0,
@@ -129,9 +129,9 @@ object Colony {
 
     }
 
-    private def generateColony: Option[Colony] = {
+    private def generateColony(time: Int): Option[Colony] = {
       // println("generate")
-      if (Random.nextInt(1000) < 1) Some(this.queen.generateNewColony(this.proximity())) else None
+      if (Random.nextInt(10000 / time) < 1) Some(this.queen.generateNewColony(this.proximity())) else None
     }
 
     private def proximity(): Point = {

@@ -1,7 +1,6 @@
 package scala.model.environment.property
 
 import breeze.linalg.DenseMatrix
-import jdk.jfr.Percentage
 
 /**
  * Represent an environmental property.

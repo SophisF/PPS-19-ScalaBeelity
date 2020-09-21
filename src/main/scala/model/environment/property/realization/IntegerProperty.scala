@@ -4,8 +4,8 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.GaussianFilterBuilder.function3d
 import scala.model.environment.property.{Property, Range}
-import scala.model.environment.utility.MathHelper._
-import scala.model.environment.utility.SequenceHelper.RichSequence
+import scala.utility.MathHelper._
+import scala.utility.SequenceHelper.RichSequence
 
 /**
  * Simplify the use (and help DRY) of numeric properties

@@ -1,7 +1,7 @@
 package scala.model.environment.property
 
 import scala.model.environment.property.realization._
-import scala.model.environment.utility.SequenceHelper.RichSequence
+import scala.utility.SequenceHelper.RichSequence
 
 /**
  * Enumeration of all the possible property types

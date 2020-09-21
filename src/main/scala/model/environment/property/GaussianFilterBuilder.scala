@@ -4,8 +4,8 @@ import breeze.linalg.DenseMatrix
 import breeze.numerics.exp
 
 import scala.model.environment.utility.IteratorHelper.RichIterator
-import scala.model.environment.utility.DenseVectorHelper._
-import scala.model.environment.utility.DenseMatrixHelper.{TransformableMatrix, empty}
+import scala.utility.DenseVectorHelper._
+import scala.utility.DenseMatrixHelper.{TransformableMatrix, empty}
 
 /**
  * TODO maybe rename to GaussianFilterBuilder.<br>

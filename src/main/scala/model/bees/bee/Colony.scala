@@ -2,17 +2,18 @@ package scala.model.bees.bee
 
 import model.bees.bee.EvolutionManager
 
+import scala.model.adapter.Cell
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.environment.EnvironmentManager
-import scala.model.adapter.Cell
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
+import scala.model.environment.EnvironmentManager
 import scala.model.prolog.{MovementLogic, PrologEngine}
-import scala.utility.Point
 import scala.util.Random
-import scala.model.bees.utility.PimpTuple._
+import scala.utility.Point
+import scala.model.prolog.PrologEngine._
+import scala.model.bees.phenotype.Characteristic._
 
 
 /**
@@ -76,10 +77,11 @@ object Colony {
         if i - this.dimension > 0 && i + this.dimension < environmentManager.environment.map.rows &&
           j - this.dimension > 0 && j + this.dimension < environmentManager.environment.map.cols
       } yield PrologEngine.buildCellTerm(environmentManager.cells().valueAt(i, j), Point(i, j))
-      val t: (Int, Int) = this.queen.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)
-      val p: (Int, Int) = this.queen.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)
-      val h: (Int, Int) = this.queen.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)
-      MovementLogic.solveLogic(reachableCells, t, p, h)
+
+      MovementLogic.solveLogic(reachableCells,
+        toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)),
+        toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)),
+          toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)))
 
     }
 
@@ -100,11 +102,12 @@ object Colony {
         val similarGenotype = EvolutionManager.calculateAverageGenotype(bees)
         Queen(Some(this), similarGenotype, Phenotype(Genotype.calculateExpression(similarGenotype)), 0,
           temperature, pressure, humidity, newCenter, this.queen.generateNewColony)
-      }, bees) :: (if (newColony.nonEmpty) List(newColony.get) else List.empty)
+      }, bees) :: newColony.getOrElse(List.empty)
 
 
     }
 
+    //TODO refactor with function passing
     private def calculateCells(newCenter: Point)(environmentManager: EnvironmentManager): Seq[Cell] = {
       for {
         i <- newCenter.x - this.dimension to newCenter.x + this.dimension
@@ -129,9 +132,9 @@ object Colony {
 
     }
 
-    private def generateColony(time: Int): Option[Colony] = {
+    private def generateColony(time: Int): Option[List[Colony]] = {
       // println("generate")
-      if (Random.nextInt(10000 / time) < 1) Some(this.queen.generateNewColony(this.proximity())) else None
+      if (Random.nextInt(10000 / time) < 1) Some(List(this.queen.generateNewColony(this.proximity()))) else None
     }
 
     private def proximity(): Point = {

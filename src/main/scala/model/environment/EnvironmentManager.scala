@@ -10,6 +10,8 @@ import scala.model.environment.property.PropertyType.properties
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
 import scala.model.environment.time.Timed.isEnded
+import scala.util.Random
+import scala.utility.Point
 
 /**
  * Manager of the environment, that control its evolution.
@@ -18,7 +20,25 @@ import scala.model.environment.time.Timed.isEnded
  * @param propertySources , the property to at the environment.
  */
 case class EnvironmentManager(environment: Environment, propertySources: PropertySource[Property]*) {
+
+  val diffPosition = 10
+
   def cells(): DenseMatrix[scala.model.adapter.Cell] = environment.map.mapValues(toCell)
+
+
+  //TODO: verificare se va bene qui
+
+  def proximityOf(position: Point): Point = {
+    val cells = for {
+      i <- position.x - diffPosition to position.x + diffPosition
+      j <- position.y - diffPosition to position.y + diffPosition
+      if i > 0 && i < environment.map.rows &&
+        j > 0 && j < environment.map.cols
+    } yield (i, j)
+    val index = Random.nextInt(cells.size)
+    Point(cells(index)._1, cells(index)._2)
+  }
+
 }
 
 object EnvironmentManager {

@@ -52,9 +52,12 @@ object EnvironmentManager {
    */
   def apply[T <: Property](width: Int, height: Int): EnvironmentManager = {
     val seasonalEnvironment = generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
-    evolution(properties().foldLeft(seasonalEnvironment)((env, prop) => addSource(env, randomInstantaneousFilter(prop, Size(width, height)))))
+    val filters = for {
+      property <- properties()
+      _ <- 0 to Random.between(10, 20)
+    } yield randomInstantaneousFilter(property, Size(width, height))
+    evolution(filters.foldLeft(seasonalEnvironment)(addSource))
   }
-
 
   /**
    * Apply property source at the environment and control property source.

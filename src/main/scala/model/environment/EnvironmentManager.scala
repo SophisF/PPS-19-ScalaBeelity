@@ -2,12 +2,14 @@ package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
+import scala.model.adapter.Cell.toCell
+import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason, randomInstantaneousFilter}
+import scala.model.environment.matrix.Size
 import scala.model.environment.property.Property
+import scala.model.environment.property.PropertyType.properties
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
 import scala.model.environment.time.Timed.isEnded
-import scala.model.adapter.Cell.toCell
-import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason}
 
 /**
  * Manager of the environment, that control its evolution.
@@ -28,8 +30,11 @@ object EnvironmentManager {
    * @param height of environment.
    * @return an environment manager.
    */
-  def apply[T <: Property](width: Int, height: Int): EnvironmentManager =
-    generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
+  def apply[T <: Property](width: Int, height: Int): EnvironmentManager = {
+    val seasonalEnvironment = generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
+    evolution(properties().foldLeft(seasonalEnvironment)((env, prop) => addSource(env, randomInstantaneousFilter(prop, Size(width, height)))))
+  }
+
 
   /**
    * Apply property source at the environment and control property source.
@@ -48,7 +53,7 @@ object EnvironmentManager {
         }: _*
       ))(addSource)
 
+
   def addSource[T <: Property](manager: EnvironmentManager, source: PropertySource[T]): EnvironmentManager =
     EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]: _*)
-
 }

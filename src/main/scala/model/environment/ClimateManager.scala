@@ -2,11 +2,13 @@ package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
+import scala.model.StatisticalData.PropertyType
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.PropertyType.PropertyValue
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
-import scala.model.environment.property.{PropertyType, TimeDependentProperty}
-import scala.model.environment.property.source.{ContinuousSource, PropertySource}
+import scala.model.environment.property.source.ZoneSource.Source
+import scala.model.environment.property.{Property, PropertyType, TimeDependentProperty}
+import scala.model.environment.property.source.{ContinuousSource, PropertySource, ZoneSource}
 import scala.model.environment.utility.SequenceHelper.RichSequence
 import scala.util.Random
 
@@ -38,8 +40,15 @@ object ClimateManager {
    */
   private def randomContinuousFilter(property: TimeDependentProperty, environmentSize: Size, iterations: Int)
   : ContinuousSource[TimeDependentProperty] = new ContinuousSource(property.timedFilter(10, 10, iterations)
-      .asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
+    .asInstanceOf[DenseMatrix[TimeDependentProperty#TimedVariation]],
     Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), iterations)
+
+  def randomInstantaneousFilter(property: PropertyType, environmentSize: Size): Source[Property] =
+    Source(property().generateFilter(10, 10)
+      .asInstanceOf[DenseMatrix[Property#Variation]],
+      Random.nextInt(environmentSize.width),
+      Random.nextInt(environmentSize.height))
+
 
   private def seasonalChanges(property: TimeDependentProperty): SeasonalSource[TimeDependentProperty] =
     SeasonalSource(property.seasonalTrend)

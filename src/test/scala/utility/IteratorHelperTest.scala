@@ -20,5 +20,10 @@ class IteratorHelperTest extends AnyFunSuite {
     val it = Iterator("a", "number", "of", "words").mirror().toList
     assert(it == List("a", "number", "of", "words", "words", "of", "number", "a"))
   }
-  
+
+  test("RichIterator should make mirroring of an any type of data, such as double.") {
+    val it = Iterator(0.2, 0.3, 0.4).mirror().toList
+    assert(it == List(0.2, 0.3, 0.4, 0.4, 0.3, 0.2))
+  }
+
 }

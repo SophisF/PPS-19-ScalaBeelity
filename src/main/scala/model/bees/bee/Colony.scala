@@ -81,7 +81,7 @@ object Colony {
       MovementLogic.solveLogic(reachableCells,
         toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)),
         toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)),
-          toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)))
+        toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))) getOrElse this.queen.position
 
     }
 

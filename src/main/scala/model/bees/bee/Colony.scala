@@ -74,8 +74,8 @@ object Colony {
       val reachableCells = for {
         i <- this.queen.position.x - time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED) to this.queen.position.x + time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED)
         j <- this.queen.position.y - time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED) to this.queen.position.y + time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED)
-        if i - this.dimension > 0 && i + this.dimension < environmentManager.environment.map.rows &&
-          j - this.dimension > 0 && j + this.dimension < environmentManager.environment.map.cols
+        if i - this.dimension >= 0 && i + this.dimension < environmentManager.environment.map.rows &&
+          j - this.dimension >= 0 && j + this.dimension < environmentManager.environment.map.cols
       } yield PrologEngine.buildCellTerm(environmentManager.cells().valueAt(i, j), Point(i, j))
 
       MovementLogic.solveLogic(reachableCells,
@@ -97,7 +97,7 @@ object Colony {
       val bees = this.updatePopulation(time)(temperature)(pressure)(humidity)
       val queen = Queen(Some(this), this.queen.genotype, this.queen.phenotype, this.queen.age + time,
         temperature, pressure, humidity, newCenter, this.queen.generateNewColony)
-      val newColony = this.generateColony(time)
+      val newColony = this.generateColony(time)(environmentManager)
       Colony(this.color, if (queen.isAlive) queen else {
         val similarGenotype = EvolutionManager.calculateAverageGenotype(bees)
         Queen(Some(this), similarGenotype, Phenotype(Genotype.calculateExpression(similarGenotype)), 0,
@@ -112,6 +112,8 @@ object Colony {
       for {
         i <- newCenter.x - this.dimension to newCenter.x + this.dimension
         j <- newCenter.y - this.dimension to newCenter.y + this.dimension
+        if i - this.dimension >= 0 && i + this.dimension < environmentManager.environment.map.rows &&
+          j - this.dimension >= 0 && j + this.dimension < environmentManager.environment.map.cols
       } yield environmentManager.cells().valueAt(i, j)
     }
 
@@ -132,14 +134,17 @@ object Colony {
 
     }
 
-    private def generateColony(time: Int): Option[List[Colony]] = {
+    private def generateColony(time: Int)(environmentManager: EnvironmentManager): Option[List[Colony]] = {
       // println("generate")
-      if (Random.nextInt(10000 / time) < 1) Some(List(this.queen.generateNewColony(this.proximity()))) else None
+      if (Random.nextInt(10000 / time) < 1) Some(List(this.queen.generateNewColony(environmentManager.proximityOf(this.queen.position)))) else None
     }
 
+    /*
     private def proximity(): Point = {
       Point(this.queen.position.x + (this.dimension + Random.nextInt(20)) * (if (Random.nextInt() % 2 == 0) 1 else -1), this.queen.position.y + (this.dimension + Random.nextInt(20)) * (if (Random.nextInt() % 2 == 0) 1 else -1))
     }
+
+     */
 
 
     private val averagePhenotype: Phenotype = EvolutionManager.calculateAveragePhenotype(this.bees)

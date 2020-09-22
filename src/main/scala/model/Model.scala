@@ -5,6 +5,7 @@ import scala.model.environment.Cell
 import scala.utility.Point
 
 trait Model {
+
   def time(): Int
 
   def update(): Unit

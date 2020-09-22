@@ -20,10 +20,17 @@ object MovementLogic {
    * @param humidityRange a term that represents the humidity range of the queen.
    * @return the best Point where the queen must move to.
    */
-  def solveLogic(cells: Seq[Term], temperatureRange: String, pressureRange: String, humidityRange: String): Point = {
+  def solveLogic(cells: Seq[Term], temperatureRange: String, pressureRange: String, humidityRange: String): Option[Point] = {
     val engine: Term => Iterable[SolveInfo] = mkPrologEngine(new Theory(new FileInputStream("src/main/prolog/movement.pl")))
     val move = new Struct("move", cells, temperatureRange, pressureRange, humidityRange, new Var())
-    val position = new Struct("getPosition", (engine(move) map (extractTerm(_, 4))) head, new Var(), new Var())
-    (engine(position) map (t => Point(extractTerm(t, 1), extractTerm(t, 2)))) head
+    val newCell = engine(move) map (extractTerm(_, 4))
+    if(newCell.isEmpty){
+      None
+    }
+    else {
+      val position = new Struct("getPosition", newCell head, new Var(), new Var())
+      Some ((engine(position) map (t => Point(extractTerm(t, 1), extractTerm(t, 2)))) head)
+    }
+
   }
 }

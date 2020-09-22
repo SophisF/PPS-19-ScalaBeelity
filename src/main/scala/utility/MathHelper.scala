@@ -1,4 +1,4 @@
-package scala.model.environment.utility
+package scala.utility
 
 object MathHelper {
 

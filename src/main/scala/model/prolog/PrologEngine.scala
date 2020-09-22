@@ -10,6 +10,14 @@ import scala.utility.Point
  */
 object PrologEngine {
 
+
+  /**
+   * Implicit method to convert a tuple of int into a Prolog range term.
+   * @param tuple the tuple to convert.
+   * @return a new Prolog term that represents the range.
+   */
+  implicit def rangeToStringTerm(tuple: (Int, Int)): String = s"range$tuple"
+
   /**
    * Method to build a cell term, given an environmental cell and its position.
    * @param cell the environmental cell.

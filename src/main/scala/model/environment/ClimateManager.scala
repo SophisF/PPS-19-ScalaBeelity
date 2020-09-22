@@ -13,7 +13,7 @@ import scala.utility.IterableHelper.RichIterable
 import scala.util.Random
 
 object ClimateManager {
-  private def newFilter() = (0 until 20).random().get == 0 // TODO maybe move outside
+  private def newFilter: Boolean = (0 until 20).random.get == 0 // TODO maybe move outside
 
   /**
    * Timed generator for non periodically climate changes.
@@ -26,10 +26,10 @@ object ClimateManager {
   def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimeDependentProperty]] =
     Iterator.continually(PropertyType.random(_.isInstanceOf[TimeDependentProperty])).filter(_ nonEmpty)
       .map(_.get().asInstanceOf[TimeDependentProperty]).map(randomContinuousFilter(_, environmentSize, iterations))
-      .takeWhile(_ => newFilter())
+      .takeWhile(_ => newFilter)
 
   def generateSeason(): Iterator[PropertySource[TimeDependentProperty]] = PropertyType.properties(_.isInstanceOf[TimeDependentProperty])
-    .map(_.asInstanceOf[PropertyValue[TimeDependentProperty]]).map(it => seasonalChanges(it())).iterator
+    .map(_.asInstanceOf[PropertyValue[TimeDependentProperty]]).map(seasonalChanges(_)).iterator
 
   /**
    *
@@ -44,11 +44,8 @@ object ClimateManager {
     Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height), iterations)
 
   def randomInstantaneousFilter(property: PropertyType, environmentSize: Size): Source[Property] =
-    Source(property().generateFilter(10, 10)
-      .asInstanceOf[DenseMatrix[Property#Variation]],
-      Random.nextInt(environmentSize.width),
-      Random.nextInt(environmentSize.height))
-
+    Source(property.generateFilter(10, 10).asInstanceOf[DenseMatrix[Property#Variation]],
+      Random.nextInt(environmentSize.width), Random.nextInt(environmentSize.height))
 
   private def seasonalChanges(property: TimeDependentProperty): SeasonalSource[TimeDependentProperty] =
     SeasonalSource(property.seasonalTrend)

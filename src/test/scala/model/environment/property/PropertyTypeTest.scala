@@ -2,100 +2,86 @@ package scala.model.environment.property
 
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.model.environment.property.PropertyType.{getPropertyFrom, properties, random}
+import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
+
 /**
  * Test property trait
  *
  * @author Paolo Baldini
  */
 class PropertyTypeTest extends AnyFunSuite {
-  /*
-  private object Props extends Property {
-    type ValueType = Int
 
-    def default = 0
-
-    case class State_(state: Int) extends State
-
-    case class Var(operation: State => State) extends Variation
-
+  test("I should not be able to instantiate a PropertyValue object from outside the object") {
+    assertDoesNotCompile("PropertyValue(TemperatureProperty)")
   }
 
-  test("Property state must have values of type 'ValueType'") {
-    assertCompiles("Props.State_(5)")
+  test("I should not be able to extend PropertyValue from outside the object") {
+    assertDoesNotCompile("case class X extends PropertyValue[TemperatureProperty]")
   }
 
-  test("Property state mustn't have values of type different from 'ValueType'") {
-    assertDoesNotCompile("""Props.State_("string")""")
+  test("PropertyValue should provide an apply method to get the property") {
+    assert(PropertyType.Temperature().isInstanceOf[Property])
   }
 
-  test("Property variation must accept a function who take a state and return a state") {
-    assertCompiles("Props.Var(s => s)")
+  test("Temperature 'value' should contains a PropertyValue of TemperatureProperty") {
+    assert(PropertyType.Temperature().isInstanceOf[TemperatureProperty])
   }
-*/
+
+  test("'isInstanceOf' should not cause problem comparing between the single properties") {
+    assert(! PropertyType.Temperature().isInstanceOf[HumidityProperty])
+  }
+
+  test("Humidity should allow an access to a HumidityProperty object") {
+    assert(PropertyType.Humidity().isInstanceOf[HumidityProperty])
+  }
+
+  test("Pressure should allow an access to a PressureProperty object") {
+    assert(PropertyType.Pressure().isInstanceOf[PressureProperty])
+  }
+
+  test("PropertyType should provide an implicit conversion from PropertyValue to *Property") {
+    assertCompiles("val property: HumidityProperty = PropertyType.Humidity")
+  }
+
+  test("PropertyType should not provide an erroneous implicit conversion from PropertyValue to *Property") {
+    assertDoesNotCompile("val property: TemperatureProperty = PropertyType.Humidity")
+  }
+
+  test("'properties' should contains TemperatureProperty") {
+    assert(properties().map(getPropertyFrom).toSeq contains TemperatureProperty)
+  }
+
+  test("'properties' should contains HumidityProperty") {
+    assert(properties().map(getPropertyFrom).toSeq contains HumidityProperty)
+  }
+
+  test("'properties' should contains PressureProperty") {
+    assert(properties().map(getPropertyFrom).toSeq contains PressureProperty)
+  }
+
+  /* TODO test("'properties' filtering for timed-properties should not contains PressureProperty") {
+    assert(! properties(_.isInstanceOf[TimeDependentProperty]).map(getPropertyFrom).contains(PressureProperty))
+  }*/
+
+  test("'properties' filtering for a specific property should return only it") {
+    assert(properties(_.isInstanceOf[PressureProperty]).map(getPropertyFrom).toSeq contains PressureProperty)
+  }
+
+  test("'properties' can return empty sequence if no property respect the condition"){
+    assert(properties(_ => false).isEmpty)
+  }
+
+  // The two following test works with random so is not guaranteed to always pass
+  test("[Partial test] 'random' should never return empty optional without filter (properties are defined)"){
+    assert(! Iterator.continually(random()).take(10000).exists(_.isEmpty))
+  }
+
+  test("[Partial test] 'random' should return different values (multiple properties are defined)"){
+    assert(Iterator.continually(random().get).take(10000).distinct.size > 1)
+  }
+
+  test("'random' can return empty optional if no property respect the condition"){
+    assert(random(_ => false).isEmpty)
+  }
 }
-/*
-  private case class NonComparableClass(x: Int, y: Int)
-  private object NonComparablePropertyClass extends Property with Range {
-    type ValueType = NonComparableClass
-    var minValue: NonComparableClass = NonComparableClass(0, 0)
-    var maxValue: NonComparableClass = NonComparableClass(0, 0)
-    var default: NonComparableClass = NonComparableClass(0, 0)
-
-    case class State(state: NonComparableClass) extends State
-  }
-
-  test("Limit function should return the passed value if it respects the limits") {
-    val property = PropertyClass(0, 100, 0)
-    assert(Range.limit(property)(50) == 50)
-  }
-
-  test("Limit function should return maxValue if it goes over the limits") {
-    val property = PropertyClass(0, 100, 0)
-    assert(Range.limit(property)(999) == 100)
-  }
-
-  test("Limit function should return maxValue if it goes under the limits") {
-    val property = PropertyClass(0, 100, 0)
-    assert(Range.limit(property)(-999) == 0)
-  }
-
-  test("Limit function should (try to) return values coherent also with explicit ordering operation") {
-    val property = PropertyClass(0, 100, 0)
-    // in case of equality, limit function return the max/min value. Obviously, an ad-hoc compare operation can be
-    // implemented to break the rules. e.g.:
-    // (_, y) => {
-    //      if (y == property.minValue) 1
-    //      else if (y == property.maxValue) -1
-    //      else 0
-    // }
-    assert(Range.limit(property)(-999)((_, _) => 0) == property.maxValue)
-  }
-
-  test("Limit without an implicit or explicit 'Ordering' should not be callable") {
-    NonComparablePropertyClass.minValue = NonComparableClass(1, 2)
-    NonComparablePropertyClass.maxValue = NonComparableClass(3, 4)
-    NonComparablePropertyClass.default = NonComparableClass(5, 6)
-
-    assertDoesNotCompile("""NonComparablePropertyClass.PropertyState.limit(NonComparableClass(7, 8))""")
-  }
-
-  test("Limit with an explicit 'Ordering' should be callable") {
-    NonComparablePropertyClass.minValue = NonComparableClass(1, 2)
-    NonComparablePropertyClass.maxValue = NonComparableClass(3, 4)
-    NonComparablePropertyClass.default = NonComparableClass(5, 6)
-
-    assert(Range.limit(NonComparablePropertyClass)(NonComparableClass(7, 8))((_, _) => 0)
-      == NonComparablePropertyClass.maxValue)
-  }
-
-  test("Vary shouldn't have strange behaviour (here, the limit function is bypassed)") {
-    NonComparablePropertyClass.minValue = NonComparableClass(1, 2)
-    NonComparablePropertyClass.maxValue = NonComparableClass(3, 4)
-    NonComparablePropertyClass.default = NonComparableClass(5, 6)
-
-    val op: (NonComparableClass, NonComparableClass) => NonComparableClass = (_, _) => NonComparableClass(-1, -1)
-    assert(Property.PropertyState.vary(NonComparablePropertyClass.State(NonComparableClass(1, 1)), NonComparableClass(0, 0))(op, (_, y) =>
-      { if (y==NonComparablePropertyClass.minValue) 1; else if (y==NonComparablePropertyClass.maxValue) -1; else 0 })
-      .state == NonComparableClass(-1, -1))
-  }
-}*/

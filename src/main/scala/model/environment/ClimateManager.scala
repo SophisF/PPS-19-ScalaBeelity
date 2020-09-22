@@ -9,11 +9,10 @@ import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.ZoneSource.Source
 import scala.model.environment.property.{Property, PropertyType, TimeDependentProperty}
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
-import scala.utility.IterableHelper.RichIterable
 import scala.util.Random
+import scala.utility.MathHelper.randomBoolean
 
 object ClimateManager {
-  private def newFilter: Boolean = (0 until 20).random.get == 0 // TODO maybe move outside
 
   /**
    * Timed generator for non periodically climate changes.
@@ -26,7 +25,7 @@ object ClimateManager {
   def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimeDependentProperty]] =
     Iterator.continually(PropertyType.random(_.isInstanceOf[TimeDependentProperty])).filter(_ nonEmpty)
       .map(_.get().asInstanceOf[TimeDependentProperty]).map(randomContinuousFilter(_, environmentSize, iterations))
-      .takeWhile(_ => newFilter)
+      .takeWhile(_ => randomBoolean(5))
 
   def generateSeason(): Iterator[PropertySource[TimeDependentProperty]] = PropertyType.properties(_.isInstanceOf[TimeDependentProperty])
     .map(_.asInstanceOf[PropertyValue[TimeDependentProperty]]).map(seasonalChanges(_)).iterator

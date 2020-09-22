@@ -23,6 +23,7 @@ trait Model {
 
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
 
+
   Time.initialize()
   Time.setIncrementValue(updateTime)
   private var _statisticalData: StatisticalData = StatisticalData()
@@ -37,6 +38,8 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
   override def time(): Int = Time.time
 
   override def statisticalData(): StatisticalData = _statisticalData
+
+  def colors: Seq[Double] = ecosystem.colonies.map(_.color)
 
   override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.center, c.dimension, c.color))
 

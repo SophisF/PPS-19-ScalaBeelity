@@ -14,17 +14,17 @@ import java.awt.geom.Rectangle2D
 
 import org.jfree.chart.plot.XYPlot
 
-object ColoniesChartBuilder extends ChartBuilder[Seq[((Point, Int), Double)]] {
+object ColoniesChartBuilder extends ChartBuilder[Seq[(Point, Int, Double)]] {
   override type ChartType = ColoniesChart
 
   class ColoniesChart(var selectedColony: Option[(Point, Int, Double)] = Option.empty) extends JPanel
 
-  override def createChart(data: Seq[((Point, Int), Double)]): ColoniesChart = newChart(data, Option.empty)
+  override def createChart(data: Seq[(Point, Int, Double)]): ColoniesChart = newChart(data, Option.empty)
 
-  override def updateChart(chart: ColoniesChart, data: Seq[((Point, Int), Double)]): ColoniesChart =
+  override def updateChart(chart: ColoniesChart, data: Seq[(Point, Int, Double)]): ColoniesChart =
     newChart(data, chart.selectedColony)
 
-  private def newChart(data: Seq[((Point, Int), Double)], selectedColony: Option[(Point, Int, Double)]): ColoniesChart = {
+  private def newChart(data: Seq[(Point, Int, Double)], selectedColony: Option[(Point, Int, Double)]): ColoniesChart = {
     val panel = new ColoniesChart(selectedColony)
     panel.setLayout(new GridLayout(1,2))
 
@@ -32,7 +32,7 @@ object ColoniesChartBuilder extends ChartBuilder[Seq[((Point, Int), Double)]] {
     plot.getRangeAxis.setRange(0, 100)  // TODO env size
     plot.getDomainAxis.setRange(0, 100)
 
-    data.map(it => colonyToComponent(it._1._1, new Dimension(it._1._2, it._1._2), getHSBColor(it._2 toFloat, 1, 1)))
+    data.map(it => colonyToComponent(it._1, new Dimension(it._2, it._2), getHSBColor(it._3 toFloat, 1, 1)))
       .foreach(plot.addAnnotation)
 
     val chart = new ChartPanel(new JFreeChart(plot))

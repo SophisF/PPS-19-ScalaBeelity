@@ -12,7 +12,7 @@ trait Model {
 
   def statisticalData(): StatisticalData
 
-  def colonies: List[(Point, Int)]
+  def colonies: List[(Point, Int, Double)]
 
   def temperatureMatrix(): Array[Array[Double]]
 

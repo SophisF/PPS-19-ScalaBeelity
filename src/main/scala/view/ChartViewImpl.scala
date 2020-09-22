@@ -33,22 +33,7 @@ class ChartViewImpl(controller: Controller) {
 
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 
-    val playButton = new JButton("Play")
-    val pauseButton = new JButton("Pause")
-    val stopButton = new JButton("Accelerate")
-    playButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
-    pauseButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
-    stopButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
     timeLabel.setText("Execution Time: " + Time.time)
-    gameBar.add(playButton)
-    gameBar.add(pauseButton)
-    gameBar.add(stopButton)
     gameBar.add(timeLabel)
 
     frame.add(gameBar, BorderLayout.PAGE_START)

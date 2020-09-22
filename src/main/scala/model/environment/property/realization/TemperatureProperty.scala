@@ -1,7 +1,7 @@
 package scala.model.environment.property.realization
 
 import scala.model.Time
-import scala.model.environment.utility.IteratorHelper.RichIterator
+import scala.utility.IteratorHelper.RichIterator
 
 sealed trait TemperatureProperty extends IntegerProperty with IntegerTimedProperty
 

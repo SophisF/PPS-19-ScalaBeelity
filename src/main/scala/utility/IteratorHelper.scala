@@ -1,4 +1,6 @@
-package scala.model.environment.utility
+package scala.utility
+
+import Tuple.RichTuple
 
 /**
  * Applying `Pimp my library` pattern to iterable to add utilities methods
@@ -15,9 +17,13 @@ object IteratorHelper {
      * @param mirrorCenter if false do not duplicate center element
      * @return the mirrored iterator
      */
-    def mirror(mirrorCenter: Boolean = true): Iterator[A] = iterator.duplicate.productIterator
-      .map(_.asInstanceOf[Iterator[A]]).reduce((_1, _2) => _1 ++ _2.toSeq.reverse.drop(if (mirrorCenter) 0 else 1))
+    def mirror(mirrorCenter: Boolean = true): Iterator[A] = iterator.duplicate
+      .reduce(_ ++ _.reverse.drop(if (mirrorCenter) 0 else 1))
   }
 
-  implicit def toIterator[A](iterable: Iterable[A]): Iterator[A] = iterable.iterator
+  implicit def toIterator[A](iterable: Iterable[A]): Iterator[A] = iterable iterator
+
+  implicit def toIterable[A](iterator: Iterator[A]): Iterable[A] = iterator to Iterable
+
+  implicit def toSeq[A](iterator: Iterator[A]): Seq[A] = iterator toSeq
 }

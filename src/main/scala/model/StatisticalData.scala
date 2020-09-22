@@ -38,7 +38,7 @@ object StatisticalData {
     def averageLongevity: List[Int] = this expression CharacteristicTaxonomy.LONGEVITY map toInt
 
     private def expression(characteristicTaxonomy: CharacteristicTaxonomy): List[Characteristic#Expression] =
-      colonies.map(c => calculateAveragePhenotype(List(c.queen) ++ c.bees).expressionOf(characteristicTaxonomy))
+      colonies.map(c => calculateAveragePhenotype(Set(c.queen) ++ c.bees).expressionOf(characteristicTaxonomy))
   }
 
   def updateStats(environment: Environment, colonies: List[Colony], statistics: StatisticalData): StatisticalData =

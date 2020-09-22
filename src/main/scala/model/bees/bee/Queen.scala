@@ -38,6 +38,9 @@ object Queen {
     val position: Point
     val generateNewColony: Point => Colony
 
+    def update(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(newCenter: Point): Queen =
+      Queen(Some(this.colony), this.genotype, this.phenotype, this.age + time, averageTemperature, averagePressure, averageHumidity,
+        newCenter, this.generateNewColony)
   }
 
   private case class QueenImpl(colonyOpt: Option[Colony],
@@ -48,7 +51,7 @@ object Queen {
 
     override val colony: Colony = colonyOpt getOrElse Colony(queen = this, bees = generateBee)
 
-    private def generateBee: Seq[Bee] = (0 to this.effectiveReproductionRate + 1)
+    private def generateBee: Set[Bee] = (0 to this.effectiveReproductionRate + 1)
       .map(_ => {
         val t: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)
         val p: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)
@@ -60,7 +63,7 @@ object Queen {
           0,
           temperature, pressure, humidity
         )
-      })
+      }).toSet
   }
 
 }

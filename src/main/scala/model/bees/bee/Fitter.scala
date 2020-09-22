@@ -26,23 +26,23 @@ object Fitter {
    * Method to calculate the fit value, based on the environment parameters.
    *
    * @param phenotype   the phenotype ot the bee.
-   * @param temperature the temperature of the environment.
-   * @param pressure    the pressure of the environment.
-   * @param humidity    the humidity of the environment.
+   * @param averageTemperature the average temperature of the environment where the bee's colony is.
+   * @param averagePressure    the average pressure of the environment where the bee's colony is.
+   * @param averageHumidity    the average humidity of the environment where the bee's colony is.
    * @param calculate   a strategy to calculate the fitValue.
    * @param fitStrategy a strategy to calculate the fit on a single parameter.
    * @return the fit value.
    */
-  def calculateFitValue(phenotype: Phenotype)(temperature: Int)(pressure: Int)(humidity: Int)
+  def calculateFitValue(phenotype: Phenotype)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)
                        (calculate: (Double, Double, Double) => Double,
                         fitStrategy: Int => Range => Double = (property: Int) => (range: Range) =>
                           if (property in range) 1.0 else if (property < range) 1.0 - (range._1.toDouble - property.toDouble) / 100
                           else 1.0 - (property.toDouble - range._2.toDouble) / 100)
   : Double = {
 
-    val tFit: Double = this.calculateFit(temperature)(phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY))(fitStrategy)
-    val pFit: Double = this.calculateFit(pressure)(phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY))(fitStrategy)
-    val hFit: Double = this.calculateFit(humidity)(phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))(fitStrategy)
+    val tFit: Double = this.calculateFit(averageTemperature)(phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY))(fitStrategy)
+    val pFit: Double = this.calculateFit(averagePressure)(phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY))(fitStrategy)
+    val hFit: Double = this.calculateFit(averageHumidity)(phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))(fitStrategy)
 
     calculate(tFit, pFit, hFit)
   }

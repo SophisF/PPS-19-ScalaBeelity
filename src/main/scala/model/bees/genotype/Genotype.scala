@@ -43,7 +43,7 @@ object Genotype {
      * @param geneTaxonomy the gene taxonomy.
      * @return the frequency of the gene.
      */
-    def frequency(geneTaxonomy: GeneTaxonomy): Int = {
+    def frequencyOf(geneTaxonomy: GeneTaxonomy): Int = {
       val geneOpt = genes.find(_.name.equals(geneTaxonomy))
       if(geneOpt.nonEmpty) geneOpt.get.frequency else Gene.minFrequency
     }

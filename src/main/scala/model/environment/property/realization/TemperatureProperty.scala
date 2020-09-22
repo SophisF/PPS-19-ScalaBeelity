@@ -1,7 +1,7 @@
 package scala.model.environment.property.realization
 
 import scala.model.Time
-import scala.utility.IteratorHelper.RichIterator
+import scala.utility.IterableHelper.RichIterable
 
 sealed trait TemperatureProperty extends IntegerProperty with IntegerTimedProperty
 
@@ -16,7 +16,7 @@ object TemperatureProperty extends TemperatureProperty {
     private var lastGet: Int = 0
 
     override def instantaneous(instant: Time): VariationType = {
-      val monthlyValue = (0 to 6).iterator.mirror(false).map(_ * MonthlyIncrement).drop(instant month).toSeq.head
+      val monthlyValue = (0 to 6).mirror(false).map(_ * MonthlyIncrement).drop(instant month).head
       val variation = monthlyValue - lastGet
       lastGet = monthlyValue
       variation

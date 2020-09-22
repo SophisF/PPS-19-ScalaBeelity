@@ -1,6 +1,6 @@
 package scala.model
 
-import model.bees.bee.ColonyManager
+import model.bees.bee.PopulationManager
 
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.bee.Queen
@@ -19,7 +19,7 @@ class Ecosystem(nColonies: Int, width: Int, height: Int) {
 
   def update(): Unit = {
     this.environmentManager = evolution(environmentManager)
-    this.colonies = ColonyManager.manage(this.colonies.flatMap(_.update(Time.incrementValue)(environmentManager))
+    this.colonies = PopulationManager.manage(this.colonies.flatMap(_.update(Time.incrementValue)(environmentManager))
       .filter(_.isColonyAlive)).filter(_.isColonyAlive)
   }
 

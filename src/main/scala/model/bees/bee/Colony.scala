@@ -40,6 +40,10 @@ object Colony {
    */
   private val limitBeesForCell: Int = 10
 
+  private val proximity: Int = 10
+
+  private val newColonyGenerationProbability: Int = 10000
+
   /**
    * Trait that represents colony
    */
@@ -149,7 +153,7 @@ object Colony {
     }
 
 
-    private def getRangeCells(position: Int)(toApply: Int)(op: (Int, Int) => Int): Int = {
+    private def applyToCells(position: Int)(toApply: Int)(op: (Int, Int) => Int): Int = {
       op(position, toApply)
     }
 
@@ -161,10 +165,11 @@ object Colony {
      * @return the new point where the queen has to move in.
      */
     private def move(time: Int)(environmentManager: EnvironmentManager): Point = {
-      val reachableCells = environmentManager.indexInRange((this.getRangeCells(this.center.x)(time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED))(_ - _),
-        this.getRangeCells(this.center.x)(time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED))(_ + _)),
-        (this.getRangeCells(this.center.y)(time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED))(_ - _),
-          this.getRangeCells(this.center.y)(time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED))(_ + _))
+      val toApply = time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED)
+      val reachableCells = environmentManager.indexInRange((this.applyToCells(this.center.x)(toApply)(_ - _),
+        this.applyToCells(this.center.x)(toApply)(_ + _)),
+        (this.applyToCells(this.center.y)(toApply)(_ - _),
+          this.applyToCells(this.center.y)(toApply)(_ + _))
       ).map(index => PrologEngine.buildCellTerm(environmentManager.cells().valueAt(index._1, index._2), Point(index._1, index._2)))
 
       MovementLogic.solveLogic(reachableCells,
@@ -226,11 +231,9 @@ object Colony {
     }
 
     private def generateColony(time: Int)(environmentManager: EnvironmentManager): Option[List[Colony]] = {
-      // println("generate")
-      if (Random.nextInt(10000 / time) < 1) Some(List(this.queen.generateNewColony(environmentManager.proximityOf(
-        (this.getRangeCells(this.center.x)(10)(_ - _), this.getRangeCells(this.center.x)(10)(_ + _)), (
-          (this.getRangeCells(this.center.y)(10)(_ - _), this.getRangeCells(this.center.y)(10)(_ + _))
-          )
+      if (Random.nextInt(newColonyGenerationProbability / time) < 1) Some(List(this.queen.generateNewColony(environmentManager.proximityOf(
+        (this.applyToCells(this.center.x)(proximity)(_ - _), this.applyToCells(this.center.x)(proximity)(_ + _)),
+        (this.applyToCells(this.center.y)(proximity)(_ - _), this.applyToCells(this.center.y)(proximity)(_ + _))
       )))) else None
     }
 

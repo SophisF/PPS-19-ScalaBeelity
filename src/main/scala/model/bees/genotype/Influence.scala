@@ -37,8 +37,6 @@ object Influence {
      * The value of the influence.
      */
     val influenceValue: Double
-
-
   }
 
   /**

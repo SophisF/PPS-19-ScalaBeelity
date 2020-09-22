@@ -15,7 +15,7 @@ import scala.util.Random
 class Ecosystem(nColonies: Int, width: Int, height: Int) {
 
   var environmentManager: EnvironmentManager = EnvironmentManager(width, height)
-  var colonies: List[Colony] = (0 to nColonies).map(_ => createQueen()).toList
+  var colonies: List[Colony] = (0 to nColonies).map(_ => createColony()).toList
 
   def update(): Unit = {
     this.environmentManager = evolution(environmentManager)
@@ -23,12 +23,12 @@ class Ecosystem(nColonies: Int, width: Int, height: Int) {
       .filter(_.isColonyAlive)).filter(_.isColonyAlive)
   }
 
-  def createQueen(position: Point = (Random.nextInt(environmentManager.environment.map.rows - 1), Random.nextInt(environmentManager.environment.map.cols - 1))): Colony = {
+  def createColony(position: Point = (Random.nextInt(environmentManager.environment.map.rows - 1), Random.nextInt(environmentManager.environment.map.cols - 1))): Colony = {
     val genotype = Genotype()
     val cell: Cell = environmentManager.environment.map(position.x, position.y)
     val queen: Queen = Queen(None, genotype, Phenotype(Genotype.calculateExpression(genotype)), 0,
       cell.temperature.numericRepresentation(false), cell.pressure.numericRepresentation(false),
-      cell.humidity.numericRepresentation(false), position, this.createQueen)
+      cell.humidity.numericRepresentation(false), position, this.createColony)
     queen.colony
   }
 }

@@ -3,7 +3,7 @@ package scala.model.environment.property.realization
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.GaussianFilterBuilder.function3d
-import scala.model.environment.property.{Property, Range}
+import scala.model.environment.property.Property
 import scala.utility.MathHelper._
 import scala.utility.IterableHelper.RichIterable
 
@@ -12,8 +12,7 @@ import scala.utility.IterableHelper.RichIterable
  *
  * @author Paolo Baldini
  */
-trait IntegerProperty extends Property with Range {
-  override type ValueType = Int
+trait IntProperty extends Property with IntRange {
   override type StateType = IntegerState
   override type VariationType = IntegerVariation
 
@@ -26,7 +25,7 @@ trait IntegerProperty extends Property with Range {
   trait IntegerState extends State {
 
     override def numericRepresentation(percentage: Boolean = true): Int = percentage match {
-      case true => (value - minValue) * 100 / (maxValue - minValue)
+      case true => (value - minValue) * 100 / rangeWidth
       case _ => value
     }
 
@@ -47,20 +46,12 @@ trait IntegerProperty extends Property with Range {
     override def vary[S <: State](_state: S): StateType = state(_state.value + value)
   }
 
-
-  //TODO: Applicare principio DRY e rimuovere ripetizione.
-  private def rangeWidth: Int = maxValue - minValue
-
-  private def rangeCenter: Int = minValue + rangeWidth / 2
-
-  private def zeroCenteredRange: (Int, Int) = (minValue - rangeCenter, maxValue - rangeCenter)
-
   override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] =
-    IntegerProperty.filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
+    IntProperty.filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
 }
 
-object IntegerProperty {
+object IntProperty {
 
   def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
-    function3d((minValue to maxValue).filter(_ != 0).random().get, 0, xDecrement, yDecrement)
+    function3d((minValue to maxValue).filter(_ != 0).random.get, 0, xDecrement, yDecrement)
 }

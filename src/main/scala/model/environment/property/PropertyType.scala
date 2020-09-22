@@ -34,5 +34,5 @@ object PropertyType extends Enumeration {
     values.toSeq.asInstanceOf[Seq[PropertyValue[Property]]].filter(it => filterCondition(it()))
 
   def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] =
-    properties().filter(property => filterCondition(property())).random()
+    properties().filter(property => filterCondition(property())).random
 }

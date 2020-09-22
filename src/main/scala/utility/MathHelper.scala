@@ -9,5 +9,5 @@ object MathHelper {
    * @tparam N type of value
    * @return converted value
    */
-  implicit def intValue[N: Numeric](value: N): Int = implicitly[Numeric[N]].toInt(value)
+  implicit def intValueOf[N: Numeric](value: N): Int = implicitly[Numeric[N]].toInt(value)
 }

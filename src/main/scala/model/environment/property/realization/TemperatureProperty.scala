@@ -3,7 +3,7 @@ package scala.model.environment.property.realization
 import scala.model.Time
 import scala.utility.IterableHelper.RichIterable
 
-sealed trait TemperatureProperty extends IntegerProperty with IntegerTimedProperty
+sealed trait TemperatureProperty extends IntProperty with IntTimedProperty
 
 object TemperatureProperty extends TemperatureProperty {
   private val MonthlyIncrement = 2

@@ -26,8 +26,8 @@ object GaussianFilterBuilder {
    * @return the right side (from the center) of a 2d gaussian curve
    */
   def function2dOneSided(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] = correctRanges(peak, stop)
-    .map((peak, stop) => readjustRanges(peak, stop, Iterator.from(0).map(pow(_, 2) / -(2.0 * pow(decrementRate, 2)))
-      .map(peak * exp(_)).takeWhile(_.abs >= stop.abs) to Iterable))
+    .map((_peak, _stop) => readjustRanges(peak, stop, Iterator.from(0).map(pow(_, 2) / -(2.0 * pow(decrementRate, 2)))
+      .map(_peak * exp(_)).takeWhile(_.abs >= _stop.abs) to Iterable))
 
   /**
    * Calculate influence descent through use of a gaussian function (See

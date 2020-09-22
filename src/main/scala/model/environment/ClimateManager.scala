@@ -8,8 +8,8 @@ import scala.model.environment.property.PropertyType.PropertyValue
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.ZoneSource.Source
 import scala.model.environment.property.{Property, PropertyType, TimeDependentProperty}
-import scala.model.environment.property.source.{ContinuousSource, PropertySource, ZoneSource}
-import scala.utility.SequenceHelper.RichSequence
+import scala.model.environment.property.source.{ContinuousSource, PropertySource}
+import scala.utility.IterableHelper.RichIterable
 import scala.util.Random
 
 object ClimateManager {

@@ -33,5 +33,5 @@ object Zone {
    * @return true if the point is contained in the zone, false otherwise
    */
   def in(x: Int, y: Int, zone: Zone): Boolean = x >= border(zone)(Left) && x <= border(zone)(Right) &&
-      y >= border(zone)(Top) && y <= border(zone)(Bottom)
+    y >= border(zone)(Top) && y <= border(zone)(Bottom)
 }

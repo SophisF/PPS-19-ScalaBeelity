@@ -1,10 +1,8 @@
 package scala.model.statistic
 
-import model.bees.bee.EvolutionManager.calculateAveragePhenotype
-
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.phenotype.Characteristic.Characteristic
-import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 import scala.model.environment.property.Property
 import scala.model.environment.property.PropertyType.PropertyValue
@@ -19,7 +17,7 @@ object StatisticColonies {
     def stat(): Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)] = CharacteristicTaxonomy.values.map(v => (v, getAverageOf(v)))
 
     def getAverageOf(characteristicTaxonomy: CharacteristicTaxonomy): Characteristic#Expression = {
-      calculateAveragePhenotype(Set(colony.queen) ++ colony.bees).expressionOf(characteristicTaxonomy)
+      Phenotype.averagePhenotype(Set(colony.queen) ++ colony.bees).expressionOf(characteristicTaxonomy)
     }
 
   }

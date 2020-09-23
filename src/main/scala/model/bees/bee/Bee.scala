@@ -41,8 +41,6 @@ object Bee {
       override val effectiveAggression: Int = Fitter.applyFitValue(fitValue)(_phenotype.expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))(_ * _)
 
     }
-
-
   }
 
   /**

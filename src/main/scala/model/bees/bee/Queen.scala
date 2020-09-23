@@ -4,10 +4,9 @@ import model.bees.bee.EvolutionManager
 
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Colony.Colony
-import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
+import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.bees.utility.PimpTuple._
 import scala.utility.Point
 
@@ -59,7 +58,7 @@ object Queen {
         val similarGenotype = EvolutionManager.buildGenotype(this.genotype)(this.phenotype)(t.average)(p.average)(h.average)(1)
         Bee(
           similarGenotype,
-          Phenotype(Genotype.calculateExpression(similarGenotype)),
+          similarGenotype expressItself,
           0,
           temperature, pressure, humidity
         )

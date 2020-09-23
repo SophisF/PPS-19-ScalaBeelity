@@ -38,11 +38,22 @@ object Colony {
   /**
    * Variable that represents the maximum number of bees per cell.
    */
-  private val limitBeesForCell: Int = 10
+  private val limitBeesForCell: Int = 5
 
   private val proximity: Int = 10
 
   private val newColonyGenerationProbability: Int = 10000
+
+  /**
+   * Method to manage the colonies. It combines and adjust them if there are the conditions.
+   *
+   * @param colonies , the colonies of bees.
+   * @return a new list of colonies with the new colonies managed.
+   */
+  def manage(colonies: List[Colony]): List[Colony] = {
+    val combined = Combiner.combine(colonies, colonies)
+    Cleaner.clean(combined, combined, List.empty).toList
+  }
 
   /**
    * Trait that represents colony
@@ -118,7 +129,7 @@ object Colony {
     /**
      * Utility variable to maintain the average phenotype of the colony.
      */
-    private lazy val averagePhenotype: Phenotype = EvolutionManager.calculateAveragePhenotype(Set(this.queen) ++ this.bees)
+    private lazy val averagePhenotype: Phenotype = Phenotype.averagePhenotype(Set(this.queen) ++ this.bees)
 
     override def center: Point = this.queen.position
 
@@ -152,11 +163,6 @@ object Colony {
         (this.generateColony(time)(environmentManager) getOrElse List.empty)
     }
 
-
-    private def applyToCells(position: Int)(toApply: Int)(op: (Int, Int) => Int): Int = {
-      op(position, toApply)
-    }
-
     /**
      * Method that manages the movement of the colony.
      *
@@ -166,11 +172,10 @@ object Colony {
      */
     private def move(time: Int)(environmentManager: EnvironmentManager): Point = {
       val toApply = time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED)
-      val reachableCells = environmentManager.indexInRange((this.applyToCells(this.center.x)(toApply)(_ - _),
-        this.applyToCells(this.center.x)(toApply)(_ + _)),
-        (this.applyToCells(this.center.y)(toApply)(_ - _),
-          this.applyToCells(this.center.y)(toApply)(_ + _))
-      ).map(index => PrologEngine.buildCellTerm(environmentManager.cells().valueAt(index._1, index._2), Point(index._1, index._2)))
+      val reachableCells = environmentManager.indexInRange((this.center.x - toApply,this.center.x + toApply),
+        (this.center.y - toApply, this.center.y + toApply))
+        .map(index => PrologEngine.buildCellTerm(environmentManager.cells().valueAt(index._1, index._2),
+          Point(index._1, index._2)))
 
       MovementLogic.solveLogic(reachableCells,
         toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)),
@@ -192,8 +197,8 @@ object Colony {
     private def updateQueen(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(newCenter: Point): Queen = {
       val queen = this.queen.update(time)(averageTemperature)(averagePressure)(averageHumidity)(newCenter)
       if (queen.isAlive) queen else {
-        val similarGenotype = EvolutionManager.calculateAverageGenotype(bees)
-        Queen(Some(this), similarGenotype, Phenotype(Genotype.calculateExpression(similarGenotype)), 0,
+        val similarGenotype = Genotype.averageGenotype(bees)
+        Queen(Some(this), similarGenotype, similarGenotype expressItself, 0,
           averageTemperature, averagePressure, averageHumidity, newCenter, this.queen.generateNewColony)
       }
     }
@@ -225,15 +230,15 @@ object Colony {
       val max: Int = if (this.numberOfBees >= this.maxBees) 0 else r * time
       Random.shuffle(this.bees).flatMap(bee => (0 to bee.phenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)).map(_ => {
         val similarGenotype = EvolutionManager.buildGenotype(bee.genotype)(bee.phenotype)(averageTemperature)(averagePressure)(averageHumidity)(time)
-        Bee(similarGenotype, Phenotype(Genotype.calculateExpression(similarGenotype)), Random.nextInt(time),
+        Bee(similarGenotype, similarGenotype expressItself, Random.nextInt(time),
           averageTemperature, averagePressure, averageHumidity)
       })).take(max)
     }
 
     private def generateColony(time: Int)(environmentManager: EnvironmentManager): Option[List[Colony]] = {
       if (Random.nextInt(newColonyGenerationProbability / time) < 1) Some(List(this.queen.generateNewColony(environmentManager.proximityOf(
-        (this.applyToCells(this.center.x)(proximity)(_ - _), this.applyToCells(this.center.x)(proximity)(_ + _)),
-        (this.applyToCells(this.center.y)(proximity)(_ - _), this.applyToCells(this.center.y)(proximity)(_ + _))
+        (this.center.x - proximity, this.center.x + proximity),
+        (this.center.y - proximity,  this.center.y + proximity)
       )))) else None
     }
 

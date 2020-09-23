@@ -1,10 +1,11 @@
 package scala.model.bees.genotype
 
 
+import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
-import scala.model.bees.phenotype.CharacteristicTaxonomy
-import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 
 /**
  * Object that represent the genotype.
@@ -13,23 +14,22 @@ object Genotype {
 
   /**
    * Apply method for genotype.
+   *
    * @param genes the input genes.
    * @return a new genotype.
    */
   def apply(genes: Set[Gene] = Set.empty): Genotype = GenotypeImpl(genes)
 
   /**
-   * Utility method to calculate how a genotype expresses itself.
-   * @param genotype the genotype.
-   * @return a map which binds a characteristic taxonomy with his expression value, expressed as a double.
+   * Method to calculate the average genotype in a sequence of bees.
+   *
+   * @param bees the set of bees.
+   * @return the average genotype.
    */
-  def calculateExpression(genotype: Genotype): Map[CharacteristicTaxonomy, Double] = {
-    CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, genotype.genes
-      .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
-      .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _)
-      / genotype.genes.count(_.geneticInformation.influence(taxonomy).nonEmpty)
-
-    )).toMap
+  def averageGenotype(bees: Set[Bee]): Genotype = {
+    Genotype(GeneTaxonomy.values.unsorted.map(value => Gene(value, {
+      bees.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).sum / bees.size
+    })))
   }
 
   /**
@@ -40,18 +40,31 @@ object Genotype {
 
     /**
      * Method to get the frequency of a gene.
+     *
      * @param geneTaxonomy the gene taxonomy.
      * @return the frequency of the gene.
      */
     def frequencyOf(geneTaxonomy: GeneTaxonomy): Int = {
       val geneOpt = genes.find(_.name.equals(geneTaxonomy))
-      if(geneOpt.nonEmpty) geneOpt.get.frequency else Gene.minFrequency
+      if (geneOpt.nonEmpty) geneOpt.get.frequency else Gene.minFrequency
     }
 
+    /**
+     * Method to calculate how a genotype expresses itself.
+     *
+     * @return a phenotype as expression of itself.
+     */
+    def expressItself: Phenotype = {
+      Phenotype(CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, this.genes
+        .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
+        .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _)
+        / this.genes.count(_.geneticInformation.influence(taxonomy).nonEmpty))).toMap)
+    }
   }
 
   /**
    * Concrete implementation of genotype.
+   *
    * @param geneSet a set of gene to build the genotype.
    */
   private case class GenotypeImpl(geneSet: Set[Gene]) extends Genotype {

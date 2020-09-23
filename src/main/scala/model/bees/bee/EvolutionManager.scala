@@ -1,26 +1,15 @@
 package model.bees.bee
 
-import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import scala.model.bees.phenotype.Phenotype
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.model.bees.utility.PimpInt._
 import scala.util.Random
 
 object EvolutionManager {
-
-  /**
-   * Private method to calculate the evolutionary rate based on time spent.
-   *
-   * @param time                      the time spent.
-   * @param calculateEvolutionaryRate a strategy to calculate the evolutionary rate.
-   * @return the evolutionary rate.
-   */
-  private def evolutionaryRate(time: Int)(calculateEvolutionaryRate: Int => Int): Int = calculateEvolutionaryRate(time)
 
   /**
    * Method that build a new genotype with a better adaptation to the environment and casual variations.
@@ -42,13 +31,21 @@ object EvolutionManager {
       case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(genotype)(phenotype)(averageHumidity)(gene.name)(gene.geneticInformation.characteristics.head)(evolutionaryRate)
     })
     genes = genes ++ this.randomMutation(genotype)(evolutionaryRate)
-
     Genotype(genes)
-
   }
 
   /**
+   * Private method to calculate the evolutionary rate based on time spent.
+   *
+   * @param time                      the time spent.
+   * @param calculateEvolutionaryRate a strategy to calculate the evolutionary rate.
+   * @return the evolutionary rate.
+   */
+  private def evolutionaryRate(time: Int)(calculateEvolutionaryRate: Int => Int): Int = calculateEvolutionaryRate(time)
+
+  /**
    * Generic method that products the environmental adaptation.
+   *
    * @param genotype       the existing genotype.
    * @param phenotype      the existing phenotype.
    * @param parameter      the environmental parameter.
@@ -69,7 +66,8 @@ object EvolutionManager {
 
   /**
    * Method to apply random mutation to a genotype.
-   * @param genotype the genotype.
+   *
+   * @param genotype         the genotype.
    * @param evolutionaryRate the change applied by the mutation.
    * @return a new set of genes, with mutated frequency.
    */
@@ -77,27 +75,4 @@ object EvolutionManager {
     genotype.genes.filterNot(_.isEnvironmental).map(gene => Gene(gene.name, if (Random.nextInt() % 2 == 0)
       gene.frequency - evolutionaryRate else gene.frequency + evolutionaryRate))
   }
-
-  /**
-   * Method to calculate the average genotype in a sequence of bees.
-   *
-   * @param bees the set of bees.
-   * @return the average genotype.
-   */
-  def calculateAverageGenotype(bees: Set[Bee]): Genotype = {
-    Genotype(GeneTaxonomy.values.unsorted.map(value => Gene(value, {
-      bees.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).sum / bees.size
-    })))
-  }
-
-  /**
-   * Method to calculate the average phenotype in a sequence of bees.
-   *
-   * @param bees the set of bees.
-   * @return the average phenotype.
-   */
-  def calculateAveragePhenotype(bees: Set[Bee]): Phenotype = {
-    Phenotype(Genotype.calculateExpression(this.calculateAverageGenotype(bees)))
-  }
-
 }

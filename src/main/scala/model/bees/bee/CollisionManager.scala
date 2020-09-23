@@ -17,7 +17,7 @@ object CollisionManager {
    * @param colonies the list of colonies.
    * @return a list of colonies that collide with colony.
    */
-  def findColliding(colony: Colony, colonies: List[Colony]): List[Colony] = for {
+  def findColliding(colony: Colony, colonies: Iterable[Colony]): Iterable[Colony] = for {
     c <- colonies
     if colony != c
     if this.checkCollision(colony, c)

@@ -6,7 +6,6 @@ import javax.swing._
 
 import scala.controller.Controller
 import scala.model.Time
-import scala.utility.Point
 
 class ChartViewImpl(controller: Controller) {
   private type Matrix = Array[Array[Double]]
@@ -23,35 +22,18 @@ class ChartViewImpl(controller: Controller) {
 
     tabbedPane.addChangeListener(_ => updateGui())
 
-    val season = new SeasonalChart[Seq[(String, Array[Array[Double]])]]
-    val seasonalChart = season.createChart(controller.statisticalData.variationSequence()
+    val seasonalChart = SeasonalChartBuilder.createChart(controller.statisticalData.variationSequence()
       .map(e => (e._1, Array((1 to e._2.size).map(_ toDouble).toArray, e._2.toArray))))
     seasonalChart.setPreferredSize(new Dimension(410, 50))
     tabbedPane.addTab("Seasonal Variation", null, seasonalChart)
 
-    val colonies = new ColoniesChart[Seq[(Point, Int, Double)]](controller)
-    val coloniesChart = colonies.createChart(controller.colonies)
+    val coloniesChart = ColoniesChartBuilder.createChart(controller.colonies)
     coloniesChart.setPreferredSize(new Dimension(200, 200))
     tabbedPane.addTab("Colonies", null, coloniesChart)
 
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 
-    val playButton = new JButton("Play")
-    val pauseButton = new JButton("Pause")
-    val stopButton = new JButton("Accelerate")
-    playButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
-    pauseButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
-    stopButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
     timeLabel.setText("Execution Time: " + Time.time)
-    gameBar.add(playButton)
-    gameBar.add(pauseButton)
-    gameBar.add(stopButton)
     gameBar.add(timeLabel)
 
     frame.add(gameBar, BorderLayout.PAGE_START)
@@ -61,27 +43,23 @@ class ChartViewImpl(controller: Controller) {
     frame.setVisible(true)
   }
 
-  val tabsComponents: Map[String, () => Component] = Map(
-    "Temperature" -> (() => heatmapChart(controller.properties("Temperature"))),
-    "Humidity" -> (() => heatmapChart(controller.properties("Humidity"))),
-    "Pressure" -> (() => heatmapChart(controller.properties("Pressure"))),
-    "Seasonal Variation" -> (() => new SeasonalChart[Seq[(String, Matrix)]]
-      .createChart(controller.statisticalData.variationSequence()
-        .map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2.toArray))))),
-    "Colonies" -> (() => new ColoniesChart[Seq[(Point, Int, Double)]](controller).createChart(controller.colonies))
+  val tabsComponents: Map[String, Int => Component] = Map(
+    "Temperature" -> (_ => heatmapChart(controller properties "Temperature")),
+    "Humidity" -> (_ => heatmapChart(controller properties "Humidity")),
+    "Pressure" -> (_ => heatmapChart(controller properties "Pressure")),
+    "Seasonal Variation" -> (_ => SeasonalChartBuilder.createChart(controller.statisticalData.variationSequence()
+      .map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2.toArray))))),
+    "Colonies" -> (idx => ColoniesChartBuilder.updateChart(tabbedPane.getComponentAt(idx)
+      .asInstanceOf[ColoniesChartBuilder.ColoniesChart], controller.colonies))
   )
 
   def updateGui(): Unit = SwingUtilities.invokeLater(() => {
     val index = tabbedPane.getSelectedIndex
-    if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane.getTitleAt(index))())
+    if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane getTitleAt index)(index))
 
     timeLabel.setText("Execution Time: " + Time.time)
-    gameBar.add(timeLabel)
+    gameBar add timeLabel
   })
 
-  private def heatmapChart(matrix: Matrix): Component = {
-    val heatmap = new HeatmapChart[Array[Array[Double]]]
-    val chart = heatmap.createChart(matrix)
-    chart
-  }
+  private def heatmapChart(matrix: Matrix): Component = HeatmapChartBuilder createChart matrix
 }

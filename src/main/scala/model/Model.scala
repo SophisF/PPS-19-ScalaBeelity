@@ -9,6 +9,7 @@ import scala.model.environment.Cell
 import scala.utility.Point
 
 trait Model {
+
   def time(): Int
 
   def update(): Unit
@@ -27,6 +28,7 @@ trait Model {
 }
 
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
+
 
   Time.initialize()
   Time.setIncrementValue(updateTime)
@@ -51,6 +53,7 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
   }
 
   override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.position, c.dimension, c.color))
+  def colors: Seq[Double] = ecosystem.colonies.map(_.color)
 
   override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.numericRepresentation())
 

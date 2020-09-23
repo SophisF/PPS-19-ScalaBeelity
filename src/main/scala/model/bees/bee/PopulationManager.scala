@@ -4,7 +4,7 @@ import scala.model.bees.bee.{CollisionManager, Colony}
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 
-object ColonyManager {
+object PopulationManager {
 
   private val maxAggressionToMerge: Int = 3
   private val minAggressionToAttack: Int = 8

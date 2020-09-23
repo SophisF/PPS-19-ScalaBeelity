@@ -30,10 +30,10 @@ object CollisionManager {
    * @return the collision area between the two colonies.
    */
   def collisionArea(colony1: Colony, colony2: Colony): Int = {
-    val colony1XRange: Range = colony1.position.x.applyTwoOperations(colony1.dimension)(_ - _)(_ + _)
-    val colony1YRange: Range = colony1.position.y.applyTwoOperations(colony1.dimension)(_ - _)(_ + _)
-    val colony2XRange: Range = colony2.position.x.applyTwoOperations(colony2.dimension)(_ - _)(_ + _)
-    val colony2YRange: Range = colony2.position.y.applyTwoOperations(colony2.dimension)(_ - _)(_ + _)
+    val colony1XRange: Range = colony1.center.x.applyTwoOperations(colony1.dimension)(_ - _)(_ + _)
+    val colony1YRange: Range = colony1.center.y.applyTwoOperations(colony1.dimension)(_ - _)(_ + _)
+    val colony2XRange: Range = colony2.center.x.applyTwoOperations(colony2.dimension)(_ - _)(_ + _)
+    val colony2YRange: Range = colony2.center.y.applyTwoOperations(colony2.dimension)(_ - _)(_ + _)
 
     this.calculateIntersectionArea(colony1XRange)(colony2XRange) * this.calculateIntersectionArea(colony1YRange)(colony2YRange)
   }
@@ -42,9 +42,10 @@ object CollisionManager {
    * Method to check if two colony collides.
    * @param colony1 the first colony.
    * @param colony2 the second colony.
+   * @tparam A a possibly specific type of colony.
    * @return a boolean, true if the two colonies collide, false otherwise.
    */
-  private def checkCollision(colony1: Colony, colony2: Colony): Boolean = {
+  private def checkCollision[A <: Colony](colony1: A, colony2: A): Boolean = {
     this.collisionArea(colony1, colony2) > 0
   }
 

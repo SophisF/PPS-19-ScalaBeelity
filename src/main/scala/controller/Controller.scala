@@ -35,6 +35,8 @@ class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: 
 
   def environmentDimension(): (Int, Int) = (dimension, dimension)
 
+  def color: Seq[Double] = model.colors
+
   def colonies: Seq[(Point, Int, Double)] = model.colonies
 
   def statisticalData: StatisticalData = model.statisticalData()

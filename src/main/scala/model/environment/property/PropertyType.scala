@@ -16,7 +16,7 @@ object PropertyType extends Enumeration {
    * @param property instantiated object
    * @tparam T type of property
    */
-  sealed trait PropertyValue[T <: Property] extends Val {
+  sealed trait PropertyValue[T <: Property] {
     def property: T
 
     /**
@@ -27,9 +27,9 @@ object PropertyType extends Enumeration {
     def apply(): T = property
   }
 
-  val Temperature: PropertyValue[TemperatureProperty] = TemperatureProperty
-  val Humidity: PropertyValue[HumidityProperty] = HumidityProperty
-  val Pressure: PropertyValue[PressureProperty] = PressureProperty
+  val Temperature: Val with PropertyValue[TemperatureProperty] = TemperatureProperty
+  val Humidity: Val with PropertyValue[HumidityProperty] = HumidityProperty
+  val Pressure: Val with PropertyValue[PressureProperty] = PressureProperty
 
   def properties(filterCondition: Property => Boolean = _ => true): Iterable[PropertyValue[Property]] =
     values.asInstanceOf[Iterable[PropertyValue[Property]]].filter(filterCondition(_))
@@ -39,7 +39,6 @@ object PropertyType extends Enumeration {
 
   implicit def getPropertyFrom[T <: Property](entry: PropertyValue[T]): T = entry()
 
-  private implicit def enumValueOf[T <: Property](_property: T): PropertyValue[T] = new PropertyValue[T] {
-    override def property: T = _property
-  }
+  private implicit def enumValueOf[T <: Property](_property: T): Val with PropertyValue[T] =
+    new Val with PropertyValue[T] { override def property: T = _property }
 }

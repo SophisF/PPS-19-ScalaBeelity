@@ -1,9 +1,8 @@
 package scala.view
 
-trait SimulationSettings {
-
-  def coloniesNumber: Int
-  def timeGranularity: Int
-  def simulationDuration: Int
-  def environmentSize: Int
-}
+case class SimulationSettings(
+  coloniesNumber: Int,
+  timeGranularity: Int,
+  simulationDuration: Int,
+  environmentSize: (Int, Int)
+)

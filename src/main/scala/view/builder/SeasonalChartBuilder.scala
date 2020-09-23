@@ -1,4 +1,4 @@
-package scala.view
+package scala.view.builder
 
 import java.awt.{BasicStroke, Color, Component}
 

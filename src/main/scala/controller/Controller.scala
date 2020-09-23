@@ -1,20 +1,20 @@
 package scala.controller
 
+import scala.controller.Looper.loop
 import scala.model.ModelImpl
 import scala.model.statistic.StatisticEnvironment.StatisticalData
 import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
 import scala.utility.TypeUtilities.StatisticColonies
-import scala.view.View.ViewImpl
+import scala.view.View.simulationView
 
-class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: Int) {
+class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: (Int, Int)) {
 
-  private val model = new ModelImpl(numColonies, updateTime, dimension)
-  private val view = new ViewImpl(this)
+  private val model = new ModelImpl(numColonies, updateTime, dimension._1)
+  private val view = simulationView(this)
+  view.createAndShow()
 
-  view.createSimulationGUI()
-
-  def start(): Unit = Looper.loop(iterations)(model.update)(view.update)
+  def start(): Unit = loop(iterations)(model.update)(view.update)
 
   def playSimulation() = ???
 
@@ -28,7 +28,7 @@ class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: 
     Pressure.toString -> model.pressureMatrix()
   )
 
-  def environmentDimension(): (Int, Int) = (dimension, dimension)
+  def environmentDimension(): (Int, Int) = (dimension._1, dimension._1)
 
   def color: Seq[Double] = model colors
 

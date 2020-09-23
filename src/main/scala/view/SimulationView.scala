@@ -6,8 +6,9 @@ import javax.swing._
 
 import scala.controller.Controller
 import scala.model.Time
+import scala.view.builder.{ColoniesChartBuilder, HeatmapChartBuilder, SeasonalChartBuilder}
 
-class ChartViewImpl(controller: Controller) {
+class SimulationView(controller: Controller) {
   private type Matrix = Array[Array[Double]]
 
   val frame = new JFrame()
@@ -16,11 +17,10 @@ class ChartViewImpl(controller: Controller) {
   val gameBar = new JPanel()
   val timeLabel = new JLabel()
 
-  def createAndShowGUI(): Unit = {
-
+  def createAndShow(): Unit = {
     controller.properties.foreach(p => tabbedPane.addTab(p._1, null, heatmapChart(p._2)))
 
-    tabbedPane.addChangeListener(_ => updateGui())
+    tabbedPane.addChangeListener(_ => update())
 
     val seasonalChart = SeasonalChartBuilder.createChart(controller.statisticalData.variationSequence()
       .map(e => (e._1, Array((1 to e._2.size).map(_ toDouble).toArray, e._2.toArray))))
@@ -54,7 +54,7 @@ class ChartViewImpl(controller: Controller) {
       .asInstanceOf[ColoniesChartBuilder.ColoniesChart], (controller.environmentDimension(), controller.statistic())))
   )
 
-  def updateGui(): Unit = SwingUtilities.invokeLater(() => {
+  def update(): Unit = SwingUtilities.invokeLater(() => {
     val index = tabbedPane.getSelectedIndex
     if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane getTitleAt index)(index))
 

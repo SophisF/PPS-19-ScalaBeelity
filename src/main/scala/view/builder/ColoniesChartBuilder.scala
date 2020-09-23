@@ -1,16 +1,15 @@
-package scala.view
+package scala.view.builder
 
 import java.awt.Color.getHSBColor
-
+import java.awt.geom.Rectangle2D
 import java.awt.{BasicStroke, Color, Dimension, GridLayout}
 
 import breeze.plot.Plot
 import javax.swing.{JPanel, JTextArea}
-import org.jfree.chart.{ChartMouseEvent, ChartMouseListener, ChartPanel, JFreeChart}
 import org.jfree.chart.annotations.{XYAnnotation, XYShapeAnnotation}
 import org.jfree.chart.plot.XYPlot
 import org.jfree.chart.ui.RectangleEdge
-import java.awt.geom.Rectangle2D
+import org.jfree.chart.{ChartMouseEvent, ChartMouseListener, ChartPanel, JFreeChart}
 
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.phenotype.Characteristic.Characteristic

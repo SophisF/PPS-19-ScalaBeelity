@@ -1,19 +1,21 @@
-package scala.view
+package scala.view.builder
 
-import Array.empty
+import java.awt.{BorderLayout, Color, Component, Paint}
+
 import breeze.linalg.DenseMatrix
 import breeze.linalg.DenseMatrix.create
 import breeze.plot.{Plot, image}
-import org.jfree.chart.{ChartPanel, JFreeChart}
+import javax.swing.JPanel
+import javax.swing.border.EmptyBorder
 import org.jfree.chart.axis.NumberAxis
 import org.jfree.chart.renderer.PaintScale
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.title.PaintScaleLegend
 import org.jfree.chart.ui.RectangleEdge.RIGHT
 import org.jfree.chart.ui.RectangleInsets
-import java.awt.{BorderLayout, Color, Component, Paint}
-import javax.swing.JPanel
-import javax.swing.border.EmptyBorder
+import org.jfree.chart.{ChartPanel, JFreeChart}
+
+import scala.Array.empty
 
 object HeatmapChartBuilder extends ChartBuilder[Array[Array[Double]]] {
   override type ChartType = Component

@@ -1,8 +1,8 @@
 package scala.model.bees.bee
 
 import scala.model.bees.bee.Colony.Colony
-import scala.model.bees.utility.PimpTuple._
-import scala.model.bees.utility.PimpInt._
+import scala.utility.PimpTuple._
+import scala.utility.PimpInt._
 
 /**
  * Object that provides method to check collisions between colonies.

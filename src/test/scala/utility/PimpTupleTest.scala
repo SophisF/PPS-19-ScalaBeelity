@@ -2,7 +2,7 @@ package scala.model.utility
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.bees.utility.PimpTuple._
+import scala.utility.PimpTuple._
 
 class PimpTupleTest extends AnyFunSuite {
 

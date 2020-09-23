@@ -68,7 +68,7 @@ object ColoniesChartBuilder extends ChartBuilder[StatisticColony] {
 
   private def colonyToString(colonyChar: (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])): String = {
     var str = s"Colony info: \nPosition: ${colonyChar._1.center x} ${colonyChar._1.center y}\nBees' number: ${colonyChar._1.bees size}"
-    colonyChar._2.foreach(t => str = str.+(s"\n${t._1}, ${t._2}"))
+    colonyChar._2.foreach(t => str = str.+(s"\n${t._1}: ${t._2}"))
     str
   }
 

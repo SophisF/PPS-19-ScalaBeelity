@@ -15,10 +15,11 @@ object Statistic {
   implicit def ordering[E <: (CharacteristicTaxonomy, Characteristic#Expression)]: Ordering[(CharacteristicTaxonomy, Characteristic#Expression)] = Ordering.by(_._1)
 
   case class Statistic(colony: Colony) {
+    def stat(): Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)] = CharacteristicTaxonomy.values.map(v => (v, getAverageOf(v)))
 
-    def stat(): Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)] = CharacteristicTaxonomy.values.map(v => (v, p(v)))
-
-    def p(characteristicTaxonomy: CharacteristicTaxonomy): Characteristic#Expression = calculateAveragePhenotype(List(colony.queen) ++ colony.bees).expressionOf(characteristicTaxonomy)
+    def getAverageOf(characteristicTaxonomy: CharacteristicTaxonomy): Characteristic#Expression = {
+      calculateAveragePhenotype(List(colony.queen) ++ colony.bees).expressionOf(characteristicTaxonomy)
+    }
 
   }
 

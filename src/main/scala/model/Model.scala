@@ -3,6 +3,8 @@ package scala.model
 import scala.model.Statistic.Statistic
 import scala.model.StatisticalData.{StatisticalData, updateStats}
 import scala.model.bees.bee.Colony.{Colony, Color}
+import scala.model.bees.phenotype.Characteristic.Characteristic
+import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.environment.Cell
 import scala.utility.Point
 
@@ -13,7 +15,7 @@ trait Model {
 
   def statisticalData(): StatisticalData
 
-  def statisticList(): List[(Color, Statistic)]
+  def statisticList(): List[(Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])]
 
   def colonies: List[(Point, Int, Double)]
 
@@ -29,13 +31,14 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
   Time.initialize()
   Time.setIncrementValue(updateTime)
   private var _statisticalData: StatisticalData = StatisticalData()
-  private var _statisticList: List[(Color, Statistic)] = List.empty
+  private var _statisticList: List[(Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = List.empty
   private val ecosystem = new Ecosystem(numColonies, dimension, dimension)
 
   override def update(): Unit = {
     ecosystem.update()
     _statisticalData = updateStats(ecosystem.environmentManager.environment, ecosystem.colonies, _statisticalData)
     _statisticList = statisticList()
+    println(_statisticList)
     Time.increment()
   }
 
@@ -43,9 +46,8 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def statisticalData(): StatisticalData = _statisticalData
 
-  override def statisticList(): List[(Color, Statistic)] = {
-    ecosystem.colonies.map(c => (c.color, Statistic(c)))
-
+  override def statisticList(): List[(Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = {
+    ecosystem.colonies.map(c => (c.color, Statistic(c).stat()))
   }
 
   override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.position, c.dimension, c.color))

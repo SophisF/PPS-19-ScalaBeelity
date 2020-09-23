@@ -7,6 +7,7 @@ import scala.model.bees.phenotype.Characteristic.Characteristic
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.environment.Cell
 import scala.utility.Point
+import scala.utility.TypeUtilities.StatisticColony
 
 trait Model {
 
@@ -16,9 +17,9 @@ trait Model {
 
   def statisticalData(): StatisticalData
 
-  def statisticList(): List[(Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])]
+  def statisticList(): StatisticColony
 
-  def colonies: List[(Point, Int, Double)]
+  def colonies: List[Colony]
 
   def temperatureMatrix(): Array[Array[Double]]
 
@@ -28,19 +29,17 @@ trait Model {
 }
 
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
-
-
   Time.initialize()
   Time.setIncrementValue(updateTime)
   private var _statisticalData: StatisticalData = StatisticalData()
-  private var _statisticList: List[(Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = List.empty
+  private var _statisticList: StatisticColony = List.empty
   private val ecosystem = new Ecosystem(numColonies, dimension, dimension)
 
   override def update(): Unit = {
     ecosystem.update()
     _statisticalData = updateStats(ecosystem.environmentManager.environment, ecosystem.colonies, _statisticalData)
-    _statisticList = statisticList()
-    println(_statisticList)
+    //_statisticList = statisticList()
+   // println(_statisticList)
     Time.increment()
   }
 
@@ -48,11 +47,12 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def statisticalData(): StatisticalData = _statisticalData
 
-  override def statisticList(): List[(Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = {
-    ecosystem.colonies.map(c => (c.color, Statistic(c).stat()))
+  override def statisticList(): StatisticColony = {
+    ecosystem.colonies.map(c => (c, Statistic(c).stat()))
   }
 
-  override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.position, c.dimension, c.color))
+  override def colonies: List[Colony] = ecosystem.colonies
+
   def colors: Seq[Double] = ecosystem.colonies.map(_.color)
 
   override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.numericRepresentation())

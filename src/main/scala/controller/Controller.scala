@@ -9,6 +9,7 @@ import scala.model.bees.phenotype.Characteristic.Characteristic
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
 import scala.utility.Point
+import scala.utility.TypeUtilities.StatisticColony
 import scala.view.View.ViewImpl
 
 class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: Int) {
@@ -37,13 +38,9 @@ class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: 
 
   def color: Seq[Double] = model.colors
 
-  def colonies: Seq[(Point, Int, Double)] = model.colonies
+  def colonies: Seq[Colony] = model.colonies
 
   def statisticalData: StatisticalData = model.statisticalData()
 
-  def statistic: List[(Colony.Color, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = {
-    var x = model.statisticList()
-    println("Have n elem = " + x.size + "\n " + x)
-    x
-  }
+  def statistic() : StatisticColony = model.statisticList()
 }

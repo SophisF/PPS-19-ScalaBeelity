@@ -36,10 +36,10 @@ class ColoniesChart[T <: Seq[(Point, Int)]](controller: Controller) extends Char
     label.setLayout(new GridLayout(4, data.size))
 
 
-    createStatistical(label, "Aggr",controller.statisticalData.averageAggression )
-    createStatistical(label, "Long",controller.statisticalData.averageLongevity )
-    createStatistical(label, "Repr",controller.statisticalData.averageReproduction )
-    createStatistical(label, "Speed",controller.statisticalData.averageSpeed )
+//    createStatistical(label, "Aggr",controller.statisticalData.averageAggression )
+//    createStatistical(label, "Long",controller.statisticalData.averageLongevity )
+//    createStatistical(label, "Repr",controller.statisticalData.averageReproduction )
+//    createStatistical(label, "Speed",controller.statisticalData.averageSpeed )
     scrol.setSize(300,300)
     scrol.add(label)
     panel.add(scrol, BorderLayout.EAST)

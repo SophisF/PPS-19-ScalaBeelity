@@ -6,9 +6,6 @@ import scala.Iterable.empty
 import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.property.Property
 import scala.model.environment.property.PropertyType._
-import scala.model.bees.phenotype.Characteristic.Characteristic
-import scala.model.bees.phenotype.CharacteristicTaxonomy
-import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 import scala.model.environment.Environment
 import scala.model.bees.phenotype.Characteristic._
 
@@ -22,23 +19,6 @@ object StatisticalData {
     lastUpdate: Time = Time.now()
   ) {
     def variationSequence(): Seq[(String, Iterable[Double])] = averageProperties.map(e => (e._1 toString, e _2)) toSeq
-
-    def temperatureRange: List[Range] =  this expression CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY map toTuple
-
-    def pressureRange: List[Range] = this expression CharacteristicTaxonomy.PRESSURE_COMPATIBILITY map toTuple
-
-    def humidityRange: List[Range] = this expression CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY map toTuple
-
-    def averageAggression: List[Int] = this expression CharacteristicTaxonomy.AGGRESSION_RATE map toInt
-
-    def averageReproduction: List[Int] = this expression CharacteristicTaxonomy.REPRODUCTION_RATE map toInt
-
-    def averageSpeed: List[Int] = this expression CharacteristicTaxonomy.SPEED map toInt
-
-    def averageLongevity: List[Int] = this expression CharacteristicTaxonomy.LONGEVITY map toInt
-
-    private def expression(characteristicTaxonomy: CharacteristicTaxonomy): List[Characteristic#Expression] =
-      colonies.map(c => calculateAveragePhenotype(Set(c.queen) ++ c.bees).expressionOf(characteristicTaxonomy))
   }
 
   def updateStats(environment: Environment, colonies: List[Colony], statistics: StatisticalData): StatisticalData =

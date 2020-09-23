@@ -4,17 +4,17 @@ import scala.model.statistic.StatisticColonies.Statistic
 import scala.model.statistic.StatisticEnvironment.{StatisticalData, updateStats}
 import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.Cell
-import scala.utility.TypeUtilities.StatisticColony
+import scala.utility.TypeUtilities.StatisticColonies
 
 trait Model {
 
-  def time(): Int
+  def time(): Int = Time.now()
 
   def update(): Unit
 
   def statisticalData(): StatisticalData
 
-  def statisticList(): StatisticColony
+  def statisticList(): StatisticColonies
 
   def colonies: List[Colony]
 
@@ -37,13 +37,9 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
     Time.increment()
   }
 
-  override def time(): Int = Time.time
-
   override def statisticalData(): StatisticalData = _statisticalData
 
-  override def statisticList(): StatisticColony = {
-    ecosystem.colonies.map(c => (c, Statistic(c).stat()))
-  }
+  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).stat()))
 
   override def colonies: List[Colony] = ecosystem.colonies
 
@@ -59,5 +55,4 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
     val env = ecosystem.environmentManager.environment.map
     env.data.map(strategy).sliding(env cols, env cols) toArray
   }
-
 }

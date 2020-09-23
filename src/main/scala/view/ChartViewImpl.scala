@@ -27,7 +27,7 @@ class ChartViewImpl(controller: Controller) {
     seasonalChart.setPreferredSize(new Dimension(410, 50))
     tabbedPane.addTab("Seasonal Variation", null, seasonalChart)
 
-    val coloniesChart = ColoniesChartBuilder.createChart(controller.statistic())
+    val coloniesChart = ColoniesChartBuilder.createChart((controller.environmentDimension(), controller.statistic()))
 
     coloniesChart.setPreferredSize(new Dimension(200, 200))
     tabbedPane.addTab("Colonies", null, coloniesChart)
@@ -51,7 +51,7 @@ class ChartViewImpl(controller: Controller) {
     "Seasonal Variation" -> (_ => SeasonalChartBuilder.createChart(controller.statisticalData.variationSequence()
       .map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2.toArray))))),
     "Colonies" -> (idx => ColoniesChartBuilder.updateChart(tabbedPane.getComponentAt(idx)
-      .asInstanceOf[ColoniesChartBuilder.ColoniesChart], controller.statistic()))
+      .asInstanceOf[ColoniesChartBuilder.ColoniesChart], (controller.environmentDimension(), controller.statistic())))
   )
 
   def updateGui(): Unit = SwingUtilities.invokeLater(() => {

@@ -16,28 +16,27 @@ import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.phenotype.Characteristic.Characteristic
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.utility.Point
-import scala.utility.TypeUtilities.StatisticColony
+import scala.utility.TypeUtilities._
 
-
-object ColoniesChartBuilder extends ChartBuilder[StatisticColony] {
+object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)] {
   override type ChartType = ColoniesChart
+  class ColoniesChart(var selectedColony: Option[StatisticColony] = Option.empty) extends JPanel
 
-  class ColoniesChart(var selectedColony: Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = Option.empty) extends JPanel
+  override def createChart(data: ((Int, Int), StatisticColonies)): ColoniesChart = newChart(data._1, data._2, None)
 
-  override def createChart(data: StatisticColony): ColoniesChart = newChart(data, Option.empty)
+  override def updateChart(chart: ColoniesChart, data: ((Int, Int), StatisticColonies)): ColoniesChart =
+    newChart(data._1, data._2, chart.selectedColony)
 
-  override def updateChart(chart: ColoniesChart, data: StatisticColony): ColoniesChart =
-    newChart(data, chart.selectedColony)
-
-  private def newChart(data: StatisticColony, selectedColony: Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])]): ColoniesChart = {
+  private def newChart(environmentSize: Dimension, data: StatisticColonies, selectedColony: Option[StatisticColony])
+  : ColoniesChart = {
     val panel = new ColoniesChart(selectedColony)
     panel.setLayout(new GridLayout(1,2))
 
     val plot = new Plot().plot
-    plot.getRangeAxis.setRange(0, 100)  // TODO env size
-    plot.getDomainAxis.setRange(0, 100)
+    plot.getRangeAxis.setRange(0, environmentSize.height)  // TODO env size
+    plot.getDomainAxis.setRange(0, environmentSize.width)
 
-    data.map(it => colonyToComponent(it._1.center, new Dimension(it._1.dimension, it._1.dimension), getHSBColor(it._1.color toFloat, 1, 1)))
+    data.map(it => colonyToComponent(it._1.center, (it._1.dimension, it._1.dimension), it._1.color))
       .foreach(plot.addAnnotation)
 
     val chart = new ChartPanel(new JFreeChart(plot))
@@ -70,9 +69,9 @@ object ColoniesChartBuilder extends ChartBuilder[StatisticColony] {
     str
   }
 
-  private def colonyOverPoint(data: StatisticColony, x: Int, y: Int): Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = {
-    data.find(d => x >= d._1.center.x - d._1.dimension / 2 && x <= d._1.center.x + d._1.dimension/ 2 && y >= d._1.center.y - d._1.dimension / 2 && y <= d._1.center.y + d._1.dimension / 2)
-  }
+  private def colonyOverPoint(data: StatisticColonies, x: Int, y: Int): Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] =
+    data.find(d => x >= d._1.center.x - d._1.dimension / 2 && x <= d._1.center.x + d._1.dimension/ 2
+      && y >= d._1.center.y - d._1.dimension / 2 && y <= d._1.center.y + d._1.dimension / 2)
 
   private def mousePosition(_x: Int, _y: Int, plot: XYPlot, chart: ChartPanel): (Int, Int) = {
     val dataArea = chart.getScreenDataArea
@@ -82,4 +81,8 @@ object ColoniesChartBuilder extends ChartBuilder[StatisticColony] {
 
     (x toInt, y toInt)
   }
+
+  private implicit def dimensionFrom(tuple: (Int, Int)): Dimension = new Dimension(tuple._1, tuple._2)
+
+  private implicit def colorFrom(value: Double): Color = getHSBColor(value toFloat, 1, 1)
 }

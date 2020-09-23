@@ -6,7 +6,7 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy
 
 object TypeUtilities {
 
-  type StatisticColony = List[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])]
+  type StatisticColony = (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])
 
-
+  type StatisticColonies = List[StatisticColony]
 }

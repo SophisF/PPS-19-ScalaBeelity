@@ -61,7 +61,7 @@ object Characteristic {
    */
   trait RangeExpression {
     characteristic: Characteristic =>
-    type Expression = (Int, Int) //Int or Double??
+    type Expression = (Int, Int)
   }
 
   /**

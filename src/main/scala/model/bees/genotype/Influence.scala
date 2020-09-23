@@ -1,7 +1,7 @@
 package scala.model.bees.genotype
 
 import scala.model.bees.genotype.InfluenceType.InfluenceType
-import scala.model.bees.utility.PimpInt._
+import scala.utility.PimpInt._
 
 /**
  * Enumeration of the influence types.

@@ -1,4 +1,4 @@
-package scala.model.environment.utility
+package scala.utility
 
 /**
  * Applying `Pimp my library` pattern to iterable to add utilities methods

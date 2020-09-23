@@ -6,7 +6,7 @@ import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.bees.utility.PimpInt._
+import scala.utility.PimpInt._
 import scala.util.Random
 
 object EvolutionManager {

@@ -2,7 +2,7 @@ package scala.model.bees.bee
 
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.bees.utility.PimpInt._
+import scala.utility.PimpInt._
 
 /**
  * Object used to calculate the fit value of the phenotype's characteristics, based on the environment parameters.

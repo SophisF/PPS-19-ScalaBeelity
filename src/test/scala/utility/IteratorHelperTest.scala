@@ -1,7 +1,7 @@
 package scala.utility
 
 import org.scalatest.funsuite.AnyFunSuite
-import scala.model.environment.utility.IteratorHelper.RichIterator
+import scala.utility.IteratorHelper.RichIterator
 
 
 class IteratorHelperTest extends AnyFunSuite {

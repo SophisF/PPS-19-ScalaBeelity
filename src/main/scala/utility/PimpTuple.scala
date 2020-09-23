@@ -1,4 +1,4 @@
-package scala.model.bees.utility
+package scala.utility
 
 /**
  * A pimp library to add some methods to Tuple class.

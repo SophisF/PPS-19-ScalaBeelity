@@ -26,8 +26,8 @@ object Size {
     val Top, Right, Bottom, Left = Value
   }
 
-  def apply(_weight: Int, _height: Int): Size = new Size {
-    override val width: Int = _weight
+  def apply(_width: Int, _height: Int): Size = new Size {
+    override val width: Int = _width
     override val height: Int = _height
   }
 

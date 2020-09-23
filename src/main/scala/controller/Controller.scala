@@ -1,10 +1,10 @@
 package scala.controller
 
 import scala.model.ModelImpl
-import scala.model.StatisticalData.StatisticalData
+import scala.model.statistic.StatisticEnvironment.StatisticalData
+import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
-
-import scala.utility.Point
+import scala.utility.TypeUtilities.StatisticColony
 import scala.view.View.ViewImpl
 
 class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: Int) {
@@ -31,7 +31,11 @@ class Controller(numColonies: Int, updateTime: Int, iterations: Int, dimension: 
 
   def environmentDimension(): (Int, Int) = (dimension, dimension)
 
-  def colonies: Seq[(Point, Int, Double)] = model.colonies
+  def color: Seq[Double] = model.colors
+
+  def colonies: Seq[Colony] = model.colonies
 
   def statisticalData: StatisticalData = model.statisticalData()
+
+  def statistic() : StatisticColony = model.statisticList()
 }

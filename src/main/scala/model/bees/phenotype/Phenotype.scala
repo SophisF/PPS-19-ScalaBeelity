@@ -1,5 +1,7 @@
 package scala.model.bees.phenotype
 
+import scala.model.bees.bee.Bee.Bee
+import scala.model.bees.genotype.Genotype.averageGenotype
 import scala.model.bees.phenotype.Characteristic.Characteristic
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
@@ -12,10 +14,21 @@ object Phenotype {
 
   /**
    * Apply method for phenotype.
+   *
    * @param expressions a map of characteristic and its frequency.
    * @return a new phenotype.
    */
   def apply(expressions: Map[CharacteristicTaxonomy, Double]): Phenotype = PhenotypeImpl(expressions)
+
+  /**
+   * Method to calculate the average phenotype in a sequence of bees.
+   *
+   * @param bees the set of bees.
+   * @return the average phenotype.
+   */
+  def averagePhenotype(bees: Set[Bee]): Phenotype = {
+    averageGenotype(bees) expressItself
+  }
 
   /**
    * Trait for the phenotype.
@@ -26,6 +39,7 @@ object Phenotype {
 
     /**
      * Method that return the expression of a characteristic.
+     *
      * @param taxonomy the characteristic's name.
      * @return the characteristic's expression.
      */
@@ -36,6 +50,7 @@ object Phenotype {
 
   /**
    * Concrete implementation of phenotype.
+   *
    * @param expressions a map of characteristic and its frequency.
    */
   private case class PhenotypeImpl(expressions: Map[CharacteristicTaxonomy, Double]) extends Phenotype {
@@ -45,6 +60,6 @@ object Phenotype {
     override def expressionOf(taxonomy: CharacteristicTaxonomy): Characteristic#Expression = characteristics.find(_.name.equals(taxonomy)).get.expression
 
 
-
   }
+
 }

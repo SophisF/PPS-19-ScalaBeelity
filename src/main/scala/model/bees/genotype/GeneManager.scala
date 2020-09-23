@@ -10,7 +10,7 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy
 object GeneManager {
 
   /**
-   * Implicit strategy which binds a gene taxonomy to its genetic information.
+   * Strategy which binds a gene taxonomy to its genetic information.
    * @param geneTaxonomy the taxonomy of the gene.
    * @return a genetic information.
    */

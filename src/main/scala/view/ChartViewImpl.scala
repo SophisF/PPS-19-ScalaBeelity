@@ -6,7 +6,6 @@ import javax.swing._
 
 import scala.controller.Controller
 import scala.model.Time
-import scala.utility.Point
 
 class ChartViewImpl(controller: Controller) {
   private type Matrix = Array[Array[Double]]
@@ -28,28 +27,14 @@ class ChartViewImpl(controller: Controller) {
     seasonalChart.setPreferredSize(new Dimension(410, 50))
     tabbedPane.addTab("Seasonal Variation", null, seasonalChart)
 
-    val coloniesChart = ColoniesChartBuilder.createChart(controller.colonies)
+    val coloniesChart = ColoniesChartBuilder.createChart(controller.statistic())
+
     coloniesChart.setPreferredSize(new Dimension(200, 200))
     tabbedPane.addTab("Colonies", null, coloniesChart)
 
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 
-    val playButton = new JButton("Play")
-    val pauseButton = new JButton("Pause")
-    val stopButton = new JButton("Accelerate")
-    playButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
-    pauseButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
-    stopButton.addActionListener((e) => {
-      //TODO:Implement action listener
-    })
     timeLabel.setText("Execution Time: " + Time.time)
-    gameBar.add(playButton)
-    gameBar.add(pauseButton)
-    gameBar.add(stopButton)
     gameBar.add(timeLabel)
 
     frame.add(gameBar, BorderLayout.PAGE_START)
@@ -66,7 +51,7 @@ class ChartViewImpl(controller: Controller) {
     "Seasonal Variation" -> (_ => SeasonalChartBuilder.createChart(controller.statisticalData.variationSequence()
       .map(e => (e._1, Array((1 to e._2.size).map(_.toDouble).toArray, e._2.toArray))))),
     "Colonies" -> (idx => ColoniesChartBuilder.updateChart(tabbedPane.getComponentAt(idx)
-      .asInstanceOf[ColoniesChartBuilder.ColoniesChart], controller.colonies))
+      .asInstanceOf[ColoniesChartBuilder.ColoniesChart], controller.statistic()))
   )
 
   def updateGui(): Unit = SwingUtilities.invokeLater(() => {

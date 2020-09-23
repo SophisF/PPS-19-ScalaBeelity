@@ -1,13 +1,11 @@
 package scala.model
 
-import model.bees.bee.EvolutionManager.calculateAveragePhenotype
-
 import scala.Iterable.empty
 import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.property.Property
 import scala.model.environment.property.PropertyType._
 import scala.model.bees.phenotype.Characteristic.Characteristic
-import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 import scala.model.environment.Environment
 import scala.model.bees.phenotype.Characteristic._
@@ -38,7 +36,7 @@ object StatisticalData {
     def averageLongevity: List[Int] = this expression CharacteristicTaxonomy.LONGEVITY map toInt
 
     private def expression(characteristicTaxonomy: CharacteristicTaxonomy): List[Characteristic#Expression] =
-      colonies.map(c => calculateAveragePhenotype(List(c.queen) ++ c.bees).expressionOf(characteristicTaxonomy))
+      colonies.map(c => Phenotype.averagePhenotype(Set(c.queen) ++ c.bees).expressionOf(characteristicTaxonomy))
   }
 
   def updateStats(environment: Environment, colonies: List[Colony], statistics: StatisticalData): StatisticalData =

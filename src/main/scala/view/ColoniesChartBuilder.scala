@@ -2,29 +2,34 @@ package scala.view
 
 import java.awt.Color.getHSBColor
 
-import scala.utility.Point
 import java.awt.{BasicStroke, Color, Dimension, GridLayout}
 
 import breeze.plot.Plot
 import javax.swing.{JPanel, JTextArea}
 import org.jfree.chart.{ChartMouseEvent, ChartMouseListener, ChartPanel, JFreeChart}
 import org.jfree.chart.annotations.{XYAnnotation, XYShapeAnnotation}
+import org.jfree.chart.plot.XYPlot
 import org.jfree.chart.ui.RectangleEdge
 import java.awt.geom.Rectangle2D
 
-import org.jfree.chart.plot.XYPlot
+import scala.model.bees.bee.Colony.Colony
+import scala.model.bees.phenotype.Characteristic.Characteristic
+import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.utility.Point
+import scala.utility.TypeUtilities.StatisticColony
 
-object ColoniesChartBuilder extends ChartBuilder[Seq[(Point, Int, Double)]] {
+
+object ColoniesChartBuilder extends ChartBuilder[StatisticColony] {
   override type ChartType = ColoniesChart
 
-  class ColoniesChart(var selectedColony: Option[(Point, Int, Double)] = Option.empty) extends JPanel
+  class ColoniesChart(var selectedColony: Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = Option.empty) extends JPanel
 
-  override def createChart(data: Seq[(Point, Int, Double)]): ColoniesChart = newChart(data, Option.empty)
+  override def createChart(data: StatisticColony): ColoniesChart = newChart(data, Option.empty)
 
-  override def updateChart(chart: ColoniesChart, data: Seq[(Point, Int, Double)]): ColoniesChart =
+  override def updateChart(chart: ColoniesChart, data: StatisticColony): ColoniesChart =
     newChart(data, chart.selectedColony)
 
-  private def newChart(data: Seq[(Point, Int, Double)], selectedColony: Option[(Point, Int, Double)]): ColoniesChart = {
+  private def newChart(data: StatisticColony, selectedColony: Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])]): ColoniesChart = {
     val panel = new ColoniesChart(selectedColony)
     panel.setLayout(new GridLayout(1,2))
 
@@ -32,11 +37,11 @@ object ColoniesChartBuilder extends ChartBuilder[Seq[(Point, Int, Double)]] {
     plot.getRangeAxis.setRange(0, 100)  // TODO env size
     plot.getDomainAxis.setRange(0, 100)
 
-    data.map(it => colonyToComponent(it _1, new Dimension(it _2, it _2), getHSBColor(it._3 toFloat, 1, 1)))
+    data.map(it => colonyToComponent(it._1.center, new Dimension(it._1.dimension, it._1.dimension), getHSBColor(it._1.color toFloat, 1, 1)))
       .foreach(plot.addAnnotation)
 
     val chart = new ChartPanel(new JFreeChart(plot))
-    val infoArea = new JTextArea(selectedColony.map(colonyToString) getOrElse "No colony selected")
+    val infoArea = new JTextArea(selectedColony.map(colonyToString) getOrElse "No colony selected") //TODO provo eliminare Else
 
     chart.addChartMouseListener(new ChartMouseListener {
       override def chartMouseClicked(event: ChartMouseEvent): Unit = { }
@@ -59,11 +64,15 @@ object ColoniesChartBuilder extends ChartBuilder[Seq[(Point, Int, Double)]] {
   private def colonyToComponent(point: Point, size: Dimension, color: Color): XYAnnotation = new XYShapeAnnotation(
     new Rectangle2D.Double(point x, point y, size width, size height), new BasicStroke(2f), color, color)
 
-  private def colonyToString(colony: (Point, Int, Double)): String = "Colony info:\n" +
-    s"Position: ${colony._1 x} ${colony._1 y}\nSize: ${colony _2} ${colony _2}\nAggressivity: ${colony _3}"
+  private def colonyToString(colonyChar: (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])): String = {
+    var str = s"Colony info: \nPosition: ${colonyChar._1.center x} ${colonyChar._1.center y}\nBees' number: ${colonyChar._1.bees size}"
+    colonyChar._2.foreach(t => str = str.+(s"\n${t._1}, ${t._2}"))
+    str
+  }
 
-  private def colonyOverPoint(data: Seq[(Point, Int, Double)], x: Int, y: Int): Option[(Point, Int, Double)] =
-    data.find(d => x >= d._1.x - d._2 / 2 && x <= d._1.x + d._2 / 2 && y >= d._1.y - d._2 / 2 && y <= d._1.y + d._2 / 2)
+  private def colonyOverPoint(data: StatisticColony, x: Int, y: Int): Option[(Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])] = {
+    data.find(d => x >= d._1.center.x - d._1.dimension / 2 && x <= d._1.center.x + d._1.dimension/ 2 && y >= d._1.center.y - d._1.dimension / 2 && y <= d._1.center.y + d._1.dimension / 2)
+  }
 
   private def mousePosition(_x: Int, _y: Int, plot: XYPlot, chart: ChartPanel): (Int, Int) = {
     val dataArea = chart.getScreenDataArea

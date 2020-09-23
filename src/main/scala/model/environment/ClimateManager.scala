@@ -2,7 +2,7 @@ package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.StatisticalData.PropertyType
+import scala.model.statistic.StatisticEnvironment.PropertyType
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.PropertyType.PropertyValue
 import scala.model.environment.property.source.GlobalSource.SeasonalSource

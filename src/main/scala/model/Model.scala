@@ -1,8 +1,10 @@
 package scala.model
 
-import scala.model.StatisticalData.{StatisticalData, updateStats}
+import scala.model.statistic.StatisticColonies.Statistic
+import scala.model.statistic.StatisticEnvironment.{StatisticalData, updateStats}
+import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.Cell
-import scala.utility.Point
+import scala.utility.TypeUtilities.StatisticColony
 
 trait Model {
 
@@ -12,7 +14,9 @@ trait Model {
 
   def statisticalData(): StatisticalData
 
-  def colonies: List[(Point, Int, Double)]
+  def statisticList(): StatisticColony
+
+  def colonies: List[Colony]
 
   def temperatureMatrix(): Array[Array[Double]]
 
@@ -22,8 +26,6 @@ trait Model {
 }
 
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
-
-
   Time.initialize()
   Time.setIncrementValue(updateTime)
   private var _statisticalData: StatisticalData = StatisticalData()
@@ -31,7 +33,7 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def update(): Unit = {
     ecosystem.update()
-    _statisticalData = updateStats(ecosystem.environmentManager.environment, ecosystem.colonies, _statisticalData)
+    _statisticalData = updateStats(ecosystem.environmentManager.environment, _statisticalData)
     Time.increment()
   }
 
@@ -39,9 +41,13 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def statisticalData(): StatisticalData = _statisticalData
 
-  def colors: Seq[Double] = ecosystem.colonies.map(_.color)
+  override def statisticList(): StatisticColony = {
+    ecosystem.colonies.map(c => (c, Statistic(c).stat()))
+  }
 
-  override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.center, c.dimension, c.color))
+  override def colonies: List[Colony] = ecosystem.colonies
+
+  def colors: Seq[Double] = ecosystem.colonies.map(_.color)
 
   override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.numericRepresentation())
 
@@ -53,4 +59,5 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
     val env = ecosystem.environmentManager.environment.map
     env.data.map(strategy).sliding(env cols, env cols) toArray
   }
+
 }

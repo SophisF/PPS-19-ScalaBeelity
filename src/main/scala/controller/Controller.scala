@@ -1,8 +1,8 @@
 package scala.controller
 
 import scala.model.ModelImpl
-import scala.model.Statistic.Statistic
-import scala.model.StatisticalData.StatisticalData
+import scala.model.statistic.StatisticColonies.Statistic
+import scala.model.statistic.StatisticEnvironment.StatisticalData
 import scala.model.bees.bee.Colony
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.phenotype.Characteristic.Characteristic

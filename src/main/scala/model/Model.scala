@@ -1,12 +1,9 @@
 package scala.model
 
-import scala.model.Statistic.Statistic
-import scala.model.StatisticalData.{StatisticalData, updateStats}
-import scala.model.bees.bee.Colony.{Colony, Color}
-import scala.model.bees.phenotype.Characteristic.Characteristic
-import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.statistic.StatisticColonies.Statistic
+import scala.model.statistic.StatisticEnvironment.{StatisticalData, updateStats}
+import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.Cell
-import scala.utility.Point
 import scala.utility.TypeUtilities.StatisticColony
 
 trait Model {
@@ -32,14 +29,11 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
   Time.initialize()
   Time.setIncrementValue(updateTime)
   private var _statisticalData: StatisticalData = StatisticalData()
-  private var _statisticList: StatisticColony = List.empty
   private val ecosystem = new Ecosystem(numColonies, dimension, dimension)
 
   override def update(): Unit = {
     ecosystem.update()
-    _statisticalData = updateStats(ecosystem.environmentManager.environment, ecosystem.colonies, _statisticalData)
-    //_statisticList = statisticList()
-   // println(_statisticList)
+    _statisticalData = updateStats(ecosystem.environmentManager.environment, _statisticalData)
     Time.increment()
   }
 

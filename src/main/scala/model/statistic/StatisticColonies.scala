@@ -1,14 +1,15 @@
-package scala.model
+package scala.model.statistic
 
 import model.bees.bee.EvolutionManager.calculateAveragePhenotype
+
 import scala.model.bees.bee.Colony.Colony
-import scala.model.environment.property.Property
-import scala.model.environment.property.PropertyType._
-import scala.model.bees.phenotype.Characteristic.{Characteristic, _}
+import scala.model.bees.phenotype.Characteristic.Characteristic
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
+import scala.model.environment.property.Property
+import scala.model.environment.property.PropertyType.PropertyValue
 
-object Statistic {
+object StatisticColonies {
   type PropertyType = PropertyValue[Property]
   type Range = (Int, Int)
 

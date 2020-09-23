@@ -236,7 +236,8 @@ object Colony {
     }
 
     private def generateColony(time: Int)(environmentManager: EnvironmentManager): Option[List[Colony]] = {
-      if (Random.nextInt(newColonyGenerationProbability / time) < 1) Some(List(this.queen.generateNewColony(environmentManager.proximityOf(
+      if (Random.nextInt(newColonyGenerationProbability / time) < 1)
+        Some(List(this.queen.generateNewColony(environmentManager.proximityOf(
         (this.center.x - proximity, this.center.x + proximity),
         (this.center.y - proximity,  this.center.y + proximity)
       )))) else None

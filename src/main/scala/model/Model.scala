@@ -26,7 +26,7 @@ trait Model {
 }
 
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
-  Time.initialize()
+  Time.reset()
   Time.setIncrementValue(updateTime)
   private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
   private val ecosystem = new Ecosystem(numColonies, dimension, dimension)

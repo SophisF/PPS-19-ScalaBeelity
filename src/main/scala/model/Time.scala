@@ -2,7 +2,9 @@ package scala.model
 
 sealed trait Time {
   def days: Int
+
   def month: Int
+
   def year: Int
 }
 
@@ -19,7 +21,8 @@ object Time extends Ordering[Time] {
   }
 
   def now(): Time = _time
-  def time(): Int = toDays(_time) // TODO remove
+
+  def dayTime(): Int = toDays(_time)
 
   def delay(days: Int, from: Time = Time.now()): Time = from + days
 
@@ -28,7 +31,6 @@ object Time extends Ordering[Time] {
   }
 
   def reset(): Unit = _time = 0
-  def initialize(): Unit = _time = 0  // TODO remove
 
   implicit def toTime(days: Int): Time = new TimeImpl(days)
 

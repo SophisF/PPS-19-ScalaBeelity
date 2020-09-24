@@ -25,5 +25,4 @@ class IterableHelperTest extends AnyFunSuite {
     val it = Iterable(0.2, 0.3, 0.4).mirror().toList
     assert(it == List(0.2, 0.3, 0.4, 0.4, 0.3, 0.2))
   }
-
 }

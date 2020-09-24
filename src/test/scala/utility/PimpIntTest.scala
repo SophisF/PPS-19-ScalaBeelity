@@ -2,7 +2,7 @@ package scala.model.utility
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.bees.utility.PimpInt._
+import scala.utility.PimpInt._
 
 class PimpIntTest extends AnyFunSuite{
 

@@ -1,29 +1,29 @@
-package scala.view
+package scala.view.builder
 
-import Array.empty
+import java.awt.{BorderLayout, Color, Component, Paint}
+
 import breeze.linalg.DenseMatrix
 import breeze.linalg.DenseMatrix.create
 import breeze.plot.{Plot, image}
-import org.jfree.chart.{ChartPanel, JFreeChart}
+import javax.swing.JPanel
+import javax.swing.border.EmptyBorder
 import org.jfree.chart.axis.NumberAxis
 import org.jfree.chart.renderer.PaintScale
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.title.PaintScaleLegend
 import org.jfree.chart.ui.RectangleEdge.RIGHT
 import org.jfree.chart.ui.RectangleInsets
-import java.awt.{BorderLayout, Color, Component, Paint}
-import javax.swing.JPanel
-import javax.swing.border.EmptyBorder
+import org.jfree.chart.{ChartPanel, JFreeChart}
 
-import scala.view.HeatmapChart.createHeatMap
+import scala.Array.empty
 
-class HeatmapChart[T <: Array[Array[Double]]] extends Chart[T] {
+object HeatmapChartBuilder extends ChartBuilder[Array[Array[Double]]] {
+  override type ChartType = Component
 
-  override def createChart(data: T): Component = createHeatMap(create(data.headOption.getOrElse(empty).length,
-    data length, data reduce((r1, r2) => r1 appendedAll r2)))
-}
+  override def createChart(data: Array[Array[Double]]): Component =
+    createHeatMap(create(data.headOption.getOrElse(empty).length, data length, data reduce((f, s) => f appendedAll s)))
 
-object HeatmapChart {
+  override def updateChart(chart: ChartType, data: Array[Array[Double]]): Component = createChart(data)
 
   private def createHeatMap(data: DenseMatrix[Double]): JPanel = {
     val panel = new JPanel(new BorderLayout())

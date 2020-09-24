@@ -1,18 +1,22 @@
 package scala.model
 
-import scala.model.StatisticalData.{StatisticalData, updateStats}
+import scala.model.statistic.StatisticColonies.Statistic
+import scala.model.statistic.StatisticEnvironment.{StatisticalEnvironment, updateStats}
+import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.Cell
-import scala.utility.Point
+import scala.utility.TypeUtilities.StatisticColonies
 
 trait Model {
 
-  def time(): Int
+  def time(): Int = Time.now()
 
   def update(): Unit
 
-  def statisticalData(): StatisticalData
+  def statisticalData(): StatisticalEnvironment
 
-  def colonies: List[(Point, Int, Double)]
+  def statisticList(): StatisticColonies
+
+  def colonies: List[Colony]
 
   def temperatureMatrix(): Array[Array[Double]]
 
@@ -22,23 +26,24 @@ trait Model {
 }
 
 class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
-
   Time.initialize()
   Time.setIncrementValue(updateTime)
-  private var _statisticalData: StatisticalData = StatisticalData()
+  private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
   private val ecosystem = new Ecosystem(numColonies, dimension, dimension)
 
   override def update(): Unit = {
     ecosystem.update()
-    _statisticalData = updateStats(ecosystem.environmentManager.environment, ecosystem.colonies, _statisticalData)
+    _statisticalData = updateStats(ecosystem.environmentManager.environment, _statisticalData)
     Time.increment()
   }
 
-  override def time(): Int = Time.time
+  override def statisticalData(): StatisticalEnvironment = _statisticalData
 
-  override def statisticalData(): StatisticalData = _statisticalData
+  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).stat()))
 
-  override def colonies: List[(Point, Int, Double)] = ecosystem.colonies.map(c => (c.position, c.dimension, c.color))
+  override def colonies: List[Colony] = ecosystem.colonies
+
+  def colors: Seq[Double] = ecosystem.colonies.map(_.color)
 
   override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.numericRepresentation())
 

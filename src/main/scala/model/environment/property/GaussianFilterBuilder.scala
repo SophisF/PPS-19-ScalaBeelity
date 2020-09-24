@@ -4,6 +4,7 @@ import math.pow
 
 import breeze.linalg.DenseMatrix
 import breeze.numerics.exp
+
 import scala.utility.Tuple._
 import scala.utility.DenseVectorHelper._
 import scala.utility.DenseMatrixHelper.{TransformableMatrix, empty}

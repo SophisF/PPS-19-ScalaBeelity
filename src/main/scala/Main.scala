@@ -1,4 +1,5 @@
 package scala
+
 import scala.controller.Controller
 import scala.view.View
 
@@ -8,6 +9,12 @@ import scala.view.View
  * @author Paolo Baldini
  */
 object Main extends App {
-  View.createInitialGUI((colonies, updateTime, iterations, dimension) =>
-    new Controller(colonies, updateTime, iterations, dimension).start())
+  for {
+    settings <- View.settingsView
+  } yield new Controller(
+    settings.coloniesNumber,
+    settings.timeGranularity,
+    settings.simulationDuration,
+    settings.environmentSize
+  ).start()
 }

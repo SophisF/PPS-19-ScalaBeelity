@@ -3,9 +3,8 @@ package scala.model.bees.bee
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.collection.immutable.HashSet
-import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.genotype.Genotype.Genotype
-import scala.model.bees.phenotype.Phenotype
+import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.Phenotype.Phenotype
 
 class FitterTest extends AnyFunSuite {
@@ -19,7 +18,7 @@ class FitterTest extends AnyFunSuite {
       Gene(GeneTaxonomy.TEMPERATURE_GENE, maxFrequency),
       Gene(GeneTaxonomy.PRESSURE_GENE, maxFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, maxFrequency)))
-    val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
+    val phenotype: Phenotype = genotype expressItself;
     assert(Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)((temperature, pressure, humidity) => (temperature + pressure + humidity) / 3) == 1)
   }
 
@@ -29,7 +28,7 @@ class FitterTest extends AnyFunSuite {
       Gene(GeneTaxonomy.TEMPERATURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.PRESSURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, middleFrequency)))
-    val phenotype: Phenotype = Phenotype(Genotype.calculateExpression(genotype))
+    val phenotype: Phenotype = genotype expressItself
     val fitValue = Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)((temperature, pressure, humidity) => (temperature + pressure + humidity) / 3)
     assert(fitValue > 0 && fitValue < 1)
   }

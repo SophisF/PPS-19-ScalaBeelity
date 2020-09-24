@@ -1,11 +1,11 @@
 package scala.utility
 
+import scala.utility.TypeUtilities.Range
+
 /**
  * A pimp library to add some methods to Tuple class.
  */
 object PimpTuple {
-
-  type Range = (Int, Int)
 
   /**
    * An implicit class to pimp tuples of integer.

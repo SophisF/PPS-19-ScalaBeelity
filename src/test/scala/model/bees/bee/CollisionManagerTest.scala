@@ -2,7 +2,8 @@ package model.bees.bee
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.bees.bee.{Bee, CollisionManager, Colony, Queen}
+import scala.model.bees.bee.utility.CollisionManager
+import scala.model.bees.bee.{Bee, Colony, Queen}
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.Phenotype.Phenotype

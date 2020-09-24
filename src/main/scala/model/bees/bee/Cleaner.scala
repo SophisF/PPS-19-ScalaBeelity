@@ -1,6 +1,7 @@
 package scala.model.bees.bee
 
 import scala.model.bees.bee.Colony.Colony
+import scala.model.bees.bee.utility.CollisionManager
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 
 /**

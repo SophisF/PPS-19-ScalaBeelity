@@ -32,14 +32,14 @@ object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)
     panel.setLayout(new GridLayout(1,2))
 
     val plot = new Plot().plot
-    plot.getRangeAxis.setRange(0, environmentSize.height)  // TODO env size
+    plot.getRangeAxis.setRange(0, environmentSize.height)
     plot.getDomainAxis.setRange(0, environmentSize.width)
 
     data.map(it => colonyToComponent(it._1.center, (it._1.dimension, it._1.dimension), it._1.color))
       .foreach(plot.addAnnotation)
 
     val chart = new ChartPanel(new JFreeChart(plot))
-    val infoArea = new JTextArea(selectedColony.map(colonyToString) getOrElse "No colony selected") //TODO provo eliminare Else
+    val infoArea = new JTextArea(selectedColony.map(colonyToString) getOrElse "No colony selected")
 
     chart.addChartMouseListener(new ChartMouseListener {
       override def chartMouseClicked(event: ChartMouseEvent): Unit = { }
@@ -63,8 +63,8 @@ object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)
     new Rectangle2D.Double(point x, point y, size width, size height), new BasicStroke(2f), color, color)
 
   private def colonyToString(colonyChar: (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])): String = {
-    var str = s"Colony info: \nPosition: ${colonyChar._1.center x} ${colonyChar._1.center y}\nBees' number: ${colonyChar._1.bees size}"
-    colonyChar._2.foreach(t => str = str.+(s"\n${t._1}: ${t._2}"))
+    var str = s"Colony info: \n\nPosition: ${colonyChar._1.center x} ${colonyChar._1.center y}\n\nBees' number: ${colonyChar._1.bees size}"
+    colonyChar._2.foreach(t => str = str.+(s"\n\n${t._1}: ${t._2}"))
     str
   }
 

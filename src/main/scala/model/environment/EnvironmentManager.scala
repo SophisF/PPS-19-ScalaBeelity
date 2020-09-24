@@ -30,7 +30,6 @@ case class EnvironmentManager(environment: Environment, propertySources: Propert
       j > 0 && j < environment.map.cols
   } yield (i, j)
 
-  //TODO: verificare se va bene qui
   def proximityOf(range1: (Int, Int), range2: (Int, Int)): Point = {
     val cells = indexInRange(range1, range2)
     val index = Random.nextInt(cells.size)

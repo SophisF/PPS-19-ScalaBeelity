@@ -35,7 +35,7 @@ class SimulationView(controller: Controller) {
 
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT)
 
-    timeLabel.setText("Execution Time: " + Time.time)
+    timeLabel.setText("Execution Time: " + Time.dayTime)
     gameBar.add(timeLabel)
 
     frame.add(gameBar, BorderLayout.PAGE_START)
@@ -60,7 +60,7 @@ class SimulationView(controller: Controller) {
     val index = tabbedPane.getSelectedIndex
     if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane getTitleAt index)(index))
 
-    timeLabel.setText("Execution Time: " + Time.time)
+    timeLabel.setText("Execution Time: " + Time.dayTime)
     gameBar add timeLabel
   })
 

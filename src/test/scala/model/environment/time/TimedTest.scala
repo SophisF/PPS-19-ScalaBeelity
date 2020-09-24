@@ -20,7 +20,7 @@ class TimedTest extends AnyFunSuite {
   }
 
   test("Ended function should return false when time is before the timed-data life (fireTime + duration)") {
-    Time.initialize()
+    Time.reset()
     val _timed = timed(0, 100)
     Time increment 100
 
@@ -28,7 +28,7 @@ class TimedTest extends AnyFunSuite {
   }
 
   test("Ended function should return true when time is after the timed-data life (fireTime + duration)") {
-    Time.initialize()
+    Time.reset()
     val _timed = timed(0, 99)
     Time increment 100
 
@@ -37,7 +37,7 @@ class TimedTest extends AnyFunSuite {
 
   test("Ended function should work also for fireTime different from 0") {
     Time increment 50
-    val _timed = timed(Time.time(), 100)
+    val _timed = timed(Time.dayTime(), 100)
     Time increment 100
 
     assert(!isEnded(_timed))
@@ -47,21 +47,21 @@ class TimedTest extends AnyFunSuite {
   }
 
   test("Ended function should return true when duration is 0 (or eventually less)") {
-    Time.initialize()
+    Time.reset()
     Time increment 2
     assert(isEnded(timed(0, 0)))
   }
 
   test("IsStarted function should return false when time is before the timed-data fireTime") {
-    assert(!isStarted(timed(Time.time + 1, 100)))
+    assert(!isStarted(timed(Time.dayTime + 1, 100)))
   }
 
   test("IsStarted function should return true when time is after the timed-data fireTime") {
-    assert(isStarted(timed(Time.time(), 100)))
+    assert(isStarted(timed(Time.dayTime(), 100)))
   }
 
   test("IsStarted function should work also for fireTime 0") {
-    Time.initialize()
+    Time.reset()
     val _timed = timed(0, 100)
 
     assert(isStarted(_timed))
@@ -72,19 +72,19 @@ class TimedTest extends AnyFunSuite {
   }
 
   test("InProgress function should return false when is not started") {
-    assert(!inProgress(timed(Time.time + 1, 100)))
+    assert(!inProgress(timed(Time.dayTime + 1, 100)))
   }
 
   test("InProgress function should return false when is ended") {
-    assert(!inProgress(timed(Time.time - 1, 0)))
+    assert(!inProgress(timed(Time.dayTime - 1, 0)))
   }
 
   test("InProgress function should return true when is started and not ended") {
-    assert(inProgress(timed(Time.time(), 100)))
+    assert(inProgress(timed(Time.dayTime(), 100)))
   }
 
   test("InProgress function should work also for fireTime 0") {
-    Time.initialize()
+    Time.reset()
     val _timed = timed(0, 100)
 
     assert(inProgress(_timed))

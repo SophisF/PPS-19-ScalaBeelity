@@ -4,9 +4,9 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.Time
 import scala.model.environment.property.TimeDependentProperty
-import scala.model.environment.property.realization.IntegerProperty.filter
+import scala.model.environment.property.realization.IntProperty.filter
 
-trait IntegerTimedProperty extends TimeDependentProperty {
+trait IntTimedProperty extends TimeDependentProperty with IntRange {
   override type TimedVariationType = IntegerTimedVariation
 
   implicit def variation(value: Int): VariationType
@@ -23,13 +23,6 @@ trait IntegerTimedProperty extends TimeDependentProperty {
   }
 
   trait IntegerTimedVariation extends TimedVariation
-
-  def maxValue: Int
-  def minValue: Int
-
-  private def rangeWidth: Int = maxValue - minValue
-  private def rangeCenter: Int = minValue + rangeWidth / 2
-  private def zeroCenteredRange: (Int, Int) = (minValue - rangeCenter, maxValue - rangeCenter)
 
   override def timedFilter(width: Int, height: Int, duration: Time, start: Time): DenseMatrix[TimedVariationType] =
     filter(width, height)(zeroCenteredRange._1, zeroCenteredRange._2).map(d => timedVariation(d toInt, start, duration))

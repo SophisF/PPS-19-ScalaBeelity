@@ -1,7 +1,7 @@
 package scala.model.environment.property
 
 import scala.model.environment.property.realization._
-import scala.utility.SequenceHelper.RichSequence
+import scala.utility.IterableHelper.RichIterable
 
 /**
  * Enumeration of all the possible property types
@@ -16,7 +16,8 @@ object PropertyType extends Enumeration {
    * @param property instantiated object
    * @tparam T type of property
    */
-  case class PropertyValue[T <: Property] private(property: T) extends Val() {
+  sealed trait PropertyValue[T <: Property] {
+    def property: T
 
     /**
      * Allow to get the property value directly without access the 'property' field
@@ -26,13 +27,18 @@ object PropertyType extends Enumeration {
     def apply(): T = property
   }
 
-  val Temperature: PropertyValue[TemperatureProperty] = PropertyValue(TemperatureProperty)
-  val Humidity: PropertyValue[HumidityProperty] = PropertyValue(HumidityProperty)
-  val Pressure: PropertyValue[PressureProperty] = PropertyValue(PressureProperty)
+  val Temperature: Val with PropertyValue[TemperatureProperty] = TemperatureProperty
+  val Humidity: Val with PropertyValue[HumidityProperty] = HumidityProperty
+  val Pressure: Val with PropertyValue[PressureProperty] = PressureProperty
 
-  def properties(filterCondition: Property => Boolean = _ => true): Seq[PropertyValue[Property]] =
-    values.toSeq.asInstanceOf[Seq[PropertyValue[Property]]].filter(it => filterCondition(it()))
+  def properties(filterCondition: Property => Boolean = _ => true): Iterable[PropertyValue[Property]] =
+    values.asInstanceOf[Iterable[PropertyValue[Property]]].filter(filterCondition(_))
 
   def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] =
-    properties().filter(property => filterCondition(property())).random()
+    properties().filter(filterCondition(_)).random
+
+  implicit def getPropertyFrom[T <: Property](entry: PropertyValue[T]): T = entry()
+
+  private implicit def enumValueOf[T <: Property](_property: T): Val with PropertyValue[T] =
+    new Val with PropertyValue[T] { override def property: T = _property }
 }

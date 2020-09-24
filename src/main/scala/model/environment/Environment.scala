@@ -1,6 +1,7 @@
 package scala.model.environment
 
 import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseMatrix.create
 
 import scala.model.environment.matrix.Zone.{border, in}
 import scala.model.environment.matrix.Size.Border._
@@ -27,8 +28,8 @@ object Environment {
    * @param defaultCell initial value for the cells of the map
    * @return the environment
    */
-  def apply(width: Int, height: Int, defaultCell: Cell = Cell()): Environment = Environment(DenseMatrix
-    .create(width, height, Iterator continually defaultCell take(width * height) toArray))
+  def apply(width: Int, height: Int, defaultCell: Cell = Cell()): Environment =
+    Environment(create(height, width, Iterator continually defaultCell take(width * height) toArray))
 
   def apply(environment: Environment, source: PropertySource[_]): Environment = source match {
     case source: ZoneSource[Property] => applyFilter(environment, source)

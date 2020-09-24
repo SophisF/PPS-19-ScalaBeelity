@@ -1,14 +1,16 @@
 package scala.model.environment.property
 
+import math.pow
+
 import breeze.linalg.DenseMatrix
 import breeze.numerics.exp
 
-import scala.utility.IteratorHelper.RichIterator
+import scala.utility.Tuple._
 import scala.utility.DenseVectorHelper._
 import scala.utility.DenseMatrixHelper.{TransformableMatrix, empty}
+import scala.utility.IterableHelper.RichIterable
 
 /**
- * TODO maybe rename to GaussianFilterBuilder.<br>
  * Contains functions to create gaussian filters.
  *
  * @author Paolo Baldini
@@ -23,12 +25,9 @@ object GaussianFilterBuilder {
    * @param decrementRate influences the 'width' of the function. The greater it is, the more the values descent slowly
    * @return the right side (from the center) of a 2d gaussian curve
    */
-  def function2dOneSided(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] = {
-    val ranges = correctRanges(peak, stop)
-    readjustRanges(peak, stop, Iterator.iterate(0)(_ + 1)
-      .map(it => ranges._1 * exp( (it * it) / -(2.0 * decrementRate * decrementRate) ))
-      .takeWhile(_.abs >= ranges._2.abs).toArray)
-  }
+  def function2dOneSided(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] = correctRanges(peak, stop)
+    .map((_peak, _stop) => readjustRanges(peak, stop, Iterator.from(0).map(pow(_, 2) / -(2.0 * pow(decrementRate, 2)))
+      .map(_peak * exp(_)).takeWhile(_.abs >= _stop.abs) to Iterable))
 
   /**
    * Calculate influence descent through use of a gaussian function (See
@@ -41,7 +40,7 @@ object GaussianFilterBuilder {
    * @return the 2d gaussian function
    */
   def function2d(peak: Int, stop: Int = 1, decrementRate: Int = 1): Iterable[Double] =
-    function2dOneSided(peak, stop, decrementRate).toArray.reverseIterator.mirror(false).toArray
+    function2dOneSided(peak, stop, decrementRate).reverse.mirror(false)
 
   /**
    * Build a matrix representing the 3d gaussian function
@@ -68,10 +67,8 @@ object GaussianFilterBuilder {
       case t => t
     }
 
-  private def readjustRanges(peak: Int, stop: Int, iterator: Iterable[Double]): Iterable[Double] = {
-    val t = correctRanges(peak, stop)
-    iterator.map(_ + stop - t._2)
-  }
+  private def readjustRanges(peak: Int, stop: Int, iterator: Iterable[Double]): Iterable[Double] =
+    iterator.map(_ + stop - correctRanges(peak, stop)._2) // TODO check if scala optimize the function (not recalculate avery time)
 
   private def concordantSign[T](value1: Int, value2: Int, discordant: (Int, Int) => T, concordant: (Int, Int) => T): T =
     value1 * value2 match {

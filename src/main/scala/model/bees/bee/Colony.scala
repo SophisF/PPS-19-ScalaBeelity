@@ -1,9 +1,8 @@
 package scala.model.bees.bee
 
-import model.bees.bee.EvolutionManager
-
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Queen.Queen
+import scala.model.bees.bee.utility.{Cleaner, Combiner, EvolutionManager}
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Characteristic._
 import scala.model.bees.phenotype.Phenotype.Phenotype

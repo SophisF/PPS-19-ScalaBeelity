@@ -1,7 +1,7 @@
-package scala.model.bees.bee
+package scala.model.bees.bee.utility
 
+import scala.model.bees.bee.Colony
 import scala.model.bees.bee.Colony.Colony
-import scala.model.bees.bee.utility.CollisionManager
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 
 /**
@@ -21,9 +21,9 @@ object Cleaner {
    * @return the new colonies.
    */
   @scala.annotation.tailrec
-  def clean(colonies: Iterable[Colony], col: Iterable[Colony], newColonies: Iterable[Colony]): Iterable[Colony] = col match {
+  def clean(colonies: Iterable[Colony], col: Iterable[Colony], newColonies: Iterable[Colony] = List.empty): Iterable[Colony] = col match {
     case h :: t => val colliding = CollisionManager.findColliding(h, colonies)
-      val toClean = colliding.filter(checkClean)
+      val toClean = colliding.filter(checkIfClean)
       /**
        * Method to adjust the number of bees of a colony with respect to each other that collide with it and under some conditions.
        *
@@ -36,14 +36,14 @@ object Cleaner {
         case Some(colony) =>
           colonies
           match {
-            case h :: t => cleanAll(kill(colony, h), t)
+            case h :: t => cleanAll(adjustBees(colony, h), t)
             case _ => Some(colony)
           }
 
         case _ => None
       }
       val cleaned = cleanAll(Some(h), toClean)
-      clean(colonies, t, cleaned.orNull :: newColonies.toList)
+      clean(colonies, t, (if(cleaned nonEmpty) cleaned.get :: newColonies.toList else newColonies))
     case _ => newColonies.filter(_.isColonyAlive)
   }
 
@@ -53,7 +53,7 @@ object Cleaner {
    * @param colony the colony.
    * @return true if the colony can fight, false otherwise.
    */
-  private def checkClean(colony: Colony): Boolean = {
+  private def checkIfClean(colony: Colony): Boolean = {
     val aggression: Int = Phenotype averagePhenotype colony.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
     aggression > minAggressionToAttack
   }
@@ -65,7 +65,7 @@ object Cleaner {
    * @param colony2 the colony to fight.
    * @return a new colony with the number of bees adjusted.
    */
-  private def kill(colony1: Colony, colony2: Colony): Option[Colony] = {
+  private def adjustBees(colony1: Colony, colony2: Colony): Option[Colony] = {
     val collisionArea = CollisionManager.collisionArea(colony1, colony2)
     val colony2Aggression: Int = if (colony2.isColonyAlive) Phenotype.averagePhenotype(colony2.bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE) else 0
     val newBees = colony1.bees diff colony1.bees.take(colony2Aggression * collisionArea)

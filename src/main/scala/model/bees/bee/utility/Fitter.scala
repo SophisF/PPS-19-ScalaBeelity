@@ -1,15 +1,14 @@
-package scala.model.bees.bee
+package scala.model.bees.bee.utility
 
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.utility.PimpInt._
+import scala.utility.TypeUtilities.Range
 
 /**
  * Object used to calculate the fit value of the phenotype's characteristics, based on the environment parameters.
  */
 object Fitter {
-
-  type Range = (Int, Int)
 
   /**
    * Method to apply a fit value to a parameter, based on the operation passed.

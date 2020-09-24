@@ -69,7 +69,7 @@ object CollisionManager {
     val colony1XRange: Range = calculateRange(colony1.center.x, colony1.dimension)
     val colony1YRange: Range = calculateRange(colony1.center.y, colony1.dimension)
     val colony2XRange: Range = calculateRange(colony2.center.x, colony2.dimension)
-    val colony2YRange: Range = calculateRange(colony1.center.y, colony2.dimension)
+    val colony2YRange: Range = calculateRange(colony2.center.y, colony2.dimension)
 
     this.calculateOverlappingOnAxis(colony1XRange)(colony2XRange) *
       this.calculateOverlappingOnAxis(colony1YRange)(colony2YRange)

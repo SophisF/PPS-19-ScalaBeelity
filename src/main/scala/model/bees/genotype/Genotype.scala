@@ -28,7 +28,7 @@ object Genotype {
    */
   def averageGenotype(bees: Set[Bee]): Genotype = {
     Genotype(GeneTaxonomy.values.unsorted.map(value => Gene(value, {
-      bees.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).sum / bees.size
+      bees.toList.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).sum / bees.size
     })))
   }
 
@@ -57,8 +57,9 @@ object Genotype {
     def expressItself: Phenotype = {
       Phenotype(CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, this.genes
         .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
-        .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).foldRight(0.0)(_ + _)
-        / this.genes.count(_.geneticInformation.influence(taxonomy).nonEmpty))).toMap)
+        .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue)
+        .foldRight(0.0)(_ + _))).toMap)
+
     }
   }
 

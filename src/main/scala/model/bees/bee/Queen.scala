@@ -1,9 +1,8 @@
 package scala.model.bees.bee
 
-import model.bees.bee.EvolutionManager
-
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Colony.Colony
+import scala.model.bees.bee.utility.{EvolutionManager, Fitter}
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype

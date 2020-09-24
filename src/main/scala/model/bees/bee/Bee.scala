@@ -1,5 +1,6 @@
 package scala.model.bees.bee
 
+import scala.model.bees.bee.utility.Fitter
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype

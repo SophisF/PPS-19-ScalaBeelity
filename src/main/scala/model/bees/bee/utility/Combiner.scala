@@ -1,7 +1,7 @@
-package scala.model.bees.bee
+package scala.model.bees.bee.utility
 
+import scala.model.bees.bee.Colony
 import scala.model.bees.bee.Colony.Colony
-import scala.model.bees.bee.utility.CollisionManager
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 
 /**
@@ -53,7 +53,7 @@ object Combiner {
      */
     private def checkMerge(colony1: Colony, colony2: Colony): Boolean = {
       val aggressionColony1: Int = Phenotype averagePhenotype colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
-      val aggressionColony2: Int = Phenotype averagePhenotype colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+      val aggressionColony2: Int = Phenotype averagePhenotype colony2.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
       aggressionColony1 < maxAggressionToMerge &&
         aggressionColony2 < maxAggressionToMerge
     }

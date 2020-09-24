@@ -11,7 +11,6 @@ import scala.utility.DenseMatrixHelper.{TransformableMatrix, empty}
 import scala.utility.IterableHelper.RichIterable
 
 /**
- * TODO maybe rename to GaussianFilterBuilder.<br>
  * Contains functions to create gaussian filters.
  *
  * @author Paolo Baldini

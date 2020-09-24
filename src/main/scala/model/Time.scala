@@ -22,7 +22,7 @@ object Time extends Ordering[Time] {
 
   def now(): Time = _time
 
-  def dayTime(): Int = toDays(_time)
+  def dayTime(): Int = daysFrom(_time)
 
   def delay(days: Int, from: Time = Time.now()): Time = from + days
 
@@ -32,9 +32,9 @@ object Time extends Ordering[Time] {
 
   def reset(): Unit = _time = 0
 
-  implicit def toTime(days: Int): Time = new TimeImpl(days)
+  implicit def timeFrom(days: Int): Time = new TimeImpl(days)
 
-  implicit def toDays(time: Time): Int = time.year * 365 + time.month * 30 + time.days
+  implicit def daysFrom(time: Time): Int = time.year * 365 + time.month * 30 + time.days
 
   override def compare(first: Time, second: Time): Int = first - second
 

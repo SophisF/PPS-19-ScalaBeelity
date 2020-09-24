@@ -54,6 +54,8 @@ object PimpInt {
     def applyTwoOperations(value: Int)(operation1: (Int, Int) => Int)(operation2: (Int, Int) => Int): (Int, Int) = {
       (operation1(number, value), operation2(number, value))
     }
+
+    def ~^(value: Int): Int = Math.pow(number, value).toInt
   }
 
 }

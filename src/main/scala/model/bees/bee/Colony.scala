@@ -13,6 +13,7 @@ import scala.model.prolog.PrologEngine._
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
 import scala.utility.Point
+import scala.utility.PimpInt._
 
 
 /**
@@ -135,7 +136,7 @@ object Colony {
 
     override def dimension: Int = (math.ceil(math.sqrt(this.bees.size.toDouble / limitBeesForCell)) / 2.0).toInt
 
-    override def area: Int = (this.dimension * 2 + 1) ^ 2
+    override def area: Int = (this.dimension * 2 + 1) ~^ 2
 
     override def isColonyAlive: Boolean = this.bees.exists(_.isAlive)
 

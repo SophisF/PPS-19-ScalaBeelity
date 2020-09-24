@@ -56,13 +56,16 @@ object CollisionManager {
    * @return the intersection area.
    */
   private def calculateIntersectionArea(range1: Range)(range2: Range): Int = {
+
+    //TODO refactor
+
     if (range1.contains(range2)) {
       val max: Int = math.min(range1._2, range2._2)
-      max - range1._1 + 1
+      max - range2._1 + 1
     }
     else if (range2.contains(range1)) {
       val max: Int = math.min(range1._2, range2._2)
-      max - range2._1 + 1
+      max - range1._1 + 1
     }
     else 0
   }

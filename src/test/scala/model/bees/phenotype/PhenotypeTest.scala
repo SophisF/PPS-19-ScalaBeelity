@@ -7,7 +7,7 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 
 class PhenotypeTest extends AnyFunSuite{
   private val characteristicMap: Map[CharacteristicTaxonomy, Double] = Map((CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY, 1.0))
-  private val phenotype = Genotype() expressItself
+  private val phenotype = Genotype() expressInPhenotype
 
   test("A Phenotype should not be empty"){
     assert(phenotype.characteristics.nonEmpty)

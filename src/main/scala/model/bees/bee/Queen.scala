@@ -2,7 +2,7 @@ package scala.model.bees.bee
 
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Colony.Colony
-import scala.model.bees.bee.utility.{EvolutionManager, Fitter}
+import scala.model.bees.bee.utility.{EvolutionManager, FitCalculator}
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
@@ -10,22 +10,36 @@ import scala.utility.PimpTuple._
 import scala.utility.Point
 
 /**
- * Object that represents the queen bee
+ * Object that represents the queen bee.
  */
 object Queen {
 
+  /**
+   * Apply method for the queen.
+   *
+   * @param colonyOpt          an optional which contains her colony, if it exists.
+   * @param genotype           the genotype.
+   * @param phenotype          the phenotype.
+   * @param age                the age of the queen.
+   * @param averageTemperature the average temperature of the environment where the colony is.
+   * @param averagePressure    the average pressure of the environment where the colony is.
+   * @param averageHumidity    the average humidity of the environment where the colony is.
+   * @param position           the position of the queen.
+   * @param generateNewColony  a strategy function to generate a new colony if the queen is just born.
+   * @return a new queen.
+   */
   def apply(colonyOpt: Option[Colony],
             genotype: Genotype, phenotype: Phenotype,
             age: Int, averageTemperature: Int,
             averagePressure: Int, averageHumidity: Int,
             position: Point, generateNewColony: Point => Colony): Queen = {
-    val fitValue: Double = Fitter.calculateFitValue(phenotype)(averageTemperature)(averagePressure)(averageHumidity)(
-      (temperature, pressure, humidity) => (temperature + pressure + humidity) / 3)
+    val fitValue: Double = FitCalculator.calculateFitValue(phenotype)(averageTemperature)(averagePressure)(averageHumidity)(
+      params => params.sum / params.size)
 
-    val l: Int = phenotype.expressionOf(CharacteristicTaxonomy.LONGEVITY)
-    QueenImpl(colonyOpt, genotype, phenotype, age, Fitter.applyFitValue(fitValue)(l - age)(_ * _),
-      Fitter.applyFitValue(fitValue)(phenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE))(_ * _),
-      Fitter.applyFitValue(fitValue)(phenotype.expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))(_ * _),
+    val l: Int = phenotype expressionOf CharacteristicTaxonomy.LONGEVITY
+    QueenImpl(colonyOpt, genotype, phenotype, age, FitCalculator.applyFitValue(fitValue)(l - age)(_ * _),
+      FitCalculator.applyFitValue(fitValue)(phenotype expressionOf CharacteristicTaxonomy.REPRODUCTION_RATE)(_ * _),
+      FitCalculator.applyFitValue(fitValue)(phenotype expressionOf CharacteristicTaxonomy.AGGRESSION_RATE)(_ * _),
       averageTemperature, averagePressure, averageHumidity, position, generateNewColony)
   }
 
@@ -35,11 +49,25 @@ object Queen {
   trait Queen extends Bee {
     val colony: Colony
     val position: Point
+
+    /**
+     * Strategy method to generate new colony.
+     */
     val generateNewColony: Point => Colony
 
-    def update(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(newCenter: Point): Queen =
+    /**
+     * Method that map a queen into a new queen in the next iteration of the simulation.
+     *
+     * @param time               the time that has passed in the simulation.
+     * @param averageTemperature the average temperature of the environment where the colony is.
+     * @param averagePressure    the average pressure of the environment where the colony is.
+     * @param averageHumidity    the average humidity of the environment where the colony is.
+     * @param position           the new position of the queen.
+     * @return a new queen updated.
+     */
+    def update(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(position: Point): Queen =
       Queen(Some(this.colony), this.genotype, this.phenotype, this.age + time, averageTemperature, averagePressure, averageHumidity,
-        newCenter, this.generateNewColony)
+        position, this.generateNewColony)
   }
 
   private case class QueenImpl(colonyOpt: Option[Colony],
@@ -59,7 +87,7 @@ object Queen {
         val similarGenotype = EvolutionManager.buildGenotype(this.genotype)(this.phenotype)(t.average)(p.average)(h.average)(1)
         Bee(
           similarGenotype,
-          similarGenotype expressItself,
+          similarGenotype expressInPhenotype,
           0,
           averageTemperature, averagePressure, averageHumidity
         )

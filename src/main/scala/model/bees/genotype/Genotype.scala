@@ -54,11 +54,11 @@ object Genotype {
      *
      * @return a phenotype as expression of itself.
      */
-    def expressItself: Phenotype = {
+    def expressInPhenotype: Phenotype = {
       Phenotype(CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, this.genes
         .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
         .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue)
-        .foldRight(0.0)(_ + _))).toMap)
+        .foldRight(0.0)(_ + _) / this.genes.count(_.geneticInformation.influence(taxonomy).nonEmpty))).toMap)
 
     }
   }

@@ -54,8 +54,8 @@ object Cleaner {
    * @return true if the colony can fight, false otherwise.
    */
   private def checkIfClean(colony: Colony): Boolean = {
-    val aggression: Int = Phenotype averagePhenotype colony.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
-    aggression > minAggressionToAttack
+    val aggression: Int = Phenotype averagePhenotype Set(colony.queen) ++ colony.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+    aggression >= minAggressionToAttack
   }
 
   /**
@@ -67,7 +67,7 @@ object Cleaner {
    */
   private def adjustBees(colony1: Colony, colony2: Colony): Option[Colony] = {
     val collisionArea = CollisionManager.collisionArea(colony1, colony2)
-    val colony2Aggression: Int = if (colony2.isColonyAlive) Phenotype.averagePhenotype(colony2.bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE) else 0
+    val colony2Aggression: Int = if (colony2.isColonyAlive) Phenotype.averagePhenotype(Set(colony2.queen) ++ colony2.bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE) else 0
     val newBees = colony1.bees diff colony1.bees.take(colony2Aggression * collisionArea)
     if (newBees.nonEmpty) Some(Colony(colony1.color, colony1.queen, newBees)) else None
 

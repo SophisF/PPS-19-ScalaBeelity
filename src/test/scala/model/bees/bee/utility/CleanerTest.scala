@@ -27,6 +27,8 @@ class CleanerTest extends AnyFunSuite {
   private val lowAggressionColony = UtilityColonyBuilder.createColony(lowAggressionGenotype, Point(3, 3))
 
   test("Two colonies that collides and have an aggression greater than a threshold should attack each other"){
+    //println(Phenotype.averagePhenotype(Set(colony1.queen) ++ colony1.bees) expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
+
     val colonies = List(colony1, colony2)
 
     assert(Cleaner.clean(colonies, colonies).flatMap(_.bees).size < colonies.flatMap(_.bees).size)

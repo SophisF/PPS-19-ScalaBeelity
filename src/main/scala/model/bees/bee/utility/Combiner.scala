@@ -52,8 +52,8 @@ object Combiner {
      * @return true if the colonies can be merged, false otherwise.
      */
     private def checkMerge(colony1: Colony, colony2: Colony): Boolean = {
-      val aggressionColony1: Int = Phenotype averagePhenotype colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
-      val aggressionColony2: Int = Phenotype averagePhenotype colony2.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+      val aggressionColony1: Int = Phenotype averagePhenotype Set(colony1.queen) ++ colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+      val aggressionColony2: Int = Phenotype averagePhenotype Set(colony2.queen) ++ colony2.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
       aggressionColony1 < maxAggressionToMerge &&
         aggressionColony2 < maxAggressionToMerge
     }

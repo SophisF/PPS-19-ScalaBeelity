@@ -7,7 +7,7 @@ import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.Phenotype.Phenotype
 
-class FitterTest extends AnyFunSuite {
+class FitCalculatorTest extends AnyFunSuite {
   val maxTemperature = 36
   val maxPressure = 1050
   val maxHumidity = 80
@@ -18,10 +18,10 @@ class FitterTest extends AnyFunSuite {
       Gene(GeneTaxonomy.TEMPERATURE_GENE, maxFrequency),
       Gene(GeneTaxonomy.PRESSURE_GENE, maxFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, maxFrequency)))
-    val phenotype: Phenotype = genotype expressItself
+    val phenotype: Phenotype = genotype expressInPhenotype
 
-    assert(Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)(
-      (t, p, h) => (t + p + h) / 3) == 1)
+    assert(FitCalculator.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)(
+      params => params.sum / params.size) == 1)
   }
 
   test("The fit value should be between 0 and 1 if the environmental expressions not corresponds to environment parameters") {
@@ -30,14 +30,14 @@ class FitterTest extends AnyFunSuite {
       Gene(GeneTaxonomy.TEMPERATURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.PRESSURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, middleFrequency)))
-    val phenotype: Phenotype = genotype expressItself
-    val fitValue = Fitter.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)(
-      (t, p, h) => (t + p + h) / 3)
+    val phenotype: Phenotype = genotype expressInPhenotype
+    val fitValue = FitCalculator.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)(
+      params => params.sum / params.size)
 
     assert(fitValue > 0 && fitValue < 1)
   }
 
   test("Apply a fit value to a parameter means apply an operation between the parameter and the fit value") {
-    assert(Fitter.applyFitValue(0.5)(50)(_ * _) == 25)
+    assert(FitCalculator.applyFitValue(0.5)(50)(_ * _) == 25)
   }
 }

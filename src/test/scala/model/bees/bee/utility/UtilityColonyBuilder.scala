@@ -14,8 +14,8 @@ object UtilityColonyBuilder {
   private val h = 100
 
   def createColony(genotype: Genotype, position: Point): Colony = {
-    Colony(Random.nextDouble(), Queen(None, genotype, genotype expressItself, age, t, p, h, position, null),
-      (1 to 10).map(_ => Bee(genotype, genotype expressItself, age, t, p, h)).toSet)
+    Colony(Random.nextDouble(), Queen(None, genotype, genotype expressInPhenotype, age, t, p, h, position, null),
+      (1 to 10).map(_ => Bee(genotype, genotype expressInPhenotype, age, t, p, h)).toSet)
   }
 
 

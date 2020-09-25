@@ -24,14 +24,27 @@ object EvolutionManager {
    */
   def buildGenotype(genotype: Genotype)(phenotype: Phenotype)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(time: Int): Genotype = {
     val evolutionaryRate = this.evolutionaryRate(time)(time => Math.sqrt(time).toInt)
-    var genes: Set[Gene] = Set.empty
-    genes = genes ++ genotype.genes.filter(_.isEnvironmental) map (gene => gene.name match {
-      case GeneTaxonomy.TEMPERATURE_GENE => environmentalAdaptation(genotype)(phenotype)(averageTemperature)(gene.name)(gene.geneticInformation.characteristics.head)(evolutionaryRate)
-      case GeneTaxonomy.PRESSURE_GENE => environmentalAdaptation(genotype)(phenotype)(averagePressure)(gene.name)(gene.geneticInformation.characteristics.head)(evolutionaryRate)
-      case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(genotype)(phenotype)(averageHumidity)(gene.name)(gene.geneticInformation.characteristics.head)(evolutionaryRate)
-    })
-    genes = genes ++ this.randomMutation(genotype)(evolutionaryRate)
-    Genotype(genes)
+
+    /**
+     * Inner function to create a new genotype, evolved with respect to the given genotype.
+     *
+     * @param genes    a list of current genes of the given genotype.
+     * @param newGenes a list of new genes.
+     * @return the list of new genes.
+     */
+    @scala.annotation.tailrec
+    def createGenotype(genes: List[Gene], newGenes: List[Gene] = List.empty): List[Gene] = genes match {
+      case h :: t => val gene = h.name match {
+        case GeneTaxonomy.TEMPERATURE_GENE => environmentalAdaptation(genotype)(phenotype)(averageTemperature)(h.name)(h.geneticInformation.characteristics.head)(evolutionaryRate)
+        case GeneTaxonomy.PRESSURE_GENE => environmentalAdaptation(genotype)(phenotype)(averagePressure)(h.name)(h.geneticInformation.characteristics.head)(evolutionaryRate)
+        case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(genotype)(phenotype)(averageHumidity)(h.name)(h.geneticInformation.characteristics.head)(evolutionaryRate)
+        case _ => this.randomMutation(h)(evolutionaryRate)
+      }
+        createGenotype(t, gene :: newGenes)
+      case _ => newGenes
+    }
+
+    Genotype(createGenotype(genotype.genes.toList).toSet)
   }
 
   /**
@@ -65,14 +78,13 @@ object EvolutionManager {
   }
 
   /**
-   * Method to apply random mutation to a genotype.
+   * Method to apply random mutation to a gene.
    *
-   * @param genotype         the genotype.
+   * @param gene             the gene.
    * @param evolutionaryRate the change applied by the mutation.
-   * @return a new set of genes, with mutated frequency.
+   * @return a new gene, with mutated frequency.
    */
-  private def randomMutation(genotype: Genotype)(evolutionaryRate: Int): Set[Gene] = {
-    genotype.genes.filterNot(_.isEnvironmental).map(gene => Gene(gene.name, if (Random.nextInt() % 2 == 0)
-      gene.frequency - evolutionaryRate else gene.frequency + evolutionaryRate))
+  private def randomMutation(gene: Gene)(evolutionaryRate: Int): Gene = {
+    Gene(gene.name, if (Random.nextInt() % 2 == 0) gene.frequency - evolutionaryRate else gene.frequency + evolutionaryRate)
   }
 }

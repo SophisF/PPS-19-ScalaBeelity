@@ -27,7 +27,7 @@ object Phenotype {
    * @return the average phenotype.
    */
   def averagePhenotype(bees: Set[Bee]): Phenotype = {
-    averageGenotype(bees) expressItself
+    averageGenotype(bees) expressInPhenotype
   }
 
   /**

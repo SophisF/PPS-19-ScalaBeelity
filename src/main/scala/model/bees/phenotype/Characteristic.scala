@@ -127,7 +127,7 @@ object Characteristic {
   private case class ReproductionRateCharacteristic(influenceValue: Double)(implicit mapper: Int => Int => Double => Int)
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.REPRODUCTION_RATE
-    override val expression: Int = mapper(1)(5)(influenceValue)
+    override val expression: Int = mapper(1)(10)(influenceValue)
   }
 
   /**

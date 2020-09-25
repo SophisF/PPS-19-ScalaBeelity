@@ -11,8 +11,8 @@ class CleanerTest extends AnyFunSuite {
 
   private val genotype: Genotype = Genotype(HashSet(
     Gene(GeneTaxonomy.TEMPERATURE_GENE, 100),
-    Gene(GeneTaxonomy.PRESSURE_GENE, 100),
     Gene(GeneTaxonomy.HUMIDITY_GENE, 100),
+    Gene(GeneTaxonomy.PRESSURE_GENE, 100),
     Gene(GeneTaxonomy.AGGRESSION_GENE, 100),
     Gene(GeneTaxonomy.GROWTH_GENE, 100)))
 
@@ -26,25 +26,22 @@ class CleanerTest extends AnyFunSuite {
 
   private val lowAggressionColony = UtilityColonyBuilder.createColony(lowAggressionGenotype, Point(3, 3))
 
-  test("Two colonies that collides and have an aggression greater than a threshold should attack each other"){
-    //println(Phenotype.averagePhenotype(Set(colony1.queen) ++ colony1.bees) expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
-
+  test("Two colonies that collides and have an aggression greater than a threshold should attack each other") {
     val colonies = List(colony1, colony2)
 
     assert(Cleaner.clean(colonies, colonies).flatMap(_.bees).size < colonies.flatMap(_.bees).size)
   }
 
-  test("A colony with aggression lower than a threshold should not kill other colonies' bees"){
+  test("A colony with aggression lower than a threshold should not kill other colonies' bees") {
     val colonies = List(lowAggressionColony, lowAggressionColony)
 
     assert(Cleaner.clean(colonies, colonies).flatMap(_.bees).size == colonies.flatMap(_.bees).size)
   }
 
-  test("If two colonies does not collide, they don't attack each other"){
+  test("If two colonies does not collide, they don't attack each other") {
     val colonies = List(colony1, colony3)
 
     assert(Cleaner.clean(colonies, colonies).flatMap(_.bees).size == colonies.flatMap(_.bees).size)
   }
-
 
 }

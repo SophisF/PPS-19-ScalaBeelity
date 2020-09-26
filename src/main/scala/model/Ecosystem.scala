@@ -10,10 +10,8 @@ import scala.util.Random
 import scala.utility.Point
 
 class Ecosystem(nColonies: Int, width: Int, height: Int) {
-
   var environmentManager: EnvironmentManager = EnvironmentManager(width, height)
   var colonies: List[Colony] = (1 to nColonies).map(_ => createColony()).toList
-
 
   def update(): Unit = {
     this.environmentManager = evolution(environmentManager)
@@ -21,7 +19,8 @@ class Ecosystem(nColonies: Int, width: Int, height: Int) {
       .filter(_.isColonyAlive)).filter(_.isColonyAlive)
   }
 
-  def createColony(position: Point = (Random.nextInt(environmentManager.environment.map.rows - 1), Random.nextInt(environmentManager.environment.map.cols - 1))): Colony = {
+  def createColony(position: Point = (Random.nextInt(environmentManager.environment.map.rows - 1),
+  Random.nextInt(environmentManager.environment.map.cols - 1))): Colony = {
     val genotype = Genotype()
     val cell: Cell = environmentManager.environment.map(position.x, position.y)
     val queen: Queen = Queen(None, genotype, genotype expressItself, 0,

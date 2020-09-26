@@ -76,6 +76,7 @@ object Time extends Ordering[Time] {
    */
   def increment(days: Int = _incrementValue): Unit = days match {
     case value if value > 0 => _time = _time + value
+    case _ =>
   }
 
   /** Reset time to zero */

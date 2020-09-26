@@ -9,4 +9,6 @@ object TypeUtilities {
   type StatisticColony = (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])
 
   type StatisticColonies = List[StatisticColony]
+
+  type Range = (Int, Int)
 }

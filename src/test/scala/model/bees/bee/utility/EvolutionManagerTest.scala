@@ -1,6 +1,5 @@
-package scala.model.bees.bee
+package scala.model.bees.bee.utility
 
-import model.bees.bee.EvolutionManager
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.model.bees.genotype.Genotype.Genotype
@@ -9,7 +8,7 @@ import scala.model.bees.phenotype.Phenotype.Phenotype
 
 class EvolutionManagerTest extends AnyFunSuite{
   val genotype: Genotype = Genotype()
-  val phenotype: Phenotype = genotype expressItself
+  val phenotype: Phenotype = genotype expressInPhenotype
 
   test("The evolution should slowly adapt the bees to the environment"){
     val newGenotype = EvolutionManager.buildGenotype(genotype)(phenotype)(40)(1080)(100)(1)

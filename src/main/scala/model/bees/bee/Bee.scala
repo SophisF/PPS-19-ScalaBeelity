@@ -1,5 +1,6 @@
 package scala.model.bees.bee
 
+import scala.model.bees.bee.utility.FitCalculator
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
@@ -25,20 +26,22 @@ object Bee {
       val a: Int = _phenotype.expressionOf(CharacteristicTaxonomy.LONGEVITY)
       if (age > a) a else age
     }
-    val fitValue: Double = Fitter
+    val fitValue: Double = FitCalculator
       .calculateFitValue(_phenotype)(averageTemperature)(averagePressure)(averageHumidity)(
-        (temperature, pressure, humidity) => (temperature + pressure + humidity) / 3)
+        params => params.sum / params.size
+      )
+
 
     new Bee {
       override val genotype: Genotype = _genotype
       override val phenotype: Phenotype = _phenotype
       override val age: Int = currentAge
       override val effectiveLongevity: Int = {
-        val l: Int = _phenotype.expressionOf(CharacteristicTaxonomy.LONGEVITY)
-        Fitter.applyFitValue(fitValue)(l - currentAge)(_ * _)
+        val l: Int = _phenotype expressionOf CharacteristicTaxonomy.LONGEVITY
+        FitCalculator.applyFitValue(fitValue)(l - currentAge)(_ * _)
       }
-      override val effectiveReproductionRate: Int = Fitter.applyFitValue(fitValue)(_phenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE))(_ * _)
-      override val effectiveAggression: Int = Fitter.applyFitValue(fitValue)(_phenotype.expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))(_ * _)
+      override val effectiveReproductionRate: Int = FitCalculator.applyFitValue(fitValue)(_phenotype expressionOf CharacteristicTaxonomy.REPRODUCTION_RATE)(_ * _)
+      override val effectiveAggression: Int = FitCalculator.applyFitValue(fitValue)(_phenotype expressionOf CharacteristicTaxonomy.AGGRESSION_RATE)(_ * _)
 
     }
   }

@@ -22,7 +22,6 @@ object SeasonalChartBuilder extends ChartBuilder[Seq[(String, Array[Array[Double
 
   override def updateChart(chart: Component, data: Seq[(String, Array[Array[Double]])]): Component = createChart(data)
 
-  //TODO: vedere se fare impliciti
   private def createDataset(data: Seq[(String, Array[Array[Double]])]) = { // this method creates the data as time series
     val ds = new DefaultXYDataset
     data.foreach(d => ds.addSeries(d._1, d._2.map(_ toArray)))

@@ -8,6 +8,13 @@ import scala.util.Random
  * Object that represent a gene.
  */
 object Gene {
+  /**
+   * The type of the frequency, expressed as an integer value.
+   */
+  type Frequency = Int
+
+  val maxFrequency: Int = 100
+  val minFrequency: Int = 1
 
   /**
    * Apply method for gene.
@@ -31,15 +38,6 @@ object Gene {
       override val geneticInformation: GeneticInformation = mapToInformation (name)
       override val isEnvironmental: Boolean = defineIsEnvironmental (geneticInformation)
     }
-
-
-  /**
-   * The type of the frequency, expressed as an integer value.
-   */
-  type Frequency = Int
-
-  val maxFrequency: Int = 100
-  val minFrequency: Int = 1
 
   /**
    * Trait that represents a gene.

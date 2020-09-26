@@ -1,9 +1,8 @@
 package scala.model.bees.bee
 
-import model.bees.bee.EvolutionManager
-
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Queen.Queen
+import scala.model.bees.bee.utility.{Cleaner, Combiner, EvolutionManager}
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Characteristic._
 import scala.model.bees.phenotype.Phenotype.Phenotype
@@ -13,6 +12,7 @@ import scala.model.prolog.PrologEngine._
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
 import scala.utility.Point
+import scala.utility.PimpInt._
 
 
 /**
@@ -135,7 +135,7 @@ object Colony {
 
     override def dimension: Int = (math.ceil(math.sqrt(this.bees.size.toDouble / limitBeesForCell)) / 2.0).toInt
 
-    override def area: Int = (this.dimension * 2 + 1) ^ 2
+    override def area: Int = (this.dimension * 2 + 1) ~^ 2
 
     override def isColonyAlive: Boolean = this.bees.exists(_.isAlive)
 
@@ -198,7 +198,7 @@ object Colony {
       val queen = this.queen.update(time)(averageTemperature)(averagePressure)(averageHumidity)(newCenter)
       if (queen.isAlive) queen else {
         val similarGenotype = Genotype.averageGenotype(bees)
-        Queen(Some(this), similarGenotype, similarGenotype expressItself, 0,
+        Queen(Some(this), similarGenotype, similarGenotype expressInPhenotype, 0,
           averageTemperature, averagePressure, averageHumidity, newCenter, this.queen.generateNewColony)
       }
     }
@@ -230,7 +230,7 @@ object Colony {
       val max: Int = if (this.numberOfBees >= this.maxBees) 0 else r * time
       Random.shuffle(this.bees).flatMap(bee => (0 to bee.phenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)).map(_ => {
         val similarGenotype = EvolutionManager.buildGenotype(bee.genotype)(bee.phenotype)(averageTemperature)(averagePressure)(averageHumidity)(time)
-        Bee(similarGenotype, similarGenotype expressItself, Random.nextInt(time),
+        Bee(similarGenotype, similarGenotype expressInPhenotype, Random.nextInt(time),
           averageTemperature, averagePressure, averageHumidity)
       })).take(max)
     }

@@ -14,7 +14,6 @@ object Looper {
    * @param updateModel function to update model
    * @param updateView function to update the view
    */
-  //TODO: Da sostituire con Ecosystem
   @tailrec
   def loop(iterations: Int)(updateModel: () => Unit)(updateView: () => Unit): Unit = iterations match {
     case 0 =>

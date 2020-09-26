@@ -8,6 +8,7 @@ import scala.model.environment.matrix.Size.Border._
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.{Property, TimeDependentProperty}
 import scala.model.environment.property.source.{PropertySource, ZoneSource}
+import scala.utility.SugarBowl.RichMappable
 
 /**
  * A first scratch of the environment class.
@@ -17,7 +18,7 @@ import scala.model.environment.property.source.{PropertySource, ZoneSource}
  * @author Paolo Baldini
  */
 case class Environment private (map: DenseMatrix[Cell]) {
-  def cells: Iterable[Cell] = map.data
+  def cells: Iterable[Cell] = map data
   def width: Int = map cols
   def height: Int = map rows
 }
@@ -48,13 +49,11 @@ object Environment {
    * @param filter to apply
    * @return an environment to which is applied the filter
    */
-  def applyFilter(environment: Environment, source: ZoneSource[Property]): Environment = {
-    val filter = source.filter
-    Environment(environment.map.mapPairs {
+  def applyFilter(environment: Environment, source: ZoneSource[Property]): Environment = source.filter ~> (
+    filter => Environment(environment.map.mapPairs {
       case ((x, y), cell) if in(x, y, source) => cell + filter(y - border(source)(Top), x - border(source)(Left))
       case (_, cell) => cell
-    })
-  }
+    }))
 
   /**
    * Apply a seasonal variation to an environment

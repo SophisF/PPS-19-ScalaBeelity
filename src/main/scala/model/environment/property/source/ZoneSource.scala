@@ -6,11 +6,9 @@ import scala.model.environment.matrix.Zone
 import scala.model.environment.property.Property
 
 /**
- * A property source that influence only a sub-part of the environment
+ * A property source that influence only a sub-part (zone) of the environment
  *
  * @tparam T type of property
- *
- * @author Paolo Baldini
  */
 trait ZoneSource[T <: Property] extends PropertySource[T] with Zone {
   def filter: DenseMatrix[T#Variation]
@@ -18,12 +16,7 @@ trait ZoneSource[T <: Property] extends PropertySource[T] with Zone {
 
 object ZoneSource {
 
-  /**
-   * Object for a basic filter that contains a matrix representing the gaussian 3d function.
-   * It also store the center position (source) on which apply the filter.
-   *
-   * @author Paolo Baldini
-   */
+  /** An implementation for a zone-source of a property who is applied to a center position */
   case class Source[T <: Property](
     filter: DenseMatrix[T#Variation],
     x: Int, y: Int,
@@ -31,6 +24,5 @@ object ZoneSource {
 
     val width: Int = filter cols
     val height: Int = filter rows
-
   }
 }

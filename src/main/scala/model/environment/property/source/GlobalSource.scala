@@ -4,11 +4,9 @@ import scala.model.Time
 import scala.model.environment.property.{Property, TimeDependentProperty}
 
 /**
- * A property source that influence the whole environment
+ * A property source that influences the whole environment
  *
  * @tparam T type of property
- *
- * @author Paolo Baldini
  */
 trait GlobalSource[T <: Property] extends PropertySource[T] {
   def variation: T#Variation
@@ -16,6 +14,12 @@ trait GlobalSource[T <: Property] extends PropertySource[T] {
 
 object GlobalSource {
 
+  /**
+   * An implementation for the global-source
+   *
+   * @param globalVariation
+   * @tparam T type of property
+   */
   case class SeasonalSource[T <: TimeDependentProperty](
     globalVariation: T#TimedVariation
   ) extends GlobalSource[T] {

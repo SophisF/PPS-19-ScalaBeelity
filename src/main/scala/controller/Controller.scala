@@ -22,7 +22,7 @@ class Controller(coloniesCount: Int, timeGranularity: Int, iterations: Int, dime
   view.createAndShow()
 
   /** Start the simulation */
-  def start(): Unit = loop(iterations)(model.update)(view.update)
+  def start(): Unit = loop(iterations)(model.update, view.update)
 
   /**
    * Get the map of all the properties in the system environment

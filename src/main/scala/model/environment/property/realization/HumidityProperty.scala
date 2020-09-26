@@ -8,6 +8,8 @@ import scala.utility.MathHelper.intValueOf
 sealed trait HumidityProperty extends IntProperty with IntTimedProperty
 
 object HumidityProperty extends HumidityProperty {
+  private val seasonalVariationMultiplier = .25
+
   override val default: Int = 30
   override val maxValue: Int = 100
   override val minValue: Int = 0
@@ -16,7 +18,7 @@ object HumidityProperty extends HumidityProperty {
     private var lastGet: Int = 0
 
     override def instantaneous(instant: Time): VariationType = {
-      val monthlyValue = rangeCenter * .25 * sin(toRadians(instant % 365))
+      val monthlyValue = rangeCenter * seasonalVariationMultiplier * sin(toRadians(instant % 365))
       val variation: Int = monthlyValue - lastGet
       lastGet = monthlyValue
       variation

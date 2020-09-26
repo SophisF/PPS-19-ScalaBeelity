@@ -6,6 +6,9 @@ import scala.model.Time
 import scala.model.environment.property.TimeDependentProperty
 import scala.model.environment.property.realization.IntProperty.filter
 
+/**
+ * A property related to time who has a time-based behaviour
+ */
 trait IntTimedProperty extends TimeDependentProperty with IntRange {
   override type TimedVariationType = IntegerTimedVariation
 
@@ -22,6 +25,7 @@ trait IntTimedProperty extends TimeDependentProperty with IntRange {
     }
   }
 
+  /** A partial implementation of a timed-variation for a timed-integer-type property */
   trait IntegerTimedVariation extends TimedVariation
 
   override def timedFilter(width: Int, height: Int, duration: Time, start: Time): DenseMatrix[TimedVariationType] =

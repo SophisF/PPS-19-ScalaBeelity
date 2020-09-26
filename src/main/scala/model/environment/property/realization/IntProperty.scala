@@ -4,13 +4,13 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.GaussianFilterBuilder.function3d
 import scala.model.environment.property.Property
-import scala.utility.MathHelper._
+import scala.model.environment.property.realization.IntProperty.filter
+import scala.utility.MathHelper.intValueOf
 import scala.utility.IterableHelper.RichIterable
 
 /**
+ * Represent a generic property who works with data of type Int.
  * Simplify the use (and help DRY) of numeric properties
- *
- * @author Paolo Baldini
  */
 trait IntProperty extends Property with IntRange {
   override type StateType = IntegerState
@@ -22,6 +22,7 @@ trait IntProperty extends Property with IntRange {
     override val value: Int = limit(_value)
   }
 
+  /** A partial implementation of a state for an integer-type property */
   trait IntegerState extends State {
 
     override def numericRepresentation(percentage: Boolean = true): Int = percentage match {
@@ -29,25 +30,25 @@ trait IntProperty extends Property with IntRange {
       case _ => value
     }
 
-    override def equals(obj: Any): Boolean = obj.isInstanceOf[IntegerState] &&
-      obj.asInstanceOf[IntegerState].value == value
+    override def equals(a: Any): Boolean = a.isInstanceOf[IntegerState] && a.asInstanceOf[IntegerState].value == value
   }
 
   implicit def variation(_value: Int): VariationType = new IntegerVariation {
     override def value: Int = _value
   }
 
+  /** A partial implementation of a variation for an integer-type property */
   trait IntegerVariation extends Variation {
 
     def value: Int
 
     def isNull: Boolean = value == 0
 
-    override def vary[S <: State](_state: S): StateType = state(_state.value + value)
+    override def vary[S <: State](_state: S): StateType = _state.value + value
   }
 
   override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] =
-    IntProperty.filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
+    filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
 }
 
 object IntProperty {

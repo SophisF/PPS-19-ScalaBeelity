@@ -1,5 +1,10 @@
 package scala.model.environment.property.realization
 
+/**
+ * A PressureProperty is a property who works with data of type Int and has a behaviour based on the time.
+ * However, it has no specific/custom seasonal trend.
+ * This file contains configurations data for the specified property.
+ */
 sealed trait PressureProperty extends IntProperty with IntTimedProperty
 
 object PressureProperty extends PressureProperty {

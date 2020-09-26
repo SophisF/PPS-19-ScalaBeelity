@@ -5,6 +5,10 @@ import Math.{cos, toRadians}
 import scala.model.Time
 import scala.utility.MathHelper.intValueOf
 
+/**
+ * A TemperatureProperty is a property who works with data of type Int and has a behaviour based on the time.
+ * This file contains configurations data for the specified property.
+ */
 sealed trait TemperatureProperty extends IntProperty with IntTimedProperty
 
 object TemperatureProperty extends TemperatureProperty {

@@ -1,5 +1,8 @@
 package scala.model
 
+import scala.Option.when
+import scala.utility.SugarBowl.RichOptional
+
 /**
  * Represents the time in the system.
  *
@@ -74,10 +77,7 @@ object Time extends Ordering[Time] {
    *
    * @param days to which increment. Needs to be greater than zero
    */
-  def increment(days: Int = _incrementValue): Unit = days match {
-    case value if value > 0 => _time = _time + value
-    case _ =>
-  }
+  def increment(days: Int = _incrementValue): Unit = _time = delay(Math.max(0, days))
 
   /** Reset time to zero */
   def reset(): Unit = _time = 0
@@ -129,8 +129,5 @@ object Time extends Ordering[Time] {
    *
    * @param value to which increment. Needs to be greater than 0
    */
-  def setIncrementValue(value: Int = 1): Unit = value match {
-    case value if value > 0 => _incrementValue = value
-    case _ =>
-  }
+  def setIncrementValue(value: Int = 1): Unit = _incrementValue = when(value > 0)(value) ! _incrementValue
 }

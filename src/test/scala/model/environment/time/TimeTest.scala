@@ -106,12 +106,12 @@ class TimeTest extends AnyFunSuite {
   }
 
   test("'incrementValue' should initially be coherent to the set one") {
-    setIncrementValue(5)
+    incrementValue = 5
     assert(incrementValue == 5)
   }
 
   test("'incrementValue' cannot be set to 0 or lower") {
-    setIncrementValue(-5)
+    incrementValue = -5
     assert(incrementValue > 0)
   }
 }

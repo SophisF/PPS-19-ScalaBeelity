@@ -129,5 +129,5 @@ object Time extends Ordering[Time] {
    *
    * @param value to which increment. Needs to be greater than 0
    */
-  def setIncrementValue(value: Int = 1): Unit = _incrementValue = when(value > 0)(value) ! _incrementValue
+  def incrementValue_=(value: Int = 1): Unit = _incrementValue = when(value > 0)(value) ! _incrementValue
 }

@@ -13,6 +13,7 @@ import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
 import scala.utility.Point
 import scala.utility.PimpInt._
+import scala.utility.PimpIterable._
 
 
 /**
@@ -150,13 +151,13 @@ object Colony {
 
     override def update(time: Int)(environmentManager: EnvironmentManager): List[Colony] = {
       val newCenter: Point = this.move(time)(environmentManager)
-      val cells = environmentManager.indexInRange((newCenter.x - this.dimension, newCenter.x + this.dimension), (
-        newCenter.y - this.dimension, newCenter.y + this.dimension
-      )).map(index => environmentManager.cells().valueAt(index._1, index._2))
+      val cells = environmentManager.indexInRange(newCenter.x.applyTwoOperations(this.dimension)(_ - _)(_ + _),
+        newCenter.y.applyTwoOperations(this.dimension)(_ - _)(_ + _))
+        .map(index => environmentManager.cells().valueAt(index._1, index._2))
 
-      val temperature: Int = cells.foldRight(0)(_.temperature + _) / cells.size
-      val pressure: Int = cells.foldRight(0)(_.pressure + _) / cells.size
-      val humidity: Int = cells.foldRight(0)(_.humidity + _) / cells.size
+      val temperature: Int = cells.map(_.temperature).average
+      val pressure: Int = cells.map(_.pressure).average
+      val humidity: Int = cells.map(_.humidity).average
 
       Colony(this.color, this.updateQueen(time)(temperature)(pressure)(humidity)(newCenter),
         this.updatePopulation(time)(temperature)(pressure)(humidity)) ::
@@ -172,8 +173,8 @@ object Colony {
      */
     private def move(time: Int)(environmentManager: EnvironmentManager): Point = {
       val toApply = time * this.averagePhenotype.expressionOf(CharacteristicTaxonomy.SPEED)
-      val reachableCells = environmentManager.indexInRange((this.center.x - toApply,this.center.x + toApply),
-        (this.center.y - toApply, this.center.y + toApply))
+      val reachableCells = environmentManager.indexInRange(this.center.x.applyTwoOperations(toApply)(_ - _)(_ + _),
+        this.center.y.applyTwoOperations(toApply)(_ - _)(_ + _))
         .map(index => PrologEngine.buildCellTerm(environmentManager.cells().valueAt(index._1, index._2),
           Point(index._1, index._2)))
 
@@ -238,9 +239,9 @@ object Colony {
     private def generateColony(time: Int)(environmentManager: EnvironmentManager): Option[List[Colony]] = {
       if (Random.nextInt(newColonyGenerationProbability / time) < 1)
         Some(List(this.queen.generateNewColony(environmentManager.proximityOf(
-        (this.center.x - proximity, this.center.x + proximity),
-        (this.center.y - proximity,  this.center.y + proximity)
-      )))) else None
+          this.center.x.applyTwoOperations(proximity)(_ - _)(_ + _),
+          this.center.y.applyTwoOperations(proximity)(_ - _)(_ + _)
+        )))) else None
     }
 
   }

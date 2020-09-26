@@ -16,7 +16,11 @@ import scala.model.environment.property.source.{PropertySource, ZoneSource}
  *
  * @author Paolo Baldini
  */
-case class Environment private (map: DenseMatrix[Cell])
+case class Environment private (map: DenseMatrix[Cell]) {
+  def cells: Iterable[Cell] = map.data
+  def width: Int = map cols
+  def height: Int = map rows
+}
 
 object Environment {
 

@@ -15,9 +15,9 @@ trait GlobalSource[T <: Property] extends PropertySource[T] {
 object GlobalSource {
 
   /**
-   * An implementation for the global-source
+   * An implementation for the global-source who takes time-dependent properties
    *
-   * @param globalVariation
+   * @param globalVariation the time-dependent variation of the property
    * @tparam T type of property
    */
   case class SeasonalSource[T <: TimeDependentProperty](

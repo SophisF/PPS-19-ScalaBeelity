@@ -2,11 +2,12 @@ package scala.model
 
 import scala.model.statistic.StatisticColonies.Statistic
 import scala.model.statistic.StatisticEnvironment.{StatisticalEnvironment, updateStats}
-import scala.model.bees.bee.Colony.Colony
 import scala.model.environment.Cell
+import scala.utility.SugarBowl.RichMappable
 import scala.utility.TypeUtilities.StatisticColonies
 
 trait Model {
+  type Matrix = Array[Array[Double]]
 
   def time(): Int = Time.now()
 
@@ -16,20 +17,18 @@ trait Model {
 
   def statisticList(): StatisticColonies
 
-  def colonies: List[Colony]
+  def temperatureMatrix(): Matrix
 
-  def temperatureMatrix(): Array[Array[Double]]
+  def humidityMatrix(): Matrix
 
-  def humidityMatrix(): Array[Array[Double]]
-
-  def pressureMatrix(): Array[Array[Double]]
+  def pressureMatrix(): Matrix
 }
 
-class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model {
+class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extends Model {
   Time.reset()
-  Time.setIncrementValue(updateTime)
+  Time setIncrementValue updateTime
   private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
-  private val ecosystem = new Ecosystem(numColonies, dimension, dimension)
+  private val ecosystem = new Ecosystem(numColonies, dimension _1, dimension _2)
 
   override def update(): Unit = {
     ecosystem.update()
@@ -41,18 +40,12 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: Int) extends Model
 
   override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).stat()))
 
-  override def colonies: List[Colony] = ecosystem.colonies
+  override def temperatureMatrix(): Matrix = propertyMatrix(_.temperature.numericRepresentation())
 
-  def colors: Seq[Double] = ecosystem.colonies.map(_.color)
+  override def humidityMatrix(): Matrix = propertyMatrix(_.humidity.numericRepresentation())
 
-  override def temperatureMatrix(): Array[Array[Double]] = propertyMatrix(_.temperature.numericRepresentation())
+  override def pressureMatrix(): Matrix = propertyMatrix(_.pressure.numericRepresentation())
 
-  override def humidityMatrix(): Array[Array[Double]] = propertyMatrix(_.humidity.numericRepresentation())
-
-  override def pressureMatrix(): Array[Array[Double]] = propertyMatrix(_.pressure.numericRepresentation())
-
-  private def propertyMatrix(strategy: Cell => Double): Array[Array[Double]] = {
-    val env = ecosystem.environmentManager.environment.map
-    env.data.map(strategy).sliding(env cols, env cols) toArray
-  }
+  private def propertyMatrix(strategy: Cell => Double): Matrix =
+    ecosystem.environmentManager.environment ~> (e => e.cells.toArray.map(strategy).sliding(e width, e width) toArray)
 }

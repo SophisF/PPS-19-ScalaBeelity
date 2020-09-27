@@ -1,7 +1,5 @@
 package scala.model.prolog
 
-import java.io.FileInputStream
-
 import alice.tuprolog._
 
 import scala.model.prolog.PrologEngine._
@@ -21,7 +19,7 @@ object MovementLogic {
    * @return the best Point where the queen must move to.
    */
   def solveLogic(cells: Seq[Term], temperatureRange: String, pressureRange: String, humidityRange: String): Option[Point] = {
-    val engine: Term => Iterable[SolveInfo] = mkPrologEngine(new Theory(new FileInputStream("src/main/prolog/movement.pl")))
+    val engine: Term => Iterable[SolveInfo] = mkPrologEngine(new Theory(getClass.getResource("/movement.pl").openStream()))
     val move = new Struct("move", cells, temperatureRange, pressureRange, humidityRange, new Var())
     val newCell = engine(move) map (extractTerm(_, 4))
     if(newCell.isEmpty){

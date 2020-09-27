@@ -2,23 +2,22 @@ package scala.model.bees.bee.utility
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.collection.immutable.HashSet
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.utility.Point
 
 class CleanerTest extends AnyFunSuite {
 
-  private val genotype: Genotype = Genotype(HashSet(
+  private val genotype: Genotype = Genotype(
     Gene(GeneTaxonomy.TEMPERATURE_GENE, 100),
     Gene(GeneTaxonomy.HUMIDITY_GENE, 100),
     Gene(GeneTaxonomy.PRESSURE_GENE, 100),
     Gene(GeneTaxonomy.AGGRESSION_GENE, 100),
-    Gene(GeneTaxonomy.GROWTH_GENE, 100)))
+    Gene(GeneTaxonomy.GROWTH_GENE, 100))
 
-  private val lowAggressionGenotype = Genotype(HashSet(
+  private val lowAggressionGenotype = Genotype(
     Gene(GeneTaxonomy.AGGRESSION_GENE, 0),
-    Gene(GeneTaxonomy.GROWTH_GENE, 0)))
+    Gene(GeneTaxonomy.GROWTH_GENE, 0))
 
   private val colony1 = UtilityColonyBuilder.createColony(genotype, Point(3, 3))
   private val colony2 = UtilityColonyBuilder.createColony(genotype, Point(3, 3))

@@ -6,6 +6,7 @@ import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
+import scala.utility.PimpIterable._
 
 /**
  * Object that represent the genotype.
@@ -18,7 +19,7 @@ object Genotype {
    * @param genes the input genes.
    * @return a new genotype.
    */
-  def apply(genes: Set[Gene] = Set.empty): Genotype = GenotypeImpl(genes)
+  def apply(genes: Gene*): Genotype = GenotypeImpl(genes)
 
   /**
    * Method to calculate the average genotype in a sequence of bees.
@@ -28,8 +29,8 @@ object Genotype {
    */
   def averageGenotype(bees: Set[Bee]): Genotype = {
     Genotype(GeneTaxonomy.values.unsorted.map(value => Gene(value, {
-      bees.toList.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).sum / bees.size
-    })))
+      bees.toList.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).average
+    })).toSeq :_*)
   }
 
   /**
@@ -67,10 +68,10 @@ object Genotype {
   /**
    * Concrete implementation of genotype.
    *
-   * @param geneSet a set of gene to build the genotype.
+   * @param geneArg a variable arguments of gene to build the genotype.
    */
-  private case class GenotypeImpl(geneSet: Set[Gene]) extends Genotype {
-    override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneSet.find(_.name.equals(value)).getOrElse(Gene(value)))
+  private case class GenotypeImpl(geneArg: Gene*) extends Genotype {
+    override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneArg.find(_.name.equals(value)).getOrElse(Gene(value)))
   }
 
 }

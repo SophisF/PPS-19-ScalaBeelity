@@ -2,23 +2,22 @@ package scala.model.bees.bee.utility
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.collection.immutable.HashSet
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.utility.Point
 
 class CombinerTest extends AnyFunSuite {
-  private val genotype: Genotype = Genotype(HashSet(
+  private val genotype: Genotype = Genotype(
     Gene(GeneTaxonomy.AGGRESSION_GENE, 0),
-    Gene(GeneTaxonomy.GROWTH_GENE, 0)))
+    Gene(GeneTaxonomy.GROWTH_GENE, 0))
 
-  private val mediumAggressiveGenotype: Genotype = Genotype(HashSet(
+  private val mediumAggressiveGenotype: Genotype = Genotype(
     Gene(GeneTaxonomy.TEMPERATURE_GENE, 100),
     Gene(GeneTaxonomy.PRESSURE_GENE, 100),
     Gene(GeneTaxonomy.HUMIDITY_GENE, 100),
     Gene(GeneTaxonomy.AGGRESSION_GENE, 50),
-    Gene(GeneTaxonomy.GROWTH_GENE, 50)))
+    Gene(GeneTaxonomy.GROWTH_GENE, 50))
 
   println(mediumAggressiveGenotype.expressInPhenotype.expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
 

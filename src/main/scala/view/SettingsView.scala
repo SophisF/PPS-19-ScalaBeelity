@@ -6,30 +6,36 @@ import javax.swing.JOptionPane._
 import javax.swing._
 
 object SettingsView {
+  private val MatrixSize = Array("100", "200", "300")
+  private val Iterations = Array("1000", "5000", "infinite")
+  private val DefaultColoniesNumber = 1
+  private val DefaultTemporalGranularity = 1
 
   def createAndShow: Option[SimulationSettings] = {
-    val matrixDim = Array("100", "200", "300")
-    val comboMatrix = new JComboBox(matrixDim)
-    val iterations = Array("1000", "5000", "infinite")
-    val comboIter = new JComboBox(iterations)
-
-    val numColonies = new JTextField("1")
-    val temporalGranularity = new JTextField("1")
     val panel = new JPanel(new GridLayout(0, 1))
+
     panel.add(new JLabel("N° Colonies (queens):"))
+    val numColonies = new JTextField(DefaultColoniesNumber)
     panel.add(numColonies)
+
     panel.add(new JLabel("Temporal Granularity :"))
+    val temporalGranularity = new JTextField(DefaultTemporalGranularity)
     panel.add(temporalGranularity)
+
     panel.add(new JLabel("N° max iterations:"))
-    panel.add(comboIter)
-    panel.add(new JLabel("Dim of Matrix:"))
+    val comboIterations = new JComboBox(Iterations)
+    panel.add(comboIterations)
+
+    panel.add(new JLabel("Environment size:"))
+    val comboMatrix = new JComboBox(MatrixSize)
     panel.add(comboMatrix)
 
     showConfirmDialog(null, panel, "Test", OK_CANCEL_OPTION, PLAIN_MESSAGE) match {
-      case OK_OPTION => Option(SimulationSettings(numColonies, temporalGranularity, comboIter.getSelectedItem match {
-        case "infinite" => -1
-        case value => value.toString.toInt
-      }, (comboMatrix, comboMatrix)))
+      case OK_OPTION => Option(SimulationSettings(numColonies, temporalGranularity,
+        comboIterations.getSelectedItem match {
+          case "infinite" => -1
+          case value => value.toString.toInt
+        }, (comboMatrix, comboMatrix)))
       case _ => Option.empty
     }
   }

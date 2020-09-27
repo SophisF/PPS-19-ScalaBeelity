@@ -19,7 +19,7 @@ object Genotype {
    * @param genes the input genes.
    * @return a new genotype.
    */
-  def apply(genes: Gene*): Genotype = GenotypeImpl(genes)
+  def apply(genes: Gene*): Genotype = GenotypeImpl(genes :_ *)
 
   /**
    * Method to calculate the average genotype in a sequence of bees.

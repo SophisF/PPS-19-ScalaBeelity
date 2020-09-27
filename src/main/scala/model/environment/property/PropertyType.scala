@@ -3,20 +3,21 @@ package scala.model.environment.property
 import scala.model.environment.property.realization._
 import scala.utility.IterableHelper.RichIterable
 
-/**
- * Enumeration of all the possible property types
- *
- * @author Paolo Baldini
- */
+/** Enumeration of the possible property types */
 object PropertyType extends Enumeration {
 
   /**
-   * A non externally instantiable class that contains the property type and instantiation (for most one, a singleton)
+   * A non-externally-instantiable class that contains the property type and instantiation (for most one, a singleton)
    *
-   * @param property instantiated object
    * @tparam T type of property
    */
   sealed trait PropertyValue[T <: Property] {
+
+    /**
+     * A property instantiation containing his usage information
+     *
+     * @return the property object who contains usage information
+     */
     def property: T
 
     /**
@@ -31,12 +32,31 @@ object PropertyType extends Enumeration {
   val Humidity: Val with PropertyValue[HumidityProperty] = HumidityProperty
   val Pressure: Val with PropertyValue[PressureProperty] = PressureProperty
 
+  /**
+   * Returns an iterable of properties possibly filtered with a condition
+   *
+   * @param filterCondition filter the properties returning only the ones which match the condition
+   * @return the iterable of properties
+   */
   def properties(filterCondition: Property => Boolean = _ => true): Iterable[PropertyValue[Property]] =
     values.asInstanceOf[Iterable[PropertyValue[Property]]].filter(filterCondition(_))
 
+  /**
+   * Get a random property from the ones that match the given condition
+   *
+   * @param filterCondition a condition that a property should match to be eligible to be returned
+   * @return a random property from the eligible ones
+   */
   def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] =
     properties().filter(filterCondition(_)).random
 
+  /**
+   * Utility function to automatically convert from a PropertyValue to a Property
+   *
+   * @param entry the property-value of which take the property
+   * @tparam T the type of the property to be returned
+   * @return the property held by the property-value
+   */
   implicit def getPropertyFrom[T <: Property](entry: PropertyValue[T]): T = entry()
 
   private implicit def enumValueOf[T <: Property](_property: T): Val with PropertyValue[T] =

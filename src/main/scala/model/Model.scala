@@ -28,17 +28,17 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extend
   Time.reset()
   Time.incrementValue = updateTime
   private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
-  private val ecosystem = new Ecosystem(numColonies, dimension _1, dimension _2)
+  private var ecosystem = Ecosystem(numColonies, dimension _1, dimension _2)
 
   override def update(): Unit = {
-    ecosystem.update()
+    ecosystem = Ecosystem update ecosystem
     _statisticalData = updateStats(ecosystem.environmentManager.environment, _statisticalData)
     Time.increment()
   }
 
   override def statisticalData(): StatisticalEnvironment = _statisticalData
 
-  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).stat()))
+  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).stat())) toList
 
   override def temperatureMatrix(): Matrix = propertyMatrix(_.temperature.numericRepresentation())
 

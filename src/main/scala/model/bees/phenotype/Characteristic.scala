@@ -72,6 +72,44 @@ object Characteristic {
     type Expression = Int
   }
 
+  case object TemperatureCharacteristicObj {
+    val min = 18
+    val max = 36
+    val rangeTuning = 2
+  }
+
+  case object HumidityCharacteristicObj {
+    val min = 40
+    val max = 80
+    val rangeTuning = 3
+  }
+
+  case object PressureCharacteristicObj {
+    val min = 1000
+    val max = 1050
+    val rangeTuning = 5
+  }
+
+  case object AggressionCharacteristicObj {
+    val min = 1
+    val max = 10
+  }
+
+  case object ReproductionCharacteristicObj {
+    val min = 1
+    val max = 10
+  }
+
+  case object LongevityCharacteristicObj {
+    val min = 30
+    val max = 120
+  }
+  
+  case object SpeedCharacteristicObj {
+    val min = 1
+    val max = 2
+  }
+
   /**
    * Class that represents temperature characteristic.
    * @param influenceValue a double value that represents influence value.
@@ -81,7 +119,7 @@ object Characteristic {
                                                    (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY
-    override val expression: (Int, Int) = mapper(18)(36)(influenceValue)(2)
+    override val expression: (Int, Int) = mapper(TemperatureCharacteristicObj.min)(TemperatureCharacteristicObj.max)(influenceValue)(TemperatureCharacteristicObj.rangeTuning)
   }
 
   /**
@@ -93,7 +131,7 @@ object Characteristic {
                                                 (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY
-    override val expression: (Int, Int) = mapper(40)(80)(influenceValue)(3)
+    override val expression: (Int, Int) = mapper(HumidityCharacteristicObj.min)(HumidityCharacteristicObj.max)(influenceValue)(HumidityCharacteristicObj.rangeTuning)
   }
 
   /**
@@ -105,7 +143,7 @@ object Characteristic {
                                                 (implicit mapper: Int => Int => Double => Int => (Int, Int))
     extends Characteristic with RangeExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.PRESSURE_COMPATIBILITY
-    override val expression: (Int, Int) = mapper(1000)(1050)(influenceValue)(5)
+    override val expression: (Int, Int) = mapper(PressureCharacteristicObj.min)(PressureCharacteristicObj.max)(influenceValue)(PressureCharacteristicObj.rangeTuning)
   }
 
   /**
@@ -116,7 +154,7 @@ object Characteristic {
   private case class AggressionRateCharacteristic(influenceValue: Double)(implicit mapper: Int => Int => Double => Int)
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.AGGRESSION_RATE
-    override val expression: Int = mapper(1)(10)(influenceValue)
+    override val expression: Int = mapper(AggressionCharacteristicObj.min)(AggressionCharacteristicObj.max)(influenceValue)
   }
 
   /**
@@ -127,7 +165,7 @@ object Characteristic {
   private case class ReproductionRateCharacteristic(influenceValue: Double)(implicit mapper: Int => Int => Double => Int)
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.REPRODUCTION_RATE
-    override val expression: Int = mapper(1)(10)(influenceValue)
+    override val expression: Int = mapper(ReproductionCharacteristicObj.min)(ReproductionCharacteristicObj.max)(influenceValue)
   }
 
   /**
@@ -139,7 +177,7 @@ object Characteristic {
                                         (implicit mapper: Int => Int => Double => Int)
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.LONGEVITY
-    override val expression: Int = mapper(30)(120)(influenceValue)
+    override val expression: Int = mapper(LongevityCharacteristicObj.min)(LongevityCharacteristicObj.max)(influenceValue)
   }
 
   /**
@@ -151,7 +189,7 @@ object Characteristic {
                                     (implicit mapper: Int => Int => Double => Int)
     extends Characteristic with IntExpression {
     override val name: CharacteristicTaxonomy = CharacteristicTaxonomy.SPEED
-    override val expression: Int = mapper(1)(2)(influenceValue)
+    override val expression: Int = mapper(SpeedCharacteristicObj.min)(SpeedCharacteristicObj.max)(influenceValue)
   }
 
 }

@@ -1,11 +1,14 @@
 package scala.controller
 
+import scala.math.ceil
+
 import scala.controller.Looper.loop
 import scala.model.{ModelImpl, Time}
 import scala.utility.TypeUtilities.StatisticColonies
 import scala.view.View.simulationView
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
 import scala.model.statistic.StatisticEnvironment.StatisticalEnvironment
+import scala.utility.MathHelper.intValueOf
 
 /**
  * MVC's Controller whose here act as a proxy to the model
@@ -22,7 +25,7 @@ class Controller(coloniesCount: Int, timeGranularity: Int, iterations: Int, dime
   view.createAndShow()
 
   /** Start the simulation */
-  def start(): Unit = loop(iterations)(model.update, view.update)
+  def start(): Unit = loop(ceil(iterations / timeGranularity.toDouble))(model.update, view.update)
 
   /**
    * Get the map of all the properties in the system environment

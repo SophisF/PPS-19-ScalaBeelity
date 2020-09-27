@@ -63,7 +63,7 @@ object Environment {
    * @return an environment to which is applied the filter
    */
   def applySeason(environment: Environment, source: SeasonalSource[TimeDependentProperty]): Environment =
-    source.variationAt() match {
+    source.variation match {
       case variation if variation isNull => environment
       case variation => Environment(environment.map.map(_ + variation))
     }

@@ -65,7 +65,7 @@ class EnvironmentTest extends AnyFunSuite {
 
   test("The variation of the application of an continuous filter without increment the time should be nul") {
     val filter = create(3, 3, Array[TemperatureProperty#TimedVariation](1,2,3,4,5,6,7,8,9))
-    val source = new ContinuousSource[TemperatureProperty](filter, 0, 0, 100)
+    val source = new ContinuousSource[TemperatureProperty](0, 0, 100)(filter)
     val modifiedEnvironment = Environment(Environment(5,5), source)
     assert(
       modifiedEnvironment.cells.map(_.temperature.numericRepresentation(false)).iterator
@@ -76,7 +76,7 @@ class EnvironmentTest extends AnyFunSuite {
 
   test("There should be a variation after the application of an continuous filter with time increment") {
     val filter = create(3, 3, Array[TemperatureProperty#TimedVariation](1,2,3,4,5,6,7,8,9))
-    val source = new ContinuousSource[TemperatureProperty](filter, 0, 0, 100)
+    val source = new ContinuousSource[TemperatureProperty](0, 0, 100)(filter)
     Time increment 200
     val modifiedEnvironment = Environment(Environment(5,5), source)
     println(modifiedEnvironment.cells.map(_.temperature.numericRepresentation(false)).toArray.mkString("", ", ", ""))
@@ -89,7 +89,7 @@ class EnvironmentTest extends AnyFunSuite {
 
   test("There should be a partial variation with time increment without reach the duration") {
     val filter = create(3, 3, Array[TemperatureProperty#TimedVariation](1,2,3,4,5,6,7,8,9))
-    val source = new ContinuousSource[TemperatureProperty](filter, 0, 0, 100)
+    val source = new ContinuousSource[TemperatureProperty](0, 0, 100)(filter)
     Time increment 50
     val modifiedEnvironment = Environment(Environment(5,5), source)
     val default = TemperatureProperty.default

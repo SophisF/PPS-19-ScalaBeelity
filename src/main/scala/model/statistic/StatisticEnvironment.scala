@@ -9,6 +9,9 @@ import scala.model.Time.now
 import scala.utility.Conversion.{mapOf, sequenceOf}
 import scala.utility.SugarBowl.{RichMap, RichOptional}
 
+/**
+ * Store statistic for environment.
+ */
 object StatisticEnvironment {
   type PropertyType = PropertyValue[Property]
 
@@ -19,6 +22,14 @@ object StatisticEnvironment {
     def variationSequence(): Seq[(String, Iterable[Double])] = averageProperties.map(e => (e._1 toString, e _2))
   }
 
+  /**
+   * Update statistics with new data.
+   *
+   * @param environment, the environment
+   * @param statistics to update
+   *
+   * @return new statistic data.
+   */
   def updateStats(environment: Environment, statistics: StatisticalEnvironment): StatisticalEnvironment =
     statistics.lastUpdate match {
       case time if Time.elapsed(time, 30) =>

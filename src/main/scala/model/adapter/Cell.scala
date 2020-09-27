@@ -1,5 +1,5 @@
 package scala.model.adapter
-// TODO move to environment to made old cell type package protected
+// TODO: move to environment to made old cell type package protected
 /**
  * An object structure to share between environment and colonies
  *

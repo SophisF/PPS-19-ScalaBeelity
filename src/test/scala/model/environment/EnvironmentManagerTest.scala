@@ -23,9 +23,4 @@ class EnvironmentManagerTest extends AnyFunSuite {
     assert(!(env.environment.map equals evolution(env).environment.map))
   }
 
-  test(s"$E should give cells matrix, whose represent environment matrix. ") {
-    val environment = EnvironmentManager(30, 30)
-    assert(environment.environment.map equals environment.cells().map(_.asInstanceOf[Cell]))
-  }
-
 }

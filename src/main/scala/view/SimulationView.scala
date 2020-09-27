@@ -59,7 +59,7 @@ class SimulationView(controller: Controller) {
     val index = tabbedPane.getSelectedIndex
     if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane getTitleAt index)(index))
 
-    timeLabel.setText("Execution Time: " + Time.dayTime)
+    timeLabel.setText(s"Execution Time: ${controller.dayTime} Colonies: ${controller.statisticColonies.length}")
     gameBar add timeLabel
   })
 

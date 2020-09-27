@@ -1,7 +1,7 @@
 package scala.controller
 
 import scala.controller.Looper.loop
-import scala.model.ModelImpl
+import scala.model.{ModelImpl, Time}
 import scala.utility.TypeUtilities.StatisticColonies
 import scala.view.View.simulationView
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
@@ -55,4 +55,11 @@ class Controller(coloniesCount: Int, timeGranularity: Int, iterations: Int, dime
    * @return information about the colonies
    */
   def statisticColonies: StatisticColonies = model.statisticList()
+
+  /**
+   * Get days elapsed since simulation started
+   *
+   * @return days from simulation start
+   */
+  def dayTime: Int = Time.dayTime()
 }

@@ -44,7 +44,7 @@ object EvolutionManager {
       case _ => newGenes
     }
 
-    Genotype(createGenotype(genotype.genes.toList).toSet)
+    Genotype(createGenotype(genotype.genes.toList) :_*)
   }
 
   /**

@@ -17,6 +17,9 @@ import org.jfree.chart.{ChartPanel, JFreeChart}
 
 import scala.Array.empty
 
+/**
+ * Heatmap chart.
+ */
 object HeatmapChartBuilder extends ChartBuilder[Array[Array[Double]]] {
   override type ChartType = Component
 

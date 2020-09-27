@@ -69,7 +69,7 @@ object Colony {
      *
      * @return the dimension of the colony.
      */
-    def dimension: Int
+    def dimension: Int = (math.ceil(math.sqrt(this.bees.size.toDouble / limitBeesForCell)) / 2.0).toInt
 
     /**
      * Getter method for the maximum number of bees for the colony.
@@ -83,36 +83,36 @@ object Colony {
      *
      * @return the center of the colony.
      */
-    def center: Point
+    def center: Point = this.queen.position
 
     /**
      * Getter method for the area of the colony, expressed as the number of cells occupied.
      *
      * @return the area of the colony.
      */
-    def area: Int
+    def area: Int = (this.dimension * 2 + 1) ~^ 2
 
     /**
      * Check if the colony is alive.
      *
      * @return true if at least a bee is still alive, false otherwise.
      */
-    def isColonyAlive: Boolean
+    def isColonyAlive: Boolean = this.bees.exists(_.isAlive)
 
     /**
      * Check if the queen of the colony is alive.
      *
      * @return true if she's alive, false otherwise.
      */
-    def isQueenAlive: Boolean
+    def isQueenAlive: Boolean = this.queen.isAlive
 
     /**
      * Getter method for the number of bees in the colony.
      *
      * @return the current number of bees of the colony.
      */
-    def numberOfBees: Int
 
+    def numberOfBees: Int = this.bees.size
     /**
      * Update method for the colonies.
      *
@@ -132,17 +132,7 @@ object Colony {
      */
     private lazy val averagePhenotype: Phenotype = Phenotype.averagePhenotype(Set(this.queen) ++ this.bees)
 
-    override def center: Point = this.queen.position
 
-    override def dimension: Int = (math.ceil(math.sqrt(this.bees.size.toDouble / limitBeesForCell)) / 2.0).toInt
-
-    override def area: Int = (this.dimension * 2 + 1) ~^ 2
-
-    override def isColonyAlive: Boolean = this.bees.exists(_.isAlive)
-
-    override def isQueenAlive: Boolean = this.queen.isAlive
-
-    override def numberOfBees: Int = this.bees.size
 
     override def maxBees: Int = {
       val r: Int = this.averagePhenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)

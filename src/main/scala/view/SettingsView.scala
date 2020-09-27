@@ -15,11 +15,11 @@ object SettingsView {
     val panel = new JPanel(new GridLayout(0, 1))
 
     panel.add(new JLabel("N° Colonies (queens):"))
-    val numColonies = new JTextField(DefaultColoniesNumber)
+    val numColonies = new JTextField(DefaultColoniesNumber toString)
     panel.add(numColonies)
 
     panel.add(new JLabel("Temporal Granularity :"))
-    val temporalGranularity = new JTextField(DefaultTemporalGranularity)
+    val temporalGranularity = new JTextField(DefaultTemporalGranularity toString)
     panel.add(temporalGranularity)
 
     panel.add(new JLabel("N° max iterations:"))

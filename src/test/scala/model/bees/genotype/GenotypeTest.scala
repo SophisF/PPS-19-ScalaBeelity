@@ -2,7 +2,6 @@ package scala.model.bees.genotype
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.collection.immutable.HashSet
 import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.Genotype.Genotype
 
@@ -11,7 +10,7 @@ class GenotypeTest extends AnyFunSuite {
 
   private val growthGene: Gene = Gene(GeneTaxonomy.GROWTH_GENE, 50)
   private val wingsGene: Gene = Gene(GeneTaxonomy.WINGS_GENE, 50)
-  private val fixedGenotype: Genotype = Genotype(HashSet(growthGene, wingsGene))
+  private val fixedGenotype: Genotype = Genotype(growthGene, wingsGene)
 
   /*
   private def calculateExpression(gene: Gene, taxonomy: CharacteristicTaxonomy): Int =

@@ -46,6 +46,10 @@ object Bee {
     }
   }
 
+  def calculateEffectiveCharacteristic(): Unit ={
+
+  }
+
   /**
    * Trait that represents bee.
    */

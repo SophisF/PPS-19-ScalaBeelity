@@ -21,7 +21,7 @@ object SettingsView {
     val numColonies = new JTextField(DefaultColoniesNumber toString)
     panel.add(numColonies)
 
-    panel.add(new JLabel("Temporal Granularity :"))
+    panel.add(new JLabel("Temporal Granularity (days) :"))
     val temporalGranularity = new JTextField(DefaultTemporalGranularity toString)
     panel.add(temporalGranularity)
 

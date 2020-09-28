@@ -81,9 +81,9 @@ object Queen {
 
     private def generateBee: Set[Bee] = (0 to this.effectiveReproductionRate + 1)
       .map(_ => {
-        val t: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)
-        val p: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)
-        val h: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)
+        val t: (Int, Int) = this.phenotype expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY
+        val p: (Int, Int) = this.phenotype expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY
+        val h: (Int, Int) = this.phenotype expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY
         val similarGenotype = EvolutionManager.evolveGenotype(this.genotype)(t.average)(p.average)(h.average)(1)
         Bee(
           similarGenotype,
@@ -91,7 +91,7 @@ object Queen {
           0,
           averageTemperature, averagePressure, averageHumidity
         )
-      }).toSet
+      }) toSet
   }
 
 }

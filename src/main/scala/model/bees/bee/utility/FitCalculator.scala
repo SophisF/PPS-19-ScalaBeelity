@@ -29,34 +29,20 @@ object FitCalculator {
    * @param averagePressure    the average pressure of the environment where the bee's colony is.
    * @param averageHumidity    the average humidity of the environment where the bee's colony is.
    * @param fitAggregator   a strategy to calculate the fitValue.
-   * @param fitCalculator a strategy to calculate the fit on a single parameter.
    * @return the aggregated fit value.
    */
   def calculateFitValue(phenotype: Phenotype)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)
-                       (fitAggregator: Seq[Double] => Double,
-                        fitCalculator: Int => Range => Double = this.defaultCalculator)
+                       (fitAggregator: Seq[Double] => Double)
   : Double = {
 
-    val tFit: Double = this.calculateFit(averageTemperature)(phenotype
-       expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)(fitCalculator)
-    val pFit: Double = this.calculateFit(averagePressure)(phenotype
-      expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)(fitCalculator)
-    val hFit: Double = this.calculateFit(averageHumidity)(phenotype
-      expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)(fitCalculator)
+    val tFit: Double = this.defaultCalculator(averageTemperature)(phenotype
+       expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)
+    val pFit: Double = this.defaultCalculator(averagePressure)(phenotype
+      expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)
+    val hFit: Double = this.defaultCalculator(averageHumidity)(phenotype
+      expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)
 
-    fitAggregator(List(tFit, pFit, hFit))
-  }
-
-  /**
-   * Defines how the fit value must be computed.
-   *
-   * @param property  the property of the environment.
-   * @param range     the expression of the property in the phenotype.
-   * @param fitCalculator a strategy to calculate the fit of the parameter.
-   * @return the fit value of the property.
-   */
-  private def calculateFit(property: Int)(range: Range)(fitCalculator: Int => Range => Double): Double = {
-    fitCalculator(property)(range)
+    fitAggregator(Seq(tFit, pFit, hFit))
   }
 
   /**

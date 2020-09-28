@@ -7,9 +7,7 @@ import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.Phenotype.Phenotype
 
 class FitCalculatorTest extends AnyFunSuite {
-  val maxTemperature = 36
-  val maxPressure = 1050
-  val maxHumidity = 80
+
 
   test("The fit value for perfect range of values should be 1") {
     val maxFrequency = 100
@@ -19,7 +17,7 @@ class FitCalculatorTest extends AnyFunSuite {
       Gene(GeneTaxonomy.HUMIDITY_GENE, maxFrequency))
     val phenotype: Phenotype = genotype expressInPhenotype
 
-    assert(FitCalculator.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)(
+    assert(FitCalculator.calculateFitValue(phenotype)(UtilityColonyCreator.maxTemperature)(UtilityColonyCreator.maxPressure)(UtilityColonyCreator.maxHumidity)(
       params => params.sum / params.size) == 1)
   }
 
@@ -30,10 +28,10 @@ class FitCalculatorTest extends AnyFunSuite {
       Gene(GeneTaxonomy.PRESSURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, middleFrequency))
     val phenotype: Phenotype = genotype expressInPhenotype
-    val fitValue = FitCalculator.calculateFitValue(phenotype)(maxTemperature)(maxPressure)(maxHumidity)(
+    val fitValue = FitCalculator.calculateFitValue(phenotype)(UtilityColonyCreator.maxTemperature)(UtilityColonyCreator.maxPressure)(UtilityColonyCreator.maxHumidity)(
       params => params.sum / params.size)
 
-    assert(fitValue > 0 && fitValue < 1)
+    assert(fitValue >= 0 && fitValue < 1)
   }
 
   test("Apply a fit value to a parameter means apply an operation between the parameter and the fit value") {

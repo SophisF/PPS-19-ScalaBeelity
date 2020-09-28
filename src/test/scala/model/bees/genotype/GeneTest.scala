@@ -5,10 +5,10 @@ import org.scalatest.funsuite.AnyFunSuite
 import scala.model.bees.genotype.Gene._
 
 class GeneTest extends AnyFunSuite {
-  val temperatureGene: Gene = Gene(GeneTaxonomy.TEMPERATURE_GENE)
-  val negativeFrequencyGene: Gene = Gene(GeneTaxonomy.TEMPERATURE_GENE, -1)
-  val overMaxFrequencyGene: Gene = Gene(GeneTaxonomy.PRESSURE_GENE, Gene.maxFrequency + 1)
-  val nonEnvironmentalGene: Gene = Gene(GeneTaxonomy.GROWTH_GENE)
+  private val temperatureGene: Gene = Gene(GeneTaxonomy.TEMPERATURE_GENE)
+  private val negativeFrequencyGene: Gene = Gene(GeneTaxonomy.TEMPERATURE_GENE, -1)
+  private val overMaxFrequencyGene: Gene = Gene(GeneTaxonomy.PRESSURE_GENE, Gene.maxFrequency + 1)
+  private val nonEnvironmentalGene: Gene = Gene(GeneTaxonomy.GROWTH_GENE)
 
   private val geneStr = "A Gene should always have"
 
@@ -22,10 +22,6 @@ class GeneTest extends AnyFunSuite {
 
   test(s"$geneStr a valid name") {
     assert(GeneTaxonomy.values.contains(temperatureGene.taxonomy))
-  }
-
-  test(s"$geneStr positive frequency"){
-    assert(negativeFrequencyGene.frequency > 0)
   }
 
   test(s"$geneStr frequency in range (1, 100)"){

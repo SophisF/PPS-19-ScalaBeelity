@@ -27,10 +27,8 @@ object Bee {
       val a: Int = _phenotype.expressionOf(CharacteristicTaxonomy.LONGEVITY)
       if (age > a) a else age
     }
-    val fitValue: Double = FitCalculator
-      .calculateFitValue(_phenotype)(averageTemperature)(averagePressure)(averageHumidity)(
-        params => params.sum / params.size
-      )
+    val fitValue: Double =
+      FitCalculator.calculateFitValue(_phenotype)(averageTemperature)(averagePressure)(averageHumidity)(params => params.sum / params.size)
 
 
     new Bee {

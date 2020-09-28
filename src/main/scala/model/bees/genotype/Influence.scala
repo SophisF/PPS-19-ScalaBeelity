@@ -50,8 +50,6 @@ object Influence {
    */
   private case class InfluenceImpl(override val typeOfInfluence: InfluenceType,
                            influenceInPercentage: Int) extends Influence {
-
-    //TODO substitute.
     require(InfluenceType.values.contains(typeOfInfluence) &&
       influenceInPercentage >= 0 && influenceInPercentage <= 100)
 

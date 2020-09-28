@@ -152,7 +152,7 @@ object Characteristic {
 
   case object ReproductionRateCharacteristic {
     val min = 1
-    val max = 10
+    val max = 5
 
     def apply(influenceValue: Double): Characteristic with IntExpression = ReproductionRateCharacteristic(influenceValue)
     /**
@@ -169,7 +169,7 @@ object Characteristic {
 
   case object LongevityRateCharacteristic {
     val min = 30
-    val max = 120
+    val max = 90
 
     def apply(influenceValue: Double): Characteristic with IntExpression = LongevityRateCharacteristic(influenceValue)
     /**

@@ -40,6 +40,9 @@ case class EnvironmentManager(environment: Environment, propertySources: Propert
 
 object EnvironmentManager {
 
+  val minRandom = 10
+  val maxRandom = 20
+
   /**
    * Apply function.
    *
@@ -51,7 +54,7 @@ object EnvironmentManager {
     val seasonalEnvironment = generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
     val filters = for {
       property <- properties()
-      _ <- 0 to Random.between(10, 20)
+      _ <- 0 to Random.between(minRandom, maxRandom)
     } yield randomInstantaneousFilter(property, Size(width, height))
     evolution(filters.foldLeft(seasonalEnvironment)(addSource))
   }
@@ -64,6 +67,7 @@ object EnvironmentManager {
    *
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager =
+  //TODO: check thi magic number
     generateLocalChanges((manager.environment.map.cols, manager.environment.map.rows), 200)
       .foldLeft(EnvironmentManager(
         manager.propertySources.foldLeft(manager.environment)(Environment.apply),

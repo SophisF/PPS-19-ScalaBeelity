@@ -3,7 +3,8 @@ package scala.model.environment.property
 import breeze.linalg.DenseMatrix
 
 /**
- * Represent an environmental property.
+ * This represent an environmental property defined as an entity
+ * having a variable state and a variation strategy embedded in it.
  * It can be both a quantitative one (e.g., temperature, pressure),
  * or a qualitative one (e.g., a land can be wooded, arid, etc.)
  */

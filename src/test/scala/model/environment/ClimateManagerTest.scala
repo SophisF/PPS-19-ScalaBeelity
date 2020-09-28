@@ -10,8 +10,8 @@ import scala.model.environment.property.source.ContinuousSource
 class ClimateManagerTest extends AnyFunSuite {
   private val C = "Climate Manager"
 
-  test(s"$C should generate a season for each Property.") {
-    assert(ClimateManager.generateSeason().distinct.length == 3)
+  test(s"$C should generate a season for each Property except Pressure (not a seasonal one).") {
+    assert(ClimateManager.generateSeason().distinct.length == 2)
   }
 
   test(s"$C should have a correct value for iterations") {

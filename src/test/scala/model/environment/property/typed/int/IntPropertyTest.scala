@@ -1,11 +1,11 @@
-package scala.model.environment.property.realization
+package scala.model.environment.property.typed.int
 
 import org.scalatest.funsuite.AnyFunSuite
 
 
 class IntPropertyTest extends AnyFunSuite{
 
-  val intProperty = new IntProperty {
+  val intProperty: IntProperty = new IntProperty {
     override def default: Int = 5
 
     override def minValue: Int = 0

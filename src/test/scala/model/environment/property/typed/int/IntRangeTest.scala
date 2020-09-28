@@ -1,4 +1,4 @@
-package scala.model.environment.property.realization
+package scala.model.environment.property.typed.int
 
 import org.scalatest.funsuite.AnyFunSuite
 

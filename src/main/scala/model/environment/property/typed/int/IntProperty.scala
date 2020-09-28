@@ -1,12 +1,13 @@
-package scala.model.environment.property.realization
+package scala.model.environment.property.typed.int
 
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.GaussianFilterBuilder.function3d
 import scala.model.environment.property.Property
-import scala.model.environment.property.realization.IntProperty.filter
-import scala.utility.MathHelper.intValueOf
+import scala.model.environment.property.typed.int.IntProperty.filter
 import scala.utility.IterableHelper.RichIterable
+import scala.utility.MathHelper.intValueOf
+import scala.utility.SugarBowl.RichMappable
 
 /**
  * Represent a generic property who works with data of type Int.
@@ -16,21 +17,30 @@ trait IntProperty extends Property with IntRange {
   override type StateType = IntegerState
   override type VariationType = IntegerVariation
 
+  /**
+   * Represent a default value for the property state
+   *
+   * @return the default value of the state
+   */
   def default: Int
 
+  /**
+   * Build a state from an Int
+   *
+   * @param _value to set as the state value
+   * @return the built state
+   */
   implicit def state(_value: Int): IntegerState = new IntegerState {
     override val value: Int = limit(_value)
   }
 
-  /** A partial implementation of a state for an integer-type property */
+  /** An implementation of a state for an integer-type property */
   trait IntegerState extends State {
 
-    override def numericRepresentation(percentage: Boolean = true): Int = percentage match {
-      case true => (value - minValue) * 100 / rangeWidth
-      case _ => value
-    }
+    override def numericRepresentation(percentage: Boolean = true): Int =
+      value.when (_ => percentage) ~> (v => (v - minValue) * 100 / rangeWidth)
 
-    override def equals(a: Any): Boolean = a.isInstanceOf[IntegerState] && a.asInstanceOf[IntegerState].value == value
+    override def equals(a: Any): Boolean = a.isInstanceOf[IntegerState] && a.asInstanceOf[IntegerState].value == value // TODO check usage
   }
 
   implicit def variation(_value: Int): VariationType = new IntegerVariation {

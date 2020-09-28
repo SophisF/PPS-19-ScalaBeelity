@@ -66,7 +66,7 @@ object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)
     new Rectangle2D.Double(point x, point y, size width, size height), new BasicStroke(2f), color, color)
 
   private def colonyToString(colonyChar: (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])): String = {
-    var str = s"Colony info: \n\nPosition: ${colonyChar._1.center x} ${colonyChar._1.center y}\n\nBees' number: ${colonyChar._1.bees size}"
+    var str = s"Colony info: \n\nPosition: ${colonyChar._1.center x}; ${colonyChar._1.center y}\n\nBees' number: ${colonyChar._1.bees size}"
     colonyChar._2.foreach(t => str = str.+(s"\n\n${t._1}: ${t._2}"))
     str
   }

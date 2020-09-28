@@ -84,7 +84,7 @@ object Queen {
         val t: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)
         val p: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)
         val h: (Int, Int) = this.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)
-        val similarGenotype = EvolutionManager.buildGenotype(this.genotype)(this.phenotype)(t.average)(p.average)(h.average)(1)
+        val similarGenotype = EvolutionManager.evolveGenotype(this.genotype)(t.average)(p.average)(h.average)(1)
         Bee(
           similarGenotype,
           similarGenotype expressInPhenotype,

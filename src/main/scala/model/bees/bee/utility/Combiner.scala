@@ -24,7 +24,7 @@ object Combiner {
     @scala.annotation.tailrec
     def combine(col: Iterable[Colony], newColonies: Iterable[Colony]): Iterable[Colony] = col match {
       case h :: t => val colliding = CollisionManager.findColliding(h, newColonies)
-        val toMerge = colliding.filter(checkMerge(h, _)).toList
+        val toMerge = colliding filter(checkMerge(h, _)) toList
 
         /**
          * Method to merge all the colony of a list with another colony.
@@ -40,7 +40,7 @@ object Combiner {
         }
 
         val merged = mergeAll(h, toMerge)
-        combine(t diff toMerge, merged :: (newColonies.toList diff (h :: toMerge)))
+        combine(t diff toMerge, merged :: ((newColonies toList) diff (h :: toMerge)))
       case _ => newColonies
     }
 
@@ -52,8 +52,12 @@ object Combiner {
      * @return true if the colonies can be merged, false otherwise.
      */
     private def checkMerge(colony1: Colony, colony2: Colony): Boolean = {
-      val aggressionColony1: Int = Phenotype averagePhenotype Set(colony1.queen) ++ colony1.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
-      val aggressionColony2: Int = Phenotype averagePhenotype Set(colony2.queen) ++ colony2.bees expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+
+      //TODO refactor
+      val aggressionColony1: Int = Phenotype averagePhenotype (
+        Set(colony1 queen) ++ (colony1 bees)) expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
+      val aggressionColony2: Int = Phenotype averagePhenotype (
+        Set(colony2 queen) ++ (colony2 bees)) expressionOf CharacteristicTaxonomy.AGGRESSION_RATE
       aggressionColony1 < maxAggressionToMerge &&
         aggressionColony2 < maxAggressionToMerge
     }
@@ -66,6 +70,9 @@ object Combiner {
      * @return a new colony, made up by the two colonies merged together.
      */
     private def merge(colony1: Colony, colony2: Colony): Colony = {
-      Colony(if (colony1.area > colony2.area) colony1.color else colony2.color, if (colony1.area > colony2.area) colony1.queen else colony2.queen, colony1.bees ++ colony2.bees)
+      val colonyUnionBees = (colony1 bees) ++ (colony2 bees)
+      if ((colony1 area) > (colony2 area)) Colony(colony1 color, colony1 queen, colonyUnionBees) else
+        Colony(colony2 color, colony2 queen, colonyUnionBees)
+
     }
 }

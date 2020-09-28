@@ -19,7 +19,7 @@ object Genotype {
    * @param genes the input genes.
    * @return a new genotype.
    */
-  def apply(genes: Gene*): Genotype = GenotypeImpl(genes :_ *)
+  def apply(genes: Gene*): Genotype = GenotypeImpl(genes: _ *)
 
   /**
    * Method to calculate the average genotype in a sequence of bees.
@@ -28,9 +28,9 @@ object Genotype {
    * @return the average genotype.
    */
   def averageGenotype(bees: Set[Bee]): Genotype = {
-    Genotype(GeneTaxonomy.values.unsorted.map(value => Gene(value, {
-      bees.toList.map(_.genotype.genes.toList.filter(_.name.equals(value)).head.frequency).average
-    })).toSeq :_*)
+    Genotype(((GeneTaxonomy values) unsorted) map (value => Gene(value, {
+      (bees toList) map (bee => ((((bee genotype) genes) toList) filter (_.taxonomy equals value ) head) frequency) average
+    })) toSeq: _*)
   }
 
   /**
@@ -46,8 +46,8 @@ object Genotype {
      * @return the frequency of the gene.
      */
     def frequencyOf(geneTaxonomy: GeneTaxonomy): Int = {
-      val geneOpt = genes.find(_.name.equals(geneTaxonomy))
-      if (geneOpt.nonEmpty) geneOpt.get.frequency else Gene.minFrequency
+      val geneOpt = genes find (_.taxonomy equals geneTaxonomy)
+      if (geneOpt nonEmpty) (geneOpt get) frequency else Gene minFrequency
     }
 
     /**
@@ -56,12 +56,11 @@ object Genotype {
      * @return a phenotype as expression of itself.
      */
     def expressInPhenotype: Phenotype = {
-      Phenotype(CharacteristicTaxonomy.values.map(taxonomy => (taxonomy, this.genes.toList
-        .filter(_.geneticInformation.influence(taxonomy).nonEmpty)
-        .map(gene => gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).sum
-        / this.genes.toList.filter(_.geneticInformation.influence(taxonomy).nonEmpty).map(
-        gene => gene.geneticInformation.influence(taxonomy).get.influenceValue).sum)).toMap)
-
+      Phenotype(((CharacteristicTaxonomy values) map (taxonomy => (taxonomy, {
+        val relatedGenes = ((this genes) toList) filter (_.geneticInformation influence taxonomy nonEmpty)
+        (relatedGenes map (gene => (gene frequency) * (((gene geneticInformation) influence taxonomy get) influenceValue)) sum) /
+          (relatedGenes map (gene => ((gene geneticInformation) influence taxonomy get) influenceValue) sum)
+      }))).toMap)
     }
   }
 
@@ -71,7 +70,8 @@ object Genotype {
    * @param geneArg a variable arguments of gene to build the genotype.
    */
   private case class GenotypeImpl(geneArg: Gene*) extends Genotype {
-    override val genes: Set[Gene] = GeneTaxonomy.values.unsorted.map(value => geneArg.find(_.name.equals(value)).getOrElse(Gene(value)))
+    override val genes: Set[Gene] = ((GeneTaxonomy values) unsorted) map
+      (taxonomy => geneArg find(_.taxonomy equals taxonomy) getOrElse Gene(taxonomy))
   }
 
 }

@@ -17,7 +17,7 @@ object StatisticColonies {
     def stat(): Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)] = CharacteristicTaxonomy.values.map(v => (v, getAverageOf(v)))
 
     def getAverageOf(characteristicTaxonomy: CharacteristicTaxonomy): Characteristic#Expression = {
-      Phenotype.averagePhenotype(Set(colony.queen) ++ colony.bees).expressionOf(characteristicTaxonomy)
+      Phenotype averagePhenotype(Set(colony queen) ++ (colony bees)) expressionOf characteristicTaxonomy
     }
 
   }

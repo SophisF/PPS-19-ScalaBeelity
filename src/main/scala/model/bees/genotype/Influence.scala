@@ -16,13 +16,15 @@ object InfluenceType extends Enumeration {
  */
 object Influence {
 
+  type InfluenceValue = Double
+
   /**
    * Apply method for influence.
    * @param typeOfInfluence the type of influence.
    * @param influenceInPercentage the value of the influence, in percentage.
    * @return a new influence.
    */
-  def apply(typeOfInfluence: InfluenceType = InfluenceType.POSITIVE,
+  def apply(typeOfInfluence: InfluenceType = InfluenceType POSITIVE,
             influenceInPercentage: Int = 100): Influence = InfluenceImpl(typeOfInfluence, influenceInPercentage)
 
   /**
@@ -36,7 +38,7 @@ object Influence {
     /**
      * The value of the influence.
      */
-    val influenceValue: Double
+    val influenceValue: InfluenceValue
   }
 
   /**
@@ -48,6 +50,8 @@ object Influence {
    */
   private case class InfluenceImpl(override val typeOfInfluence: InfluenceType,
                            influenceInPercentage: Int) extends Influence {
+
+    //TODO substitute.
     require(InfluenceType.values.contains(typeOfInfluence) &&
       influenceInPercentage >= 0 && influenceInPercentage <= 100)
 
@@ -56,12 +60,12 @@ object Influence {
      *
      * @return the influence value
      */
-    private def convertInfluence: Double = influenceInPercentage.toInfluenceValue / 100
+    private def convertInfluence: InfluenceValue = (influenceInPercentage toInfluenceValue) / 100
 
     /**
      * The value of the influence.
      */
-    override lazy val influenceValue: Double = this.typeOfInfluence match {
+    override lazy val influenceValue: InfluenceValue = this typeOfInfluence match {
       case InfluenceType.POSITIVE => convertInfluence
       case _ => -convertInfluence
     }

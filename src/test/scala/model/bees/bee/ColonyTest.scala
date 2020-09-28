@@ -1,11 +1,10 @@
 package scala.model.bees.bee
 
 import org.scalatest.funsuite.AnyFunSuite
-
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.bee.Queen.Queen
-import scala.model.bees.genotype.{Genotype, Influence}
+import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.utility.Point
@@ -36,7 +35,7 @@ class ColonyTest extends AnyFunSuite {
     assert(colony.area*5 >= colony.numberOfBees)
   }
 
-  test("Dimension of colony must always be proportionate at limit for cell of bee"){
+  test("Dimension of a bigger colony must be proportionate at limit for cell of bee"){
     assert(colony2.area*5 >= colony2.numberOfBees)
   }
 
@@ -49,6 +48,5 @@ class ColonyTest extends AnyFunSuite {
     assert(colony3.numberOfBees <= 100 * Phenotype.averagePhenotype(Set(queen) ++ bees)
       .expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE) )
   }
-
 
 }

@@ -33,7 +33,7 @@ object SettingsView {
     val comboMatrix = new JComboBox(MatrixSize)
     panel.add(comboMatrix)
 
-    showConfirmDialog(null, panel, "Test", OK_CANCEL_OPTION, PLAIN_MESSAGE) match {
+    showConfirmDialog(null, panel, "Settings", OK_CANCEL_OPTION, PLAIN_MESSAGE) match {
       case OK_OPTION => Option(SimulationSettings(numColonies, temporalGranularity,
         comboIterations.getSelectedItem match {
           case "infinite" => -1

@@ -1,6 +1,7 @@
 package scala.model.environment.property.source
 
 import scala.model.Time
+import scala.model.Time.now
 import scala.model.environment.property.{Property, TimeDependentProperty}
 
 /**
@@ -24,8 +25,8 @@ object GlobalSource {
     globalVariation: T#TimedVariation
   ) extends GlobalSource[T] {
 
-    override def variation: T#Variation = variationAt()
+    def variation: T#Variation = variation(now())
 
-    def variationAt(instant: Time = Time.now()): T#Variation = globalVariation instantaneous instant
+    def variation(instant: Time): T#Variation = globalVariation instantaneous instant
   }
 }

@@ -8,6 +8,11 @@ import scala.controller.Controller
 import scala.model.Time
 import scala.view.builder.{ColoniesChartBuilder, HeatmapChartBuilder, SeasonalChartBuilder}
 
+/**
+ * View for show simulation.
+ *
+ * @param controller of the system.
+ */
 class SimulationView(controller: Controller) {
   private type Matrix = Array[Array[Double]]
 
@@ -55,6 +60,9 @@ class SimulationView(controller: Controller) {
       (controller.environmentSize, controller.statisticColonies)))
   )
 
+  /**
+   * Update this gui.
+   */
   def update(): Unit = SwingUtilities.invokeLater(() => {
     val index = tabbedPane.getSelectedIndex
     if (index >= 0) tabbedPane.setComponentAt(index, tabsComponents(tabbedPane getTitleAt index)(index))

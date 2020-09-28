@@ -2,8 +2,6 @@ package scala.model.environment.property
 
 /**
  * Set a maximum an minimum value to something.
- *
- * @author Paolo Baldini
  */
 trait Range {
   type ValueType

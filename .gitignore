@@ -1,5 +1,6 @@
 *.class
 *.log
 .idea/
-project/
+project/*
+!project/plugins.sbt
 target/

@@ -14,8 +14,6 @@ import scala.utility.SugarBowl.RichMappable
  * A first scratch of the environment class.
  *
  * @param map of the environment. Represented as a grid.
- *
- * @author Paolo Baldini
  */
 case class Environment private (map: DenseMatrix[Cell]) {
   def cells: Iterable[Cell] = map data
@@ -46,7 +44,7 @@ object Environment {
    * Apply a filter to an environment
    *
    * @param environment to which apply the filter
-   * @param filter to apply
+   * @param source to apply
    * @return an environment to which is applied the filter
    */
   def applyFilter(environment: Environment, source: ZoneSource[Property]): Environment = source.filter ~> (
@@ -59,11 +57,11 @@ object Environment {
    * Apply a seasonal variation to an environment
    *
    * @param environment to which apply the filter
-   * @param variator to apply
+   * @param source to apply
    * @return an environment to which is applied the filter
    */
   def applySeason(environment: Environment, source: SeasonalSource[TimeDependentProperty]): Environment =
-    source.variationAt() match {
+    source.variation match {
       case variation if variation isNull => environment
       case variation => Environment(environment.map.map(_ + variation))
     }

@@ -8,6 +8,9 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
 import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.DefaultXYDataset
 
+/**
+ * Chart for show seasonal variation.
+ */
 object SeasonalChartBuilder extends ChartBuilder[Seq[(String, Array[Array[Double]])]] {
   override type ChartType = Component
 

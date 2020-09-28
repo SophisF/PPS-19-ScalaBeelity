@@ -5,8 +5,6 @@ import scala.model.Time.{compare, delay}
 
 /**
  * Represent a duration
- *
- * @author Paolo Baldini
  */
 trait Timed {
   def fireTime: Time
@@ -20,7 +18,7 @@ object Timed {
   /**
    * Check if start time has yet been reached
    *
-   * @param obj to check start
+   * @param timed to check start
    * @return true if start time is previous to actual time; false otherwise
    */
   def isStarted(timed: Timed): Boolean = compare(timed fireTime, Time.now()) <= 0

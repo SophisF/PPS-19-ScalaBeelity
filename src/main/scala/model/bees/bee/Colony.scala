@@ -230,7 +230,7 @@ object Colony {
       val r: Int = this.averagePhenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)
       val max: Int = if (this.numberOfBees >= this.maxBees) 0 else r * time
       Random.shuffle(this.bees).flatMap(bee => (0 to bee.phenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)).map(_ => {
-        val similarGenotype = EvolutionManager.buildGenotype(bee.genotype)(bee.phenotype)(averageTemperature)(averagePressure)(averageHumidity)(time)
+        val similarGenotype = EvolutionManager.evolveGenotype(bee.genotype)(averageTemperature)(averagePressure)(averageHumidity)(time)
         Bee(similarGenotype, similarGenotype expressInPhenotype, Random.nextInt(time),
           averageTemperature, averagePressure, averageHumidity)
       })).take(max)

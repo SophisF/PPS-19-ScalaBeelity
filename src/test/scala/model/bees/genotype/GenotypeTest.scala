@@ -2,8 +2,10 @@ package scala.model.bees.genotype
 
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.model.bees.bee.Bee
 import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.Genotype.Genotype
+import scala.model.bees.phenotype.Phenotype.Phenotype
 
 class GenotypeTest extends AnyFunSuite {
   private val genotype: Genotype = Genotype()
@@ -12,30 +14,38 @@ class GenotypeTest extends AnyFunSuite {
   private val wingsGene: Gene = Gene(GeneTaxonomy.WINGS_GENE, 50)
   private val fixedGenotype: Genotype = Genotype(growthGene, wingsGene)
 
-  /*
-  private def calculateExpression(gene: Gene, taxonomy: CharacteristicTaxonomy): Int =
-    (gene.frequency * gene.geneticInformation.influence(taxonomy).get.influenceValue).toInt /
-      gene.geneticInformation.influence(taxonomy)
+  val gen = "A Genotype"
 
-   */
-
-  test("A Genotype should not be empty") {
-    assert(genotype.genes.nonEmpty)
+  test(s"$gen should have exactly 8 genes") {
+    assert(genotype.genes.size == 8)
   }
 
-  test("A Genotype should have exactly " + GeneTaxonomy.maxId + " Genes") {
-    assert(genotype.genes.size == GeneTaxonomy.maxId)
+  test(s"$gen creates random genes if it's necessary"){
+    assert(((Genotype(Gene(GeneTaxonomy TEMPERATURE_GENE)) genes) size) == 8)
   }
 
-  /*
-  test("The Genotype expresses its Genes as the sum of their Genetic Information for each Characteristic") {
-    val taxonomy: CharacteristicTaxonomy = CharacteristicTaxonomy.SPEED
-    assert(fixedGenotype.expressItself.expressionOf(taxonomy) ==
-      (this.calculateExpression(growthGene, taxonomy)
-      + this.calculateExpression(wingsGene, taxonomy)))
+  test(s"$gen should contains exactly one gene of each type"){
+    assert(((Genotype(Gene(GeneTaxonomy TEMPERATURE_GENE), Gene(GeneTaxonomy TEMPERATURE_GENE)) genes)
+      count(_.taxonomy equals GeneTaxonomy.TEMPERATURE_GENE)) == 1)
   }
 
-   */
+  test("The frequency expresses the frequency of a gene in the genotype"){
+    assert((Genotype(Gene(GeneTaxonomy TEMPERATURE_GENE, 100)) frequencyOf GeneTaxonomy.TEMPERATURE_GENE) == 100)
+  }
 
+  test(s"$gen should expresses itself in a phenotype"){
+    assert((genotype expressInPhenotype).isInstanceOf[Phenotype])
+  }
+
+  test("The average Genotype of a set of bees is made by the average of the frequency of their genes"){
+    val genotype1 = Genotype()
+    val genotype2 = Genotype()
+
+    val bee1 = Bee(genotype1, genotype1 expressInPhenotype, 0, 20, 1000, 40)
+    val bee2 = Bee(genotype2, genotype2 expressInPhenotype, 0, 20, 1000, 40)
+
+    assert((Genotype averageGenotype Set(bee1, bee2) frequencyOf GeneTaxonomy.TEMPERATURE_GENE) ==
+      ((genotype1 frequencyOf GeneTaxonomy.TEMPERATURE_GENE) + (genotype2 frequencyOf GeneTaxonomy.TEMPERATURE_GENE)) / 2)
+  }
 
 }

@@ -5,7 +5,9 @@ import org.scalatest.funsuite.AnyFunSuite
 import scala.model.bees.bee.Bee
 import scala.model.bees.genotype.Gene.Gene
 import scala.model.bees.genotype.Genotype.Genotype
+import scala.model.bees.phenotype.EnvironmentInformation
 import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.environment.Cell
 
 class GenotypeTest extends AnyFunSuite {
   private val genotype: Genotype = Genotype()
@@ -41,8 +43,8 @@ class GenotypeTest extends AnyFunSuite {
     val genotype1 = Genotype()
     val genotype2 = Genotype()
 
-    val bee1 = Bee(genotype1, genotype1 expressInPhenotype, 0, 20, 1000, 40)
-    val bee2 = Bee(genotype2, genotype2 expressInPhenotype, 0, 20, 1000, 40)
+    val bee1 = Bee(genotype1, genotype1 expressInPhenotype, 0, EnvironmentInformation(Cell()))
+    val bee2 = Bee(genotype2, genotype2 expressInPhenotype, 0, EnvironmentInformation(Cell()))
 
     assert((Genotype averageGenotype Set(bee1, bee2) frequencyOf GeneTaxonomy.TEMPERATURE_GENE) ==
       ((genotype1 frequencyOf GeneTaxonomy.TEMPERATURE_GENE) + (genotype2 frequencyOf GeneTaxonomy.TEMPERATURE_GENE)) / 2)

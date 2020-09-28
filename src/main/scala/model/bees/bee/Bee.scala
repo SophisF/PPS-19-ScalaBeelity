@@ -3,6 +3,7 @@ package scala.model.bees.bee
 import scala.model.bees.bee.utility.FitCalculator
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.phenotype.EnvironmentInformation.EnvironmentInformation
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
@@ -21,14 +22,13 @@ object Bee {
    * @param averageHumidity    the humidity of the environment where the bee's colony is.
    * @return a new bee.
    */
-  def apply(_genotype: Genotype, _phenotype: Phenotype, age: Int, averageTemperature: Int = TemperatureProperty.default,
-            averagePressure: Int = PressureProperty.default, averageHumidity: Int = HumidityProperty.default): Bee = {
+  def apply(_genotype: Genotype, _phenotype: Phenotype, age: Int, environmentInformation: EnvironmentInformation): Bee = {
     val currentAge: Int = {
       val a: Int = _phenotype.expressionOf(CharacteristicTaxonomy.LONGEVITY)
       if (age > a) a else age
     }
     val fitValue: Double =
-      FitCalculator.calculateFitValue(_phenotype)(averageTemperature)(averagePressure)(averageHumidity)(params => params.sum / params.size)
+      FitCalculator.calculateFitValue(_phenotype)(environmentInformation)(params => params.sum / params.size)
 
 
     new Bee {
@@ -70,14 +70,12 @@ object Bee {
     /**
      * Method that map a bee to a new bee in a successive iteration of the simulation.
      *
-     * @param time               the time occurred.
-     * @param averageTemperature the average temperature of the environment where the bee's colony is.
-     * @param averagePressure    the average pressure of the environment where the bee's colony is.
-     * @param averageHumidity    the average humidity of the environment where the bee's colony is.
+     * @param time                   the time occurred.
+     * @param environmentInformation the information of the environment.
      * @return a new bee, in the next iteration of the simulation.
      */
-    def update(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int): Bee = {
-      Bee(this.genotype, this.phenotype, this.age + time, averageTemperature, averagePressure, averageHumidity)
+    def update(time: Int)(environmentInformation: EnvironmentInformation): Bee = {
+      Bee(this.genotype, this.phenotype, this.age + time, environmentInformation)
 
     }
   }

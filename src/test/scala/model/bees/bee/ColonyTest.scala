@@ -5,18 +5,19 @@ import org.scalatest.funsuite.AnyFunSuite
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.bee.Queen.Queen
-import scala.model.bees.genotype.{Genotype, Influence}
+import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
-import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
+import scala.model.bees.phenotype.{CharacteristicTaxonomy, EnvironmentInformation, Phenotype}
+import scala.model.environment.Cell
 import scala.utility.Point
 
 class ColonyTest extends AnyFunSuite {
   val genotype: Genotype = Genotype()
-  val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0, Point(10,20), null)
+  val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0,  Point(10,20), null, (EnvironmentInformation(Cell())))
   val colony: Colony = queen.colony
-  val bees: Set[Bee] = (1 to 100).map(_ => Bee(genotype, genotype expressInPhenotype, 0)).toSet
+  val bees: Set[Bee] = (1 to 100).map(_ => Bee(genotype, genotype expressInPhenotype, 0, (EnvironmentInformation(Cell())))).toSet
   val colony2: Colony = Colony(queen = queen, bees = bees)
-  val bees3: Set[Bee] = (1 to 1000).map(_ => Bee(genotype, genotype expressInPhenotype, 0)).toSet
+  val bees3: Set[Bee] = (1 to 1000).map(_ => Bee(genotype, genotype expressInPhenotype, 0, (EnvironmentInformation(Cell())))).toSet
   val colony3: Colony = Colony(queen = queen, bees = bees)
 
 

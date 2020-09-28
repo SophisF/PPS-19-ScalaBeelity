@@ -5,14 +5,14 @@ import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.bee.utility.{Cleaner, CollisionManager, Combiner, EvolutionManager}
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Characteristic._
+import scala.model.bees.phenotype.EnvironmentInformation.EnvironmentInformation
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
+import scala.model.bees.phenotype.{CharacteristicTaxonomy, EnvironmentInformation, Phenotype}
 import scala.model.environment.EnvironmentManager
 import scala.model.prolog.PrologEngine._
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
 import scala.utility.PimpInt._
-import scala.utility.PimpIterable._
 import scala.utility.Point
 
 
@@ -143,15 +143,13 @@ object Colony {
       val newCenter: Point = this.move(time)(environmentManager)
       val cells = environmentManager.indexInRange(newCenter.x.applyTwoOperations(this.dimension)(_ - _)(_ + _),
         newCenter.y.applyTwoOperations(this.dimension)(_ - _)(_ + _))
-        .map(index => environmentManager.cells().valueAt(index._1, index._2))
+        .map(index => environmentManager.environment.map.valueAt(index._1, index._2))
 
-      val temperature: Int = cells.map(_.temperature).average
-      val pressure: Int = cells.map(_.pressure).average
-      val humidity: Int = cells.map(_.humidity).average
+      val environmentBinder = EnvironmentInformation(cells: _*)
 
-      Colony(this.color, this.updateQueen(time)(temperature)(pressure)(humidity)(CollisionManager.keepInside(newCenter, this.dimension,
+      Colony(this.color, this.updateQueen(time)(environmentBinder)(CollisionManager.keepInside(newCenter, this.dimension,
         environmentManager.environment.width, environmentManager.environment.height)),
-        this.updatePopulation(time)(temperature)(pressure)(humidity)) ::
+        this.updatePopulation(time)(environmentBinder)) ::
         (this.generateColony(time)(environmentManager) getOrElse List.empty)
     }
 
@@ -180,18 +178,15 @@ object Colony {
      * Method to update the queen.
      *
      * @param time               the time that has passed from the last iteration.
-     * @param averageTemperature the average temperature of the environment where the bee's colony is.
-     * @param averagePressure    the average pressure of the environment where the bee's colony is.
-     * @param averageHumidity    the average humidity of the environment where the bee's colony is.
-     * @param newCenter          the new center of the colony.
+     * @param environmentInformation the information of the environment.
      * @return a new queen.
      */
-    private def updateQueen(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(newCenter: Point): Queen = {
-      val queen = this.queen.update(time)(averageTemperature)(averagePressure)(averageHumidity)(newCenter)
+    private def updateQueen(time: Int)(environmentInformation: EnvironmentInformation)(newCenter: Point): Queen = {
+      val queen = this.queen.update(time)(environmentInformation)(newCenter)
       if (queen.isAlive) queen else {
         val similarGenotype = Genotype.averageGenotype(bees)
         Queen(Some(this), similarGenotype, similarGenotype expressInPhenotype, 0,
-          newCenter, this.queen.generateNewColony, averageTemperature, averagePressure, averageHumidity)
+          newCenter, this.queen.generateNewColony, environmentInformation)
       }
     }
 
@@ -199,31 +194,27 @@ object Colony {
      * Method to update the bees.
      *
      * @param time               the time that has passed from the last iteration.
-     * @param averageTemperature the average temperature of the environment where the bee's colony is.
-     * @param averagePressure    the average pressure of the environment where the bee's colony is.
-     * @param averageHumidity    the average humidity of the environment where the bee's colony is.
+     * @param environmentInformation the information of the environment.
      * @return a new set of bees.
      */
-    private def updatePopulation(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int): Set[Bee] = {
-      this.bees.filter(_.isAlive).map(_.update(time)(averageTemperature)(averagePressure)(averageHumidity)) ++
-        generateBees(time)(averageTemperature)(averagePressure)(averageHumidity)
+    private def updatePopulation(time: Int)(environmentInformation: EnvironmentInformation): Set[Bee] = {
+      this.bees.filter(_.isAlive).map(_.update(time)(environmentInformation)) ++
+        generateBees(time)(environmentInformation)
     }
 
     /**
      * Method to generate new bees every iteration, if it's possible.
      *
-     * @param averageTemperature the average temperature of the environment where the bee's colony is.
-     * @param averagePressure    the average pressure of the environment where the bee's colony is.
-     * @param averageHumidity    the average humidity of the environment where the bee's colony is.
+     * @param environmentInformation the information of the environment.
      * @return a new set of bees.
      */
-    private def generateBees(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int): Set[Bee] = {
+    private def generateBees(time: Int)(environmentInformation: EnvironmentInformation): Set[Bee] = {
       val r: Int = this.averagePhenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)
       val max: Int = if (this.numberOfBees >= this.maxBees) 0 else r * time
       Random.shuffle(this.bees).flatMap(bee => (0 to bee.phenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)).map(_ => {
-        val similarGenotype = EvolutionManager.evolveGenotype(bee.genotype)(averageTemperature)(averagePressure)(averageHumidity)(time)
+        val similarGenotype = EvolutionManager.evolveGenotype(bee.genotype)(environmentInformation)(time)
         Bee(similarGenotype, similarGenotype expressInPhenotype, Random.nextInt(time),
-          averageTemperature, averagePressure, averageHumidity)
+          environmentInformation)
       })).take(max)
     }
 

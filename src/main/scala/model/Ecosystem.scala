@@ -4,6 +4,7 @@ import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.bee.{Colony, Queen}
 import scala.model.bees.genotype.Genotype
+import scala.model.bees.phenotype.EnvironmentInformation
 import scala.model.environment.EnvironmentManager.evolution
 import scala.model.environment.{Cell, Environment, EnvironmentManager}
 import scala.util.Random.{nextInt => randomUntil}
@@ -31,8 +32,7 @@ object Ecosystem {
     val genotype = Genotype()
     val cell: Cell = environment.map(position.x, position.y)
     val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0, position, this.createColony(environment),
-      cell.temperature.numericRepresentation(false), cell.pressure.numericRepresentation(false),
-      cell.humidity.numericRepresentation(false))
+      EnvironmentInformation(cell))
     queen.colony
   }
 }

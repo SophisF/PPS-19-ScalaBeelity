@@ -4,6 +4,7 @@ import scala.model.bees.bee.utility.FitCalculator
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
 /**
  * Object that represents bee.
@@ -20,8 +21,8 @@ object Bee {
    * @param averageHumidity    the humidity of the environment where the bee's colony is.
    * @return a new bee.
    */
-  def apply(_genotype: Genotype, _phenotype: Phenotype, age: Int, averageTemperature: Int,
-            averagePressure: Int, averageHumidity: Int): Bee = {
+  def apply(_genotype: Genotype, _phenotype: Phenotype, age: Int, averageTemperature: Int = TemperatureProperty.default,
+            averagePressure: Int = PressureProperty.default, averageHumidity: Int = HumidityProperty.default): Bee = {
     val currentAge: Int = {
       val a: Int = _phenotype.expressionOf(CharacteristicTaxonomy.LONGEVITY)
       if (age > a) a else age
@@ -46,7 +47,7 @@ object Bee {
     }
   }
 
-  def calculateEffectiveCharacteristic(): Unit ={
+  def calculateEffectiveCharacteristic(): Unit = {
 
   }
 

@@ -2,7 +2,7 @@ package scala.model.bees.bee
 
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Queen.Queen
-import scala.model.bees.bee.utility.{Cleaner, Combiner, EvolutionManager}
+import scala.model.bees.bee.utility.{Cleaner, CollisionManager, Combiner, EvolutionManager}
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.phenotype.Characteristic._
 import scala.model.bees.phenotype.Phenotype.Phenotype
@@ -43,7 +43,7 @@ object Colony {
 
   private val proximity: Int = 10
 
-  private val newColonyGenerationProbability: Int = 10000
+  private val newColonyGenerationProbability: Int = 1000
 
   /**
    * Method to manage the colonies. It combines and adjust them if there are the conditions.
@@ -113,6 +113,7 @@ object Colony {
      */
 
     def numberOfBees: Int = this.bees.size
+
     /**
      * Update method for the colonies.
      *
@@ -133,9 +134,8 @@ object Colony {
     private lazy val averagePhenotype: Phenotype = Phenotype.averagePhenotype(Set(this.queen) ++ this.bees)
 
 
-
     override def maxBees: Int = {
-      val r: Int = this.averagePhenotype.expressionOf(CharacteristicTaxonomy.REPRODUCTION_RATE)
+      val r: Int = averagePhenotype expressionOf CharacteristicTaxonomy.REPRODUCTION_RATE
       r * 100
     }
 
@@ -149,7 +149,8 @@ object Colony {
       val pressure: Int = cells.map(_.pressure).average
       val humidity: Int = cells.map(_.humidity).average
 
-      Colony(this.color, this.updateQueen(time)(temperature)(pressure)(humidity)(newCenter),
+      Colony(this.color, this.updateQueen(time)(temperature)(pressure)(humidity)(CollisionManager.keepInside(newCenter, this.dimension,
+        environmentManager.environment.width, environmentManager.environment.height)),
         this.updatePopulation(time)(temperature)(pressure)(humidity)) ::
         (this.generateColony(time)(environmentManager) getOrElse List.empty)
     }
@@ -190,7 +191,7 @@ object Colony {
       if (queen.isAlive) queen else {
         val similarGenotype = Genotype.averageGenotype(bees)
         Queen(Some(this), similarGenotype, similarGenotype expressInPhenotype, 0,
-          averageTemperature, averagePressure, averageHumidity, newCenter, this.queen.generateNewColony)
+          newCenter, this.queen.generateNewColony, averageTemperature, averagePressure, averageHumidity)
       }
     }
 

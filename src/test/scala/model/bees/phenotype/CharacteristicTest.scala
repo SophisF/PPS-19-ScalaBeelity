@@ -22,19 +22,19 @@ class CharacteristicTest extends AnyFunSuite{
   test("A TemperatureCompatibilityCharacteristic should have expression between 18 and 36"){
     val range: (Int, Int) = temperatureCharacteristic.expression
     println("Temperature: (" + range._1 +", " + range._2 + ")")
-    assert(range._1 >= TemperatureCharacteristicObj.min && range._2 <= TemperatureCharacteristicObj.max)
+    assert(range._1 >= TemperatureCompatibilityCharacteristic.min && range._2 <= TemperatureCompatibilityCharacteristic.max)
   }
 
   test("A humidityCompatibilityCharacteristic should have expression between 40 and 70"){
     val range: (Int, Int) = humidityCharacteristic.expression
     println("Humidity: (" + range._1 +", " + range._2 + ")")
-    assert(range._1 >= HumidityCharacteristicObj.min && range._2 <= HumidityCharacteristicObj.max)
+    assert(range._1 >= HumidityCompatibilityCharacteristic.min && range._2 <= HumidityCompatibilityCharacteristic.max)
   }
 
   test("A pressureCompatibilityCharacteristic should have expression between 1000 and 1050"){
     val range: (Int, Int) = pressureCharacteristic.expression
     println("Pressure: (" + range._1 +", " + range._2 + ")")
-    assert(range._1 >= PressureCharacteristicObj.min && range._2 <= PressureCharacteristicObj.max)
+    assert(range._1 >= PressureCompatibilityCharacteristic.min && range._2 <= PressureCompatibilityCharacteristic.max)
   }
 
 }

@@ -6,6 +6,7 @@ import scala.model.bees.bee.utility.{EvolutionManager, FitCalculator}
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 import scala.utility.PimpTuple._
 import scala.utility.Point
 
@@ -29,10 +30,9 @@ object Queen {
    * @return a new queen.
    */
   def apply(colonyOpt: Option[Colony],
-            genotype: Genotype, phenotype: Phenotype,
-            age: Int, averageTemperature: Int,
-            averagePressure: Int, averageHumidity: Int,
-            position: Point, generateNewColony: Point => Colony): Queen = {
+            genotype: Genotype, phenotype: Phenotype, age: Int, position: Point,
+            generateNewColony: Point => Colony, averageTemperature: Int = TemperatureProperty.default,
+            averagePressure: Int = PressureProperty.default, averageHumidity: Int = HumidityProperty.default): Queen = {
     val fitValue: Double = FitCalculator.calculateFitValue(phenotype)(averageTemperature)(averagePressure)(averageHumidity)(
       params => params.sum / params.size)
 
@@ -66,8 +66,8 @@ object Queen {
      * @return a new queen updated.
      */
     def update(time: Int)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(position: Point): Queen =
-      Queen(Some(this.colony), this.genotype, this.phenotype, this.age + time, averageTemperature, averagePressure, averageHumidity,
-        position, this.generateNewColony)
+      Queen(Some(this.colony), this.genotype, this.phenotype, this.age + time, position,
+        this.generateNewColony, averageTemperature, averagePressure, averageHumidity)
   }
 
   private case class QueenImpl(colonyOpt: Option[Colony],

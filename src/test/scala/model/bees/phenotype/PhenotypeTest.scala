@@ -23,7 +23,7 @@ class PhenotypeTest extends AnyFunSuite{
 
   test("All the characteristic should be mapped into characterisicTaxonomy"){
     var contains: Boolean = true
-    phenotype.characteristics.foreach(c => if (!CharacteristicTaxonomy.values.contains(c.name)) contains = false)
+    phenotype.characteristics.foreach(c => if (!CharacteristicTaxonomy.values.contains(c.taxonomy)) contains = false)
     assert(contains)
   }
 

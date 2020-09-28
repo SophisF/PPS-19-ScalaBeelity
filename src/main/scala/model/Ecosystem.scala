@@ -28,9 +28,9 @@ object Ecosystem {
   ): Colony = {
     val genotype = Genotype()
     val cell: Cell = environment.map(position.x, position.y)
-    val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0,
+    val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0, position, this.createColony(environment),
       cell.temperature.numericRepresentation(false), cell.pressure.numericRepresentation(false),
-      cell.humidity.numericRepresentation(false), position, this.createColony(environment))
+      cell.humidity.numericRepresentation(false))
     queen.colony
   }
 }

@@ -1,6 +1,5 @@
 package scala.model.bees.bee
 
-import scala.model.Ecosystem
 import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.bee.utility.{Cleaner, CollisionManager, Combiner, EvolutionManager}
@@ -12,9 +11,9 @@ import scala.model.environment.EnvironmentManager
 import scala.model.prolog.PrologEngine._
 import scala.model.prolog.{MovementLogic, PrologEngine}
 import scala.util.Random
-import scala.utility.Point
 import scala.utility.PimpInt._
 import scala.utility.PimpIterable._
+import scala.utility.Point
 
 
 /**
@@ -141,7 +140,7 @@ object Colony {
     }
 
     override def update(time: Int)(environmentManager: EnvironmentManager): List[Colony] = {
-      val newCenter: Point = CollisionManager.keepInside(this.move(time)(environmentManager), this.dimension, Ecosystem.dimension _1, Ecosystem.dimension _2)
+      val newCenter: Point = this.move(time)(environmentManager)
       val cells = environmentManager.indexInRange(newCenter.x.applyTwoOperations(this.dimension)(_ - _)(_ + _),
         newCenter.y.applyTwoOperations(this.dimension)(_ - _)(_ + _))
         .map(index => environmentManager.cells().valueAt(index._1, index._2))

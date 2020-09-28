@@ -13,12 +13,8 @@ import scala.utility.SugarBowl.RichMappable
 case class Ecosystem(environmentManager: EnvironmentManager, colonies: Colony*)
 
 object Ecosystem {
-  private var _dimension: (Int, Int) = (100,100)
-
-  def dimension : (Int, Int) = _dimension
 
   def apply(coloniesCount: Int, width: Int, height: Int): Ecosystem = {
-    _dimension = (width, height)
     EnvironmentManager(width, height) ~> (
       manager => Ecosystem(manager, (1 to coloniesCount).map(_ => createColony(manager.environment)()) :_*))
   }

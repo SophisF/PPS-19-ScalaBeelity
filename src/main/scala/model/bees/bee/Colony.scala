@@ -117,7 +117,6 @@ object Colony {
      *
      * @return the current number of bees of the colony.
      */
-
     def numberOfBees: Int = this.bees.size
 
     /**
@@ -131,6 +130,13 @@ object Colony {
 
   }
 
+  /**
+   *  Case class that represents the colony.
+   *
+   * @param color the colony's color.
+   * @param queen the colony's queen, only one.
+   * @param bees  the bees that compose the colony, must be not empty.
+   */
   case class ColonyImpl(override val color: Color, override val queen: Queen, override val bees: Set[Bee]) extends Colony {
     require(bees.nonEmpty)
 

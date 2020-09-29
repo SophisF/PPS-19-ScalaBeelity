@@ -13,14 +13,14 @@ class EnvironmentManagerTest extends AnyFunSuite {
     Time.reset()
     val env2 = EnvironmentManager(30, 30)
     Time.increment(10)
-    assert(!(env2.environment.map equals evolution(env2).environment.map))
+    assert(!(env2.cells() equals evolution(env2).cells()))
   }
 
   test(s"$E should change after 10 iteration.") {
     Time.reset()
     val env = EnvironmentManager(20, 20)
     Time.increment(5)
-    assert(!(env.environment.map equals evolution(env).environment.map))
+    assert(!(env.cells() equals evolution(env).cells()))
   }
 
 }

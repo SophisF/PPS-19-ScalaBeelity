@@ -2,7 +2,7 @@ package scala.model.prolog
 
 import alice.tuprolog.{Prolog, SolveInfo, Struct, Term, Theory}
 
-import scala.model.adapter.Cell
+import scala.model.environment.adapter.Cell
 import scala.utility.Point
 
 /**
@@ -25,7 +25,7 @@ object PrologEngine {
    * @return a cell as a term.
    */
   def buildCellTerm(cell: Cell, position: Point): Term = {
-    s"cell(${cell.temperature}, ${cell.pressure}, ${cell.humidity}, position(${position.x}, ${position.y}))"
+    s"cell(${cell.temperature()}, ${cell.pressure()}, ${cell.humidity()}, position(${position.x}, ${position.y}))"
   }
 
   /**

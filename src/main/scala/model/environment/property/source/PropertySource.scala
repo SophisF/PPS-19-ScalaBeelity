@@ -7,4 +7,4 @@ import scala.model.environment.property.Property
  *
  * @tparam T type of property
  */
-trait PropertySource[T <: Property]
+private[environment] trait PropertySource[T <: Property]

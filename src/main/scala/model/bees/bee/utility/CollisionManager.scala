@@ -46,7 +46,7 @@ object CollisionManager {
   def findColliding(colony: Colony, colonies: Iterable[Colony]): Iterable[Colony] = for {
     c <- colonies
     if colony != c
-    if this.checkCollision(colony, c)
+    if this checkCollision(colony, c)
   } yield c
 
   /**
@@ -55,7 +55,7 @@ object CollisionManager {
    * @param colony2 the second colony.
    * @return the collision area between the two colonies.
    */
-  def collisionArea(colony1: Colony, colony2: Colony): Int = {
+  def collisionAreaBetween(colony1: Colony, colony2: Colony): Int = {
 
     /**
      * Method to calculate the spatial range occupied by a colony on one axis by
@@ -82,7 +82,7 @@ object CollisionManager {
    * @return a boolean, true if the two colonies collide, false otherwise.
    */
   private def checkCollision(colony1: Colony, colony2: Colony): Boolean = {
-    this.collisionArea(colony1, colony2) > 0
+    ((this collisionAreaBetween)(colony1, colony2)) > 0
   }
 
   /**
@@ -99,13 +99,13 @@ object CollisionManager {
      * @param contained the range that is contained.
      * @return the intersection area.
      */
-    def calculateOverlapping(container: Range, contained: Range): Int ={
+    def calculateOverlappingBetween(container: Range, contained: Range): Int ={
       val max: Int = math.min(container._2, contained._2)
       max - contained._1 + 1
     }
 
-    if (range1.contains(range2)) calculateOverlapping(range1, range2)
-    else if (range2.contains(range1)) calculateOverlapping(range2, range1)
+    if (range1 contains range2) calculateOverlappingBetween(range1, range2)
+    else if (range2 contains range1) calculateOverlappingBetween(range2, range1)
     else 0
   }
 }

@@ -21,13 +21,13 @@ class CombinerTest extends AnyFunSuite {
 
   println(mediumAggressiveGenotype.expressInPhenotype.expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
 
-  private val colony1 = UtilityColonyBuilder.createColony(genotype, Point(3, 3))
-  private val colony2 = UtilityColonyBuilder.createColony(genotype, Point(3, 3))
-  private val colony3 = UtilityColonyBuilder.createColony(genotype, Point(6, 6))
+  private val colony1 = UtilityColonyCreator.createColony(genotype, Point(3, 3))
+  private val colony2 = UtilityColonyCreator.createColony(genotype, Point(3, 3))
+  private val colony3 = UtilityColonyCreator.createColony(genotype, Point(6, 6))
 
-  private val mediumAggressiveColony = UtilityColonyBuilder.createColony(mediumAggressiveGenotype, Point(3, 3))
+  private val mediumAggressiveColony = UtilityColonyCreator.createColony(mediumAggressiveGenotype, Point(3, 3))
 
-  println(Phenotype.averagePhenotype(mediumAggressiveColony.bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
+  println(Phenotype.averagePhenotype(mediumAggressiveColony bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
   test("Two colonies that collides and have an aggression lower than a threshold should merge in only one colonies"){
     val colonies = List(colony1, colony2)
 

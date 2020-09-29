@@ -13,17 +13,17 @@ class PhenotypeTest extends AnyFunSuite{
     assert(phenotype.characteristics.nonEmpty)
   }
 
-  test("A Phenotype should raise an IllegalArgumentException if not all the characteristics are mapped"){
-    assertThrows[IllegalArgumentException](Phenotype(characteristicMap))
-  }
-
   test("A Phenotype should always have all characteristics."){
     assert(phenotype.characteristics.size == CharacteristicTaxonomy.maxId)
   }
 
-  test("All the characteristic should be mapped into characterisicTaxonomy"){
+  test("A Phenotype should raise an IllegalArgumentException if not all the characteristics are mapped"){
+    assertThrows[IllegalArgumentException](Phenotype(characteristicMap))
+  }
+
+  test("All the characteristic should be mapped into characteristicTaxonomy"){
     var contains: Boolean = true
-    phenotype.characteristics.foreach(c => if (!CharacteristicTaxonomy.values.contains(c.name)) contains = false)
+    phenotype.characteristics.foreach(c => if (!CharacteristicTaxonomy.values.contains(c.taxonomy)) contains = false)
     assert(contains)
   }
 

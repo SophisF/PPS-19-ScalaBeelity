@@ -116,7 +116,7 @@ class EnvironmentTest extends AnyFunSuite {
 
   test("Seasonal variation application should return the different values into the year") {
     val modifiedEnvironment = Environment(Environment(5,5), SeasonalSource(TemperatureProperty.seasonalTrend))
-    Time increment 30
+    Time increment 60
     assert(!modifiedEnvironment.cells.map(_.temperature.numericRepresentation()).iterator.sameElements(
       Environment(Environment(5,5), SeasonalSource(TemperatureProperty.seasonalTrend)).cells
         .map(_.temperature.numericRepresentation()).iterator

@@ -8,7 +8,7 @@ import scala.model.environment.matrix.Size.Border.Border
  *
  * @author Paolo Baldini
  */
-trait Size {
+private[environment] trait Size {
   val width: Int
   val height: Int
 
@@ -26,7 +26,7 @@ trait Size {
   }
 }
 
-object Size {
+private[environment] object Size {
 
   /**
    * Enumeration of the various border 'sides'

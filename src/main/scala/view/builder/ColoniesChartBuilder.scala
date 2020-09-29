@@ -17,7 +17,10 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.utility.Point
 import scala.utility.TypeUtilities._
 
-object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)] {
+/**
+ * Chart for show movement of colonies and their details.
+ */
+private[view] object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)] {
   override type ChartType = ColoniesChart
   class ColoniesChart(var selectedColony: Option[StatisticColony] = Option.empty) extends JPanel
 
@@ -63,7 +66,7 @@ object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)
     new Rectangle2D.Double(point x, point y, size width, size height), new BasicStroke(2f), color, color)
 
   private def colonyToString(colonyChar: (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])): String = {
-    var str = s"Colony info: \n\nPosition: ${colonyChar._1.center x} ${colonyChar._1.center y}\n\nBees' number: ${colonyChar._1.bees size}"
+    var str = s"Colony info: \n\nPosition: ${colonyChar._1.center x}; ${colonyChar._1.center y}\n\nBees' number: ${colonyChar._1.bees size}"
     colonyChar._2.foreach(t => str = str.+(s"\n\n${t._1}: ${t._2}"))
     str
   }

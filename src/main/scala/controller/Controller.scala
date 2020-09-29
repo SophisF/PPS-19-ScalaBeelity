@@ -1,13 +1,11 @@
 package scala.controller
 
 import scala.math.ceil
-
 import scala.controller.Looper.loop
-import scala.model.{ModelImpl, Time}
-import scala.utility.TypeUtilities.StatisticColonies
+import scala.model.ModelImpl
+import scala.utility.TypeUtilities.{StatisticColonies, StatisticEnvironment}
 import scala.view.View.simulationView
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
-import scala.model.statistic.StatisticEnvironment.StatisticalEnvironment
 import scala.utility.MathHelper.intValueOf
 
 /**
@@ -50,7 +48,7 @@ class Controller(coloniesCount: Int, timeGranularity: Int, iterations: Int, dime
    *
    * @return information about the environment
    */
-  def statisticEnvironment: StatisticalEnvironment = model.statisticalData()
+  def statisticEnvironment: StatisticEnvironment = model.statisticalData().variationSequence()
 
   /**
    * Get information about the colonies in the simulation
@@ -64,5 +62,5 @@ class Controller(coloniesCount: Int, timeGranularity: Int, iterations: Int, dime
    *
    * @return days from simulation start
    */
-  def dayTime: Int = Time.dayTime()
+  def dayTime: Int = model.time()
 }

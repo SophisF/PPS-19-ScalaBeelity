@@ -9,8 +9,6 @@ import scala.reflect.ClassTag
 
 /**
  * Pimping breeze.Matrix adding utility functions.
- *
- * @author Paolo Baldini
  */
 object DenseMatrixHelper {
   type Matrix[T] = DenseMatrix[T]

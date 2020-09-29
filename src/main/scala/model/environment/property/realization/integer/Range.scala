@@ -6,7 +6,7 @@ import scala.model.environment.property.{Range => Range_}
  * Represent a generic range who works with data of type Int.
  * Simplify the use (and help DRY) of numeric ranges
  */
-trait Range extends Range_ {
+private[realization] trait Range extends Range_ {
   override type ValueType = Int
 
   /**

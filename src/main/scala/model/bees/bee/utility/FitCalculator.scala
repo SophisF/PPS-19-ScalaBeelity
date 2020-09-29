@@ -1,6 +1,6 @@
 package scala.model.bees.bee.utility
 
-import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.phenotype.EnvironmentInformation.EnvironmentInformation
 import scala.model.bees.phenotype.Phenotype.Phenotype
 import scala.utility.PimpInt._
 import scala.utility.TypeUtilities.Range
@@ -13,9 +13,9 @@ object FitCalculator {
   /**
    * Method to apply a fit value to a parameter, based on the operation passed.
    *
-   * @param fitValue   the fit value.
-   * @param parameter  the parameter to whom apply the fit value.
-   * @param applier a strategy operation to apply.
+   * @param fitValue  the fit value.
+   * @param parameter the parameter to whom apply the fit value.
+   * @param applier   a strategy operation to apply.
    * @return the effective parameter.
    */
 
@@ -24,45 +24,22 @@ object FitCalculator {
   /**
    * Method to calculate the fit value, based on the environment parameters.
    *
-   * @param phenotype   the phenotype ot the bee.
-   * @param averageTemperature the average temperature of the environment where the bee's colony is.
-   * @param averagePressure    the average pressure of the environment where the bee's colony is.
-   * @param averageHumidity    the average humidity of the environment where the bee's colony is.
-   * @param fitAggregator   a strategy to calculate the fitValue.
-   * @param fitCalculator a strategy to calculate the fit on a single parameter.
+   * @param phenotype              the phenotype ot the bee.
+   * @param environmentInformation the information of the environment.
    * @return the aggregated fit value.
    */
-  def calculateFitValue(phenotype: Phenotype)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)
-                       (fitAggregator: Seq[Double] => Double,
-                        fitCalculator: Int => Range => Double = this.defaultCalculator)
+  def calculateFitValue(phenotype: Phenotype)(environmentInformation: EnvironmentInformation)
+                       (fitAggregator: Seq[Double] => Double)
   : Double = {
 
-    val tFit: Double = this.calculateFit(averageTemperature)(phenotype
-       expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)(fitCalculator)
-    val pFit: Double = this.calculateFit(averagePressure)(phenotype
-      expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)(fitCalculator)
-    val hFit: Double = this.calculateFit(averageHumidity)(phenotype
-      expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)(fitCalculator)
-
-    fitAggregator(List(tFit, pFit, hFit))
-  }
-
-  /**
-   * Defines how the fit value must be computed.
-   *
-   * @param property  the property of the environment.
-   * @param range     the expression of the property in the phenotype.
-   * @param fitCalculator a strategy to calculate the fit of the parameter.
-   * @return the fit value of the property.
-   */
-  private def calculateFit(property: Int)(range: Range)(fitCalculator: Int => Range => Double): Double = {
-    fitCalculator(property)(range)
+    fitAggregator(environmentInformation.characteristicMap.map(kv => this.defaultCalculator(kv._2)(phenotype expressionOf kv._1)).toSeq)
   }
 
   /**
    * Default strategy to calculate the fit value of a property.
+   *
    * @param property the property of the environment.
-   * @param range the optimal range.
+   * @param range    the optimal range.
    * @return the fit value, based on much the property departs from the range.
    */
   private def defaultCalculator(property: Int)(range: Range): Double =

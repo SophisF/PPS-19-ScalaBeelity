@@ -9,7 +9,7 @@ import scala.utility.DenseMatrixHelper.Matrix
  *
  * @tparam T type of property
  */
-trait ZoneSource[T <: Property] extends PropertySource[T] with Zone {
+private[environment] trait ZoneSource[T <: Property] extends PropertySource[T] with Zone {
 
   def filter: Matrix[T#Variation]
 
@@ -18,7 +18,7 @@ trait ZoneSource[T <: Property] extends PropertySource[T] with Zone {
   val height: Int = filter rows
 }
 
-object ZoneSource {
+private[environment] object ZoneSource {
 
   /** An implementation for a zone-source of a property who is applied to a center position */
   case class Source[T <: Property](

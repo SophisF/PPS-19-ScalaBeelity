@@ -1,11 +1,11 @@
 package scala.model.bees.bee.utility
 
-import scala.model.bees.genotype.Gene.Gene
+import scala.model.bees.genotype.Gene.{Frequency, Gene}
 import scala.model.bees.genotype.GeneTaxonomy.GeneTaxonomy
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
-import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
-import scala.model.bees.phenotype.Phenotype.Phenotype
+import scala.model.bees.phenotype.CharacteristicTaxonomy
+import scala.model.bees.phenotype.EnvironmentInformation.EnvironmentInformation
 import scala.util.Random
 import scala.utility.PimpInt._
 
@@ -14,16 +14,15 @@ object EvolutionManager {
   /**
    * Method that build a new genotype with a better adaptation to the environment and casual variations.
    *
-   * @param genotype           the existing genotype.
-   * @param phenotype          the existing phenotype.
-   * @param averageTemperature the average temperature of the environment where the bee's colony is.
-   * @param averagePressure    the average pressure of the environment where the bee's colony is.
-   * @param averageHumidity    the average humidity of the environment where the bee's colony is.
-   * @param time               the time spent.
+   * @param genotype               the existing genotype.
+   * @param environmentInformation the information of the environment.
+   * @param time                   the time spent.
    * @return a new genotype with better adaptation to the environment and casual variations.
    */
-  def buildGenotype(genotype: Genotype)(phenotype: Phenotype)(averageTemperature: Int)(averagePressure: Int)(averageHumidity: Int)(time: Int): Genotype = {
+  def evolveGenotype(genotype: Genotype)(environmentInformation: EnvironmentInformation)(time: Int): Genotype = {
     val evolutionaryRate = this.evolutionaryRate(time)(time => Math.sqrt(time).toInt)
+
+    val phenotype = genotype expressInPhenotype
 
     /**
      * Inner function to create a new genotype, evolved with respect to the given genotype.
@@ -34,17 +33,23 @@ object EvolutionManager {
      */
     @scala.annotation.tailrec
     def createGenotype(genes: List[Gene], newGenes: List[Gene] = List.empty): List[Gene] = genes match {
-      case h :: t => val gene = h.name match {
-        case GeneTaxonomy.TEMPERATURE_GENE => environmentalAdaptation(genotype)(phenotype)(averageTemperature)(h.name)(h.geneticInformation.characteristics.head)(evolutionaryRate)
-        case GeneTaxonomy.PRESSURE_GENE => environmentalAdaptation(genotype)(phenotype)(averagePressure)(h.name)(h.geneticInformation.characteristics.head)(evolutionaryRate)
-        case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(genotype)(phenotype)(averageHumidity)(h.name)(h.geneticInformation.characteristics.head)(evolutionaryRate)
+      case h :: t => val gene = h taxonomy match {
+        case GeneTaxonomy.TEMPERATURE_GENE => environmentalAdaptation(h taxonomy)(h frequency)(
+          phenotype expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)(
+          environmentInformation.characteristicMap(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY))(evolutionaryRate)
+        case GeneTaxonomy.PRESSURE_GENE => environmentalAdaptation(h taxonomy)(h frequency)(
+          phenotype expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)(
+          environmentInformation.characteristicMap(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY))(evolutionaryRate)
+        case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(h taxonomy)(h frequency)(
+          phenotype expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)(
+          environmentInformation.characteristicMap(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))(evolutionaryRate)
         case _ => this.randomMutation(h)(evolutionaryRate)
       }
         createGenotype(t, gene :: newGenes)
       case _ => newGenes
     }
 
-    Genotype(createGenotype(genotype.genes.toList) :_*)
+    Genotype(createGenotype(genotype.genes.toList): _*)
   }
 
   /**
@@ -59,22 +64,20 @@ object EvolutionManager {
   /**
    * Generic method that products the environmental adaptation.
    *
-   * @param genotype       the existing genotype.
-   * @param phenotype      the existing phenotype.
-   * @param parameter      the environmental parameter.
-   * @param gene           the taxonomy of the gene.
-   * @param characteristic the taxonomy of the characteristic expressed by the gene.
+   * @param taxonomy         the taxonomy of the gene.
+   * @param frequency        the frequency of the gene in the genotype.
+   * @param expression       the expression of the characteristic.
+   * @param parameter        the environmental parameter.
+   * @param evolutionaryRate the evolutionary rate of the gene.
    * @return a new gene with a frequency that fit better the environment.
    */
-  private def environmentalAdaptation(genotype: Genotype)(phenotype: Phenotype)(parameter: Int)
-                                     (gene: GeneTaxonomy)(characteristic: CharacteristicTaxonomy)(evolutionaryRate: Int): Gene = {
-    val frequency: Int = genotype frequencyOf gene
-    val expression: (Int, Int) = phenotype expressionOf characteristic
+  private def environmentalAdaptation(taxonomy: GeneTaxonomy)(frequency: Frequency)(expression: (Int, Int))
+                                     (parameter: Int)(evolutionaryRate: Int): Gene = {
 
-    if (parameter in expression) Gene(gene, frequency)
+    if (parameter in expression) Gene(taxonomy, frequency)
     else if (parameter < expression)
-      Gene(gene, frequency - evolutionaryRate)
-    else Gene(gene, frequency + evolutionaryRate)
+      Gene(taxonomy, frequency - evolutionaryRate)
+    else Gene(taxonomy, frequency + evolutionaryRate)
   }
 
   /**
@@ -85,6 +88,6 @@ object EvolutionManager {
    * @return a new gene, with mutated frequency.
    */
   private def randomMutation(gene: Gene)(evolutionaryRate: Int): Gene = {
-    Gene(gene.name, if (Random.nextInt() % 2 == 0) gene.frequency - evolutionaryRate else gene.frequency + evolutionaryRate)
+    Gene(gene taxonomy, if (Random.nextInt() % 2 == 0) (gene frequency) - evolutionaryRate else (gene frequency) + evolutionaryRate)
   }
 }

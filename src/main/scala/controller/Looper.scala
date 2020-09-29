@@ -5,7 +5,7 @@ import scala.math.max
 import scala.annotation.tailrec
 
 /** Looper of the simulation. Recursively manage the updates */
-object Looper {
+private[controller] object Looper {
 
   /**
    * Exec all the update steps set for the simulation

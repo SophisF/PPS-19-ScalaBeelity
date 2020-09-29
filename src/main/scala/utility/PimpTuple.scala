@@ -34,6 +34,6 @@ object PimpTuple {
    * @param tuple the tuple to convert.
    * @return a string that represents the range term.
    */
-  implicit def toPrologTerm(tuple: (Int, Int)): String = s"range(${tuple._1}, ${tuple._2})"
+  implicit def toPrologTerm(tuple: Range): String = s"range(${tuple._1}, ${tuple._2})"
 
 }

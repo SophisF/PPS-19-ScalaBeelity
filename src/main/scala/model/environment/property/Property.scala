@@ -6,7 +6,7 @@ package scala.model.environment.property
  * It can be both a quantitative one (e.g., temperature, pressure),
  * or a qualitative one (e.g., a land can be wooded, arid, etc.)
  */
-trait Property {
+private[model] trait Property {
 
   /** Type of values of the property */
   type ValueType

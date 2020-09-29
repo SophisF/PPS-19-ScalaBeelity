@@ -6,7 +6,7 @@ import scala.model.environment.property.{TimedProperty => TimedProperty_}
 /**
  * A property related to time who has a time-based behaviour
  */
-trait TimedProperty extends TimedProperty_ with Property {
+private[realization] trait TimedProperty extends TimedProperty_ with Property {
   override type TimedVariationType = IntegerTimedVariation
 
   implicit def variation(value: Int): VariationType

@@ -10,8 +10,6 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
  */
 object Phenotype {
 
-  private val defaultExpressionValue: Int = 1
-
   /**
    * Apply method for phenotype.
    *
@@ -55,9 +53,9 @@ object Phenotype {
    */
   private case class PhenotypeImpl(expressions: Map[CharacteristicTaxonomy, Double]) extends Phenotype {
     require(expressions.size == CharacteristicTaxonomy.maxId)
-    override val characteristics: Set[Characteristic] = expressions.map(kv => Characteristic(kv._1, kv._2)).toSet
+    override val characteristics: Set[Characteristic] = expressions map (kv => Characteristic(kv._1, kv._2)) toSet
 
-    override def expressionOf(taxonomy: CharacteristicTaxonomy): Characteristic#Expression = characteristics.find(_.name.equals(taxonomy)).get.expression
+    override def expressionOf(taxonomy: CharacteristicTaxonomy): Characteristic#Expression = (characteristics find(_.taxonomy equals taxonomy) get) expression
 
 
   }

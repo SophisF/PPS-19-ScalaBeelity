@@ -8,7 +8,7 @@ import scala.utility.SugarBowl.RichOptional
  *
  * @author Paolo Baldini
  */
-sealed trait Time {
+private[model] sealed trait Time {
 
   /**
    * Return the days of the month.
@@ -35,7 +35,7 @@ sealed trait Time {
   def year: Int
 }
 
-object Time extends Ordering[Time] {
+private[model] object Time extends Ordering[Time] {
   private var _time: Time = 0
   private var _incrementValue: Int = 1
 

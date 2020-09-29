@@ -7,7 +7,7 @@ import scala.utility.SugarBowl.RichMappable
  * Represent a generic property who works with data of type Int.
  * Simplify the use (and help DRY) of numeric properties
  */
-trait Property extends Property_ with Range {
+private[realization] trait Property extends Property_ with Range {
   override type StateType = IntegerState
   override type VariationType = IntegerVariation
 

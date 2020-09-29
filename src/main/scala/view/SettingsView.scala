@@ -5,7 +5,10 @@ import java.awt.GridLayout
 import javax.swing.JOptionPane._
 import javax.swing._
 
-object SettingsView {
+/**
+ * View for setup simulation.
+ */
+private[view] object SettingsView {
   private val MatrixSize = Array("100", "200", "300")
   private val Iterations = Array("1000", "5000", "infinite")
   private val DefaultColoniesNumber = 1
@@ -18,7 +21,7 @@ object SettingsView {
     val numColonies = new JTextField(DefaultColoniesNumber toString)
     panel.add(numColonies)
 
-    panel.add(new JLabel("Temporal Granularity :"))
+    panel.add(new JLabel("Temporal Granularity (days) :"))
     val temporalGranularity = new JTextField(DefaultTemporalGranularity toString)
     panel.add(temporalGranularity)
 
@@ -30,7 +33,7 @@ object SettingsView {
     val comboMatrix = new JComboBox(MatrixSize)
     panel.add(comboMatrix)
 
-    showConfirmDialog(null, panel, "Test", OK_CANCEL_OPTION, PLAIN_MESSAGE) match {
+    showConfirmDialog(null, panel, "Settings", OK_CANCEL_OPTION, PLAIN_MESSAGE) match {
       case OK_OPTION => Option(SimulationSettings(numColonies, temporalGranularity,
         comboIterations.getSelectedItem match {
           case "infinite" => -1

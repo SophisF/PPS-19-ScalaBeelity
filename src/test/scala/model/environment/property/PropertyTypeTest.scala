@@ -2,7 +2,7 @@ package scala.model.environment.property
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.environment.property.PropertyType.{propertyOf, properties, propertiesType, random}
+import scala.model.environment.property.PropertyType.{Humidity, properties, propertiesType, propertyOf, random}
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
 /**
@@ -75,5 +75,17 @@ class PropertyTypeTest extends AnyFunSuite {
 
   test("[Partial test] 'random' should return different values (multiple properties are defined)"){
     assert(Iterator.continually(random[Property].get).take(10000).distinct.size > 1)
+  }
+
+  test("Specifying an existing property in 'properties' method should allow to return it") {
+    assert(properties[HumidityProperty].toSeq contains HumidityProperty)
+  }
+
+  test("Specifying an existing property in 'properties' method should return only an element") {
+    assert(properties[HumidityProperty].size == 1)
+  }
+
+  test("Specifying an existing property in 'random' method should allow to return it") {
+    assert(random[HumidityProperty].get == HumidityProperty)
   }
 }

@@ -6,7 +6,7 @@ import breeze.linalg.DenseMatrix.create
 import scala.model.environment.matrix.Zone.{border, in}
 import scala.model.environment.matrix.Size.Border._
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
-import scala.model.environment.property.{Property, TimeDependentProperty}
+import scala.model.environment.property.{Property, TimedProperty}
 import scala.model.environment.property.source.{PropertySource, ZoneSource}
 import scala.utility.SugarBowl.RichMappable
 
@@ -38,7 +38,7 @@ object Environment {
 
   def apply(environment: Environment, source: PropertySource[_]): Environment = source match {
     case source: ZoneSource[Property] => applyFilter(environment, source)
-    case source: SeasonalSource[TimeDependentProperty] => applySeason(environment, source)
+    case source: SeasonalSource[TimedProperty] => applySeason(environment, source)
     case _ => environment
   }
 
@@ -62,7 +62,7 @@ object Environment {
    * @param variator to apply
    * @return an environment to which is applied the filter
    */
-  def applySeason(environment: Environment, source: SeasonalSource[TimeDependentProperty]): Environment =
+  def applySeason(environment: Environment, source: SeasonalSource[TimedProperty]): Environment =
     source.variation match {
       case variation if variation isNull => environment
       case variation => Environment(environment.map.map(_ + variation))

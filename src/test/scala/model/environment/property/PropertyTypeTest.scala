@@ -2,7 +2,7 @@ package scala.model.environment.property
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.environment.property.PropertyType.{getPropertyFrom, properties, random}
+import scala.model.environment.property.PropertyType.{propertyOf, properties, propertiesType, random}
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
 /**
@@ -49,15 +49,15 @@ class PropertyTypeTest extends AnyFunSuite {
   }
 
   test("'properties' should contains TemperatureProperty") {
-    assert(properties().map(getPropertyFrom).toSeq contains TemperatureProperty)
+    assert(propertiesType.map(propertyOf).toSeq contains TemperatureProperty)
   }
 
   test("'properties' should contains HumidityProperty") {
-    assert(properties().map(getPropertyFrom).toSeq contains HumidityProperty)
+    assert(propertiesType.map(propertyOf).toSeq contains HumidityProperty)
   }
 
   test("'properties' should contains PressureProperty") {
-    assert(properties().map(getPropertyFrom).toSeq contains PressureProperty)
+    assert(propertiesType.map(propertyOf).toSeq contains PressureProperty)
   }
 
   /* TODO test("'properties' filtering for timed-properties should not contains PressureProperty") {
@@ -65,23 +65,15 @@ class PropertyTypeTest extends AnyFunSuite {
   }*/
 
   test("'properties' filtering for a specific property should return only it") {
-    assert(properties(_.isInstanceOf[PressureProperty]).map(getPropertyFrom).toSeq contains PressureProperty)
-  }
-
-  test("'properties' can return empty sequence if no property respect the condition"){
-    assert(properties(_ => false).isEmpty)
+    assert(properties[PressureProperty].toSeq contains PressureProperty)
   }
 
   // The two following test works with random so is not guaranteed to always pass
   test("[Partial test] 'random' should never return empty optional without filter (properties are defined)"){
-    assert(! Iterator.continually(random()).take(10000).exists(_.isEmpty))
+    assert(! Iterator.continually(random[Property]).take(10000).exists(_.isEmpty))
   }
 
   test("[Partial test] 'random' should return different values (multiple properties are defined)"){
-    assert(Iterator.continually(random().get).take(10000).distinct.size > 1)
-  }
-
-  test("'random' can return empty optional if no property respect the condition"){
-    assert(random(_ => false).isEmpty)
+    assert(Iterator.continually(random[Property].get).take(10000).distinct.size > 1)
   }
 }

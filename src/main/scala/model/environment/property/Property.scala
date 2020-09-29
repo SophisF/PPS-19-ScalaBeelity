@@ -1,7 +1,5 @@
 package scala.model.environment.property
 
-import breeze.linalg.DenseMatrix
-
 /**
  * This represent an environmental property defined as an entity
  * having a variable state and a variation strategy embedded in it.
@@ -83,13 +81,4 @@ trait Property {
      */
     def vary[S <: StateType](state: S): StateType
   }
-
-  /**
-   * Generate a filter of variations
-   *
-   * @param xDecrement influence the width of the filter
-   * @param yDecrement influence the height of the filter
-   * @return the filter of variations
-   */
-  def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType]
 }

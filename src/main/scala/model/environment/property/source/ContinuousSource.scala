@@ -2,7 +2,7 @@ package scala.model.environment.property.source
 
 import scala.model.Time
 import scala.model.Time.now
-import scala.model.environment.property.TimeDependentProperty
+import scala.model.environment.property.TimedProperty
 import scala.model.environment.time.Timed
 import scala.utility.DenseMatrixHelper.Matrix
 
@@ -17,7 +17,7 @@ import scala.utility.DenseMatrixHelper.Matrix
  * @param finalFilter the filter that should have been applied at the source death
  * @tparam T type of time-dependent-property
  */
-case class ContinuousSource[T <: TimeDependentProperty](
+case class ContinuousSource[T <: TimedProperty](
   x: Int, y: Int,
   daysDuration: Int,
   fireTime: Time = now()

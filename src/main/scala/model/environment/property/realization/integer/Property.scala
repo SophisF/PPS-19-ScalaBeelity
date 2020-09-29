@@ -1,19 +1,13 @@
 package scala.model.environment.property.realization.integer
 
-import breeze.linalg.DenseMatrix
-
-import scala.model.environment.property.GaussianFilterBuilder.function3d
-import scala.model.environment.property.Property
-import scala.model.environment.property.realization.integer.IntProperty.filter
-import scala.utility.IterableHelper.RichIterable
+import scala.model.environment.property.{Property => Property_}
 import scala.utility.SugarBowl.RichMappable
-import scala.utility.MathHelper.intValueOf
 
 /**
  * Represent a generic property who works with data of type Int.
  * Simplify the use (and help DRY) of numeric properties
  */
-trait IntProperty extends Property with IntRange {
+trait Property extends Property_ with Range {
   override type StateType = IntegerState
   override type VariationType = IntegerVariation
 
@@ -40,7 +34,7 @@ trait IntProperty extends Property with IntRange {
     override def numericRepresentation(percentage: Boolean = true): Int =
       value.when (_ => percentage) ~> (v => (v - minValue) * 100 / rangeWidth)
 
-    override def equals(a: Any): Boolean = a.isInstanceOf[IntegerState] && a.asInstanceOf[IntegerState].value == value // TODO check usage
+    override def equals(a: Any): Boolean = a match { case state: IntegerState => state.value == value; case _ => false }
   }
 
   implicit def variation(_value: Int): VariationType = new IntegerVariation {
@@ -56,13 +50,4 @@ trait IntProperty extends Property with IntRange {
 
     override def vary[S <: State](_state: S): StateType = _state.value + value
   }
-
-  override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] =
-    filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
-}
-
-object IntProperty {
-
-  def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
-    function3d((minValue to maxValue).filter(_ != 0).random.get, 0, xDecrement, yDecrement)
 }

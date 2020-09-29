@@ -1,12 +1,12 @@
 package scala.model.environment.property.realization.integer
 
-import scala.model.environment.property.Range
+import scala.model.environment.property.{Range => Range_}
 
 /**
  * Represent a generic range who works with data of type Int.
  * Simplify the use (and help DRY) of numeric ranges
  */
-trait IntRange extends Range {
+trait Range extends Range_ {
   override type ValueType = Int
 
   /**

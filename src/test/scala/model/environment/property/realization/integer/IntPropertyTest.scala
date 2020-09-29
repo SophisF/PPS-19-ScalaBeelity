@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class IntPropertyTest extends AnyFunSuite{
 
-  val intProperty: IntProperty = new IntProperty {
+  val intProperty: Property = new Property {
     override def default: Int = 5
 
     override def minValue: Int = 0

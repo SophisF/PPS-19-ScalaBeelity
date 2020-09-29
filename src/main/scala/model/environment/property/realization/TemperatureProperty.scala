@@ -3,14 +3,15 @@ package scala.model.environment.property.realization
 import Math.{cos, toRadians}
 
 import scala.model.Time
-import scala.model.environment.property.realization.integer.{IntBehaviouralProperty, IntProperty}
+import scala.model.environment.property.realization.integer.TimedProperty
+import scala.model.environment.property.realization.integer.utils.{SeasonalBehaviour, TimedFilterGenerator}
 import scala.utility.MathHelper.intValueOf
 
 /**
  * A TemperatureProperty is a property who works with data of type Int and has a behaviour based on the time.
  * This file contains configurations data for the specified property.
  */
-sealed trait TemperatureProperty extends IntProperty with IntBehaviouralProperty
+sealed trait TemperatureProperty extends TimedProperty with SeasonalBehaviour with TimedFilterGenerator
 
 object TemperatureProperty extends TemperatureProperty {
   private val variationMultiplier = .25

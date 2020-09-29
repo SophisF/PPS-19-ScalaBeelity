@@ -9,6 +9,7 @@ import scala.model.environment.property.Property
 import scala.model.environment.property.PropertyType.properties
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
+import scala.model.environment.property.utils.FilterGenerator
 import scala.model.environment.time.Timed.isEnded
 import scala.util.Random
 import scala.utility.Point
@@ -50,7 +51,7 @@ object EnvironmentManager {
   def apply[T <: Property](width: Int, height: Int): EnvironmentManager = {
     val seasonalEnvironment = generateSeason().foldLeft(EnvironmentManager(Environment(width, height)))(addSource)
     val filters = for {
-      property <- properties()
+      property <- properties[FilterGenerator]
       _ <- 0 to Random.between(10, 20)
     } yield randomInstantaneousFilter(property, Size(width, height))
     evolution(filters.foldLeft(seasonalEnvironment)(addSource))
@@ -73,7 +74,6 @@ object EnvironmentManager {
         }: _*
       ))(addSource)
 
-
   def addSource[T <: Property](manager: EnvironmentManager, source: PropertySource[T]): EnvironmentManager =
-    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]: _*)
+    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]:_*)
 }

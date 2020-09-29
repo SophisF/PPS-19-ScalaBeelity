@@ -23,7 +23,7 @@ private[environment] case class Cell(
   def apply[T <: Property](property: PropertyValue[_]): T#StateType = (property match {
     case Temperature => temperature
     case Humidity => humidity
-    case Pressure => pressure
+    case _ => pressure
   }).asInstanceOf[T#StateType]
 
   def +(variation: Property#Variation): Cell = variation match {

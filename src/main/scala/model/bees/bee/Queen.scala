@@ -29,11 +29,15 @@ object Queen {
   def apply(colonyOpt: Option[Colony],
             genotype: Genotype, phenotype: Phenotype, age: Int, position: Point,
             generateNewColony: Point => Colony, environmentInformation: EnvironmentInformation): Queen = {
+    /**
+     * Variable that represents the fit value that represents how good it is in that position
+     */
     val fitValue: Double = FitCalculator.calculateFitValue(phenotype)(environmentInformation)(
       params => params.sum / params.size)
 
-    val l: Int = phenotype expressionOf CharacteristicTaxonomy.LONGEVITY
-    QueenImpl(colonyOpt, genotype, phenotype, age, FitCalculator.applyFitValue(fitValue)(l - age)(_ * _),
+    val longevity: Int = phenotype expressionOf CharacteristicTaxonomy.LONGEVITY
+
+    QueenImpl(colonyOpt, genotype, phenotype, age, FitCalculator.applyFitValue(fitValue)(longevity - age)(_ * _),
       FitCalculator.applyFitValue(fitValue)(phenotype expressionOf CharacteristicTaxonomy.REPRODUCTION_RATE)(_ * _),
       FitCalculator.applyFitValue(fitValue)(phenotype expressionOf CharacteristicTaxonomy.AGGRESSION_RATE)(_ * _),
       environmentInformation, position, generateNewColony)
@@ -64,6 +68,20 @@ object Queen {
         this.generateNewColony, environmentInformation)
   }
 
+  /**
+   * Case class that represents the Queen.
+   *
+   * @param colonyOpt                 an option of a Colony, if it already exists.
+   * @param genotype                  the queen's genotype.
+   * @param phenotype                 the queen's phenotype.
+   * @param age                       the queen's age.
+   * @param effectiveLongevity        the queen's effective longevity.
+   * @param effectiveReproductionRate the queen's effective reproduction rate.
+   * @param effectiveAggression       the queen's effective aggression.
+   * @param environmentInformation    the environment information.
+   * @param position                  the queen's position.
+   * @param generateNewColony         function to generate a new colony in a position.
+   */
   private case class QueenImpl(colonyOpt: Option[Colony],
                                override val genotype: Genotype, override val phenotype: Phenotype,
                                override val age: Int, override val effectiveLongevity: Int, override val effectiveReproductionRate: Int,
@@ -72,6 +90,11 @@ object Queen {
 
     override val colony: Colony = colonyOpt getOrElse Colony(queen = this, bees = generateBee)
 
+    /**
+     * Method to generate bees, the number is proportional to its effective reproduction rate.
+     *
+     * @return a Set of bees that populate the colony.
+     */
     private def generateBee: Set[Bee] = (0 to this.effectiveReproductionRate + 1)
       .map(_ => {
         val similarGenotype = EvolutionManager.evolveGenotype(this.genotype)(environmentInformation)(1)

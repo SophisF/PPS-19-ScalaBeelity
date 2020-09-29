@@ -5,7 +5,7 @@ import java.awt.Component
 /**
  * Trait for all chart.
  */
-trait ChartBuilder[T] {
+private[view] trait ChartBuilder[T] {
   type ChartType <: Component
 
   /**

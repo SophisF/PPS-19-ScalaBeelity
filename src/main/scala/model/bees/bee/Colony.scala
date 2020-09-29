@@ -143,12 +143,12 @@ object Colony {
       val newCenter: Point = this.move(time)(environmentManager)
       val cells = environmentManager.indexInRange(newCenter.x.applyTwoOperations(this.dimension)(_ - _)(_ + _),
         newCenter.y.applyTwoOperations(this.dimension)(_ - _)(_ + _))
-        .map(index => environmentManager.environment.map.valueAt(index._1, index._2))
+        .map(index => environmentManager.cells().valueAt(index._1, index._2))
 
       val environmentBinder = EnvironmentInformation(cells)
 
       Colony(this.color, this.updateQueen(time)(environmentBinder)(CollisionManager.keepInside(newCenter, this.dimension,
-        environmentManager.environment.width, environmentManager.environment.height)),
+        environmentManager.width, environmentManager.height)),
         this.updatePopulation(time)(environmentBinder)) ::
         (this.generateColony(time)(environmentManager) getOrElse List.empty)
     }

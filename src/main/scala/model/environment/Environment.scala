@@ -15,13 +15,13 @@ import scala.utility.SugarBowl.RichMappable
  *
  * @param map of the environment. Represented as a grid.
  */
-case class Environment private (map: DenseMatrix[Cell]) {
+private[environment] case class Environment private (map: DenseMatrix[Cell]) {
   def cells: Iterable[Cell] = map data
   def width: Int = map cols
   def height: Int = map rows
 }
 
-object Environment {
+private[environment] object Environment {
 
   /**
    * Create a new environment

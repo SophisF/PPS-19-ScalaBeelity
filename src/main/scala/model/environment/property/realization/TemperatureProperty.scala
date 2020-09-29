@@ -1,6 +1,6 @@
 package scala.model.environment.property.realization
 
-import Math.{cos, toRadians}
+import Math.{sin, toRadians}
 
 import scala.model.Time
 import scala.utility.MathHelper.intValueOf
@@ -9,9 +9,9 @@ import scala.utility.MathHelper.intValueOf
  * A TemperatureProperty is a property who works with data of type Int and has a behaviour based on the time.
  * This file contains configurations data for the specified property.
  */
-sealed trait TemperatureProperty extends IntProperty with IntTimedProperty
+private[environment] sealed trait TemperatureProperty extends IntProperty with IntTimedProperty
 
-object TemperatureProperty extends TemperatureProperty {
+private[environment] object TemperatureProperty extends TemperatureProperty {
   private val seasonalVariationMultiplier = .25
 
   override val default: Int = 20
@@ -22,9 +22,7 @@ object TemperatureProperty extends TemperatureProperty {
     private var lastGet: Int = 0
 
     override def instantaneous(instant: Time): VariationType = {
-      // TODO che ne dici gnagna? Così ha un andamento più smooth e complementare a quello dell'umidità -> molto caldo => secco; molto freddo => umido
-      val monthlyValue = rangeCenter * seasonalVariationMultiplier * cos(toRadians(instant % 365))
-      //val monthlyValue = (0 to 6).mirror(false).map(_ * MonthlyIncrement).drop(instant month).head
+      val monthlyValue = rangeCenter * seasonalVariationMultiplier * -sin(toRadians(instant % 365))
       val variation: Int = monthlyValue - lastGet
       lastGet = monthlyValue
       variation

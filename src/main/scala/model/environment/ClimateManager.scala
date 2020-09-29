@@ -3,18 +3,18 @@ package scala.model.environment
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.matrix.Size
-import scala.model.environment.property.PropertyType.PropertyValue
+import scala.model.environment.property.PropertyType.{PropertyValue, properties}
 import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.ZoneSource.Source
 import scala.model.environment.property.{Property, PropertyType, TimeDependentProperty}
 import scala.model.environment.property.source.{ContinuousSource, PropertySource}
-import scala.util.Random.{nextInt => randomInt, between => randomDoubleIn}
+import scala.util.Random.{between => randomDoubleIn, nextInt => randomInt}
 import scala.utility.MathHelper.randomBoolean
 
 /**
  * Manager for climate in environment.
  */
-object ClimateManager {
+private[environment] object ClimateManager {
   private val filterXAxisDecrement = (environmentWidth: Int) => randomDoubleIn(.1, .2) * environmentWidth toInt
   private val filterYAxisDecrement = (environmentHeight: Int) => randomDoubleIn(.1, .2) * environmentHeight toInt
 
@@ -36,7 +36,7 @@ object ClimateManager {
    *
    * @return an iterator of PropertySource
    */
-  def generateSeason(): Iterator[PropertySource[TimeDependentProperty]] = PropertyType.properties(_.isInstanceOf[TimeDependentProperty])
+  def generateSeason(): Iterator[PropertySource[TimeDependentProperty]] = properties(_.isInstanceOf[TimeDependentProperty])
     .map(_.asInstanceOf[PropertyValue[TimeDependentProperty]]).map(seasonalChanges(_)).iterator
 
   /**

@@ -3,14 +3,14 @@ package scala.model.environment.matrix
 import scala.model.environment.matrix.Size.Border._
 import scala.utility.Point
 
-trait Zone extends Point with Size
+private[environment] trait Zone extends Point with Size
 
 /**
  * Represent a centered area in a matrix
  *
  * @author Paolo Baldini
  */
-object Zone {
+private[environment] object Zone {
 
   /**
    * Calculate x/y position of a border. In other words, x or y of cells that reside on the borders of an area.

@@ -11,7 +11,7 @@ import org.jfree.data.xy.DefaultXYDataset
 /**
  * Chart for show seasonal variation.
  */
-object SeasonalChartBuilder extends ChartBuilder[Seq[(String, Array[Array[Double]])]] {
+private[view] object SeasonalChartBuilder extends ChartBuilder[Seq[(String, Array[Array[Double]])]] {
   override type ChartType = Component
 
   override def createChart(data: Seq[(String, Array[Array[Double]])]): Component = {

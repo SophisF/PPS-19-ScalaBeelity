@@ -9,7 +9,7 @@ import scala.model.environment.property.realization.IntProperty.filter
 /**
  * A property related to time who has a time-based behaviour
  */
-trait IntTimedProperty extends TimeDependentProperty with IntRange {
+private[realization] trait IntTimedProperty extends TimeDependentProperty with IntRange {
   override type TimedVariationType = IntegerTimedVariation
 
   implicit def variation(value: Int): VariationType

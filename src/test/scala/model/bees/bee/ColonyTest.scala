@@ -8,7 +8,7 @@ import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.{CharacteristicTaxonomy, EnvironmentInformation, Phenotype}
-import scala.model.environment.Cell
+import scala.model.environment.adapter.Cell
 import scala.utility.Point
 
 class ColonyTest extends AnyFunSuite {

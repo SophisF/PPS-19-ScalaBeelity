@@ -6,7 +6,7 @@ import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{GeneTaxonomy, Genotype}
 import scala.model.bees.phenotype.EnvironmentInformation
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.environment.Cell
+import scala.model.environment.adapter.Cell
 
 class EvolutionManagerTest extends AnyFunSuite{
   val genotype: Genotype = Genotype()

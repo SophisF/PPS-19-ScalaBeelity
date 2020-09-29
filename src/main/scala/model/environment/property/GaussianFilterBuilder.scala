@@ -11,7 +11,7 @@ import scala.utility.DenseMatrixHelper.{TransformableMatrix, empty}
 import scala.utility.IterableHelper.RichIterable
 
 /** Contains functions to create gaussian filters */
-object GaussianFilterBuilder {
+private[property] object GaussianFilterBuilder {
 
   /**
    * Build an 'half' (only values descending from ceil to floor or vice versa ascending) 2d gaussian filter

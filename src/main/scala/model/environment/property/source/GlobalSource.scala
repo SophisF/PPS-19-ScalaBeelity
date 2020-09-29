@@ -9,11 +9,11 @@ import scala.model.environment.property.{Property, TimeDependentProperty}
  *
  * @tparam T type of property
  */
-trait GlobalSource[T <: Property] extends PropertySource[T] {
+private[environment] trait GlobalSource[T <: Property] extends PropertySource[T] {
   def variation: T#Variation
 }
 
-object GlobalSource {
+private[environment] object GlobalSource {
 
   /**
    * An implementation for the global-source who takes time-dependent properties

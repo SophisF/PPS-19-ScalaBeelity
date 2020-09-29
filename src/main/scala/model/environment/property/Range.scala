@@ -3,7 +3,7 @@ package scala.model.environment.property
 /**
  * Set a maximum an minimum value to something.
  */
-trait Range {
+private[property] trait Range {
   type ValueType
 
   def minValue: ValueType

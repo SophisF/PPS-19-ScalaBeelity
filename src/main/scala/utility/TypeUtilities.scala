@@ -10,5 +10,7 @@ object TypeUtilities {
 
   type StatisticColonies = List[StatisticColony]
 
+  type StatisticEnvironment = Seq[(String, Iterable[Double])]
+
   type Range = (Int, Int)
 }

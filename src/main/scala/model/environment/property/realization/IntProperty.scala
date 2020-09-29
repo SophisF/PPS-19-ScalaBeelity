@@ -12,7 +12,7 @@ import scala.utility.IterableHelper.RichIterable
  * Represent a generic property who works with data of type Int.
  * Simplify the use (and help DRY) of numeric properties
  */
-trait IntProperty extends Property with IntRange {
+private[realization] trait IntProperty extends Property with IntRange {
   override type StateType = IntegerState
   override type VariationType = IntegerVariation
 
@@ -51,7 +51,7 @@ trait IntProperty extends Property with IntRange {
     filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))
 }
 
-object IntProperty {
+private[realization] object IntProperty {
 
   def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
     function3d((minValue to maxValue).filter(_ != 0).random.get, 0, xDecrement, yDecrement)

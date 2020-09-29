@@ -9,9 +9,9 @@ import scala.utility.MathHelper.intValueOf
  * A HumidityProperty is a property who works with data of type Int and has a behaviour based on the time.
  * This file contains configurations data for the specified property.
  */
-sealed trait HumidityProperty extends IntProperty with IntTimedProperty
+private[environment] sealed trait HumidityProperty extends IntProperty with IntTimedProperty
 
-object HumidityProperty extends HumidityProperty {
+private[environment] object HumidityProperty extends HumidityProperty {
   private val seasonalVariationMultiplier = .25
 
   override val default: Int = 30

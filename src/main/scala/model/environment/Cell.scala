@@ -14,7 +14,7 @@ import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temper
  *
  * @author Paolo Baldini
  */
-case class Cell(
+private[environment] case class Cell(
   temperature: TemperatureProperty.StateType = TemperatureProperty.default,
   humidity: HumidityProperty.StateType = HumidityProperty.default,
   pressure: PressureProperty.StateType = PressureProperty.default
@@ -44,7 +44,7 @@ case class Cell(
   def +?(variation: Option[Property#Variation]): Cell = variation map (this + _) getOrElse this
 }
 
-object Cell {
+private[environment] object Cell {
 
   def equals(first: Cell, second: Cell): Boolean = first.temperature == second.temperature &&
     first.humidity == second.humidity && first.pressure == second.pressure

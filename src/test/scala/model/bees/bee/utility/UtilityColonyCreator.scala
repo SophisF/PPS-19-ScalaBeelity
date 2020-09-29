@@ -5,7 +5,7 @@ import scala.model.bees.bee.{Bee, Colony, Queen}
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.Characteristic.{HumidityCompatibilityCharacteristic, PressureCompatibilityCharacteristic, TemperatureCompatibilityCharacteristic}
 import scala.model.bees.phenotype.EnvironmentInformation
-import scala.model.environment.Cell
+import scala.model.environment.adapter.Cell
 import scala.util.Random
 import scala.utility.Point
 

@@ -6,12 +6,12 @@ import scala.model.Time.{compare, delay}
 /**
  * Represent a duration
  */
-trait Timed {
+private[environment] trait Timed {
   def fireTime: Time
   def daysDuration: Int
 }
 
-object Timed {
+private[environment] object Timed {
 
   def isEnded(timed: Timed): Boolean = compare(delay(timed daysDuration, timed fireTime), Time.now()) < 0
 

@@ -8,7 +8,7 @@ import javax.swing._
 /**
  * View for setup simulation.
  */
-object SettingsView {
+private[view] object SettingsView {
   private val MatrixSize = Array("100", "200", "300")
   private val Iterations = Array("1000", "5000", "infinite")
   private val DefaultColoniesNumber = 1

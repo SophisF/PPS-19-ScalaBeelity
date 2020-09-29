@@ -20,7 +20,7 @@ import scala.Array.empty
 /**
  * Heatmap chart.
  */
-object HeatmapChartBuilder extends ChartBuilder[Array[Array[Double]]] {
+private[view] object HeatmapChartBuilder extends ChartBuilder[Array[Array[Double]]] {
   override type ChartType = Component
 
   override def createChart(data: Array[Array[Double]]): Component =

@@ -2,7 +2,8 @@ package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
-import scala.model.adapter.Cell.toCell
+import scala.model.environment.adapter.Cell
+import scala.model.environment.adapter.Cell.cellFromPrivateOne
 import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason, randomInstantaneousFilter}
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.Property
@@ -19,9 +20,14 @@ import scala.utility.Point
  * @param environment     , the environment to manage.
  * @param propertySources , the property to at the environment.
  */
-case class EnvironmentManager(environment: Environment, propertySources: PropertySource[Property]*) {
+private[model] case class EnvironmentManager(
+  private val environment: Environment,
+  propertySources: PropertySource[Property]*
+) {
 
-  def cells(): DenseMatrix[scala.model.adapter.Cell] = environment.map.mapValues(toCell)
+  def cells(): DenseMatrix[Cell] = environment.map.mapValues(cellFromPrivateOne)
+  def width: Int = environment.width
+  def height: Int = environment.height
 
   def indexInRange(range1: (Int, Int), range2: (Int, Int)): Seq[(Int, Int)] = for {
     i <- range1._1 to range1._2
@@ -38,7 +44,7 @@ case class EnvironmentManager(environment: Environment, propertySources: Propert
 
 }
 
-object EnvironmentManager {
+private[model] object EnvironmentManager {
 
   val minRandom = 10
   val maxRandom = 20
@@ -79,5 +85,5 @@ object EnvironmentManager {
 
 
   def addSource[T <: Property](manager: EnvironmentManager, source: PropertySource[T]): EnvironmentManager =
-    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]: _*)
+    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]:_*)
 }

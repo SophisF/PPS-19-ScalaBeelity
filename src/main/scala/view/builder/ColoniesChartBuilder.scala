@@ -20,7 +20,7 @@ import scala.utility.TypeUtilities._
 /**
  * Chart for show movement of colonies and their details.
  */
-object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)] {
+private[view] object ColoniesChartBuilder extends ChartBuilder[((Int, Int), StatisticColonies)] {
   override type ChartType = ColoniesChart
   class ColoniesChart(var selectedColony: Option[StatisticColony] = Option.empty) extends JPanel
 

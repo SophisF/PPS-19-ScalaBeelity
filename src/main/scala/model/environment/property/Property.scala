@@ -7,7 +7,7 @@ import breeze.linalg.DenseMatrix
  * It can be both a quantitative one (e.g., temperature, pressure),
  * or a qualitative one (e.g., a cell could be an aquatic or terrestrial one).
  */
-trait Property {
+private[model] trait Property {
   /** Type of values of the property */
   type ValueType
   type StateType <: State

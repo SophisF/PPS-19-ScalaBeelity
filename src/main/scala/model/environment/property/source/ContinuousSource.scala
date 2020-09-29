@@ -17,7 +17,7 @@ import scala.utility.DenseMatrixHelper.Matrix
  * @param finalFilter the filter that should have been applied at the source death
  * @tparam T type of time-dependent-property
  */
-case class ContinuousSource[T <: TimeDependentProperty](
+private[environment] case class ContinuousSource[T <: TimeDependentProperty](
   x: Int, y: Int,
   daysDuration: Int,
   fireTime: Time = now()

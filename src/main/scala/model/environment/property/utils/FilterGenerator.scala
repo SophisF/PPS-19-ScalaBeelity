@@ -4,7 +4,7 @@ import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.Property
 
-trait FilterGenerator { this: Property =>
+private[environment] trait FilterGenerator { this: Property =>
 
   /**
    * Generate a filter of variations

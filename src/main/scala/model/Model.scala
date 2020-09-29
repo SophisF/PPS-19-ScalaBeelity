@@ -24,28 +24,31 @@ trait Model {
   def pressureMatrix(inPercentage: Boolean = true): Matrix
 }
 
-class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extends Model {
-  Time.reset()
-  Time.incrementValue = updateTime
-  private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
-  private var ecosystem = Ecosystem(numColonies, dimension _1, dimension _2)
+object Model {
 
-  override def update(): Unit = {
-    ecosystem = Ecosystem update ecosystem
-    _statisticalData = updateStats(ecosystem.environmentManager, _statisticalData)
-    Time.increment()
+  class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extends Model {
+    Time.reset()
+    Time.incrementValue = updateTime
+    private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
+    private var ecosystem = Ecosystem(numColonies, dimension _1, dimension _2)
+
+    override def update(): Unit = {
+      ecosystem = Ecosystem update ecosystem
+      _statisticalData = updateStats(ecosystem.environmentManager, _statisticalData)
+      Time.increment()
+    }
+
+    override def statisticalData(): StatisticalEnvironment = _statisticalData
+
+    override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).statistic())) toList
+
+    override def temperatureMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ temperature inPercentage)
+
+    override def humidityMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ humidity inPercentage)
+
+    override def pressureMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ pressure inPercentage)
+
+    private def propertyMatrix(strategy: Cell => Double): Matrix = ecosystem.environmentManager ~>
+      (environment => environment.cells().data.map(strategy).sliding(environment width, environment width) toArray)
   }
-
-  override def statisticalData(): StatisticalEnvironment = _statisticalData
-
-  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).statistic())) toList
-
-  override def temperatureMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ temperature inPercentage)
-
-  override def humidityMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ humidity inPercentage)
-
-  override def pressureMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ pressure inPercentage)
-
-  private def propertyMatrix(strategy: Cell => Double): Matrix = ecosystem.environmentManager ~>
-    (environment => environment.cells().data.map(strategy).sliding(environment width, environment width) toArray)
 }

@@ -33,29 +33,28 @@ object PropertyType extends Enumeration {
   val Humidity: Val with PropertyValue[HumidityProperty] = HumidityProperty
   val Pressure: Val with PropertyValue[PressureProperty] = PressureProperty
 
+  /**
+   * Returns an iterable of property-types
+   *
+   * @return the property-types defined in this enum
+   */
   def propertiesType: Iterable[PropertyValue[Property]] = values.collect { case it: PropertyValue[Property] => it }
 
+  /**
+   * Returns the elements, matching the type, defined in this enum
+   *
+   * @tparam T type of returned element
+   * @return the elements of this enum that matches the specified type
+   */
   def properties[T: ClassTag]: Iterable[T] = propertiesType.map(propertyOf).collect { case it: T => it.asInstanceOf[T] }
 
-  def random[T: ClassTag]: Option[T] = properties[T].random
-
   /**
-   * Returns an iterable of properties possibly filtered with a condition
+   * Get a random property from the ones that match the given type
    *
-   * @param filterCondition filter the properties returning only the ones which match the condition
-   * @return the iterable of properties
-   */
-  //def properties(filterCondition: Property => Boolean = _ => true): Iterable[PropertyValue[Property]] =
-  //  values.asInstanceOf[Iterable[PropertyValue[Property]]].filter(filterCondition(_))
-
-  /**
-   * Get a random property from the ones that match the given condition
-   *
-   * @param filterCondition a condition that a property should match to be eligible to be returned
+   * @tparam T the type the the property must match
    * @return a random property from the eligible ones
    */
-  //def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] =
-  //  properties().filter(filterCondition(_)).random
+  def random[T: ClassTag]: Option[T] = properties[T].random
 
   /**
    * Utility function to automatically convert from a PropertyValue to a Property

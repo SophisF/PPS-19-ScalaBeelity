@@ -6,7 +6,7 @@ import scala.model.Time
  * Represents a property with a time-related behaviour.
  * Particularly, it can have variations whose values depends from the specific time instant
  */
-trait TimedProperty extends Property {
+private[environment] trait TimedProperty extends Property {
   type TimedVariationType <: TimedVariation
 
   /**

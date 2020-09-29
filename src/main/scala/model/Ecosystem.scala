@@ -14,7 +14,7 @@ import scala.utility.SugarBowl.RichMappable
 
 private[model] case class Ecosystem(environmentManager: EnvironmentManager, colonies: Colony*)
 
-object Ecosystem {
+private[model] object Ecosystem {
 
   def apply(coloniesCount: Int, width: Int, height: Int): Ecosystem = {
     EnvironmentManager(width, height) ~> (

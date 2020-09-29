@@ -11,7 +11,8 @@ import scala.utility.MathHelper.intValueOf
  * A TemperatureProperty is a property who works with data of type Int and has a behaviour based on the time.
  * This file contains configurations data for the specified property.
  */
-private[environment] sealed trait TemperatureProperty extends TimedProperty with SeasonalBehaviour with TimedFilterGenerator
+private[environment]
+sealed trait TemperatureProperty extends TimedProperty with SeasonalBehaviour with TimedFilterGenerator
 
 private[environment] object TemperatureProperty extends TemperatureProperty {
   private val variationMultiplier = .25

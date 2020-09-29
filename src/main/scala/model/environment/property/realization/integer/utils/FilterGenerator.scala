@@ -8,7 +8,7 @@ import scala.model.environment.property.utils.{FilterGenerator => Utils}
 import scala.utility.IterableHelper.RichIterable
 import scala.utility.MathHelper.intValueOf
 
-trait FilterGenerator extends Utils { this: Property =>
+private[realization] trait FilterGenerator extends Utils { this: Property =>
 
   def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
     function3d((minValue to maxValue).filter(_ != 0).random.get, 0, xDecrement, yDecrement)

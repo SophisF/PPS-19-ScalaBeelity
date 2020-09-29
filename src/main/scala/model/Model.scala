@@ -38,7 +38,7 @@ class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extend
 
   override def statisticalData(): StatisticalEnvironment = _statisticalData
 
-  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).stat())) toList
+  override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).statistic())) toList
 
   override def temperatureMatrix(): Matrix = propertyMatrix(_.temperature.numericRepresentation())
 

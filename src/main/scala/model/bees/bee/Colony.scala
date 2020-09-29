@@ -41,8 +41,14 @@ object Colony {
    */
   private val limitBeesForCell: Int = 5
 
+  /**
+   * Variable that represents the around of creation of new colony.
+   */
   private val proximity: Int = 10
 
+  /**
+   * Variable that represents the probability to create a new colony.
+   */
   private val newColonyGenerationProbability: Int = 1000
 
   /**
@@ -133,7 +139,6 @@ object Colony {
      */
     private lazy val averagePhenotype: Phenotype = Phenotype.averagePhenotype(Set(this.queen) ++ this.bees)
 
-
     override def maxBees: Int = {
       val r: Int = averagePhenotype expressionOf CharacteristicTaxonomy.REPRODUCTION_RATE
       r * 100
@@ -218,6 +223,13 @@ object Colony {
       })).take(max)
     }
 
+    /**
+     * Method that can generate new colony with a probability.
+     *
+     * @param time               the time that has passed from the last iteration.
+     * @param environmentManager the environment manager to create it in proximity of this.
+     * @return an option of list of colony, None if it mustn't create a new colony.
+     */
     private def generateColony(time: Int)(environmentManager: EnvironmentManager): Option[List[Colony]] = {
       if (Random.nextInt(newColonyGenerationProbability / time) < 1)
         Some(List(this.queen.generateNewColony(environmentManager.proximityOf(

@@ -1,4 +1,4 @@
-package scala.model.environment.property.typed.int
+package scala.model.environment.property.realization.integer
 
 import scala.model.environment.property.Range
 

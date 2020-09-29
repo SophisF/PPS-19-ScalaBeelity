@@ -1,6 +1,6 @@
 package scala.model.environment.property.realization
 
-import scala.model.environment.property.typed.int.{IntProperty, IntTimedProperty}
+import scala.model.environment.property.realization.integer.{IntProperty, IntTimedProperty}
 
 /**
  * A PressureProperty is a property who works with data of type Int and has a behaviour based on the time.

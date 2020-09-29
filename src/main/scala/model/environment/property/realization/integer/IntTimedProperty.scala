@@ -1,10 +1,10 @@
-package scala.model.environment.property.typed.int
+package scala.model.environment.property.realization.integer
 
 import breeze.linalg.DenseMatrix
 
 import scala.model.Time
 import scala.model.environment.property.TimeDependentProperty
-import scala.model.environment.property.typed.int.IntProperty.filter
+import scala.model.environment.property.realization.integer.IntProperty.filter
 
 /**
  * A property related to time who has a time-based behaviour

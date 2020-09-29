@@ -3,7 +3,7 @@ package scala.model.environment.property.realization
 import Math.{sin, toRadians}
 
 import scala.model.Time
-import scala.model.environment.property.typed.int.{IntBehaviouralProperty, IntProperty}
+import scala.model.environment.property.realization.integer.{IntBehaviouralProperty, IntProperty}
 import scala.utility.MathHelper.intValueOf
 
 /**

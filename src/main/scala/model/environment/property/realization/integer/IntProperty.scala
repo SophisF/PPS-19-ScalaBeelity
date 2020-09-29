@@ -1,13 +1,13 @@
-package scala.model.environment.property.typed.int
+package scala.model.environment.property.realization.integer
 
 import breeze.linalg.DenseMatrix
 
 import scala.model.environment.property.GaussianFilterBuilder.function3d
 import scala.model.environment.property.Property
-import scala.model.environment.property.typed.int.IntProperty.filter
+import scala.model.environment.property.realization.integer.IntProperty.filter
 import scala.utility.IterableHelper.RichIterable
-import scala.utility.MathHelper.intValueOf
 import scala.utility.SugarBowl.RichMappable
+import scala.utility.MathHelper.intValueOf
 
 /**
  * Represent a generic property who works with data of type Int.

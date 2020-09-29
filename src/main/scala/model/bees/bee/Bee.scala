@@ -5,7 +5,6 @@ import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 import scala.model.bees.phenotype.EnvironmentInformation.EnvironmentInformation
 import scala.model.bees.phenotype.Phenotype.Phenotype
-import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
 /**
  * Object that represents bee.
@@ -14,12 +13,10 @@ object Bee {
   /**
    * Apply method for bee.
    *
-   * @param _genotype          the bee's genotype.
-   * @param _phenotype         the bee's phenotype.
-   * @param age                the age of the bee.
-   * @param averageTemperature the temperature of the environment where the bee's colony is.
-   * @param averagePressure    the pressure of the environment where the bee's colony is.
-   * @param averageHumidity    the humidity of the environment where the bee's colony is.
+   * @param _genotype              the bee's genotype.
+   * @param _phenotype             the bee's phenotype.
+   * @param age                    the age of the bee.
+   * @param environmentInformation the information of the environment.
    * @return a new bee.
    */
   def apply(_genotype: Genotype, _phenotype: Phenotype, age: Int, environmentInformation: EnvironmentInformation): Bee = {

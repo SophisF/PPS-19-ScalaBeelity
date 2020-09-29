@@ -19,7 +19,7 @@ class FitCalculatorTest extends AnyFunSuite {
       Gene(GeneTaxonomy.HUMIDITY_GENE, maxFrequency))
     val phenotype: Phenotype = genotype expressInPhenotype
 
-    assert(FitCalculator.calculateFitValue(phenotype)(EnvironmentInformation(Cell(36, 80, 1050)))(
+    assert(FitCalculator.calculateFitValue(phenotype)(EnvironmentInformation(Seq(Cell(36, 80, 1050))))(
       params => params.sum / params.size) == 1)
   }
 
@@ -30,7 +30,7 @@ class FitCalculatorTest extends AnyFunSuite {
       Gene(GeneTaxonomy.PRESSURE_GENE, middleFrequency),
       Gene(GeneTaxonomy.HUMIDITY_GENE, middleFrequency))
     val phenotype: Phenotype = genotype expressInPhenotype
-    val fitValue = FitCalculator.calculateFitValue(phenotype)(EnvironmentInformation(Cell()))(
+    val fitValue = FitCalculator.calculateFitValue(phenotype)(EnvironmentInformation(Seq(Cell())))(
       params => params.sum / params.size)
 
     assert(fitValue >= 0 && fitValue < 1)

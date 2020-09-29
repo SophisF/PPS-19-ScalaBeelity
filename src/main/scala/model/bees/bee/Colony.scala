@@ -145,7 +145,7 @@ object Colony {
         newCenter.y.applyTwoOperations(this.dimension)(_ - _)(_ + _))
         .map(index => environmentManager.environment.map.valueAt(index._1, index._2))
 
-      val environmentBinder = EnvironmentInformation(cells: _*)
+      val environmentBinder = EnvironmentInformation(cells)
 
       Colony(this.color, this.updateQueen(time)(environmentBinder)(CollisionManager.keepInside(newCenter, this.dimension,
         environmentManager.environment.width, environmentManager.environment.height)),

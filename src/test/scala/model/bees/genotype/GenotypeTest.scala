@@ -43,8 +43,8 @@ class GenotypeTest extends AnyFunSuite {
     val genotype1 = Genotype()
     val genotype2 = Genotype()
 
-    val bee1 = Bee(genotype1, genotype1 expressInPhenotype, 0, EnvironmentInformation(Cell()))
-    val bee2 = Bee(genotype2, genotype2 expressInPhenotype, 0, EnvironmentInformation(Cell()))
+    val bee1 = Bee(genotype1, genotype1 expressInPhenotype, 0, EnvironmentInformation(Seq(Cell())))
+    val bee2 = Bee(genotype2, genotype2 expressInPhenotype, 0, EnvironmentInformation(Seq(Cell())))
 
     assert((Genotype averageGenotype Set(bee1, bee2) frequencyOf GeneTaxonomy.TEMPERATURE_GENE) ==
       ((genotype1 frequencyOf GeneTaxonomy.TEMPERATURE_GENE) + (genotype2 frequencyOf GeneTaxonomy.TEMPERATURE_GENE)) / 2)

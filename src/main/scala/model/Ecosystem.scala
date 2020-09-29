@@ -32,7 +32,7 @@ object Ecosystem {
     val genotype = Genotype()
     val cell: Cell = environment.map(position.x, position.y)
     val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0, position, this.createColony(environment),
-      EnvironmentInformation(cell))
+      EnvironmentInformation(Seq(cell)))
     queen.colony
   }
 }

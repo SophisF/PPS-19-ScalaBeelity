@@ -31,13 +31,18 @@ object EvolutionManager {
      * @param newGenes a list of new genes.
      * @return the list of new genes.
      */
-
     @scala.annotation.tailrec
     def createGenotype(genes: List[Gene], newGenes: List[Gene] = List.empty): List[Gene] = genes match {
       case h :: t => val gene = h taxonomy match {
-        case GeneTaxonomy.TEMPERATURE_GENE => environmentalAdaptation(h taxonomy)(h frequency)(phenotype expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)(environmentInformation.characteristicMap(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY))(evolutionaryRate)
-        case GeneTaxonomy.PRESSURE_GENE => environmentalAdaptation(h taxonomy)(h frequency)(phenotype expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)(environmentInformation.characteristicMap(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY))(evolutionaryRate)
-        case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(h taxonomy)(h frequency)(phenotype expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)(environmentInformation.characteristicMap(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))(evolutionaryRate)
+        case GeneTaxonomy.TEMPERATURE_GENE => environmentalAdaptation(h taxonomy)(h frequency)(
+          phenotype expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)(
+          environmentInformation.characteristicMap(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY))(evolutionaryRate)
+        case GeneTaxonomy.PRESSURE_GENE => environmentalAdaptation(h taxonomy)(h frequency)(
+          phenotype expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)(
+          environmentInformation.characteristicMap(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY))(evolutionaryRate)
+        case GeneTaxonomy.HUMIDITY_GENE => environmentalAdaptation(h taxonomy)(h frequency)(
+          phenotype expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)(
+          environmentInformation.characteristicMap(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))(evolutionaryRate)
         case _ => this.randomMutation(h)(evolutionaryRate)
       }
         createGenotype(t, gene :: newGenes)

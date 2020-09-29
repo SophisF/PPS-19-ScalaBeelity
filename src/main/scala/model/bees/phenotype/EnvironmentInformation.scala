@@ -6,11 +6,13 @@ import scala.utility.PimpIterable._
 
 object EnvironmentInformation {
 
-  def apply(cell: Cell*): EnvironmentInformation = new EnvironmentInformation {
+  private def defaultStrategy(sum: Seq[Int]): Int = sum.average
+
+  def apply(cell: Seq[Cell], strategy: Seq[Int] => Int = this.defaultStrategy): EnvironmentInformation = new EnvironmentInformation {
     override val characteristicMap: Map[CharacteristicTaxonomy, Int] =
-      Set(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY -> cell.map(_.temperature.numericRepresentation(false)).average,
-        CharacteristicTaxonomy.PRESSURE_COMPATIBILITY -> cell.map(_.pressure.numericRepresentation(false)).average,
-        CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY -> cell.map(_.humidity.numericRepresentation(false)).average,
+      Set(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY -> strategy(cell.map(_.temperature.numericRepresentation(false))),
+        CharacteristicTaxonomy.PRESSURE_COMPATIBILITY -> strategy(cell.map(_.pressure.numericRepresentation(false))),
+        CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY -> strategy(cell.map(_.humidity.numericRepresentation(false))),
       ).toMap
   }
 

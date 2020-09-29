@@ -18,8 +18,8 @@ object UtilityColonyCreator {
   private val age = 0
 
   def createColony(genotype: Genotype, position: Point): Colony = {
-    Colony(Random.nextDouble(), Queen(None, genotype, genotype expressInPhenotype, age, position, null, (EnvironmentInformation(Cell()))),
-      (1 to 10).map(_ => Bee(genotype, genotype expressInPhenotype, age, EnvironmentInformation(Cell()))).toSet)
+    Colony(Random.nextDouble(), Queen(None, genotype, genotype expressInPhenotype, age, position, null, EnvironmentInformation(Seq(Cell()))),
+      (1 to 10).map(_ => Bee(genotype, genotype expressInPhenotype, age, EnvironmentInformation(Seq(Cell())))).toSet)
   }
 
 

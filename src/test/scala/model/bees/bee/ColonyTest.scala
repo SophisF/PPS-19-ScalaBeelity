@@ -13,11 +13,11 @@ import scala.utility.Point
 
 class ColonyTest extends AnyFunSuite {
   val genotype: Genotype = Genotype()
-  val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0,  Point(10,20), null, (EnvironmentInformation(Cell())))
+  val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0,  Point(10,20), null, EnvironmentInformation(Seq(Cell())))
   val colony: Colony = queen.colony
-  val bees: Set[Bee] = (1 to 100).map(_ => Bee(genotype, genotype expressInPhenotype, 0, (EnvironmentInformation(Cell())))).toSet
+  val bees: Set[Bee] = (1 to 100).map(_ => Bee(genotype, genotype expressInPhenotype, 0, EnvironmentInformation(Seq(Cell())))).toSet
   val colony2: Colony = Colony(queen = queen, bees = bees)
-  val bees3: Set[Bee] = (1 to 1000).map(_ => Bee(genotype, genotype expressInPhenotype, 0, (EnvironmentInformation(Cell())))).toSet
+  val bees3: Set[Bee] = (1 to 1000).map(_ => Bee(genotype, genotype expressInPhenotype, 0, EnvironmentInformation(Seq(Cell())))).toSet
   val colony3: Colony = Colony(queen = queen, bees = bees)
 
 

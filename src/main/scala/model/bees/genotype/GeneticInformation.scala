@@ -8,7 +8,7 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 /**
  * The genetic information of the bees.
  */
-object GeneticInformation {
+private[genotype] object GeneticInformation {
 
   /**
    * A default mapper for the genetic information.

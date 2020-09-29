@@ -59,13 +59,13 @@ object Colony {
    */
   def manage(colonies: List[Colony]): List[Colony] = {
     val combined = Combiner.combine(colonies, colonies)
-    Cleaner.clean(combined, combined, List.empty).toList
+    Cleaner.clean(combined, combined).toList
   }
 
   /**
    * Trait that represents colony
    */
-  trait Colony {
+  sealed trait Colony {
     val color: Color
     val queen: Queen
     val bees: Set[Bee]
@@ -151,13 +151,15 @@ object Colony {
     }
 
     override def update(time: Int)(environmentManager: EnvironmentManager): List[Colony] = {
+      //move
       val newCenter: Point = this.move(time)(environmentManager)
-      val cells = environmentManager.indexInRange(newCenter.x.applyTwoOperations(this.dimension)(_ - _)(_ + _),
+
+      val environmentBinder = EnvironmentInformation(environmentManager.indexInRange(
+        newCenter.x.applyTwoOperations(this.dimension)(_ - _)(_ + _),
         newCenter.y.applyTwoOperations(this.dimension)(_ - _)(_ + _))
-        .map(index => environmentManager.cells().valueAt(index._1, index._2))
+        .map(index => environmentManager.cells().valueAt(index._1, index._2)))
 
-      val environmentBinder = EnvironmentInformation(cells)
-
+      //update the colony
       Colony(this.color, this.updateQueen(time)(environmentBinder)(CollisionManager.keepInside(newCenter, this.dimension,
         environmentManager.width, environmentManager.height)),
         this.updatePopulation(time)(environmentBinder)) ::
@@ -179,9 +181,9 @@ object Colony {
           Point(index._1, index._2)))
 
       MovementLogic.solveLogic(reachableCells,
-        toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY)),
-        toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.PRESSURE_COMPATIBILITY)),
-        toTuple(this.queen.phenotype.expressionOf(CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY))) getOrElse this.queen.position
+        toTuple(this.queen.phenotype expressionOf CharacteristicTaxonomy.TEMPERATURE_COMPATIBILITY),
+        toTuple(this.queen.phenotype expressionOf CharacteristicTaxonomy.PRESSURE_COMPATIBILITY),
+        toTuple(this.queen.phenotype expressionOf CharacteristicTaxonomy.HUMIDITY_COMPATIBILITY)) getOrElse this.queen.position
 
     }
 

@@ -8,7 +8,7 @@ import scala.utility.TypeUtilities.Range
 /**
  * Object used to calculate the fit value of the phenotype's characteristics, based on the environment parameters.
  */
-object FitCalculator {
+private[bee] object FitCalculator {
 
   /**
    * Method to apply a fit value to a parameter, based on the operation passed.

@@ -6,7 +6,7 @@ import scala.model.bees.bee.Queen.Queen
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.EnvironmentInformation
-import scala.model.environment.Cell
+import scala.model.environment.adapter.Cell
 import scala.utility.Point
 
 class QueenTest extends AnyFunSuite{

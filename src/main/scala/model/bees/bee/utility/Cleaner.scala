@@ -8,7 +8,7 @@ import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
  * A cleaner object for the colonies. If two colonies come into contact it provides for remove the
  * dead bees.
  */
-object Cleaner {
+private[bee] object Cleaner {
 
   private val minAggressionToAttack: Int = 8
 

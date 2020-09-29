@@ -6,7 +6,7 @@ import scala.model.bees.bee.Bee.Bee
 import scala.model.bees.genotype.Genotype
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.phenotype.EnvironmentInformation
-import scala.model.environment.Cell
+import scala.model.environment.adapter.Cell
 
 class BeeTest extends AnyFunSuite{
   private val genotype: Genotype = Genotype()

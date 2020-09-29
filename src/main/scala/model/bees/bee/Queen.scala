@@ -12,7 +12,7 @@ import scala.utility.Point
 /**
  * Object that represents the queen bee.
  */
-object Queen {
+private[model] object Queen {
 
   /**
    * Apply method for the queen.
@@ -46,7 +46,7 @@ object Queen {
   /**
    * Trait for a queen
    */
-  trait Queen extends Bee {
+  sealed trait Queen extends Bee {
     val colony: Colony
     val position: Point
 

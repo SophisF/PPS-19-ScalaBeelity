@@ -8,7 +8,7 @@ import scala.model.bees.phenotype.CharacteristicTaxonomy.CharacteristicTaxonomy
 /**
  * Object that represents the phenotype.
  */
-object Phenotype {
+private[model] object Phenotype {
 
   /**
    * Apply method for phenotype.

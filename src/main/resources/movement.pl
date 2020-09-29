@@ -18,8 +18,7 @@ positionWithFit(position(X, Y), Fit).
 
 % Calculate the difference between a value and a range. Return 0 if the value is in the range.
 diff(V, range(V1, V2), O) :- V < V1, O is V1-V, !.
-diff(V, range(V1, V2), O) :- V > V2, O is V-V2, !.
-diff(V, range(V1, V2), 0).
+diff(V, range(V1, V2), O) :- O is V-V2.
 
 % Calculate the penalty of a range for a specific environmental parameter.
 fit(Param, range(Min, Max), Fit):- diff(Param, range(Min, Max), Fit).
@@ -33,22 +32,21 @@ bestFit(positionWithFit(P1, F1), positionWithFit(P2, F2), positionWithFit(P1, F1
 bestFit(positionWithFit(P1, F1), positionWithFit(P2, F2), positionWithFit(P2, F2)).
 
 % Given a list of environment's cells, find the cell with best fit for the colony.
-move([cell(T, P, H, Pos)], range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPos) :-
-	calculateFit(cell(T, P, H, Pos), range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPos), !.
-
 move([cell(T, P, H, Pos) | Tail], range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPos) :-
 	calculateFit(cell(T, P, H, Pos), range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPosTemp),
 	move(Tail, range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPosTemp, FitPos).
 
-move([cell(T, P, H, Pos)], range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPosTemp, FitPos):-
-	calculateFit(cell(T, P, H, Pos), range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitCell),
-	bestFit(FitCell, FitPosTemp, FitPos), !.
+move([cell(T, P, H, Pos)], range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPos) :-
+	calculateFit(cell(T, P, H, Pos), range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPos).
 
 move([cell(T, P, H, Pos) | Tail], range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPosTemp, FitPos):-
 	calculateFit(cell(T, P, H, Pos), range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitCell),
 	bestFit(FitCell, FitPosTemp, Temp),
 	move(Tail, range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), Temp, FitPos).
 
+move([cell(T, P, H, Pos)], range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitPosTemp, FitPos):-
+    calculateFit(cell(T, P, H, Pos), range(T_Min, T_Max), range(P_Min, P_Max), range(H_Min, H_Max), FitCell),
+    bestFit(FitCell, FitPosTemp, FitPos).
+
 % Given a positionWithFit return the components of the position.
 getPosition(positionWithFit(position(X, Y), F), X, Y).
-

@@ -30,10 +30,8 @@ private[bee] object FitCalculator {
    */
   def calculateFitValue(phenotype: Phenotype)(environmentInformation: EnvironmentInformation)
                        (fitAggregator: Seq[Double] => Double)
-  : Double = {
-
-    fitAggregator(environmentInformation.characteristicMap.map(kv => this.defaultCalculator(kv._2)(phenotype expressionOf kv._1)).toSeq)
-  }
+  : Double = fitAggregator(environmentInformation.characteristicMap.
+    map(kv => this.defaultCalculator(kv._2)(phenotype expressionOf kv._1)).toSeq)
 
   /**
    * Default strategy to calculate the fit value of a property.

@@ -17,7 +17,7 @@ import scala.utility.Point
 
 
 /**
- * Object that represents colony
+ * Object that represents colony.
  */
 object Colony {
 
@@ -131,7 +131,7 @@ object Colony {
   }
 
   /**
-   *  Case class that represents the colony.
+   * Case class that represents the colony.
    *
    * @param color the colony's color.
    * @param queen the colony's queen, only one.
@@ -190,7 +190,7 @@ object Colony {
     /**
      * Method to update the queen.
      *
-     * @param time               the time that has passed from the last iteration.
+     * @param time                   the time that has passed from the last iteration.
      * @param environmentInformation the information of the environment.
      * @return a new queen.
      */
@@ -206,7 +206,7 @@ object Colony {
     /**
      * Method to update the bees.
      *
-     * @param time               the time that has passed from the last iteration.
+     * @param time                   the time that has passed from the last iteration.
      * @param environmentInformation the information of the environment.
      * @return a new set of bees.
      */

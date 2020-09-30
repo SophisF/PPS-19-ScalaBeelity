@@ -48,14 +48,14 @@ class Controller(coloniesCount: Int, timeGranularity: Int, iterations: Int, dime
    *
    * @return information about the environment
    */
-  def statisticEnvironment: StatisticEnvironment = model.statisticalData().variationSequence()
+  def statisticEnvironment: StatisticEnvironment = model.statisticalEnvironmentData().variationSequence()
 
   /**
    * Get information about the colonies in the simulation
    *
    * @return information about the colonies
    */
-  def statisticColonies: StatisticColonies = model.statisticList()
+  def statisticColonies: StatisticColonies = model.statisticColoniesData()
 
   /**
    * Get days elapsed since simulation started

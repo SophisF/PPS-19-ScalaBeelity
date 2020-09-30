@@ -26,6 +26,11 @@ private[model] case class Ecosystem(environmentManager: EnvironmentManager, colo
 private[model] object Ecosystem {
 
   /**
+   * Initial age of a queen.
+   */
+  private val initialAge = 0
+
+  /**
    * Apply method for the Ecosystem.
    *
    * @param coloniesCount the number of initial colonies.
@@ -62,7 +67,7 @@ private[model] object Ecosystem {
   ): Colony = {
     val genotype = Genotype()
     val cell: Cell = environment.cells()(position.x, position.y)
-    val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0, position, this.createColony(environment),
+    val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, initialAge, position, this.createColony(environment),
       EnvironmentInformation(Seq(cell)))
     queen.colony
   }

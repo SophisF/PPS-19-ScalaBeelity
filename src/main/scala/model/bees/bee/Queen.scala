@@ -15,6 +15,16 @@ import scala.utility.Point
 private[model] object Queen {
 
   /**
+   * Initial bees' age.
+   */
+  private val initialAge = 0
+
+  /**
+   * Initial time that has passed for the evolution of the genotype.
+   */
+  private val initialTime = 1
+
+  /**
    * Apply method for the queen.
    *
    * @param colonyOpt              an optional which contains her colony, if it exists.
@@ -97,11 +107,11 @@ private[model] object Queen {
      */
     private def generateBee: Set[Bee] = (0 to this.effectiveReproductionRate + 1)
       .map(_ => {
-        val similarGenotype = EvolutionManager.evolveGenotype(this.genotype)(environmentInformation)(1)
+        val similarGenotype = EvolutionManager.evolveGenotype(this.genotype)(environmentInformation)(initialTime)
         Bee(
           similarGenotype,
           similarGenotype expressInPhenotype,
-          0,
+          initialAge,
           environmentInformation
         )
       }) toSet

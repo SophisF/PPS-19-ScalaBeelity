@@ -1,7 +1,7 @@
 package scala.model
 
-import scala.model.statistic.StatisticColonies.Statistic
-import scala.model.statistic.StatisticEnvironment.{StatisticalEnvironment, updateStats}
+import scala.model.statistic.StatisticColoniesData.StatisticColoniesData
+import scala.model.statistic.StatisticEnvironmentData.{StatisticEnvironmentData, updateStats}
 import scala.model.environment.adapter.Cell
 import scala.utility.SugarBowl.RichMappable
 import scala.utility.TypeUtilities.StatisticColonies
@@ -33,7 +33,7 @@ trait Model {
    *
    * @return the environment's statistics.
    */
-  def statisticalEnvironmentData(): StatisticalEnvironment
+  def statisticalEnvironmentData(): StatisticEnvironmentData
 
   /**
    * Accessor method for the statistics of the colonies.
@@ -79,7 +79,7 @@ object Model {
   class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extends Model {
     Time.reset()
     Time.incrementValue = updateTime
-    private var _statisticalEnvironmentData: StatisticalEnvironment = StatisticalEnvironment()
+    private var _statisticalEnvironmentData: StatisticEnvironmentData = StatisticEnvironmentData()
     private var ecosystem = Ecosystem(numColonies, dimension _1, dimension _2)
 
     override def update(): Unit = {
@@ -88,9 +88,9 @@ object Model {
       Time.increment()
     }
 
-    override def statisticalEnvironmentData(): StatisticalEnvironment = _statisticalEnvironmentData
+    override def statisticalEnvironmentData(): StatisticEnvironmentData = _statisticalEnvironmentData
 
-    override def statisticColoniesData(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).statistic())) toList
+    override def statisticColoniesData(): StatisticColonies = ecosystem.colonies.map(c => (c, StatisticColoniesData(c).statistic())) toList
 
     override def temperatureMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ temperature inPercentage)
 

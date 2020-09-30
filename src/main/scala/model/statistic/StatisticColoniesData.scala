@@ -10,7 +10,7 @@ import scala.model.environment.property.PropertyType.PropertyValue
 /**
  * Object that represents statistic for colonies.
  */
-object StatisticColonies {
+object StatisticColoniesData {
 
   type PropertyType = PropertyValue[Property]
 
@@ -25,7 +25,7 @@ object StatisticColonies {
    * Case class for colony's statistic .
    * @param colony the colony to calculate its statistic.
    */
-  case class Statistic(colony: Colony) {
+  case class StatisticColoniesData(colony: Colony) {
     def statistic(): Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)] = CharacteristicTaxonomy.values.map(v => (v, getAverageOf(v)))
 
     private def getAverageOf(characteristicTaxonomy: CharacteristicTaxonomy): Characteristic#Expression =

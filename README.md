@@ -2,7 +2,7 @@
 
 Bees colonies simulator. Project for PPS course of the year 2019/2020.
 
-## Requirements
+### Requirements
 
 To use the simulator you need the following software installed:
 
@@ -11,13 +11,13 @@ To use the simulator you need the following software installed:
 
 An IDE is not necessary because it's already provided the runnable jar.
 
-## Compilation process
+### Compilation process
 To compile the sources into a runnable jar you can simply run the `sbt assembly` command.
 
 ### Download
 Get the latest Jar from the GitHub releases page.
 
-## How to use
+### How to use
 
 **For Windows/Unix systems:**
 

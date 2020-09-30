@@ -6,8 +6,6 @@ import scala.model.environment.matrix.Size.Border
 
 /**
  * Test for Zone trait/object
- *
- * @author Paolo Baldini
  */
 class ZoneTest extends AnyFunSuite {
 

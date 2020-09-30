@@ -3,29 +3,23 @@ package scala.model.environment.property.realization
 import Math.{sin, toRadians}
 
 import scala.model.Time
+import scala.model.environment.property.realization.integer.TimedProperty
+import scala.model.environment.property.realization.integer.utils.{SeasonalBehaviour, TimedFilterGenerator}
 import scala.utility.MathHelper.intValueOf
 
 /**
  * A TemperatureProperty is a property who works with data of type Int and has a behaviour based on the time.
  * This file contains configurations data for the specified property.
  */
-private[environment] sealed trait TemperatureProperty extends IntProperty with IntTimedProperty
+private[environment]
+sealed trait TemperatureProperty extends TimedProperty with SeasonalBehaviour with TimedFilterGenerator
 
 private[environment] object TemperatureProperty extends TemperatureProperty {
-  private val seasonalVariationMultiplier = .25
+  private val variationMultiplier = .25
 
   override val default: Int = 20
   override val maxValue: Int = 40
   override val minValue: Int = -10
 
-  override def seasonalTrend: TimedVariationType =  new TimedVariationType {
-    private var lastGet: Int = 0
-
-    override def instantaneous(instant: Time): VariationType = {
-      val monthlyValue = rangeCenter * seasonalVariationMultiplier * -sin(toRadians(instant % 365))
-      val variation: Int = monthlyValue - lastGet
-      lastGet = monthlyValue
-      variation
-    }
-  }
+  override def monthlyValue(instant: Time): Int = rangeCenter * variationMultiplier * -sin(toRadians(instant % 365))
 }

@@ -8,8 +8,6 @@ import scala.model.environment.property.realization.{HumidityProperty, PressureP
 
 /**
  * Test for cell entities
- *
- * @author Paolo Baldini
  */
 class CellTest extends AnyFunSuite {
   private val defaultTemp = TemperatureProperty.default
@@ -45,7 +43,7 @@ class CellTest extends AnyFunSuite {
   test("Non-target properties should not change after a variation") {
     val cell = Cell(defaultTemp, defaultHum, defaultPres)
     val newCell = cell + variationHum(1)
-    assert(PropertyType.properties().filterNot(_ == Humidity).foldLeft(true)((bool, prop) =>
+    assert(PropertyType.propertiesType.filterNot(_ == Humidity).foldLeft(true)((bool, prop) =>
       cell(prop).numericRepresentation(false) == newCell(prop).numericRepresentation(false) && bool))
   }
 

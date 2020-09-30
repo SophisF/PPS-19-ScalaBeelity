@@ -1,22 +1,26 @@
 package scala.model.environment.property
 
 import scala.model.environment.property.realization._
+import scala.reflect.ClassTag
 import scala.utility.IterableHelper.RichIterable
 
 /**
- * Enumeration of all the possible property types
- *
- * @author Paolo Baldini
+ * Enumeration of the possible property types
  */
 object PropertyType extends Enumeration {
 
   /**
-   * A non externally instantiable class that contains the property type and instantiation (for most one, a singleton)
+   * A non-externally-instantiable class that contains the property type and instantiation (for most one, a singleton)
    *
-   * @param property instantiated object
    * @tparam T type of property
    */
   sealed trait PropertyValue[T <: Property] {
+
+    /**
+     * A property instantiation containing his usage information
+     *
+     * @return the property object who contains usage information
+     */
     def property: T
 
     /**
@@ -31,13 +35,37 @@ object PropertyType extends Enumeration {
   val Humidity: Val with PropertyValue[HumidityProperty] = HumidityProperty
   val Pressure: Val with PropertyValue[PressureProperty] = PressureProperty
 
-  def properties(filterCondition: Property => Boolean = _ => true): Iterable[PropertyValue[Property]] =
-    values.asInstanceOf[Iterable[PropertyValue[Property]]].filter(filterCondition(_))
+  /**
+   * Returns an iterable of property-types
+   *
+   * @return the property-types defined in this enum
+   */
+  def propertiesType: Iterable[PropertyValue[Property]] = values.collect { case it: PropertyValue[Property] => it }
 
-  def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] =
-    properties().filter(filterCondition(_)).random
+  /**
+   * Returns the elements, matching the type, defined in this enum
+   *
+   * @tparam T type of returned element
+   * @return the elements of this enum that matches the specified type
+   */
+  def properties[T: ClassTag]: Iterable[T] = propertiesType.map(propertyOf).collect { case it: T => it.asInstanceOf[T] }
 
-  implicit def getPropertyFrom[T <: Property](entry: PropertyValue[T]): T = entry()
+  /**
+   * Get a random property from the ones that match the given type
+   *
+   * @tparam T the type the the property must match
+   * @return a random property from the eligible ones
+   */
+  def random[T: ClassTag]: Option[T] = properties[T].random
+
+  /**
+   * Utility function to automatically convert from a PropertyValue to a Property
+   *
+   * @param entry the property-value of which take the property
+   * @tparam T the type of the property to be returned
+   * @return the property held by the property-value
+   */
+  implicit def propertyOf[T <: Property](entry: PropertyValue[T]): T = entry()
 
   private implicit def enumValueOf[T <: Property](_property: T): Val with PropertyValue[T] =
     new Val with PropertyValue[T] { override def property: T = _property }

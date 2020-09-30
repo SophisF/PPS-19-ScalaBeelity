@@ -23,7 +23,7 @@ private[model] case class Ecosystem(environmentManager: EnvironmentManager, colo
 /**
  * Object that represents the Ecosystem.
  */
-object Ecosystem {
+private[model] object Ecosystem {
 
   /**
    * Apply method for the Ecosystem.
@@ -56,10 +56,10 @@ object Ecosystem {
    * @return a the new colony.
    */
   def createColony(
-                    environment: EnvironmentManager
-                  )(
-                    position: Point = (randomUntil(environment width), randomUntil(environment height))
-                  ): Colony = {
+    environment: EnvironmentManager
+  )(
+    position: Point = (randomUntil(environment width), randomUntil(environment height))
+  ): Colony = {
     val genotype = Genotype()
     val cell: Cell = environment.cells()(position.x, position.y)
     val queen: Queen = Queen(None, genotype, genotype expressInPhenotype, 0, position, this.createColony(environment),

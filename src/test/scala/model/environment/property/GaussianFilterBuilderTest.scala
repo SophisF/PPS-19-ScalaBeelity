@@ -6,8 +6,6 @@ import scala.model.environment.property.GaussianFilterBuilder._
 
 /**
  * Test class for the creation of gaussian filters
- *
- * @author Paolo Baldini, Enrico Gnagnarella
  */
 class GaussianFilterBuilderTest extends AnyFunSuite {
   private val GF2P = "Positive 2d Gaussian Function"

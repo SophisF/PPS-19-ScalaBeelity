@@ -3,9 +3,7 @@ package scala
 import scala.controller.Controller
 import scala.view.View
 
-/**
- * Entry point for the application
- */
+/** Entry point for the application */
 object Main extends App {
   for {
     settings <- View.settingsView

@@ -9,7 +9,6 @@ import scala.utility.SugarBowl.RichMappable
 /**
  * Test class for the time entity
  *
- * @author Paolo Baldini
  */
 class TimeTest extends AnyFunSuite {
 

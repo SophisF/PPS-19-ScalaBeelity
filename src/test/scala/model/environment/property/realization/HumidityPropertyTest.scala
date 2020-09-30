@@ -6,8 +6,6 @@ import scala.model.environment.property.realization.HumidityProperty.seasonalTre
 
 /**
  * Test for humidity-property
- *
- * @author Paolo Baldini
  */
 class HumidityPropertyTest extends AnyFunSuite {
 

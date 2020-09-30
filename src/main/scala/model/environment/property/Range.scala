@@ -6,13 +6,24 @@ package scala.model.environment.property
 private[property] trait Range {
   type ValueType
 
+  /**
+   * Minimum value
+   *
+   * @return value
+   */
   def minValue: ValueType
+
+  /**
+   * Maximum value.
+   *
+   * @return value
+   */
   def maxValue: ValueType
 
   /**
    * Set the passed value in range
    *
-   * @param value to re-range
+   * @param value    to re-range
    * @param ordering of the value type
    * @return a re-ranged value
    */

@@ -1,10 +1,10 @@
-package scala.model.environment.property.realization
+package scala.model.environment.property.realization.integer
 
 import org.scalatest.funsuite.AnyFunSuite
 
 class IntRangeTest extends AnyFunSuite {
 
-  val range: IntRange = new IntRange() {
+  val range: Range = new Range() {
     override def minValue: Int = 0
 
     override def maxValue: Int = 2

@@ -6,8 +6,6 @@ import scala.utility.Conversion.{iteratorOf, sequenceOf}
 
 /**
  * Add utility methods to Iterable
- *
- * @author Paolo Baldini
  */
 object IterableHelper {
 

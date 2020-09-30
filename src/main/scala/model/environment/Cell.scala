@@ -1,9 +1,8 @@
 package scala.model.environment
 
-import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 import scala.model.environment.property.Property
-import scala.model.environment.property.PropertyType.PropertyValue
-import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}
+import scala.model.environment.property.PropertyType.{Humidity, PropertyValue, Temperature}
+import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
 /**
  * Class that represent an environment cell
@@ -11,8 +10,6 @@ import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temper
  * @param temperature in the area represented by the cell
  * @param humidity in the area represented by the cell
  * @param pressure in the area represented by the cell
- *
- * @author Paolo Baldini
  */
 private[environment] case class Cell(
   temperature: TemperatureProperty.StateType = TemperatureProperty.default,

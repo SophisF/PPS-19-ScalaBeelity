@@ -1,6 +1,5 @@
 package scala.model.environment.property
 
-import breeze.linalg.DenseMatrix
 import org.scalatest.funsuite.AnyFunSuite
 
 class PropertyTest extends AnyFunSuite {
@@ -46,7 +45,6 @@ class PropertyTest extends AnyFunSuite {
       override def isNull: Boolean = value == 0
       override def vary[S <: StateType](state: S): AState = AState(state.value + value)
     }
-    override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] = ???
   }
 
   object B extends Property {
@@ -58,6 +56,5 @@ class PropertyTest extends AnyFunSuite {
       override def isNull: Boolean = value == 0
       override def vary[S <: StateType](state: S): BState = BState(state.value + value)
     }
-    override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] = ???
   }
 }

@@ -6,7 +6,6 @@ import scala.model.environment.matrix.Size.Border.Border
 /**
  * Represent the size of a 2d element
  *
- * @author Paolo Baldini
  */
 private[environment] trait Size {
   val width: Int
@@ -31,7 +30,6 @@ private[environment] object Size {
   /**
    * Enumeration of the various border 'sides'
    *
-   * @author Paolo Baldini
    */
   object Border extends Enumeration {
     type Border = Value

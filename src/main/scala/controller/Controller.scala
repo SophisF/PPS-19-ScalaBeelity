@@ -2,7 +2,7 @@ package scala.controller
 
 import scala.math.ceil
 import scala.controller.Looper.loop
-import scala.model.ModelImpl
+import scala.model.Model.ModelImpl
 import scala.utility.TypeUtilities.{StatisticColonies, StatisticEnvironment}
 import scala.view.View.simulationView
 import scala.model.environment.property.PropertyType.{Humidity, Pressure, Temperature}

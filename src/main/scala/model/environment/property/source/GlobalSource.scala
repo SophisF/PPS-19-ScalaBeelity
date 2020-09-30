@@ -2,7 +2,7 @@ package scala.model.environment.property.source
 
 import scala.model.Time
 import scala.model.Time.now
-import scala.model.environment.property.{Property, TimeDependentProperty}
+import scala.model.environment.property.{Property, TimedProperty}
 
 /**
  * A property source that influences the whole environment
@@ -21,7 +21,7 @@ private[environment] object GlobalSource {
    * @param globalVariation the time-dependent variation of the property
    * @tparam T type of property
    */
-  case class SeasonalSource[T <: TimeDependentProperty](
+  case class SeasonalSource[T <: TimedProperty](
     globalVariation: T#TimedVariation
   ) extends GlobalSource[T] {
 

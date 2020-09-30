@@ -48,7 +48,7 @@ private[model] case class EnvironmentManager(
   def height: Int = environment.height
 
   /**
-   * 
+   *
    * @param range1
    * @param range2
    * @return

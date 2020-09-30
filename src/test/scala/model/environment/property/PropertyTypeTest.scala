@@ -7,8 +7,6 @@ import scala.model.environment.property.realization.{HumidityProperty, PressureP
 
 /**
  * Test property trait
- *
- * @author Paolo Baldini
  */
 class PropertyTypeTest extends AnyFunSuite {
 

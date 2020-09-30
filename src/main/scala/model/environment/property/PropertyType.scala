@@ -5,15 +5,11 @@ import scala.utility.IterableHelper.RichIterable
 
 /**
  * Enumeration of all the possible property types
- *
- * @author Paolo Baldini
  */
 object PropertyType extends Enumeration {
 
   /**
    * A non externally instantiable class that contains the property type and instantiation (for most one, a singleton)
-   *
-   * @param property instantiated object
    * @tparam T type of property
    */
   sealed trait PropertyValue[T <: Property] {
@@ -31,12 +27,30 @@ object PropertyType extends Enumeration {
   val Humidity: Val with PropertyValue[HumidityProperty] = HumidityProperty
   val Pressure: Val with PropertyValue[PressureProperty] = PressureProperty
 
+  /**
+   *
+   * @param filterCondition
+   * @return
+   */
   def properties(filterCondition: Property => Boolean = _ => true): Iterable[PropertyValue[Property]] =
     values.asInstanceOf[Iterable[PropertyValue[Property]]].filter(filterCondition(_))
 
+  /**
+   *
+   * @param filterCondition
+   * @return
+   */
   def random(filterCondition: Property => Boolean = _ => true): Option[PropertyValue[Property]] =
     properties().filter(filterCondition(_)).random
 
+  /**
+   * Get property from value.
+   *
+   * @param entry, property value
+   * @tparam T, generic type.
+   *
+   * @return value of type T
+   */
   implicit def getPropertyFrom[T <: Property](entry: PropertyValue[T]): T = entry()
 
   private implicit def enumValueOf[T <: Property](_property: T): Val with PropertyValue[T] =

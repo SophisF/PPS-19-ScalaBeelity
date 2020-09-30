@@ -7,7 +7,6 @@ import scala.model.environment.property.realization.PressureProperty.seasonalTre
 /**
  * Test for pressure-property
  *
- * @author Paolo Baldini
  */
 class PressurePropertyTest extends AnyFunSuite {
 

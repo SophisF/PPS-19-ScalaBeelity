@@ -2,9 +2,9 @@ package scala.model.environment
 
 import breeze.linalg.DenseMatrix
 
+import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason, randomInstantaneousFilter}
 import scala.model.environment.adapter.Cell
 import scala.model.environment.adapter.Cell.cellFromPrivateOne
-import scala.model.environment.ClimateManager.{generateLocalChanges, generateSeason, randomInstantaneousFilter}
 import scala.model.environment.matrix.Size
 import scala.model.environment.property.Property
 import scala.model.environment.property.PropertyType.properties
@@ -21,12 +21,18 @@ import scala.utility.Point
  * @param propertySources , the property to at the environment.
  */
 private[model] case class EnvironmentManager(
-  private val environment: Environment,
-  propertySources: PropertySource[Property]*
-) {
+                                              private val environment: Environment,
+                                              propertySources: PropertySource[Property]*
+                                            ) {
 
+  /**
+   * Accessor of matrix of cells.
+   * @return matrix of cells.
+   */
   def cells(): DenseMatrix[Cell] = environment.map.mapValues(cellFromPrivateOne)
+
   def width: Int = environment.width
+
   def height: Int = environment.height
 
   def indexInRange(range1: (Int, Int), range2: (Int, Int)): Seq[(Int, Int)] = for {
@@ -85,5 +91,5 @@ private[model] object EnvironmentManager {
 
 
   def addSource[T <: Property](manager: EnvironmentManager, source: PropertySource[T]): EnvironmentManager =
-    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]:_*)
+    EnvironmentManager(manager.environment, manager.propertySources :+ source.asInstanceOf[PropertySource[Property]]: _*)
 }

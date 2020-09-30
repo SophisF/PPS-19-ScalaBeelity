@@ -55,6 +55,13 @@ object PimpInt {
       (operation1(number, value), operation2(number, value))
     }
 
+    /**
+     * Pow of an integer
+     *
+     * @param value to pow
+     *
+     * @return pow
+     */
     def ~^(value: Int): Int = Math.pow(number, value).toInt
   }
 

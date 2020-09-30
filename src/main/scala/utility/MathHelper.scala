@@ -2,8 +2,17 @@ package scala.utility
 
 import scala.util.Random
 
+/**
+ * An helper to math function.
+ */
 object MathHelper {
-
+  /**
+   * Generate a random boolean.
+   *
+   * @param probability of calculated boolean
+   *
+   * @return boolean value
+   */
   def randomBoolean(probability: Int = 50): Boolean = Random.nextInt(100) +1 <= probability
 
   /**

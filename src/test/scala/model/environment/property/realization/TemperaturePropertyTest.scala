@@ -6,8 +6,6 @@ import scala.model.environment.property.realization.TemperatureProperty.seasonal
 
 /**
  * Test for temperature-property
- *
- * @author Paolo Baldini
  */
 class TemperaturePropertyTest extends AnyFunSuite {
 

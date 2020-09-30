@@ -1,5 +1,6 @@
 package scala.utility
 
+
 object SugarBowl {
 
   implicit class RichMappable[T](element: T) {

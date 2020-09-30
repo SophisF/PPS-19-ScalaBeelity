@@ -4,8 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * Test range trait/object
- *
- * @author Paolo Baldini
  */
 class RangeTest extends AnyFunSuite {
 

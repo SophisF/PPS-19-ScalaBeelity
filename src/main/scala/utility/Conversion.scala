@@ -1,5 +1,9 @@
 package scala.utility
 
+/**
+ * Utilities for implicit conversion of data.
+ *
+ */
 object Conversion {
 
   implicit def iteratorOf[A](iterable: Iterable[A]): Iterator[A] = iterable iterator

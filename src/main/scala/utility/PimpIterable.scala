@@ -10,6 +10,11 @@ object PimpIterable {
    * @param iterable the iterable of int.
    */
   implicit class MyIterable(iterable: Iterable[Int]){
+    /**
+     * Average of element in list.
+     *
+     * @return average
+     */
     def average: Int = iterable.sum / iterable.size
   }
 

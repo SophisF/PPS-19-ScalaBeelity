@@ -6,7 +6,6 @@ import scala.utility.SugarBowl.RichOptional
 /**
  * Represents the time in the system.
  *
- * @author Paolo Baldini
  */
 private[model] sealed trait Time {
 
@@ -35,10 +34,18 @@ private[model] sealed trait Time {
   def year: Int
 }
 
+/**
+ * Object Time
+ */
 private[model] object Time extends Ordering[Time] {
   private var _time: Time = 0
   private var _incrementValue: Int = 1
 
+  /**
+   * Private implementation of Time
+   *
+   * @param _days , days
+   */
   private class TimeImpl(val _days: Int) extends Time {
     override def days: Int = _days - year * 365 - month * 30
 
@@ -112,7 +119,7 @@ private[model] object Time extends Ordering[Time] {
    * Tell if the specified days are elapsed since the specified time
    *
    * @param instant to which start
-   * @param days the days to 'add'
+   * @param days    the days to 'add'
    * @return true if the specified days are elapsed since the specified time, false otherwise
    */
   def elapsed(instant: Time, days: Int): Boolean = _time >= instant + days

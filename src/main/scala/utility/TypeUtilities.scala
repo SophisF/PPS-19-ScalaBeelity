@@ -4,6 +4,9 @@ import scala.model.bees.bee.Colony.Colony
 import scala.model.bees.phenotype.Characteristic.Characteristic
 import scala.model.bees.phenotype.CharacteristicTaxonomy
 
+/**
+ * Utilities for type in system.
+ */
 object TypeUtilities {
 
   type StatisticColony = (Colony, Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)])

@@ -8,8 +8,6 @@ import scala.model.environment.property.realization.{HumidityProperty, PressureP
 
 /**
  * Test for cell entities
- *
- * @author Paolo Baldini
  */
 class CellTest extends AnyFunSuite {
   private val defaultTemp = TemperatureProperty.default

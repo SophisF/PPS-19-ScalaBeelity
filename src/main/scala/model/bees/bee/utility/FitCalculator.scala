@@ -8,7 +8,7 @@ import scala.utility.TypeUtilities.Range
 /**
  * Object used to calculate the fit value of the phenotype's characteristics, based on the environment parameters.
  */
-object FitCalculator {
+private[bee] object FitCalculator {
 
   /**
    * Method to apply a fit value to a parameter, based on the operation passed.
@@ -30,10 +30,8 @@ object FitCalculator {
    */
   def calculateFitValue(phenotype: Phenotype)(environmentInformation: EnvironmentInformation)
                        (fitAggregator: Seq[Double] => Double)
-  : Double = {
-
-    fitAggregator(environmentInformation.characteristicMap.map(kv => this.defaultCalculator(kv._2)(phenotype expressionOf kv._1)).toSeq)
-  }
+  : Double = fitAggregator(environmentInformation.characteristicMap.
+    map(kv => this.defaultCalculator(kv._2)(phenotype expressionOf kv._1)).toSeq)
 
   /**
    * Default strategy to calculate the fit value of a property.

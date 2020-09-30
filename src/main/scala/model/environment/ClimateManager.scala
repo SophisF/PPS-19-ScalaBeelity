@@ -24,7 +24,6 @@ private[environment] object ClimateManager {
    *
    * @param environmentSize, dimension of environment
    * @param iterations, number of iterations
-   *
    * @return an iterator of PropertySource
    */
   def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimedProperty]] =
@@ -46,7 +45,6 @@ private[environment] object ClimateManager {
    * @param property, property for filter
    * @param environmentSize, dimension of the environment
    * @param iterations, number of iterations for source
-   *
    * @return a Continuos Source
    */
   private def randomContinuousFilter(property: TimedFilterGenerator, environmentSize: Size, iterations: Int)
@@ -60,7 +58,6 @@ private[environment] object ClimateManager {
    *
    * @param property, property for filter
    * @param environmentSize, dimension of the environment
-   *
    * @return a Source for property
    */
   def randomInstantaneousFilter(property: FilterGenerator, environmentSize: Size): Source[Property] =
@@ -74,7 +71,6 @@ private[environment] object ClimateManager {
    * Create a seasonal changes for climate.
    *
    * @param property, property for filter
-   *
    * @return a Seasonal Source
    */
   private def seasonalChanges(property: SeasonalBehaviour): SeasonalSource[TimedProperty] =

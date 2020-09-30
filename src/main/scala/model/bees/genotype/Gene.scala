@@ -8,7 +8,7 @@ import scala.util.Random
 /**
  * Object that represent a gene.
  */
-object Gene {
+private [bees] object Gene {
   /**
    * The type of the frequency, expressed as an integer value.
    */

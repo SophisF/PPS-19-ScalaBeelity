@@ -9,7 +9,7 @@ import scala.utility.TypeUtilities.Range
 /**
  * Object that provides method to check collisions between colonies.
  */
-object CollisionManager {
+private[bee] object CollisionManager {
 
   /**
    * Method to keep a colony inside the border of the environment.
@@ -82,7 +82,7 @@ object CollisionManager {
    * @return a boolean, true if the two colonies collide, false otherwise.
    */
   private def checkCollision(colony1: Colony, colony2: Colony): Boolean = {
-    ((this collisionAreaBetween)(colony1, colony2)) > 0
+    (this collisionAreaBetween)(colony1, colony2) > 0
   }
 
   /**

@@ -5,7 +5,7 @@ import scala.model.bees.genotype.Gene
 /**
  * Singleton that implements strategies to map a value into an expression.
  */
-object ExpressionMapper {
+private[phenotype] object ExpressionMapper {
 
   /**
    * Implicit method to map the influence value into a range.

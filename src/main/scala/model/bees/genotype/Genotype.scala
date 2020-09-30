@@ -11,7 +11,7 @@ import scala.utility.PimpIterable._
 /**
  * Object that represent the genotype.
  */
-object Genotype {
+private[model] object Genotype {
 
   /**
    * Apply method for genotype.

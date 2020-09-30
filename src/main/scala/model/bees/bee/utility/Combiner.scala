@@ -8,7 +8,7 @@ import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
  * A combiner object for the colonies. If two colonies come into contact and their aggression is lower
  * than a threshold, it merge the colonies.
  */
-object Combiner {
+private[bee] object Combiner {
   /**
    * Maximum level of aggression to merge two colonies.
    */

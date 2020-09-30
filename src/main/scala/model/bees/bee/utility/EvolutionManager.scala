@@ -9,7 +9,10 @@ import scala.model.bees.phenotype.EnvironmentInformation.EnvironmentInformation
 import scala.util.Random
 import scala.utility.PimpInt._
 
-object EvolutionManager {
+/**
+ * Singleton used to manage the evolution of the bees.
+ */
+private[bee] object EvolutionManager {
 
   /**
    * Method that build a new genotype with a better adaptation to the environment and casual variations.

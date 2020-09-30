@@ -6,10 +6,6 @@ import scala.model.environment.{Cell => OldCell}
 
 /**
  * An object structure to share between environment and colonies
- *
- * @param temperature of the environment's cell in a numeric format
- * @param humidity of the environment's cell in a numeric format
- * @param pressure of the environment's cell in a numeric format
  */
 private[model] trait Cell {
   def temperature(percentage: Boolean = false): Int = 0

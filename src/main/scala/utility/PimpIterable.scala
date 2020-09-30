@@ -1,9 +1,21 @@
 package scala.utility
 
+/**
+ * Utility class to pimp the iterables.
+ */
 object PimpIterable {
 
-  implicit class MyIterable(list: Iterable[Int]){
-    def average: Int = list.sum / list.size
+  /**
+   * Implicit class for the iterables of int.
+   * @param iterable the iterable of int.
+   */
+  implicit class MyIterable(iterable: Iterable[Int]){
+    /**
+     * Average of element in list.
+     *
+     * @return average
+     */
+    def average: Int = iterable.sum / iterable.size
   }
 
 }

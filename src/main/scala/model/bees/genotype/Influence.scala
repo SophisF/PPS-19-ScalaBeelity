@@ -6,7 +6,7 @@ import scala.utility.PimpInt._
 /**
  * Enumeration of the influence types.
  */
-object InfluenceType extends Enumeration {
+private[genotype] object InfluenceType extends Enumeration {
   type InfluenceType = Value
   val POSITIVE, NEGATIVE = Value
 }
@@ -14,7 +14,7 @@ object InfluenceType extends Enumeration {
 /**
  * Represent the influence of a gene on a characteristic.
  */
-object Influence {
+private[genotype] object Influence {
 
   type InfluenceValue = Double
 

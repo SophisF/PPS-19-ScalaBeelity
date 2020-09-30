@@ -1,5 +1,8 @@
 package scala.utility
 
+/**
+ * Pimp my library of tuple.
+ */
 object Tuple {
 
   implicit class RichTuple[A, B](tuple: (A, B)) {

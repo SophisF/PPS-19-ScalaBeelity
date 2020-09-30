@@ -4,7 +4,9 @@ import scala.model.environment.property.realization._
 import scala.reflect.ClassTag
 import scala.utility.IterableHelper.RichIterable
 
-/** Enumeration of the possible property types */
+/**
+ * Enumeration of the possible property types
+ */
 object PropertyType extends Enumeration {
 
   /**

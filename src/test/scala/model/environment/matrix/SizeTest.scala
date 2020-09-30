@@ -6,8 +6,6 @@ import scala.model.environment.matrix.Size.Border
 
 /**
  * Test for Size trait/object
- *
- * @author Paolo Baldini
  */
 class SizeTest extends AnyFunSuite {
 

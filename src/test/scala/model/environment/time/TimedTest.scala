@@ -7,8 +7,6 @@ import scala.model.environment.time.Timed.{inProgress, isEnded, isStarted}
 
 /**
  * Test for timed entities
- *
- * @author Paolo Baldini
  */
 class TimedTest extends AnyFunSuite {
 

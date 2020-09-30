@@ -8,7 +8,7 @@ import scala.utility.Point
 /**
  *  Object to solve the movement logic.
  */
-object MovementLogic {
+private [model] object MovementLogic {
 
   /**
    * Method that exploits Prolog logic to find the new position of the colony.

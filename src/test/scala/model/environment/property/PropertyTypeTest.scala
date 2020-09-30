@@ -5,11 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import scala.model.environment.property.PropertyType.{Humidity, properties, propertiesType, propertyOf, random}
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
 
-/**
- * Test property trait
- *
- * @author Paolo Baldini
- */
+/** Test property trait */
 class PropertyTypeTest extends AnyFunSuite {
 
   test("I should not be able to instantiate a PropertyValue object from outside the object") {

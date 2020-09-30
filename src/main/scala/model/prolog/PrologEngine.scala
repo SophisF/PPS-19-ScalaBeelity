@@ -8,7 +8,7 @@ import scala.utility.Point
 /**
  * Utility object to manage Prolog engine.
  */
-object PrologEngine {
+private[model] object PrologEngine {
 
 
   /**

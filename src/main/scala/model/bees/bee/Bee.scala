@@ -9,7 +9,7 @@ import scala.model.bees.phenotype.Phenotype.Phenotype
 /**
  * Object that represents bee.
  */
-object Bee {
+private[bees] object Bee {
   /**
    * Apply method for bee.
    *

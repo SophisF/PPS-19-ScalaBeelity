@@ -18,7 +18,7 @@ import scala.utility.MathHelper.randomBoolean
 private[environment] object ClimateManager {
   private val filterXAxisDecrement = (environmentWidth: Int) => randomDoubleIn(.1, .2) * environmentWidth toInt
   private val filterYAxisDecrement = (environmentHeight: Int) => randomDoubleIn(.1, .2) * environmentHeight toInt
-  private val randomConst: Int = 5
+  private val baseProbability: Int = 5
 
   /**
    * Generate local climate change in environment.
@@ -30,7 +30,7 @@ private[environment] object ClimateManager {
   def generateLocalChanges(environmentSize: Size, iterations: Int): Iterator[PropertySource[TimedProperty]] =
     Iterator.continually(PropertyType.random[TimedFilterGenerator]).filter(_ nonEmpty)
       .map(_.get).map(randomContinuousFilter(_, environmentSize, iterations))
-      .takeWhile(_ => randomBoolean(randomConst))
+      .takeWhile(_ => randomBoolean(baseProbability))
 
   /**
    * Generate season to apply at the environment.

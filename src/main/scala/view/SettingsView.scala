@@ -36,7 +36,7 @@ private[view] object SettingsView {
     showConfirmDialog(null, panel, "Settings", OK_CANCEL_OPTION, PLAIN_MESSAGE) match {
       case OK_OPTION => Option(SimulationSettings(numColonies, temporalGranularity,
         comboIterations.getSelectedItem match {
-          case "infinite" => -1
+          case "infinite" => Int.MaxValue
           case value => value.toString.toInt
         }, (comboMatrix, comboMatrix)))
       case _ => Option.empty

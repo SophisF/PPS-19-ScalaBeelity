@@ -75,9 +75,8 @@ private[model] case class EnvironmentManager(
 }
 
 private[model] object EnvironmentManager {
-
-  private val minRandom: Int = 10
-  private val maxRandom: Int = 20
+  private val minRandom: Int = 3
+  private val maxRandom: Int = 6
   private val iterationsFilter: Int = 200
 
   /**

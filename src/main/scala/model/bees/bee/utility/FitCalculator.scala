@@ -10,6 +10,8 @@ import scala.utility.TypeUtilities.Range
  */
 private[bee] object FitCalculator {
 
+  private val maxFit: Double = 1.0
+
   /**
    * Method to apply a fit value to a parameter, based on the operation passed.
    *
@@ -41,7 +43,7 @@ private[bee] object FitCalculator {
    * @return the fit value, based on much the property departs from the range.
    */
   private def defaultCalculator(property: Int)(range: Range): Double =
-    if (property in range) 1.0
-    else if (property < range) 1.0 - (range._1.toDouble - property.toDouble) / 100
-    else 1.0 - (property.toDouble - range._2.toDouble) / 100
+    if (property in range) maxFit
+    else if (property < range) maxFit - (range._1.toDouble - property.toDouble) / 100
+    else maxFit - (property.toDouble - range._2.toDouble) / 100
 }

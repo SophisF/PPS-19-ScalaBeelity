@@ -13,7 +13,7 @@ import scala.utility.SugarBowl.{RichMap, RichMappable, RichOptional}
 private[model] object StatisticEnvironment {
   type PropertyType = PropertyValue[Property]
 
-  case class StatisticalEnvironment(
+  case class StatisticEnvironment(
     averageProperties: Map[PropertyType, Iterable[Double]] = propertiesType.map((_, empty[Double])),
     lastUpdate: Time = now()
   ) {
@@ -28,13 +28,13 @@ private[model] object StatisticEnvironment {
    *
    * @return new statistic data.
    */
-  def updateStats(environment: EnvironmentManager, statistics: StatisticalEnvironment): StatisticalEnvironment =
+  def updateStats(environment: EnvironmentManager, statistics: StatisticEnvironment): StatisticEnvironment =
     statistics.lastUpdate match {
       case time if time.year < now().year || time.month < now().month => environment.cells().data
         .foldLeft(Map.empty[PropertyType, Double])((propertyTrend, cell) => propertiesType
           .map(property => (property, (propertyTrend ? property ! .0) + cell(property, percentage = true)))). ~> (sum =>
-        StatisticalEnvironment(propertiesType.map(property => (property, (statistics.averageProperties ? property
+        StatisticEnvironment(propertiesType.map(property => (property, (statistics.averageProperties ? property
           ! empty).appended(sum(property) / environment.cells().size)))))
-      case _ => StatisticalEnvironment(statistics averageProperties, statistics lastUpdate)
+      case _ => StatisticEnvironment(statistics averageProperties, statistics lastUpdate)
     }
 }

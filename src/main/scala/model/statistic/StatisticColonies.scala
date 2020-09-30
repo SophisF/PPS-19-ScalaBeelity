@@ -22,10 +22,10 @@ object StatisticColonies {
   implicit def ordering[E <: (CharacteristicTaxonomy, Characteristic#Expression)]: Ordering[(CharacteristicTaxonomy, Characteristic#Expression)] = Ordering.by(_._1)
 
   /**
-   * Case class for colony's statistic .
+   * Case class for colony's statistic.
    * @param colony the colony to calculate its statistic.
    */
-  case class Statistic(colony: Colony) {
+  case class StatisticColonies(colony: Colony) {
     def statistic(): Set[(CharacteristicTaxonomy.Value, Characteristic#Expression)] = CharacteristicTaxonomy.values.map(v => (v, getAverageOf(v)))
 
     private def getAverageOf(characteristicTaxonomy: CharacteristicTaxonomy): Characteristic#Expression =

@@ -13,9 +13,10 @@ private[realization] trait TimedProperty extends TimedProperty_ with Property {
 
   def timedVariation(value: Int, start: Time, duration: Time): TimedVariationType = new IntegerTimedVariation {
     private var evaluated: Int = 0
+    private val minimum: Double = 1.0
 
     override def instantaneous(instant: Time): VariationType = {
-      val percentage = ((instant - start) / duration.toDouble).min(1.0)
+      val percentage = ((instant - start) / duration.toDouble).min(minimum)
       val variationValue = (percentage * value - evaluated).toInt
       if (variationValue.abs >= 1) evaluated += variationValue
       variation(variationValue)
@@ -24,4 +25,5 @@ private[realization] trait TimedProperty extends TimedProperty_ with Property {
 
   /** A partial implementation of a timed-variation for a timed-integer-type property */
   trait IntegerTimedVariation extends TimedVariation
+
 }

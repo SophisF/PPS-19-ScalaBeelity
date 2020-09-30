@@ -10,8 +10,10 @@ import scala.utility.MathHelper.intValueOf
 
 private[realization] trait FilterGenerator extends Utils { this: Property =>
 
+  private val stop: Int = 0
+
   def filter(xDecrement: Int, yDecrement: Int)(implicit minValue: Int, maxValue: Int): DenseMatrix[Double] =
-    function3d((minValue to maxValue).filter(_ != 0).random.get, 0, xDecrement, yDecrement)
+    function3d((minValue to maxValue).filter(_ != 0).random.get, stop, xDecrement, yDecrement)
 
   override def generateFilter(xDecrement: Int, yDecrement: Int): DenseMatrix[VariationType] =
     filter(xDecrement, yDecrement)(zeroCenteredRange._1, zeroCenteredRange._2).map(variation(_))

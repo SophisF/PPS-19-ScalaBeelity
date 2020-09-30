@@ -25,7 +25,18 @@ private[environment] case class ContinuousSource[T <: TimedProperty](
   finalFilter: Matrix[T#TimedVariation]
 ) extends ZoneSource[T] with Timed {
 
+  /**
+   * Filter now.
+   *
+   * @return matrix of variation
+   */
   def filter: Matrix[T#Variation] = filter(now())
 
+  /**
+   * Filter at time.
+   *
+   * @param time for apply variation
+   * @return matrix of variation
+   */
   def filter(time: Time): Matrix[T#Variation] = finalFilter map[T#Variation, Matrix[T#Variation]](_ instantaneous time)
 }

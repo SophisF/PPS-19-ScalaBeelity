@@ -23,5 +23,11 @@ private[environment] object Timed {
    */
   def isStarted(timed: Timed): Boolean = compare(timed fireTime, Time.now()) <= 0
 
+  /**
+   * Check if is started but it's not finished.
+   *
+   * @param timed to check progess
+   * @return true if is started but not finished.
+   */
   def inProgress(timed: Timed): Boolean = isStarted(timed) && !isEnded(timed)
 }

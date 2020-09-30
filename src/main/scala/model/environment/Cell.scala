@@ -17,12 +17,25 @@ private[environment] case class Cell(
   pressure: PressureProperty.StateType = PressureProperty.default
 ) {
 
+  /**
+   * Apply method.
+   *
+   * @param property value
+   * @tparam T, type to property
+   * @return state type
+   */
   def apply[T <: Property](property: PropertyValue[_]): T#StateType = (property match {
     case Temperature => temperature
     case Humidity => humidity
     case _ => pressure
   }).asInstanceOf[T#StateType]
 
+  /**
+   * Variation cell.
+   *
+   * @param variation of property
+   * @return a cell variated
+   */
   def +(variation: Property#Variation): Cell = variation match {
     case _ if variation isNull => this
     case v: TemperatureProperty.VariationType => Cell(v vary temperature, humidity, pressure)

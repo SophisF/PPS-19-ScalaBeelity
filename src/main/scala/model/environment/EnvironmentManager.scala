@@ -33,10 +33,26 @@ private[model] case class EnvironmentManager(
    */
   def cells(): DenseMatrix[Cell] = environment.map.mapValues(cellFromPrivateOne)
 
+  /**
+   * Width of environment.
+   *
+   * @return width
+   */
   def width: Int = environment.width
 
+  /**
+   * Height of environment.
+   *
+   * @return height
+   */
   def height: Int = environment.height
 
+  /**
+   * 
+   * @param range1
+   * @param range2
+   * @return
+   */
   def indexInRange(range1: (Int, Int), range2: (Int, Int)): Seq[(Int, Int)] = for {
     i <- range1._1 to range1._2
     j <- range2._1 to range2._2
@@ -44,6 +60,12 @@ private[model] case class EnvironmentManager(
       j > 0 && j < environment.map.cols
   } yield (i, j)
 
+  /**
+   *
+   * @param range1
+   * @param range2
+   * @return
+   */
   def proximityOf(range1: (Int, Int), range2: (Int, Int)): Point = {
     val cells = indexInRange(range1, range2)
     val index = Random.nextInt(cells.size)

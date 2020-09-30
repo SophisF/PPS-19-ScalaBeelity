@@ -25,8 +25,19 @@ private[environment] object GlobalSource {
     globalVariation: T#TimedVariation
   ) extends GlobalSource[T] {
 
+    /**
+     * Variation now
+     *
+     * @return variation
+     */
     def variation: T#Variation = variation(now())
 
+    /**
+     * Variation at instant.
+     *
+     * @param instant to vary
+     * @return variation
+     */
     def variation(instant: Time): T#Variation = globalVariation instantaneous instant
   }
 }

@@ -7,7 +7,7 @@ Bees colonies simulator. Project for PPS course of the year 2019/2020.
 To use the simulator you need the following software installed:
 
 * Scala version 2.13.3
-* Sbt version 1.3.10
+* sbt version 1.3.10
 
 An IDE is not necessary because it's already provided the runnable jar.
 
@@ -21,7 +21,7 @@ Get the latest Jar from the GitHub releases page.
 
 **For Windows/Unix systems:**
 
-Start runnable Jar with this command: `java - jar path/ScalaBeelity.jar`
+Start runnable Jar with this command: `java -jar /path/to/ScalaBeelity.jar`
 
 
 

@@ -8,6 +8,7 @@ import scala.utility.SugarBowl.RichMappable
  * Simplify the use (and help DRY) of numeric properties
  */
 private[realization] trait Property extends Property_ with Range {
+  val percent: Int = 100
   override type StateType = IntegerState
   override type VariationType = IntegerVariation
 
@@ -32,9 +33,12 @@ private[realization] trait Property extends Property_ with Range {
   trait IntegerState extends State {
 
     override def numericRepresentation(percentage: Boolean = true): Int =
-      value.when (_ => percentage) ~> (v => (v - minValue) * 100 / rangeWidth)
+      value.when(_ => percentage) ~> (v => (v - minValue) * percent / rangeWidth)
 
-    override def equals(a: Any): Boolean = a match { case state: IntegerState => state.value == value; case _ => false }
+    override def equals(a: Any): Boolean = a match {
+      case state: IntegerState => state.value == value;
+      case _ => false
+    }
   }
 
   implicit def variation(_value: Int): VariationType = new IntegerVariation {
@@ -50,4 +54,5 @@ private[realization] trait Property extends Property_ with Range {
 
     override def vary[S <: State](_state: S): StateType = _state.value + value
   }
+
 }

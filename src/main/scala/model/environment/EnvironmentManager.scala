@@ -54,8 +54,9 @@ private[model] case class EnvironmentManager(
 
 private[model] object EnvironmentManager {
 
-  val minRandom = 10
-  val maxRandom = 20
+  private val minRandom: Int = 10
+  private val maxRandom: Int = 20
+  private val iterationsFilter: Int = 200
 
   /**
    * Apply function.
@@ -81,8 +82,8 @@ private[model] object EnvironmentManager {
    *
    */
   def evolution(manager: EnvironmentManager): EnvironmentManager =
-  //TODO: check thi magic number
-    generateLocalChanges((manager.environment.map.cols, manager.environment.map.rows), 200)
+
+    generateLocalChanges((manager.environment.map.cols, manager.environment.map.rows), iterationsFilter)
       .foldLeft(EnvironmentManager(
         manager.propertySources.foldLeft(manager.environment)(Environment.apply),
         manager.propertySources.filter {

@@ -48,10 +48,10 @@ private[model] case class EnvironmentManager(
   def height: Int = environment.height
 
   /**
-   *
-   * @param range1
-   * @param range2
-   * @return
+   * Method to calculate the indexes of cells in a range, inside the environment.
+   * @param range1 the first range.
+   * @param range2 the second range.
+   * @return a sequence of indexes.
    */
   def indexInRange(range1: (Int, Int), range2: (Int, Int)): Seq[(Int, Int)] = for {
     i <- range1._1 to range1._2
@@ -61,10 +61,10 @@ private[model] case class EnvironmentManager(
   } yield (i, j)
 
   /**
-   *
-   * @param range1
-   * @param range2
-   * @return
+   * Method to calculate a point in proximity of an interval of cells.
+   * @param range1 the first range, represents the x range.
+   * @param range2 the second range, represents the y range.
+   * @return a new Point near the interval.
    */
   def proximityOf(range1: (Int, Int), range2: (Int, Int)): Point = {
     val cells = indexInRange(range1, range2)

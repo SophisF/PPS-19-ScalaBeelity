@@ -10,10 +10,10 @@ import scala.utility.Conversion.{mapOf, sequenceOf}
 import scala.utility.SugarBowl.{RichMap, RichMappable, RichOptional}
 
 /** Store statistic for environment */
-private[model] object StatisticEnvironment {
+private[model] object StatisticEnvironmentData {
   type PropertyType = PropertyValue[Property]
 
-  case class StatisticalEnvironment(
+  case class StatisticEnvironmentData(
     averageProperties: Map[PropertyType, Iterable[Double]] = propertiesType.map((_, empty[Double])),
     lastUpdate: Time = now()
   ) {
@@ -28,13 +28,13 @@ private[model] object StatisticEnvironment {
    *
    * @return new statistic data.
    */
-  def updateStats(environment: EnvironmentManager, statistics: StatisticalEnvironment): StatisticalEnvironment =
+  def updateStats(environment: EnvironmentManager, statistics: StatisticEnvironmentData): StatisticEnvironmentData =
     statistics.lastUpdate match {
       case time if time.year < now().year || time.month < now().month => environment.cells().data
         .foldLeft(Map.empty[PropertyType, Double])((propertyTrend, cell) => propertiesType
           .map(property => (property, (propertyTrend ? property ! .0) + cell(property, percentage = true)))). ~> (sum =>
-        StatisticalEnvironment(propertiesType.map(property => (property, (statistics.averageProperties ? property
+        StatisticEnvironmentData(propertiesType.map(property => (property, (statistics.averageProperties ? property
           ! empty).appended(sum(property) / environment.cells().size)))))
-      case _ => StatisticalEnvironment(statistics averageProperties, statistics lastUpdate)
+      case _ => StatisticEnvironmentData(statistics averageProperties, statistics lastUpdate)
     }
 }

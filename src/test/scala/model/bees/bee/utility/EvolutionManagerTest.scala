@@ -20,8 +20,6 @@ class EvolutionManagerTest extends AnyFunSuite{
   test("The evolution should slowly change a non environmental gene random, with a factor of the square of the time"){
     val time = 4
     val newGenotype = EvolutionManager.evolveGenotype(genotype)(EnvironmentInformation(Seq(Cell())))(time)
-    println("new gene " + (newGenotype frequencyOf GeneTaxonomy.GROWTH_GENE))
-    println("old gene " + (newGenotype frequencyOf GeneTaxonomy.GROWTH_GENE))
     val newGrowthGeneFrequency = newGenotype frequencyOf GeneTaxonomy.GROWTH_GENE
     val oldGrowthGeneFrequency = genotype frequencyOf GeneTaxonomy.GROWTH_GENE
     assert(newGrowthGeneFrequency == oldGrowthGeneFrequency - math.sqrt(time).toInt

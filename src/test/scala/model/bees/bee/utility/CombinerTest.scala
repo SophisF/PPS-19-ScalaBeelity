@@ -19,8 +19,6 @@ class CombinerTest extends AnyFunSuite {
     Gene(GeneTaxonomy.AGGRESSION_GENE, 50),
     Gene(GeneTaxonomy.GROWTH_GENE, 50))
 
-  println(mediumAggressiveGenotype.expressInPhenotype.expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
-
   private val colony1 = UtilityColonyCreator.createColony(genotype, Point(3, 3))
   private val colony2 = UtilityColonyCreator.createColony(genotype, Point(3, 3))
   private val colony3 = UtilityColonyCreator.createColony(genotype, Point(6, 6))

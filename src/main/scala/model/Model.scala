@@ -33,14 +33,14 @@ trait Model {
    *
    * @return the environment's statistics.
    */
-  def statisticalData(): StatisticalEnvironment
+  def statisticalEnvironmentData(): StatisticalEnvironment
 
   /**
    * Accessor method for the statistics of the colonies.
    *
    * @return the colonies' statistics.
    */
-  def statisticList(): StatisticColonies
+  def statisticColoniesData(): StatisticColonies
 
   /**
    * Accessor method for the temperature.
@@ -79,18 +79,18 @@ object Model {
   class ModelImpl(numColonies: Int, updateTime: Int, dimension: (Int, Int)) extends Model {
     Time.reset()
     Time.incrementValue = updateTime
-    private var _statisticalData: StatisticalEnvironment = StatisticalEnvironment()
+    private var _statisticalEnvironmentData: StatisticalEnvironment = StatisticalEnvironment()
     private var ecosystem = Ecosystem(numColonies, dimension _1, dimension _2)
 
     override def update(): Unit = {
       ecosystem = Ecosystem update ecosystem
-      _statisticalData = updateStats(ecosystem.environmentManager, _statisticalData)
+      _statisticalEnvironmentData = updateStats(ecosystem.environmentManager, _statisticalEnvironmentData)
       Time.increment()
     }
 
-    override def statisticalData(): StatisticalEnvironment = _statisticalData
+    override def statisticalEnvironmentData(): StatisticalEnvironment = _statisticalEnvironmentData
 
-    override def statisticList(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).statistic())) toList
+    override def statisticColoniesData(): StatisticColonies = ecosystem.colonies.map(c => (c, Statistic(c).statistic())) toList
 
     override def temperatureMatrix(inPercentage: Boolean): Matrix = propertyMatrix(_ temperature inPercentage)
 

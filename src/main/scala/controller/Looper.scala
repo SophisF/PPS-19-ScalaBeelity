@@ -1,7 +1,5 @@
 package scala.controller
 
-import scala.math.max
-
 import scala.annotation.tailrec
 
 /** Looper of the simulation. Recursively manage the updates */
@@ -14,7 +12,7 @@ private[controller] object Looper {
    * @param updatable a sequence of update function
    */
   @tailrec
-  def loop(iterations: Int)(updatable: () => Unit*): Unit = max(iterations, 0) match {
+  def loop(iterations: Int)(updatable: () => Unit*): Unit = iterations match {
     case 0 =>
     case _ =>
       updatable foreach (_())

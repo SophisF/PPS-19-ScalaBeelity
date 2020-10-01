@@ -5,7 +5,6 @@ import scala.model.environment.matrix.Size.Border.Border
 
 /**
  * Represent the size of a 2d element
- *
  */
 private[environment] trait Size {
   val width: Int

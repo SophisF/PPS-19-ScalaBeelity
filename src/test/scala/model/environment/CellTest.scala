@@ -69,6 +69,6 @@ class CellTest extends AnyFunSuite {
   }
 
   test("Two cell with different elements should not be considered equals") {
-    assert(!Cell.equals(Cell(), Cell(Int.MinValue)))
+    assert(! Cell.equals(Cell(), Cell(Int.MinValue)))
   }
 }

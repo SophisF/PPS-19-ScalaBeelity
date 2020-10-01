@@ -7,6 +7,10 @@ import scala.model.Time
  * Particularly, it can have variations whose values depends from the specific time instant
  */
 private[environment] trait TimedProperty extends Property {
+
+  /**
+   * Contains the strategy to build a variation from a specific time-instant
+   */
   type TimedVariationType <: TimedVariation
 
   /**
@@ -14,6 +18,13 @@ private[environment] trait TimedProperty extends Property {
    * vary depending on the time of call
    */
   trait TimedVariation {
+
+    /**
+     * Returns the variation at the specified instant
+     *
+     * @param instant of which calculate the variation
+     * @return the variation to use in this instant
+     */
     def instantaneous(instant: Time): VariationType
   }
 }

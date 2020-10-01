@@ -11,6 +11,9 @@ import scala.model.environment.property.source.GlobalSource.SeasonalSource
 import scala.model.environment.property.source.ZoneSource.Source
 import scala.utility.SugarBowl.RichMappable
 
+/**
+ * Tests environment
+ */
 class EnvironmentTest extends AnyFunSuite {
 
   test("Apply accepting width should return an environment with an equal number of cols") {
@@ -79,7 +82,6 @@ class EnvironmentTest extends AnyFunSuite {
     val source = new ContinuousSource[TemperatureProperty](0, 0, 100)(filter)
     Time increment 200
     val modifiedEnvironment = Environment(Environment(5,5), source)
-    println(modifiedEnvironment.cells.map(_.temperature.numericRepresentation(false)).toArray.mkString("", ", ", ""))
     assert(
       !modifiedEnvironment.cells.map(_.temperature.numericRepresentation(false)).iterator
         .sameElements(
@@ -93,7 +95,6 @@ class EnvironmentTest extends AnyFunSuite {
     Time increment 50
     val modifiedEnvironment = Environment(Environment(5,5), source)
     val default = TemperatureProperty.default
-    println(modifiedEnvironment.cells.map(_.temperature.numericRepresentation(false)).mkString("", ", ", ""))
     assert(modifiedEnvironment.cells.map(_.temperature.numericRepresentation(false)).iterator.sameElements(
       Array(
         default + 2,  default + 4,  default, default, default,

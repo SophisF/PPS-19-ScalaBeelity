@@ -2,6 +2,9 @@ package scala.model.environment.property
 
 import org.scalatest.funsuite.AnyFunSuite
 
+/**
+ * Test for Property trait
+ */
 class PropertyTest extends AnyFunSuite {
 
   test("I can create a state of property A and assign it to an Property#State var/val") {
@@ -36,7 +39,7 @@ class PropertyTest extends AnyFunSuite {
     assertCompiles("val a: A.StateType = A.AVariation(5).vary(A.AState(5))")
   }
 
-  object A extends Property {
+  private object A extends Property {
     override type ValueType = Int
     override type StateType = AState
     override type VariationType = AVariation
@@ -47,7 +50,7 @@ class PropertyTest extends AnyFunSuite {
     }
   }
 
-  object B extends Property {
+  private object B extends Property {
     override type ValueType = Int
     override type StateType = BState
     override type VariationType = BVariation

@@ -15,12 +15,12 @@ private[environment]
 sealed trait HumidityProperty extends TimedProperty with SeasonalBehaviour with TimedFilterGenerator
 
 private[environment] object HumidityProperty extends HumidityProperty {
-  private val variationMultiplier = .25
+  private val valueMultiplier = .25
   private val daysInYear = 365
 
   override val default: Int = 30
   override val maxValue: Int = 100
   override val minValue: Int = 0
 
-  override def monthlyValue(instant: Time): Int = rangeCenter * variationMultiplier * sin(toRadians(instant % daysInYear))
+  override def monthlyValue(instant: Time): Int = rangeCenter * valueMultiplier * sin(toRadians(instant % daysInYear))
 }

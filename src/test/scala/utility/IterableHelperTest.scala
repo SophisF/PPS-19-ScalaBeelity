@@ -4,6 +4,9 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import scala.utility.IterableHelper.RichIterable
 
+/**
+ * Test for iterable-helper
+ */
 class IterableHelperTest extends AnyFunSuite {
 
   test("RichIterator should make mirroring of an iterator.") {

@@ -2,10 +2,14 @@ package scala.model.environment.property
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.model.environment.property.PropertyType.{Humidity, properties, propertiesType, propertyOf, random}
+import scala.model.environment.property.PropertyType.{properties, propertiesType, propertyOf, random}
 import scala.model.environment.property.realization.{HumidityProperty, PressureProperty, TemperatureProperty}
+import scala.model.environment.property.utils.SeasonalBehaviour
+import scala.utility.Conversion.iteratorOf
 
-/** Test property trait */
+/**
+ * Test PropertyType enumeration
+ */
 class PropertyTypeTest extends AnyFunSuite {
 
   test("I should not be able to instantiate a PropertyValue object from outside the object") {
@@ -56,9 +60,9 @@ class PropertyTypeTest extends AnyFunSuite {
     assert(propertiesType.map(propertyOf).toSeq contains PressureProperty)
   }
 
-  /* TODO test("'properties' filtering for timed-properties should not contains PressureProperty") {
-    assert(! properties(_.isInstanceOf[TimeDependentProperty]).map(getPropertyFrom).contains(PressureProperty))
-  }*/
+  test("'properties' filtering for seasonal-behaviour should not contains PressureProperty") {
+    assert(! properties[SeasonalBehaviour].contains(PressureProperty))
+  }
 
   test("'properties' filtering for a specific property should return only it") {
     assert(properties[PressureProperty].toSeq contains PressureProperty)

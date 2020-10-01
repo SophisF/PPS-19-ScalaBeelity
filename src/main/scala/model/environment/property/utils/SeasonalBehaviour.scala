@@ -3,14 +3,14 @@ package scala.model.environment.property.utils
 import scala.model.environment.property.TimedProperty
 
 /**
- * Represents a property with a seasonal behaviour.
- * It allow to identify properties who has a variation
+ * Adds a seasonal-behaviour to a timed property.
+ * It allows to identify properties that have a variation
  * during the course of the year
  */
 private[environment] trait SeasonalBehaviour { this: TimedProperty =>
 
   /**
-   * Return a variation who represent the deviation from a default value in a specific period of the year
+   * Returns a variation who represents the deviation from a default value in a specific period of the year
    *
    * @return the variation from default value in this instant
    */

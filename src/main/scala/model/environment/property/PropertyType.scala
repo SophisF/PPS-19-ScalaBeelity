@@ -54,7 +54,7 @@ object PropertyType extends Enumeration {
    * Get a random property from the ones that match the given type
    *
    * @tparam T the type the the property must match
-   * @return a random property from the eligible ones
+   * @return a random property from the eligible ones, if it exists
    */
   def random[T: ClassTag]: Option[T] = properties[T].random
 

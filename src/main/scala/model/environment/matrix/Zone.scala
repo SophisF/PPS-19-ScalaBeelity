@@ -7,7 +7,6 @@ private[environment] trait Zone extends Point with Size
 
 /**
  * Represent a centered area in a matrix
- *
  */
 private[environment] object Zone {
 

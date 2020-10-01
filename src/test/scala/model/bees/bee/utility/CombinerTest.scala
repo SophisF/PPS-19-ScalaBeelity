@@ -4,7 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import scala.model.bees.genotype.Genotype.Genotype
 import scala.model.bees.genotype.{Gene, GeneTaxonomy, Genotype}
-import scala.model.bees.phenotype.{CharacteristicTaxonomy, Phenotype}
 import scala.utility.Point
 
 class CombinerTest extends AnyFunSuite {
@@ -25,7 +24,6 @@ class CombinerTest extends AnyFunSuite {
 
   private val mediumAggressiveColony = UtilityColonyCreator.createColony(mediumAggressiveGenotype, Point(3, 3))
 
-  println(Phenotype.averagePhenotype(mediumAggressiveColony bees).expressionOf(CharacteristicTaxonomy.AGGRESSION_RATE))
   test("Two colonies that collides and have an aggression lower than a threshold should merge in only one colonies"){
     val colonies = List(colony1, colony2)
 

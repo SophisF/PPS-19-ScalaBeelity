@@ -18,11 +18,11 @@ private[environment] case class Cell(
 ) {
 
   /**
-   * Apply method.
+   * Returns the state of the specified property
    *
-   * @param property value
+   * @param property type of the property to get
    * @tparam T, type to property
-   * @return state type
+   * @return the state of the property
    */
   def apply[T <: Property](property: PropertyValue[_]): T#StateType = (property match {
     case Temperature => temperature
@@ -31,10 +31,10 @@ private[environment] case class Cell(
   }).asInstanceOf[T#StateType]
 
   /**
-   * Variation cell.
+   * Vary a cell given the specified variation
    *
    * @param variation of property
-   * @return a cell variated
+   * @return a varied cell
    */
   def +(variation: Property#Variation): Cell = variation match {
     case _ if variation isNull => this

@@ -15,12 +15,12 @@ private[environment]
 sealed trait TemperatureProperty extends TimedProperty with SeasonalBehaviour with TimedFilterGenerator
 
 private[environment] object TemperatureProperty extends TemperatureProperty {
-  private val variationMultiplier = .25
+  private val valueMultiplier = .25
   private val daysInYear = 365
 
   override val default: Int = 20
   override val maxValue: Int = 40
   override val minValue: Int = -10
 
-  override def monthlyValue(instant: Time): Int = rangeCenter * variationMultiplier * -sin(toRadians(instant % daysInYear))
+  override def monthlyValue(instant: Time): Int = rangeCenter * valueMultiplier * -sin(toRadians(instant % daysInYear))
 }

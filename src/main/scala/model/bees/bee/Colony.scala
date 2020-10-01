@@ -218,6 +218,7 @@ object Colony {
     /**
      * Method to generate new bees every iteration, if it's possible.
      *
+     * @param time the time granularity.
      * @param environmentInformation the information of the environment.
      * @return a new set of bees.
      */

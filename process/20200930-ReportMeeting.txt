@@ -1,0 +1,8 @@
+Meeting di gruppo con analisi e sviluppo dei seguenti punti:
+
+- Correzione ultimi dettagli implementativi del sistema
+- Completamento della relazione
+- Controllo della presenza corretta della ScalaDoc
+- Creazione del JAR del sistema
+- Discussione sulla conclusione del progetto.
+
